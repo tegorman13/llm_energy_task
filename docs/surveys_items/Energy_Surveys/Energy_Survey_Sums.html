@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>energy_survey_sums – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#energy-survey-instruments-summaries" id="toc-energy-survey-instruments-summaries" class="nav-link active" data-scroll-target="#energy-survey-instruments-summaries">Energy Survey Instruments Summaries</a>
+  <ul class="collapse">
+  <li><a href="#attari-et-al.-2010-public-perceptions-of-energy-consumption-and-savings" id="toc-attari-et-al.-2010-public-perceptions-of-energy-consumption-and-savings" class="nav-link" data-scroll-target="#attari-et-al.-2010-public-perceptions-of-energy-consumption-and-savings">1.1. Attari et al.&nbsp;(2010) Public Perceptions of Energy Consumption and Savings</a></li>
+  <li><a href="#attari-et-al.-2025-low-carbon-tech-narratives-survey" id="toc-attari-et-al.-2025-low-carbon-tech-narratives-survey" class="nav-link" data-scroll-target="#attari-et-al.-2025-low-carbon-tech-narratives-survey">1.2. Attari et al.&nbsp;(2025) Low Carbon Tech Narratives Survey</a></li>
+  <li><a href="#canfield-et-al.-2017-perceptions-of-electricity-use-communications" id="toc-canfield-et-al.-2017-perceptions-of-electricity-use-communications" class="nav-link" data-scroll-target="#canfield-et-al.-2017-perceptions-of-electricity-use-communications">1.3. Canfield et al.&nbsp;(2017) Perceptions of Electricity-Use Communications</a></li>
+  <li><a href="#chiu-dewaters-2018-energy-issue-attitude-questionnaire-eiaq" id="toc-chiu-dewaters-2018-energy-issue-attitude-questionnaire-eiaq" class="nav-link" data-scroll-target="#chiu-dewaters-2018-energy-issue-attitude-questionnaire-eiaq">1.4. Chiu &amp; DeWaters (2018) Energy-Issue Attitude Questionnaire (EIAQ)</a></li>
+  <li><a href="#cotton-et-al.-2021-energy-literacy-in-china-and-uk" id="toc-cotton-et-al.-2021-energy-literacy-in-china-and-uk" class="nav-link" data-scroll-target="#cotton-et-al.-2021-energy-literacy-in-china-and-uk">1.5. Cotton et al.&nbsp;(2021) Energy Literacy in China and UK</a></li>
+  <li><a href="#dewaters-powers-2011-energy-literacy-questionnaire-elq" id="toc-dewaters-powers-2011-energy-literacy-questionnaire-elq" class="nav-link" data-scroll-target="#dewaters-powers-2011-energy-literacy-questionnaire-elq">1.6. DeWaters &amp; Powers (2011) Energy Literacy Questionnaire (ELQ)</a></li>
+  <li><a href="#dewaters-et-al.-2013-designing-an-energy-literacy-questionnaire" id="toc-dewaters-et-al.-2013-designing-an-energy-literacy-questionnaire" class="nav-link" data-scroll-target="#dewaters-et-al.-2013-designing-an-energy-literacy-questionnaire">1.7. DeWaters et al.&nbsp;(2013) Designing an Energy Literacy Questionnaire</a></li>
+  <li><a href="#he-et-al.-2024-social-comparison-feedback-experiment" id="toc-he-et-al.-2024-social-comparison-feedback-experiment" class="nav-link" data-scroll-target="#he-et-al.-2024-social-comparison-feedback-experiment">1.8. He et al.&nbsp;(2024) Social Comparison Feedback Experiment</a></li>
+  <li><a href="#kantenbacher-attari-2021-expert-decision-making-on-household-energy" id="toc-kantenbacher-attari-2021-expert-decision-making-on-household-energy" class="nav-link" data-scroll-target="#kantenbacher-attari-2021-expert-decision-making-on-household-energy">1.9. Kantenbacher &amp; Attari (2021) Expert Decision-Making on Household Energy</a></li>
+  <li><a href="#marghetis-et-al.-2019-correcting-misperceptions-of-home-energy-use" id="toc-marghetis-et-al.-2019-correcting-misperceptions-of-home-energy-use" class="nav-link" data-scroll-target="#marghetis-et-al.-2019-correcting-misperceptions-of-home-energy-use">1.10. Marghetis et al.&nbsp;(2019) Correcting Misperceptions of Home Energy Use</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/Energy_Surveys/Energy_Survey_Sums.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="energy-survey-instruments-summaries" class="level1">
+<h1>Energy Survey Instruments Summaries</h1>
+<section id="attari-et-al.-2010-public-perceptions-of-energy-consumption-and-savings" class="level2">
+<h2 class="anchored" data-anchor-id="attari-et-al.-2010-public-perceptions-of-energy-consumption-and-savings">1.1. Attari et al.&nbsp;(2010) Public Perceptions of Energy Consumption and Savings</h2>
+<ul>
+<li><strong>Reference:</strong> Attari, S. Z., DeKay, M. L., Davidson, C. I., &amp; Bruine De Bruin, W. (2010). Public perceptions of energy consumption and savings. <em>Proceedings of the National Academy of Sciences, 107</em>(37), 16054–16059. <a href="https://www.pnas.org/action/downloadSupplement?doi=10.1073%2Fpnas.1001509107&amp;file=pnas.201001509SI.pdf">https://www.pnas.org/action/downloadSupplement?doi=10.1073%2Fpnas.1001509107&amp;file=pnas.201001509SI.pdf</a></li>
+<li><strong>Description:</strong> This survey investigates public understanding of energy consumption, the effectiveness of energy-saving behaviors, and perceptions of energy use by household appliances and activities. It also assesses attitudes towards the environment and climate change, numeracy, and demographics.</li>
+<li><strong>Constructs:</strong> Energy-Saving Behavior Effectiveness (Open-ended), Household Energy Consumption Breakdown (Percentage Estimates), Appliance Energy Use Estimation (Relative to 100W bulb), Energy Savings Estimation (Household &amp; Transportation, Relative Scales), Transportation Energy Use Ranking, Recycling/Manufacturing Energy Use Ranking, Perceived Ease/Difficulty of Energy-Saving Behaviors, Environmental Attitudes (NEP Scale items), Climate Change Attitudes, Numeracy (Math Questions), Demographics (including energy-related habits).</li>
+<li><strong>Details:</strong> Mix of open-ended questions, percentage estimations, relative numerical estimations (using 100 units reference points for bulbs and car), ranking tasks, Likert-scale attitude questions (7-point agreement), Likert-scale ease/difficulty questions (8-point including “Do it already”), multiple-choice demographic questions, and basic numeracy questions.</li>
+</ul>
+</section>
+<section id="attari-et-al.-2025-low-carbon-tech-narratives-survey" class="level2">
+<h2 class="anchored" data-anchor-id="attari-et-al.-2025-low-carbon-tech-narratives-survey">1.2. Attari et al.&nbsp;(2025) Low Carbon Tech Narratives Survey</h2>
+<ul>
+<li><strong>Reference:</strong> Attari, Mishra, Motz (2025). Low Carbon Tech Narratives. OSF Preprints. <a href="https://osf.io/gt46s/">https://osf.io/gt46s/</a></li>
+<li><strong>Description:</strong> This survey explores public familiarity, perceptions, attitudes, and knowledge regarding electric vehicles (EVs) and heat pumps (HPs). It investigates barriers and motivations for adoption and assesses beliefs about the truthfulness of various positive and negative statements concerning these technologies.</li>
+<li><strong>Constructs:</strong> Familiarity (EVs, HPs), Ownership/Use (EVs, HPs), Purchase Consideration (EVs, HPs), Barriers/Motivations (Open-ended), Knowledge/Beliefs (True/False statements about practicality, climate impact, cost, maintenance, performance, infrastructure, etc.), Confidence in Knowledge, Perceived Statement Framing (Positive/Negative), Attitudes towards Transition (EVs, HPs), Exposure (Driving, Charging, Seeing, Social Network), Perceived Adoption Rates (Percentage Estimates), Community Discussion, Climate Change Perceptions, Social Media Use, Demographics.</li>
+<li><strong>Details:</strong> Uses definitions for EVs and HPs. Includes familiarity scales (5-point), Yes/No questions, open-ended text input for barriers/motivations, True/False questions with confidence sliders, multiple-choice questions, Likert scales (5-point agreement for attitudes, 4-point importance for climate change), percentage estimations, demographic questions (including political orientation, social media use, home ownership, utility bill payment). Ends with debriefing links.</li>
+</ul>
+</section>
+<section id="canfield-et-al.-2017-perceptions-of-electricity-use-communications" class="level2">
+<h2 class="anchored" data-anchor-id="canfield-et-al.-2017-perceptions-of-electricity-use-communications">1.3. Canfield et al.&nbsp;(2017) Perceptions of Electricity-Use Communications</h2>
+<ul>
+<li><strong>Reference:</strong> Canfield, C., Bruine De Bruin, W., &amp; Wong-Parodi, G. (2017). Perceptions of electricity-use communications: Effects of information, format, and individual differences. <em>Journal of Risk Research, 20</em>(9), 1132–1153. <a href="https://doi.org/10.1080/13669877.2015.1121909">https://doi.org/10.1080/13669877.2015.1121909</a></li>
+<li><strong>Description:</strong> This study evaluates how different formats of electricity usage information (historical use, neighbor comparison, appliance breakdown) affect user understanding, preferences, and intentions to reduce electricity use. It also includes a measure of energy literacy.</li>
+<li><strong>Constructs:</strong> Understanding (Historical Use, Neighbor Comparison, Appliance Breakdown - True/False questions), Preferences (Clarity, Ease of Understanding, Liking, Usability, Desire for Inclusion, Usefulness, Professionalism, Trust, Desire for Detail, Helpfulness for Change - 7-point scales), Intentions to Reduce Electricity Use (7-point scale), Energy Literacy (Knowledge - multiple choice).</li>
+<li><strong>Details:</strong> Uses True/False questions to assess understanding of presented information (with some questions focusing on specific values). Preference and intention questions use 7-point Likert-type scales. Energy literacy is measured using multiple-choice questions adapted from DeWaters &amp; Powers (2011).</li>
+</ul>
+</section>
+<section id="chiu-dewaters-2018-energy-issue-attitude-questionnaire-eiaq" class="level2">
+<h2 class="anchored" data-anchor-id="chiu-dewaters-2018-energy-issue-attitude-questionnaire-eiaq">1.4. Chiu &amp; DeWaters (2018) Energy-Issue Attitude Questionnaire (EIAQ)</h2>
+<ul>
+<li><strong>Reference:</strong> Mei-Shiu, C., Jan, D., &amp; Clarkson University, Potsdam, NY, USA. (2018). Development and Validation of the Energy-Issue Attitude Questionnaire: Relations with Energy Knowledge, Affect, and Behavior. <em>Journal of Advances in Education Research, 3</em>(1). <a href="https://doi.org/10.22606/jaer.2018.31003">https://doi.org/10.22606/jaer.2018.31003</a></li>
+<li><strong>Description:</strong> This study develops and validates the Energy-Issue Attitude Questionnaire (EIAQ) for Taiwanese students, examining relationships between attitudes, energy literacy (knowledge, affect, behavior), and demographics.</li>
+<li><strong>Constructs:</strong>
+<ul>
+<li><strong>EIAQ:</strong> Energy-Saving Knowledge, Carbon-Reducing Knowledge, Having Lifestyle, Being Lifestyle, Questioning Authorities, Conforming to Authorities, Technology Approaches, Nature Approaches, Future Goals, Present Goals.</li>
+<li><strong>ELQ (Adapted):</strong> Energy Knowledge, Energy Affect, Energy Behavior.</li>
+<li><strong>Demographics:</strong> Gender, Grade, Parents’ Vocation, Cultural/Material Household Possessions (PISA items).</li>
+</ul></li>
+<li><strong>Details:</strong>
+<ul>
+<li><strong>EIAQ:</strong> 40 items across 10 constructs, rated on a 5-point Likert scale (1=Disagree strongly to 5=Agree strongly). Some items are reverse-scored.</li>
+<li><strong>ELQ:</strong> Adapted from DeWaters &amp; Powers (2011) for Taiwanese context. Knowledge (33 multiple-choice items), Affect (17 Likert items), Behavior (8 Likert items). Specific items not listed in the paper. Response scales likely 5-point Likert.</li>
+<li>Demographic questions adapted from PISA 2009.</li>
+</ul></li>
+</ul>
+</section>
+<section id="cotton-et-al.-2021-energy-literacy-in-china-and-uk" class="level2">
+<h2 class="anchored" data-anchor-id="cotton-et-al.-2021-energy-literacy-in-china-and-uk">1.5. Cotton et al.&nbsp;(2021) Energy Literacy in China and UK</h2>
+<ul>
+<li><strong>Reference:</strong> Cotton, D. R. E., Zhai, J., Miller, W., Dalla Valle, L., &amp; Winter, J. (2021). Reducing energy demand in China and the United Kingdom: The importance of energy literacy. <em>Journal of Cleaner Production, 278</em>, 123876. <a href="https://doi.org/10.1016/j.jclepro.2020.123876">https://doi.org/10.1016/j.jclepro.2020.123876</a></li>
+<li><strong>Description:</strong> This survey compares energy literacy (knowledge, attitudes, behaviours) among university students in China and the UK, adapting a previous instrument and incorporating the NEP scale.</li>
+<li><strong>Constructs:</strong> Demographics (Gender, Subject of Study), Context (Source of energy knowledge, Most important national issue), Perceived Knowledge, Factual Energy Knowledge (Renewables, Efficiency, Technical, Sources, Saving Behaviours), Attitudes (Self-efficacy, Trust in government/scientists, Policy support, Environmental concern, Climate change beliefs/causes, Sustainability benefits), New Ecological Paradigm (NEP Scale), Behaviours (Conservation actions, Sustainable purchasing, Information seeking, Social influence).</li>
+<li><strong>Details:</strong> 40 questions total. Includes ranking/selection for sources/issues, a 4-point self-rated knowledge scale, multiple-choice/factual knowledge questions (specifics not listed), 5-point Likert scale (1=strongly disagree to 5=strongly agree) for attitude items, the NEP scale (items not listed), and a 4-point frequency scale (1=never to 4=always) for behaviour items.</li>
+</ul>
+</section>
+<section id="dewaters-powers-2011-energy-literacy-questionnaire-elq" class="level2">
+<h2 class="anchored" data-anchor-id="dewaters-powers-2011-energy-literacy-questionnaire-elq">1.6. DeWaters &amp; Powers (2011) Energy Literacy Questionnaire (ELQ)</h2>
+<ul>
+<li><strong>Reference:</strong> DeWaters, J. E., &amp; Powers, S. E. (2011). Energy literacy of secondary students in New York State (USA): A measure of knowledge, affect, and behavior. <em>Energy Policy, 39</em>(3), 1699–1710. <a href="https://doi.org/10.1016/j.enpol.2010.12.049">https://doi.org/10.1016/j.enpol.2010.12.049</a></li>
+<li><strong>Description:</strong> This paper details the development and validation of the Energy Literacy Questionnaire (ELQ) for US secondary school students (Middle School and High School versions), measuring cognitive, affective, and behavioral dimensions of energy literacy.</li>
+<li><strong>Constructs:</strong> Self-Assessment (Perceived Knowledge, Self-description of energy use, Family discussion frequency), Energy Knowledge (Cognitive: Saving Energy, Forms/Conversions/Units, Home Energy Use, Basic Concepts, Resources, Renewable Analysis, Environmental Impacts, Societal Issues), Energy Attitudes (Affective: Importance of energy education/saving, Self-efficacy, Worry/Responsibility, Support for policies/renewables, Environmental tradeoffs), Energy Behaviors (Behavioral: Conservation actions at home, Encouraging others, Sustainable purchasing).</li>
+<li><strong>Details:</strong> Includes initial self-assessment questions (5-point scales). Cognitive subscale uses 5-option multiple-choice items (30 MS, 38 HS). Affective subscale uses 17 items on a 5-point Likert scale (Strongly Disagree to Strongly Agree). Behavioral subscale uses 10 items on a 5-point frequency scale (e.g., Never to Almost Always).</li>
+</ul>
+</section>
+<section id="dewaters-et-al.-2013-designing-an-energy-literacy-questionnaire" class="level2">
+<h2 class="anchored" data-anchor-id="dewaters-et-al.-2013-designing-an-energy-literacy-questionnaire">1.7. DeWaters et al.&nbsp;(2013) Designing an Energy Literacy Questionnaire</h2>
+<ul>
+<li><strong>Reference:</strong> DeWaters, J., Qaqish, B., Graham, M., &amp; Powers, S. (2013). Designing an Energy Literacy Questionnaire for Middle and High School Youth. <em>The Journal of Environmental Education, 44</em>(1), 56–78. <a href="https://doi.org/10.1080/00958964.2012.682615">https://doi.org/10.1080/00958964.2012.682615</a></li>
+<li><strong>Description:</strong> This paper further details the refinement and validation process for the Energy Literacy Questionnaire (ELQ) for middle and high school students, building on the DeWaters &amp; Powers (2011) work. It provides a more extensive list of items considered and retained.</li>
+<li><strong>Constructs:</strong> Energy Knowledge (Cognitive: Various topics including definitions, units, conversions, efficiency, resources, environmental impacts, home use, conservation), Energy Attitudes (Affective: Importance, responsibility, self-efficacy, policy support, tradeoffs), Energy Behaviors (Behavioral: Conservation actions, encouraging others, purchasing).</li>
+<li><strong>Details:</strong> Provides a list of 50 cognitive items (multiple-choice, correct answer indicated), 17 affective items (5-point Likert scale: strongly disagree to strongly agree), and 10 behavioral items (5-point Likert scale: frequency-based, e.g., almost always to never). Indicates which items were specific to High School (HS) or Middle School (MS) forms or newly added. Item numbers refer to the original item pool.</li>
+</ul>
+</section>
+<section id="he-et-al.-2024-social-comparison-feedback-experiment" class="level2">
+<h2 class="anchored" data-anchor-id="he-et-al.-2024-social-comparison-feedback-experiment">1.8. He et al.&nbsp;(2024) Social Comparison Feedback Experiment</h2>
+<ul>
+<li><strong>Reference:</strong> He, S., Blasch, J., Robinson, P. J., &amp; van Beukering, P. (2024). Social comparison feedback in decision-making context: Environmental externality levels and psychological traits matter. <em>Ecological Economics, 216</em>, 108047. <a href="https://doi.org/10.1016/j.ecolecon.2023.108047">https://doi.org/10.1016/j.ecolecon.2023.108047</a></li>
+<li><strong>Description:</strong> This study uses an online experiment to investigate the effect of different types of social comparison feedback (standard social norm vs.&nbsp;tangible emissions feedback) on pro-environmental purchase decisions under varying environmental externality levels. It also measures psychological traits and climate beliefs.</li>
+<li><strong>Constructs:</strong> Norm-Following (Allocation task - Phase 1), Purchase Decision (Modified Dictator Game with environmental externality - Phase 2), Climate Change Beliefs &amp; Concerns (Conviction, General Concern, Direct Concern), Competitiveness Tendency, Risk Preference, Time Preference, Loss Aversion, Socio-Demographics, Experience with Social Comparison Feedback.</li>
+<li><strong>Details:</strong> Multi-phase experiment. Phase 1: Norm-following task (allocating balls). Phase 2: Multi-round purchase task with varying CO2 emissions per unit (low/high externality) and different feedback conditions (self-feedback, social comparison, tangible emissions comparison) presented in later rounds. Payoffs based on points, environmental outcome based on CO2 offsets. Phase 3: Survey measuring psychological traits (7-point Likert for competitiveness/loss aversion, 0-10 scale for risk/time), climate beliefs (7-point Likert), demographics, and prior experience with social comparison info (Yes/No, multiple selection).</li>
+</ul>
+</section>
+<section id="kantenbacher-attari-2021-expert-decision-making-on-household-energy" class="level2">
+<h2 class="anchored" data-anchor-id="kantenbacher-attari-2021-expert-decision-making-on-household-energy">1.9. Kantenbacher &amp; Attari (2021) Expert Decision-Making on Household Energy</h2>
+<ul>
+<li><strong>Reference:</strong> Kantenbacher, J., &amp; Attari, S. Z. (2021). Better rules for judging joules: Exploring how experts make decisions about household energy use. <em>Energy Research &amp; Social Science, 73</em>, 101911. <a href="https://doi.org/10.1016/j.erss.2021.101911">https://doi.org/10.1016/j.erss.2021.101911</a></li>
+<li><strong>Description:</strong> This study uses interviews and surveys with energy experts (Electrical Engineers, Physicists, Energy Analysts) to explore how they estimate and compare household energy use, focusing on the heuristics (rules of thumb) they employ.</li>
+<li><strong>Constructs:</strong> Energy Thinking (Open-ended), Energy Reduction Actions (Open-ended), Heuristics Used (Derived from talk-aloud choice task), Appliance Energy Use Estimation (Relative to 100W bulb), Perceived Accuracy of Heuristics (Survey).</li>
+<li><strong>Details:</strong> Mixed-methods approach.
+<ul>
+<li><strong>Interviews:</strong> Included open-ended questions, a talk-aloud warm-up, a pairwise/multi-option choice task (“Which uses least energy?”), and a numerical estimation task (relative to 100 units for a 100W bulb). Verbal reports from the choice task were coded to extract heuristics (using categories: External Cues, Function, Components).</li>
+<li><strong>Survey (Survey 2):</strong> Experts rated the accuracy of a list of 35 potential energy heuristics (including novice heuristics from van den Broek &amp; Walker, 2019 and expert-derived ones) on a 4-point scale (1=mostly inaccurate to 4=mostly accurate). Included an open-ended question for additional rules.</li>
+</ul></li>
+</ul>
+</section>
+<section id="marghetis-et-al.-2019-correcting-misperceptions-of-home-energy-use" class="level2">
+<h2 class="anchored" data-anchor-id="marghetis-et-al.-2019-correcting-misperceptions-of-home-energy-use">1.10. Marghetis et al.&nbsp;(2019) Correcting Misperceptions of Home Energy Use</h2>
+<ul>
+<li><strong>Reference:</strong> Marghetis, T., Attari, S. Z., &amp; Landy, D. (2019). Simple interventions can correct misperceptions of home energy use. <em>Nature Energy, 4</em>(10), 874–881. <a href="https://doi.org/10.1038/s41560-019-0467-2">https://doi.org/10.1038/s41560-019-0467-2</a></li>
+<li><strong>Description:</strong> This study investigates whether simple interventions (providing scale-use information and/or an explicit heuristic) can improve people’s estimations of household appliance energy consumption and their choices in energy-saving scenarios.</li>
+<li><strong>Constructs:</strong> Appliance Energy Use Estimation (Watt-hours), Behavioral Choice Task (BCT - selecting least energy-intensive option), Conceptual Understanding (Difference between energy/electricity, power/energy), National Energy Perceptions (Percentages: electricity share, generation sources, residential sector share), Policy Support, Climate Change Beliefs, Environmental Attitudes (NEP Scale), Numeracy/Cognitive Reflection Test (CRT), Demographics (including technical training, energy use habits).</li>
+<li><strong>Details:</strong> Experimental design with four conditions (Control, Scale-Use info, Explicit Heuristic, Both).
+<ul>
+<li><strong>Estimation Task:</strong> Estimate Wh for 1 hour of use for 36 appliances (numeric entry), compared to a 100W bulb reference.</li>
+<li><strong>BCT:</strong> 20 pairwise choices about energy use/savings (binary selection).</li>
+<li><strong>Interventions:</strong> Text provided before estimation/BCT.</li>
+<li><strong>Other Measures:</strong> Yes/No/Don’t Know and open-ended questions for conceptual understanding; percentage estimates for national energy; Likert scales for policy support (4-point), climate importance (4-point), NEP (5-point); multiple-choice for climate beliefs; standard numeracy/CRT items (numeric entry); various demographic questions. Confidence rating (4-point) after estimation. Open-ended questions on estimation strategies for specific items.</li>
+</ul></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Energy Survey Instruments Summaries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.1. Attari et al. (2010) Public Perceptions of Energy Consumption and Savings</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Attari, S. Z., DeKay, M. L., Davidson, C. I., &amp; Bruine De Bruin, W. (2010). Public perceptions of energy consumption and savings. *Proceedings of the National Academy of Sciences, 107*(37), 16054–16059. <span class="co">[</span><span class="ot">https://www.pnas.org/action/downloadSupplement?doi=10.1073%2Fpnas.1001509107&amp;file=pnas.201001509SI.pdf</span><span class="co">](https://www.pnas.org/action/downloadSupplement?doi=10.1073%2Fpnas.1001509107&amp;file=pnas.201001509SI.pdf)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This survey investigates public understanding of energy consumption, the effectiveness of energy-saving behaviors, and perceptions of energy use by household appliances and activities. It also assesses attitudes towards the environment and climate change, numeracy, and demographics.</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Energy-Saving Behavior Effectiveness (Open-ended), Household Energy Consumption Breakdown (Percentage Estimates), Appliance Energy Use Estimation (Relative to 100W bulb), Energy Savings Estimation (Household &amp; Transportation, Relative Scales), Transportation Energy Use Ranking, Recycling/Manufacturing Energy Use Ranking, Perceived Ease/Difficulty of Energy-Saving Behaviors, Environmental Attitudes (NEP Scale items), Climate Change Attitudes, Numeracy (Math Questions), Demographics (including energy-related habits).</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Mix of open-ended questions, percentage estimations, relative numerical estimations (using 100 units reference points for bulbs and car), ranking tasks, Likert-scale attitude questions (7-point agreement), Likert-scale ease/difficulty questions (8-point including "Do it already"), multiple-choice demographic questions, and basic numeracy questions.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.2. Attari et al. (2025) Low Carbon Tech Narratives Survey</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Attari, Mishra, Motz (2025). Low Carbon Tech Narratives. OSF Preprints. <span class="co">[</span><span class="ot">https://osf.io/gt46s/</span><span class="co">](https://osf.io/gt46s/)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This survey explores public familiarity, perceptions, attitudes, and knowledge regarding electric vehicles (EVs) and heat pumps (HPs). It investigates barriers and motivations for adoption and assesses beliefs about the truthfulness of various positive and negative statements concerning these technologies.</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Familiarity (EVs, HPs), Ownership/Use (EVs, HPs), Purchase Consideration (EVs, HPs), Barriers/Motivations (Open-ended), Knowledge/Beliefs (True/False statements about practicality, climate impact, cost, maintenance, performance, infrastructure, etc.), Confidence in Knowledge, Perceived Statement Framing (Positive/Negative), Attitudes towards Transition (EVs, HPs), Exposure (Driving, Charging, Seeing, Social Network), Perceived Adoption Rates (Percentage Estimates), Community Discussion, Climate Change Perceptions, Social Media Use, Demographics.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Uses definitions for EVs and HPs. Includes familiarity scales (5-point), Yes/No questions, open-ended text input for barriers/motivations, True/False questions with confidence sliders, multiple-choice questions, Likert scales (5-point agreement for attitudes, 4-point importance for climate change), percentage estimations, demographic questions (including political orientation, social media use, home ownership, utility bill payment). Ends with debriefing links.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.3. Canfield et al. (2017) Perceptions of Electricity-Use Communications</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Canfield, C., Bruine De Bruin, W., &amp; Wong-Parodi, G. (2017). Perceptions of electricity-use communications: Effects of information, format, and individual differences. *Journal of Risk Research, 20*(9), 1132–1153. <span class="co">[</span><span class="ot">https://doi.org/10.1080/13669877.2015.1121909</span><span class="co">](https://doi.org/10.1080/13669877.2015.1121909)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This study evaluates how different formats of electricity usage information (historical use, neighbor comparison, appliance breakdown) affect user understanding, preferences, and intentions to reduce electricity use. It also includes a measure of energy literacy.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Understanding (Historical Use, Neighbor Comparison, Appliance Breakdown - True/False questions), Preferences (Clarity, Ease of Understanding, Liking, Usability, Desire for Inclusion, Usefulness, Professionalism, Trust, Desire for Detail, Helpfulness for Change - 7-point scales), Intentions to Reduce Electricity Use (7-point scale), Energy Literacy (Knowledge - multiple choice).</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Uses True/False questions to assess understanding of presented information (with some questions focusing on specific values). Preference and intention questions use 7-point Likert-type scales. Energy literacy is measured using multiple-choice questions adapted from DeWaters &amp; Powers (2011).</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.4. Chiu &amp; DeWaters (2018) Energy-Issue Attitude Questionnaire (EIAQ)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Mei-Shiu, C., Jan, D., &amp; Clarkson University, Potsdam, NY, USA. (2018). Development and Validation of the Energy-Issue Attitude Questionnaire: Relations with Energy Knowledge, Affect, and Behavior. *Journal of Advances in Education Research, 3*(1). <span class="co">[</span><span class="ot">https://doi.org/10.22606/jaer.2018.31003</span><span class="co">](https://doi.org/10.22606/jaer.2018.31003)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This study develops and validates the Energy-Issue Attitude Questionnaire (EIAQ) for Taiwanese students, examining relationships between attitudes, energy literacy (knowledge, affect, behavior), and demographics.</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:**</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**EIAQ:** Energy-Saving Knowledge, Carbon-Reducing Knowledge, Having Lifestyle, Being Lifestyle, Questioning Authorities, Conforming to Authorities, Technology Approaches, Nature Approaches, Future Goals, Present Goals.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**ELQ (Adapted):** Energy Knowledge, Energy Affect, Energy Behavior.</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Demographics:** Gender, Grade, Parents' Vocation, Cultural/Material Household Possessions (PISA items).</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:**</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**EIAQ:** 40 items across 10 constructs, rated on a 5-point Likert scale (1=Disagree strongly to 5=Agree strongly). Some items are reverse-scored.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**ELQ:** Adapted from DeWaters &amp; Powers (2011) for Taiwanese context. Knowledge (33 multiple-choice items), Affect (17 Likert items), Behavior (8 Likert items). Specific items not listed in the paper. Response scales likely 5-point Likert.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Demographic questions adapted from PISA 2009.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.5. Cotton et al. (2021) Energy Literacy in China and UK</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Cotton, D. R. E., Zhai, J., Miller, W., Dalla Valle, L., &amp; Winter, J. (2021). Reducing energy demand in China and the United Kingdom: The importance of energy literacy. *Journal of Cleaner Production, 278*, 123876. <span class="co">[</span><span class="ot">https://doi.org/10.1016/j.jclepro.2020.123876</span><span class="co">](https://doi.org/10.1016/j.jclepro.2020.123876)</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This survey compares energy literacy (knowledge, attitudes, behaviours) among university students in China and the UK, adapting a previous instrument and incorporating the NEP scale.</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Demographics (Gender, Subject of Study), Context (Source of energy knowledge, Most important national issue), Perceived Knowledge, Factual Energy Knowledge (Renewables, Efficiency, Technical, Sources, Saving Behaviours), Attitudes (Self-efficacy, Trust in government/scientists, Policy support, Environmental concern, Climate change beliefs/causes, Sustainability benefits), New Ecological Paradigm (NEP Scale), Behaviours (Conservation actions, Sustainable purchasing, Information seeking, Social influence).</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** 40 questions total. Includes ranking/selection for sources/issues, a 4-point self-rated knowledge scale, multiple-choice/factual knowledge questions (specifics not listed), 5-point Likert scale (1=strongly disagree to 5=strongly agree) for attitude items, the NEP scale (items not listed), and a 4-point frequency scale (1=never to 4=always) for behaviour items.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.6. DeWaters &amp; Powers (2011) Energy Literacy Questionnaire (ELQ)</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** DeWaters, J. E., &amp; Powers, S. E. (2011). Energy literacy of secondary students in New York State (USA): A measure of knowledge, affect, and behavior. *Energy Policy, 39*(3), 1699–1710. <span class="co">[</span><span class="ot">https://doi.org/10.1016/j.enpol.2010.12.049</span><span class="co">](https://doi.org/10.1016/j.enpol.2010.12.049)</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This paper details the development and validation of the Energy Literacy Questionnaire (ELQ) for US secondary school students (Middle School and High School versions), measuring cognitive, affective, and behavioral dimensions of energy literacy.</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Self-Assessment (Perceived Knowledge, Self-description of energy use, Family discussion frequency), Energy Knowledge (Cognitive: Saving Energy, Forms/Conversions/Units, Home Energy Use, Basic Concepts, Resources, Renewable Analysis, Environmental Impacts, Societal Issues), Energy Attitudes (Affective: Importance of energy education/saving, Self-efficacy, Worry/Responsibility, Support for policies/renewables, Environmental tradeoffs), Energy Behaviors (Behavioral: Conservation actions at home, Encouraging others, Sustainable purchasing).</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Includes initial self-assessment questions (5-point scales). Cognitive subscale uses 5-option multiple-choice items (30 MS, 38 HS). Affective subscale uses 17 items on a 5-point Likert scale (Strongly Disagree to Strongly Agree). Behavioral subscale uses 10 items on a 5-point frequency scale (e.g., Never to Almost Always).</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.7. DeWaters et al. (2013) Designing an Energy Literacy Questionnaire</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** DeWaters, J., Qaqish, B., Graham, M., &amp; Powers, S. (2013). Designing an Energy Literacy Questionnaire for Middle and High School Youth. *The Journal of Environmental Education, 44*(1), 56–78. <span class="co">[</span><span class="ot">https://doi.org/10.1080/00958964.2012.682615</span><span class="co">](https://doi.org/10.1080/00958964.2012.682615)</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This paper further details the refinement and validation process for the Energy Literacy Questionnaire (ELQ) for middle and high school students, building on the DeWaters &amp; Powers (2011) work. It provides a more extensive list of items considered and retained.</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Energy Knowledge (Cognitive: Various topics including definitions, units, conversions, efficiency, resources, environmental impacts, home use, conservation), Energy Attitudes (Affective: Importance, responsibility, self-efficacy, policy support, tradeoffs), Energy Behaviors (Behavioral: Conservation actions, encouraging others, purchasing).</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Provides a list of 50 cognitive items (multiple-choice, correct answer indicated), 17 affective items (5-point Likert scale: strongly disagree to strongly agree), and 10 behavioral items (5-point Likert scale: frequency-based, e.g., almost always to never). Indicates which items were specific to High School (HS) or Middle School (MS) forms or newly added. Item numbers refer to the original item pool.</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.8. He et al. (2024) Social Comparison Feedback Experiment</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** He, S., Blasch, J., Robinson, P. J., &amp; van Beukering, P. (2024). Social comparison feedback in decision-making context: Environmental externality levels and psychological traits matter. *Ecological Economics, 216*, 108047. <span class="co">[</span><span class="ot">https://doi.org/10.1016/j.ecolecon.2023.108047</span><span class="co">](https://doi.org/10.1016/j.ecolecon.2023.108047)</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This study uses an online experiment to investigate the effect of different types of social comparison feedback (standard social norm vs. tangible emissions feedback) on pro-environmental purchase decisions under varying environmental externality levels. It also measures psychological traits and climate beliefs.</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Norm-Following (Allocation task - Phase 1), Purchase Decision (Modified Dictator Game with environmental externality - Phase 2), Climate Change Beliefs &amp; Concerns (Conviction, General Concern, Direct Concern), Competitiveness Tendency, Risk Preference, Time Preference, Loss Aversion, Socio-Demographics, Experience with Social Comparison Feedback.</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Multi-phase experiment. Phase 1: Norm-following task (allocating balls). Phase 2: Multi-round purchase task with varying CO2 emissions per unit (low/high externality) and different feedback conditions (self-feedback, social comparison, tangible emissions comparison) presented in later rounds. Payoffs based on points, environmental outcome based on CO2 offsets. Phase 3: Survey measuring psychological traits (7-point Likert for competitiveness/loss aversion, 0-10 scale for risk/time), climate beliefs (7-point Likert), demographics, and prior experience with social comparison info (Yes/No, multiple selection).</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.9. Kantenbacher &amp; Attari (2021) Expert Decision-Making on Household Energy</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Kantenbacher, J., &amp; Attari, S. Z. (2021). Better rules for judging joules: Exploring how experts make decisions about household energy use. *Energy Research &amp; Social Science, 73*, 101911. <span class="co">[</span><span class="ot">https://doi.org/10.1016/j.erss.2021.101911</span><span class="co">](https://doi.org/10.1016/j.erss.2021.101911)</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This study uses interviews and surveys with energy experts (Electrical Engineers, Physicists, Energy Analysts) to explore how they estimate and compare household energy use, focusing on the heuristics (rules of thumb) they employ.</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Energy Thinking (Open-ended), Energy Reduction Actions (Open-ended), Heuristics Used (Derived from talk-aloud choice task), Appliance Energy Use Estimation (Relative to 100W bulb), Perceived Accuracy of Heuristics (Survey).</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Mixed-methods approach.</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Interviews:** Included open-ended questions, a talk-aloud warm-up, a pairwise/multi-option choice task ("Which uses least energy?"), and a numerical estimation task (relative to 100 units for a 100W bulb). Verbal reports from the choice task were coded to extract heuristics (using categories: External Cues, Function, Components).</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Survey (Survey 2):** Experts rated the accuracy of a list of 35 potential energy heuristics (including novice heuristics from van den Broek &amp; Walker, 2019 and expert-derived ones) on a 4-point scale (1=mostly inaccurate to 4=mostly accurate). Included an open-ended question for additional rules.</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.10. Marghetis et al. (2019) Correcting Misperceptions of Home Energy Use</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Reference:** Marghetis, T., Attari, S. Z., &amp; Landy, D. (2019). Simple interventions can correct misperceptions of home energy use. *Nature Energy, 4*(10), 874–881. <span class="co">[</span><span class="ot">https://doi.org/10.1038/s41560-019-0467-2</span><span class="co">](https://doi.org/10.1038/s41560-019-0467-2)</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** This study investigates whether simple interventions (providing scale-use information and/or an explicit heuristic) can improve people's estimations of household appliance energy consumption and their choices in energy-saving scenarios.</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Constructs:** Appliance Energy Use Estimation (Watt-hours), Behavioral Choice Task (BCT - selecting least energy-intensive option), Conceptual Understanding (Difference between energy/electricity, power/energy), National Energy Perceptions (Percentages: electricity share, generation sources, residential sector share), Policy Support, Climate Change Beliefs, Environmental Attitudes (NEP Scale), Numeracy/Cognitive Reflection Test (CRT), Demographics (including technical training, energy use habits).</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Details:** Experimental design with four conditions (Control, Scale-Use info, Explicit Heuristic, Both).</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Estimation Task:** Estimate Wh for 1 hour of use for 36 appliances (numeric entry), compared to a 100W bulb reference.</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**BCT:** 20 pairwise choices about energy use/savings (binary selection).</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Interventions:** Text provided before estimation/BCT.</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Other Measures:** Yes/No/Don't Know and open-ended questions for conceptual understanding; percentage estimates for national energy; Likert scales for policy support (4-point), climate importance (4-point), NEP (5-point); multiple-choice for climate beliefs; standard numeracy/CRT items (numeric entry); various demographic questions. Confidence rating (4-point) after estimation. Open-ended questions on estimation strategies for specific items.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/Energy_Surveys/Energy_Survey_Sums.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

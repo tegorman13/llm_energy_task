@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy & AI Literacy Research Instruments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the dashboard */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark grey/blue background */
+            color: #d1d5db; /* Light grey text */
+        }
+        /* Style for active tab */
+        .tab-button.active {
+            background-color: #374151; /* Slightly lighter grey */
+            color: #ffffff;
+            border-bottom: 2px solid #10b981; /* Teal accent */
+        }
+        /* Style for tab buttons on hover */
+        .tab-button:not(.active):hover {
+            background-color: #1f2937;
+        }
+        /* Style for header tags with specific colors */
+        .header-tag-teal { background-color: #14b8a6; color: #ffffff; } /* Teal */
+        .header-tag-blue { background-color: #3b82f6; color: #ffffff; } /* Blue */
+        .header-tag-purple { background-color: #a855f7; color: #ffffff; } /* Purple */
+        .header-tag-orange { background-color: #f97316; color: #ffffff; } /* Orange */
+        .header-tag-red { background-color: #ef4444; color: #ffffff; } /* Red */
+        .header-tag-pink { background-color: #ec4899; color: #ffffff; } /* Pink */
+        .header-tag-yellow { background-color: #eab308; color: #000000; } /* Yellow (dark text) */
+        .header-tag-green { background-color: #22c55e; color: #ffffff; } /* Green */
+        .header-tag-grey { background-color: #6b7280; color: #ffffff; } /* Grey */
+        .header-tag-blue-yellow { background: linear-gradient(to right, #3b82f6, #eab308); color: #ffffff; } /* EU Flag */
+        .header-tag-orange-red { background: linear-gradient(to right, #f97316, #ef4444); color: #ffffff; }
+        .header-tag-red-blue { background: linear-gradient(to right, #ef4444, #3b82f6); color: #ffffff; }
+        .header-tag-blue-green { background: linear-gradient(to right, #3b82f6, #22c55e); color: #ffffff; }
+        .header-tag-green-blue { background: linear-gradient(to right, #22c55e, #3b82f6); color: #ffffff; }
+        .header-tag-orange-green { background: linear-gradient(to right, #f97316, #22c55e); color: #ffffff; }
+
+        /* Style for the card */
+        .survey-card {
+            background-color: #1f2937; /* Darker card background */
+            border: 1px solid #374151;
+            transition: box-shadow 0.3s ease;
+        }
+        .survey-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        /* Style for example questions to make them stand out */
+        .item-example {
+            background-color: #374151;
+            border-left: 3px solid #4f46e5; /* Indigo accent */
+            padding: 8px 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #e5e7eb;
+        }
+        /* Ensure content area takes available height */
+        .tab-content {
+            min-height: calc(100vh - 200px); /* Adjust based on header/nav height */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Energy & AI Literacy Research</h1>
+            <p class="text-lg md:text-xl text-gray-400">Interactive preview of survey instruments for studying knowledge, attitudes, perceptions, and behaviors.</p>
+        </header>
+
+        <nav class="mb-8 overflow-x-auto whitespace-nowrap">
+            <div class="border-b border-gray-700 flex space-x-1">
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out active" onclick="showTab('ai-literacy')">AI Literacy</button>
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out" onclick="showTab('ai-attitudes')">AI Attitudes & Trust</button>
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out" onclick="showTab('llm-perceptions')">LLM Perceptions</button>
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out" onclick="showTab('energy-literacy')">Energy Literacy</button>
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out" onclick="showTab('numeracy')">Numeracy</button>
+                <button class="tab-button py-3 px-4 text-sm md:text-base font-medium text-gray-400 rounded-t-lg transition duration-150 ease-in-out" onclick="showTab('behavioral')">Behavioral Measures</button>
+            </div>
+        </nav>
+
+        <main id="tab-content-area">
+
+            <div id="ai-literacy" class="tab-content">
+                <h2 class="text-2xl font-semibold mb-4 text-white">AI Literacy</h2>
+                <p class="text-gray-400 mb-6">Focus: Measuring knowledge, skills, self-perceptions, and competencies regarding AI.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-teal text-xs font-semibold px-2 py-1 rounded-full mb-3">Multi-faceted AI Literacy & Meta-Competencies</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🕸️</span> MAILS (Carolus et al., 2023)</h3>
+                        <p class="text-sm text-gray-400 mb-3">34 self-report items assessing perceived abilities across cognitive, technical, ethical, and self-regulatory domains related to AI.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 11-point scale (0=Not at all pronounced, 10=Perfectly pronounced) for "I can..." statements.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Use & Apply, Know & Understand, Detect AI, AI Ethics, Create AI, AI Problem-Solving, Learning, Persuasion Literacy, Emotion Regulation.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Know & Understand):</strong> "I can assess what the limitations and opportunities of using an AI are." (Scale: 0-10)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (AI Ethics):</strong> "I can analyze AI-based applications for their ethical implications." (Scale: 0-10)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-teal text-xs font-semibold px-2 py-1 rounded-full mb-3">Brief Multi-faceted AI Literacy Assessment</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">⛓️</span> MAILS – Short Version (Koch et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">10-item short form of MAILS covering key competencies.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 11-point scale (0-10) for "I can..." statements.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> AI Literacy (Detect, Apply, Understand, Ethics), Create AI, AI Self-Efficacy (Learning, Problem-Solving), AI Self-Competency (Persuasion, Emotion Regulation).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Detect AI):</strong> "I can tell if I am dealing with an application based on artificial intelligence." (Scale: 0-10)</p>
+                        </div>
+                         <div class="item-example">
+                             <p><strong>Example (Create AI):</strong> "I can design new AI applications." (Scale: 0-10)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Factual AI Knowledge</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">✅</span> Objective AI Literacy Test (Weber et al., 2023)</h3>
+                        <p class="text-sm text-gray-400 mb-3">16 multiple-choice questions testing objective knowledge across socio-technical user and creator/evaluator dimensions.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Multiple-choice with one correct answer.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Socio-User, Socio-Creator/Evaluator, Technical-User, Technical-Creator/Evaluator.</p>
+                        <div class="item-example">
+                             <p><strong>Example (Socio-User):</strong> "AI was first mentioned in..." (Options: <em>1950s</em>, 2000s, 1880s, 1980s)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Technical-Creator):</strong> "What is not a strictly necessary part of a single AI system's development process?" (Options: <em>Benchmarking</em>, Training/Learning, Data preprocessing, Model definition)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Objective Knowledge of AI Concepts & Algorithms</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧠</span> AI Literacy Test (Tully et al., 2023)</h3>
+                        <p class="text-sm text-gray-400 mb-3">17 or 25-item multiple-choice test assessing factual understanding of AI concepts, applications, data, algorithms, and ethics.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Multiple-choice with one correct answer.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Primarily yields a single knowledge score; potentially factors related to interaction ability, capability understanding, and limitation awareness.</p>
+                        <div class="item-example">
+                            <p><strong>Example:</strong> "Which technology is the primary enabler of Artificial Intelligence?" (Options: <em>Machine Learning</em>, Electric Battery, Robotics, Engineering)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example:</strong> "Which of the following is NOT powered by AI?" (Options: Self-driving cars, Google's search algorithm, <em>A basic calculator</em>, Chatbots)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-purple text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Self-Assessed AI Skills & Knowledge (LLM Context)</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">👤</span> AI Literacy Self-Perception (Rheu & Cho, 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Combines scales measuring self-efficacy, cognitive learning, and specific knowledge about AI technology and processes (steps). Focuses on student context with LLMs.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 7-point Likert scale (1=Strongly disagree, 7=Strongly agree).</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Self-Efficacy, Cognitive Learning, AI Technology Knowledge, AI-Steps Knowledge.</p>
+                        <div class="item-example">
+                             <p><strong>Example (Self-Efficacy):</strong> "I am confident I will perform well on LLM-related tasks." (Scale: 1-7)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (AI-Steps Knowledge):</strong> "I have knowledge of... The input data requirements for LLMs." (Scale: 1-7)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ai-attitudes" class="tab-content hidden">
+                 <h2 class="text-2xl font-semibold mb-4 text-white">AI Attitudes & Trust</h2>
+                 <p class="text-gray-400 mb-6">Focus: Measuring general feelings, specific attitudes, trust dimensions, and beliefs towards AI.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Overall Positive Attitude Toward AI</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">👍</span> General AI Attitude (AIAS-4) (Grassini, 2023)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Brief 4-item scale measuring optimistic beliefs about AI's impact and future use.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 10-point Likert scale (1=Not at all, 10=Completely agree).</p>
+                        <div class="item-example">
+                            <p><strong>Example:</strong> "I believe that AI will improve my life." (Scale: 1-10)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example:</strong> "I think AI technology is positive for humanity." (Scale: 1-10)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange-red text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Acceptance vs. Fear of AI</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">⚖️</span> Attitude Toward AI (ATAI) (Sindermann et al., 2021)</h3>
+                        <p class="text-sm text-gray-400 mb-3">5-item scale capturing both positive acceptance and negative fear/distrust dimensions of AI attitude.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 11-point Likert scale (0=Strongly disagree, 10=Strongly agree).</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Acceptance (Trust/Benefit), Fear (Threat/Job Loss).</p>
+                        <div class="item-example">
+                             <p><strong>Example (Acceptance):</strong> "I trust artificial intelligence." (Scale: 0-10)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Fear):</strong> "I fear artificial intelligence." (Scale: 0-10)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Cognitive, Affective, Behavioral AI Attitudes</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">💬</span> Attitudes Towards AI (ATTARI-12) (Stein et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">12-item scale measuring general attitudes towards AI across thoughts, feelings, and intentions.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 5-point Likert scale (1=Strongly disagree, 5=Strongly agree). Items mixed positive/negative.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Cognitive, Affective, Behavioral.</p>
+                        <div class="item-example">
+                             <p><strong>Example (Cognitive):</strong> "AI offers solutions to many world problems." (Scale: 1-5)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Affective):</strong> "I am afraid of AI." (Scale: 1-5, reverse-coded)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-red text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Dimensions of Trust and Distrust in AI</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🛡️</span> Trust Perception Scale - AI (TPA) (Jian et al., 2000; Scharowski et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">12-item scale assessing trust and distrust based on perceived deception, suspicion, confidence, reliability, etc.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 7-point scale (1=Not at all, 7=Extremely).</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Often Trust vs. Distrust factors. Includes a familiarity item.</p>
+                        <div class="item-example">
+                             <p><strong>Example (Distrust):</strong> "I am suspicious of the AI's intent, action, or outputs." (Scale: 1-7)</p>
+                        </div>
+                         <div class="item-example">
+                            <p><strong>Example (Trust):</strong> "The AI is reliable." (Scale: 1-7)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-pink text-xs font-semibold px-2 py-1 rounded-full mb-3">Differentiates Emotional vs. Rational Trust</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">❤️🧠</span> Affective & Cognitive Trust Scale (Shang et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">27-item semantic differential scale measuring trust along cognitive (competence, reliability, honesty) and affective (empathy, care, patience) dimensions.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 5-point or 7-point semantic differential scale (-2 to +2 or -3 to +3) using bipolar adjective pairs.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Cognitive Trust, Affective Trust.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Cognitive):</strong> Unreliable <code>---(-3)--(-2)--(-1)--(0)--(1)--(2)--(3)---</code> Reliable</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Affective):</strong> Apathetic <code>---(-3)--(-2)--(-1)--(0)--(1)--(2)--(3)---</code> Empathetic</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-red-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Scenario-Based Trust Evaluation</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">📹</span> Scharowski Trust Survey (Scharowski et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Uses video vignettes of AI (SDV, Chatbot) in high/low trust scenarios. Measures trust using TPA, single trust/use items, PANAS (affect), risk ratings, and situation-specific trust scales (STS-AD, STS-Chatbot).</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Combination of Likert scales (1-7), sliders (0-100), and PANAS emotion ratings (1-5).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Single Item):</strong> "I would <strong>trust</strong> the AI in the scenario." (Scale: 1-7 Agree/Disagree)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (STS-AD):</strong> "The automated vehicle reacted appropriately to the environment." (Scale: 1-7 Agree/Disagree)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-purple text-xs font-semibold px-2 py-1 rounded-full mb-3">Domain-Specific Attitudes & Experiences</span>
+                         <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">💼🩺🎓</span> AI Experience & Attitude Survey (AIEASM) (Gnambs et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures attitudes (cognitive, affective, behavioral) within Work, Healthcare, and Education domains. Also assesses awareness, positivity, past experience, and future usage intention for specific AI scenarios (virtual assistants, recommenders, robots, etc.).</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scales (0-4 agreement, 0-10 positivity) and frequency/experience scales (0-4).</p>
+                         <div class="item-example">
+                            <p><strong>Example (Work Attitude):</strong> "Artificial intelligence offers good solutions for many job tasks." (Scale: 0-4 Agree/Disagree)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Scenario Experience):</strong> "How much personal experience have you had with [Care robots] in the last 12 months?" (Scale: 0-4 None to Very Much)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue-yellow text-xs font-semibold px-2 py-1 rounded-full mb-3">European Public AI Awareness, Attitude & Trust</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🇪🇺</span> Perceptions on AI by Citizens of Europe (PAICE) (Scantamburlo et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Broad survey covering self-rated competency, general attitude, perceived impact, awareness of AI apps/initiatives, comfort with scenarios, importance of trust measures, and trust in various entities (Govt, EU, Companies, etc.).</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scales (1-5), Yes/No, Multiple Choice (select/rank).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Attitude):</strong> "How would you describe your attitude towards Artificial Intelligence (AI) and its applications?" (Scale: 1-5 Strongly disapprove to Strongly approve)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Trust):</strong> "How much do you trust [Universities and research centres] in ensuring that AI is in the best interest of the public?" (Scale: 1-5 Not at all to A lot)</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <div id="llm-perceptions" class="tab-content hidden">
+                 <h2 class="text-2xl font-semibold mb-4 text-white">LLM Perceptions</h2>
+                 <p class="text-gray-400 mb-6">Focus: Specific perceptions, beliefs, and evaluations related to Large Language Models.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-purple text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Attributed Mental States to LLMs</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">💭</span> Mental Capacity Attribution (Chen et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures the extent to which people attribute human-like mental capacities (related to body, heart, mind) to LLMs.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 7-point capability scale (1=Not at all capable, 7=Highly capable).</p>
+                         <div class="item-example">
+                             <p><strong>Example (Heart):</strong> "...understanding how others are feeling?" (Scale: 1-7)</p>
+                        </div>
+                         <div class="item-example">
+                             <p><strong>Example (Mind):</strong> "...having intentions?" (Scale: 1-7)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-yellow text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Belief in AI vs. Other Predictions</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🔮</span> Prediction Believability & AI Superstition (Lee et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Compares the believability (validity, personalization, reliability, usefulness) of behavioral predictions attributed to AI, Astrology, and Personality tests. Investigates psychological factors influencing belief.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 7-point Likert scale (1=Strongly disagree, 7=Strongly agree) for evaluating predictions. Also includes CRT, NCS-6, AIAS-4, Gullibility, Paranormal Beliefs scales.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Validity):</strong> "I find the [AI] prediction convincing." (Scale: 1-7)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Usefulness):</strong> "The [Astrology] prediction is useful for making future decisions." (Scale: 1-7)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-pink text-xs font-semibold px-2 py-1 rounded-full mb-3">Evaluates Perceived Empathy of LLM Responses</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🫶</span> Perceived LLM Compassion/Responsiveness (Ovsyannikova et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Compares perceived compassion and responsiveness of LLM (ChatGPT-4) vs. human responses to emotional prompts.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 5-point Likert scales for compassion facets. Binary choice for preference. 5-point Likert for responsiveness facets.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Compassion):</strong> Rate response on how much it... "was compassionate" (Scale: 1-5 Disagree/Agree)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Preference):</strong> "Which one of the two responses was better...?" (Options: Human, AI)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-grey text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Perceptions of LLMs as Expert/Objective/Accurate</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🤖</span> Machine Heuristics for LLMs (Rheu & Cho, 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses the extent to which users perceive LLMs (like ChatGPT) as knowledgeable, unbiased, and precise.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 7-point Likert scale (1=Strongly disagree, 7=Strongly agree).</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Expert, Objective, Accurate.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Objective):</strong> "LLMs applications are... Impartial" (Scale: 1-7)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Accurate):</strong> "LLMs applications are... Exact" (Scale: 1-7)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Infers User Goals & Needs from Text (LLM Application)</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧘</span> Empathic Mental Inference from User Text (Zhu et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Task where LLMs (or humans) infer user goals from product reviews and attribute them to psychological needs.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Open-ended goal inference. 5-point Likert scale for attributing goals to 13 fundamental needs.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Goal Inference):</strong> "Based on the product comment... what are your overarching goals...?" (Open text)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Need Attribution):</strong> Attribute inferred goals to "Security" (Scale: 1=Not attributed at all, 5=Highly attributed)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Social Influence of Multi-Agent LLMs</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧑‍🤝‍🧑</span> Social Influence & Agent Impressions (Song et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures opinion change after interacting with single or multiple AI agents. Assesses perceived influence and user impressions.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scales (6 or 7-point) for opinion, influence, impressions. Open-ended questions.</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> User Opinion, Informational Influence, Normative Influence, Agent Impressions.</p>
+                         <div class="item-example">
+                            <p><strong>Example (Informational Influence):</strong> "My decision was influenced by the opinion of the agent(s)." (Scale: 1-7)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Agent Impression):</strong> "The agent(s) were knowledgeable and had topic expertise." (Scale: 1-7)</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+             <div id="energy-literacy" class="tab-content hidden">
+                 <h2 class="text-2xl font-semibold mb-4 text-white">Energy Literacy</h2>
+                 <p class="text-gray-400 mb-6">Focus: Measuring knowledge, perceptions, attitudes, and context related to energy use.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Knowledge & Perception of Energy Consumption/Savings</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">💡</span> Energy Literacy Assessment (Attari et al., 2010)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses perceived effectiveness, estimates of household energy breakdown, relative energy use of devices, relative savings, attitudes (NEP), and behaviors.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Open-ended, percentage estimation, numeric estimation relative to baseline, Likert scales (NEP).</p>
+                         <div class="item-example">
+                             <p><strong>Example (Estimation):</strong> "Energy Consumed by Average Household - Transportation (%)" (Numeric Input)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Relative Use):</strong> "Energy Used by Devices in One Hour - A desktop computer" (Numeric Input relative to 100 units)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Comprehensive Assessment of Knowledge, Affect, Behavior</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">📚</span> Energy Literacy Questionnaire (DeWaters & Powers, 2011; DeWaters et al., 2013)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures factual knowledge (cognitive), attitudes/values/efficacy (affective), and conservation actions (behavioral) related to energy.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Multiple-choice (cognitive), 5-point Likert (affective/behavioral).</p>
+                        <p class="text-sm mb-3"><strong class="text-gray-300">Subscales:</strong> Cognitive, Affective, Behavioral.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Cognitive):</strong> "The amount of ELECTRICAL ENERGY (ELECTRICITY) we use is measured in units called ..." (MC Options)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Affective):</strong> "Saving energy is important." (Scale: 1-5 Agree/Disagree)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-yellow text-xs font-semibold px-2 py-1 rounded-full mb-3">Investigates & Corrects Energy Estimation Biases</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">⚙️</span> Energy Use Misperceptions & Interventions (Marghetis et al., 2019)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Uses estimation tasks, choice tasks, numeracy/CRT, and attitude scales (NEP) to assess misperceptions and intervention impacts.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Numeric estimation, binary choice, multiple-choice, Likert scales.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Estimation):</strong> Estimate Wh for "Clothes dryer" (Numeric Input)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Choice Task):</strong> "Which uses less energy? (Left) Using an electric blanket for an hour OR (Right) Using a space heater for an hour." (Binary Choice)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-purple text-xs font-semibold px-2 py-1 rounded-full mb-3">Explores How Experts Judge Energy Use</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧑‍🔬</span> Expert Energy Heuristics (Kantenbacher & Attari, 2021)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Uses talk-aloud protocols during choice/estimation tasks to identify expert heuristics. Includes survey rating accuracy of heuristic rules.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Talk-aloud, choice tasks, estimation tasks, Likert scale for heuristic accuracy (1-4).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Heuristic Rating):</strong> "Devices with heating elements use a lot of energy." (Scale: 1-4 Accuracy)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Evaluates Understanding & Preference for Energy Reports</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">📊</span> Electricity-Use Communications Perceptions (Canfield et al., 2017)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures understanding of different energy report formats (T/F questions). Assesses preferences (clarity, usefulness, trust) and intentions (Likert).</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> True/False, 7-point Likert scales.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Understanding):</strong> "True / False: The Smith's home used more electricity in February 2011 than February 2012."</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Preference):</strong> "How clear is this information?" (Scale: 1=Not at all, 7=Very much)</p>
+                        </div>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Attitudes towards Energy Issues</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🌍</span> Energy-Issue Attitude Questionnaire (Mei-Shiu et al., 2018)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses attitudes towards energy problems, solutions, and policies. (Specific items in linked PDF).</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scale (assumed).</p>
+                        <p class="text-sm text-gray-500 italic">(Note: Items available in the source PDF link)</p>
+                    </div>
+
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-green-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Knowledge & Attitudes towards EVs & Heat Pumps</span>
+                         <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🚗♨️</span> Low Carbon Technology Narratives (Attari et al., 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures familiarity, ownership, barriers, motivations, and knowledge (T/F) regarding EVs and heat pumps. Includes climate attitudes.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scales, Yes/No, True/False, Open-ended text.</p>
+                         <div class="item-example">
+                            <p><strong>Example (Knowledge):</strong> "Heat pumps can both heat and cool my home." (True/False)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Barrier):</strong> "What is the biggest barrier preventing you from buying or leasing an electric vehicle?" (Open Text)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Climate Beliefs & Related Psych Traits</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">⚖️🍃</span> Environmental Decision-Making Context (He et al., 2024)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures climate change beliefs/concerns, competitiveness, risk/time preferences, loss aversion, and experience with energy bill social comparisons.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert scales (1-7), 0-10 scales, Yes/No.</p>
+                        <div class="item-example">
+                            <p><strong>Example (Climate Concern):</strong> "Considering any potential effects of climate change on society in general, how concerned are you about climate change?" (Scale: 1-7)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Experience):</strong> "Have you ever received information about how your consumption/behaviour compares to... comparable households?" (Yes/No)</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+             <div id="numeracy" class="tab-content hidden">
+                 <h2 class="text-2xl font-semibold mb-4 text-white">Numeracy</h2>
+                 <p class="text-gray-400 mb-6">Focus: Measuring numerical literacy and cognitive reflection.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-blue text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Understanding of Probability/Percentages</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧮</span> Statistical Numeracy (Attari et al. 2010 / Berlin Numeracy Test)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Uses probability problems (e.g., coin flips, lottery chances, disease risk) to assess statistical numeracy and risk literacy.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Typically open numeric entry or multiple-choice.</p>
+                        <div class="item-example">
+                            <p><strong>Example (BNT):</strong> "Imagine we are tossing a fair coin 1,000 times. What is your best guess about how many times the coin would come up heads...?" (Numeric Input)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (BNT):</strong> "Which of the following numbers represents the biggest risk of getting a disease? 1 in 100, 1 in 1000, 1 in 10" (Multiple Choice)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Tendency to Override Intuition</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">❓</span> Cognitive Reflection Test (CRT) (Various Studies)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses propensity to engage in reflective thinking over intuitive responses using classic brain teaser-style problems.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Open numeric entry or forced choice between common incorrect and correct answer.</p>
+                        <div class="item-example">
+                            <p><strong>Example (CRT):</strong> "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost? (in cents)" (Numeric Input: Correct=5)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (CRT-2):</strong> "If you're running a race and you pass the person in second place, what place are you in?" (Options: first, <em>second</em>)</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <div id="behavioral" class="tab-content hidden">
+                 <h2 class="text-2xl font-semibold mb-4 text-white">Behavioral Measures</h2>
+                 <p class="text-gray-400 mb-6">Focus: Assessing self-reported behaviors, intentions, and related psychological constructs.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-green text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Frequency of Energy-Saving Actions</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">♻️</span> Energy Conservation Behaviors (DeWaters & Powers, 2011)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses how often individuals perform common energy conservation actions.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 5-point Likert frequency scale (e.g., 1=Never to 5=Almost Always).</p>
+                        <div class="item-example">
+                            <p><strong>Example:</strong> "When I leave a room, I turn off the lights." (Scale: 1-5 Frequency)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-yellow text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Perceived Ease/Difficulty of Adopting Behaviors</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">💪</span> Perceived Difficulty of Energy Behaviors (Attari et al., 2010)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures how hard or easy participants perceive making specific energy-saving changes to be.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Categorical scale including "Do it already", "Extremely easy" through "Extremely hard", and "Not applicable".</p>
+                        <div class="item-example">
+                            <p><strong>Example:</strong> "Carpooling with one other person to work" (Categorical Response)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-red text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Information Verification & Critical Evaluation with AI</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🔎</span> AI Fact-Checking / Critical Thinking (Rheu & Cho, 2025; Gerlich, 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses how often users verify information from AI/LLMs or engage in critical thinking when using these tools.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Likert frequency scales (e.g., 1=Never to 7=Always or 1-6 Disagree/Agree).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Rheu & Cho):</strong> "Use other search engines to further research on the topic [from LLM]." (Scale: 1-7 Frequency)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Gerlich):</strong> "I often cross-check information provided by AI tools with other sources." (Scale: 1-6 Agree/Disagree)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-purple text-xs font-semibold px-2 py-1 rounded-full mb-3">Assesses Potential Overreliance & Negative Use Patterns</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">⚠️</span> Problematic AI/Chatbot Use & Dependence (Fang et al., 2025; Gerlich, 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Measures aspects like preoccupation, withdrawal, loss of control, neglect of activities, and emotional reliance related to AI/chatbot use.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 5-point Likert agreement scale (1=Disagree, 5=Agree).</p>
+                        <div class="item-example">
+                            <p><strong>Example (Fang - PCUS):</strong> "I experience anxiety or irritability when unable to access the chatbot." (Scale: 1-5)</p>
+                        </div>
+                        <div class="item-example">
+                             <p><strong>Example (Fang - ADS-9):</strong> "I think I am emotionally dependent on the chatbot." (Scale: 1-5)</p>
+                        </div>
+                        <div class="item-example">
+                            <p><strong>Example (Gerlich - Reliance):</strong> "I find myself relying heavily on AI tools for tasks I used to do myself." (Scale: 1-6)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-orange text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Tendency to Delegate Cognitive Tasks to Tech</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">☁️⬆️</span> Cognitive Offloading (Gerlich, 2025)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Assesses the frequency of using digital tools (search engines, devices) to store information or solve problems instead of relying on internal memory or effort.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> 6-point Likert frequency/agreement scale.</p>
+                        <div class="item-example">
+                            <p><strong>Example:</strong> "How often do you use search engines like Google to retrieve information you have looked up before?" (Scale: 1-6 Frequency)</p>
+                        </div>
+                    </div>
+
+                    <div class="survey-card rounded-lg p-5 shadow-lg">
+                        <span class="inline-block header-tag-grey text-xs font-semibold px-2 py-1 rounded-full mb-3">Measures Individual Differences Correlated with Behavior</span>
+                        <h3 class="text-xl font-semibold text-white mb-2 flex items-center"><span class="text-2xl mr-2">🧩</span> Personality, Beliefs & Other Traits (Various Studies)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Includes scales like Big Five, Dark Triad, Need for Cognition, Paranormal Beliefs, Gullibility, Competitiveness, Loss Aversion, Compliance, Conformity, etc.</p>
+                        <p class="text-sm mb-1"><strong class="text-gray-300">Format:</strong> Various Likert scales (typically 5 or 7 points).</p>
+                        <p class="text-sm text-gray-500 italic">(Note: This card summarizes scale types, not specific items.)</p>
+                    </div>
+                 </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Simple JavaScript for tab switching functionality
+        function showTab(tabId) {
+            // Get all tab content elements
+            const tabContents = document.querySelectorAll('#tab-content-area .tab-content');
+            // Get all tab button elements
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            // Hide all tab content
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Deactivate all tab buttons
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+                // Adjust aria-selected for accessibility
+                button.setAttribute('aria-selected', 'false');
+            });
+
+            // Show the selected tab content
+            const selectedTabContent = document.getElementById(tabId);
+            if (selectedTabContent) {
+                selectedTabContent.classList.remove('hidden');
+            }
+
+            // Activate the selected tab button
+            const selectedTabButton = document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`);
+            if (selectedTabButton) {
+                selectedTabButton.classList.add('active');
+                 // Adjust aria-selected for accessibility
+                selectedTabButton.setAttribute('aria-selected', 'true');
+            }
+        }
+
+        // Initialize the first tab as active on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('ai-literacy'); // Show the first tab by default
+        });
+    </script>
+
+</body>
+</html>

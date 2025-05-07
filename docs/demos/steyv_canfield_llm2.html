@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Reduction Planning Task (Live LLM Demo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Slider Styles */
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+            background: #d1d5db; /* gray-300 */ outline: none; opacity: 0.7;
+            -webkit-transition: .2s; transition: opacity .2s; border-radius: 4px; cursor: pointer;
+        }
+        input[type="range"]:hover { opacity: 1; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 20px; height: 20px;
+            background: #3b82f6; /* blue-500 */ cursor: pointer; border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px; background: #3b82f6; cursor: pointer;
+            border-radius: 50%; border: none;
+        }
+        /* Message Box Styles */
+        #message-box {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; transition: opacity 0.5s ease-in-out; pointer-events: none;
+        }
+        /* Loader Styles */
+        .loader {
+            border: 4px solid #f3f4f6; /* gray-100 */
+            border-top: 4px solid #3b82f6; /* blue-500 */
+            border-radius: 50%; width: 24px; height: 24px;
+            animation: spin 1s linear infinite; display: inline-block; margin-left: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- Historical Data Visualization Styles --- */
+
+        /* Table Styles */
+        .historical-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.8rem; }
+        .historical-table th, .historical-table td { border: 1px solid #e5e7eb; padding: 4px 6px; text-align: right; }
+        .historical-table th { background-color: #f3f4f6; text-align: center; font-weight: 600; }
+        .historical-table td:first-child { text-align: left; font-weight: 500; background-color: #f9fafb;}
+        .historical-table .total-row td { font-weight: bold; background-color: #f3f4f6; border-top: 2px solid #d1d5db; }
+
+        /* Stacked Bar Chart Styles */
+        .stacked-bar-chart-container { display: flex; height: 200px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden; margin-bottom: 1rem; padding: 5px; gap: 2px; }
+        .monthly-bar { flex: 1; display: flex; flex-direction: column-reverse; background-color: #e5e7eb; position: relative; }
+        .appliance-segment { transition: height 0.3s ease; text-align: center; color: white; font-size: 0.6rem; line-height: 1; overflow: hidden; }
+        .monthly-bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #6b7280; white-space: nowrap; }
+
+        /* Icon Graph Styles */
+        .icon-chart-container { border: 1px solid #e5e7eb; border-radius: 4px; padding: 10px; background-color: #f9fafb; margin-bottom: 1rem; }
+        .monthly-icon-group { display: flex; border-bottom: 1px dashed #d1d5db; padding: 5px 0; align-items: flex-start; }
+        .monthly-icon-label { font-size: 0.8rem; font-weight: 500; color: #4b5563; width: 50px; flex-shrink: 0; padding-top: 2px;}
+        .appliance-icon-stack { display: flex; flex-wrap: wrap; gap: 1px; line-height: 0.8; margin-right: 5px; }
+        .icon { font-size: 9px; width: 10px; text-align: center; }
+        .icon-legend { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.8rem; margin-top: 10px; padding-left: 55px; }
+        .icon-legend span { display: inline-flex; align-items: center; }
+        .icon-legend .icon { margin-right: 4px; }
+
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-md">
+
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-6 text-blue-600">Energy Reduction Planning Task (Live LLM Demo)</h1>
+
+        <div id="message-box" class="hidden px-4 py-2 rounded-md shadow-lg text-white"></div>
+
+        <div id="setup-step" class="mb-8 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+            <h2 class="text-xl font-semibold mb-3 text-indigo-700">Demo Setup</h2>
+            <div class="mb-4 p-3 bg-red-100 border border-red-300 text-red-800 rounded-md">
+                <strong class="font-semibold">Security Warning:</strong> Handle API keys securely. This demo uses client-side key handling for simplicity, which is not recommended for production.
+            </div>
+            <div class="mb-4">
+                <label for="api-key" class="block text-md font-medium text-gray-700 mb-1">OpenAI API Key:</label>
+                <input type="password" id="api-key" name="api-key" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your OpenAI API key here">
+            </div>
+            <div class="mb-4">
+                <label class="block text-md font-medium text-gray-700 mb-1">Select Critique Uncertainty Style:</label>
+                <div class="mt-2 space-y-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="condition" value="confident" checked><span class="ml-2">Confident / Sure</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="condition" value="somewhat_sure"><span class="ml-2">Somewhat Sure</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="condition" value="unsure"><span class="ml-2">Unsure / Not Sure</span></label>
+                </div>
+            </div>
+             <div class="mb-4">
+                <label class="block text-md font-medium text-gray-700 mb-1">Select Critique Explanation Length:</label>
+                <div class="mt-2 space-y-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="length" value="long" checked><span class="ml-2">Long (Default)</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="length" value="short"><span class="ml-2">Short</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="length" value="uncertainty_only"><span class="ml-2">Uncertainty Only</span></label>
+                </div>
+            </div>
+             <div class="mb-4">
+                <label class="block text-md font-medium text-gray-700 mb-1">Select Historical Information Format:</label>
+                 <div class="mt-2 space-y-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="format" value="table" checked><span class="ml-2">Table</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="format" value="bar"><span class="ml-2">Stacked Bar Graph</span></label>
+                    <label class="inline-flex items-center"><input type="radio" class="form-radio text-indigo-600" name="format" value="icon"><span class="ml-2">Icon Graph</span></label>
+                </div>
+            </div>
+            <button id="start-demo-btn" class="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Start Demo</button>
+        </div>
+
+        <div id="instructions" class="hidden mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h2 class="text-xl font-semibold mb-3 text-blue-700">Instructions</h2>
+            <p class="mb-2">Imagine your household needs to reduce its monthly electricity consumption by <strong class="font-semibold">15%</strong>.</p>
+            <p class="mb-2">First, review the historical breakdown of energy use by appliance category below, presented in your selected format.</p>
+            <p class="mb-2">Then, create an action plan detailing how you would allocate the required 15% reduction across these categories using the sliders provided for each appliance.</p>
+            <p class="mb-2">The total reduction must add up to exactly 15%.</p>
+            <p>After submitting your plan, you will receive feedback generated by an AI model based on your selected uncertainty and length conditions.</p>
+            <div class="mt-4 flex justify-between items-center">
+                <button id="start-planning-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Start Planning</button>
+                <button id="skip-instructions-btn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Skip to Planning</button>
+            </div>
+        </div>
+
+        <div id="planning-task" class="hidden mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Historical Appliance Usage & Reduction Plan</h2>
+
+            <div class="mb-6 border-b pb-4">
+                 <h3 class="text-lg font-semibold mb-2 text-gray-600">Historical Usage Breakdown (<span id="format-display" class="font-medium">Table</span> Format)</h3>
+                 <div id="historical-data-display" class="overflow-x-auto">
+                     </div>
+            </div>
+
+            <h3 class="text-lg font-semibold mb-4 text-gray-600">Allocate 15% Reduction</h3>
+            <div id="appliance-sliders" class="space-y-5">
+                 </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-300">
+                <p class="text-lg font-semibold">Total Allocated Reduction: <span id="total-reduction" class="font-bold text-blue-600">0%</span> / 15%</p>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center">
+                <button id="submit-plan-btn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed" disabled>Submit Plan for Feedback</button>
+                <button id="skip-planning-btn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Skip to Feedback</button>
+            </div>
+        </div>
+
+        <div id="critique-section" class="hidden mb-8 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+             <h2 class="text-xl font-semibold mb-3 text-yellow-800 flex items-center">
+                Feedback on Your Plan (Style: <span id="critique-style-display" class="font-normal ml-1"></span>, Length: <span id="critique-length-display" class="font-normal ml-1"></span>)
+                <span id="critique-loader" class="loader hidden"></span>
+            </h2>
+            <p id="llm-critique-text" class="text-gray-700 whitespace-pre-wrap min-h-[50px] bg-white p-3 rounded border border-yellow-100"></p>
+            <div class="mt-4 flex justify-between items-center">
+                <button id="proceed-to-questions-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out disabled:opacity-50" disabled>Continue</button>
+                <button id="skip-critique-btn" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Skip to Questions</button>
+            </div>
+        </div>
+
+        <div id="dv-questions" class="hidden">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Questions about the Feedback</h2>
+            <div class="space-y-4">
+                 <div class="p-4 border rounded-md bg-gray-50">
+                    <label for="usefulness-rating" class="block text-md font-medium text-gray-700 mb-2">How useful did you find the feedback provided on your plan?</label>
+                    <select id="usefulness-rating" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="">Select...</option><option value="1">1 - Not useful</option><option value="2">2</option><option value="3">3</option><option value="4">4 - Moderately useful</option><option value="5">5</option><option value="6">6</option><option value="7">7 - Extremely useful</option>
+                    </select>
+                </div>
+                <div class="p-4 border rounded-md bg-gray-50">
+                    <label for="trust-rating" class="block text-md font-medium text-gray-700 mb-2">How much did you trust the feedback provided?</label>
+                    <select id="trust-rating" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                         <option value="">Select...</option><option value="1">1 - Did not trust</option><option value="2">2</option><option value="3">3</option><option value="4">4 - Moderately trusted</option><option value="5">5</option><option value="6">6</option><option value="7">7 - Completely trusted</option>
+                    </select>
+                </div>
+                 <div class="p-4 border rounded-md bg-gray-50">
+                    <label for="preference-rating" class="block text-md font-medium text-gray-700 mb-2">How much did you like the style of the feedback provided?</label>
+                    <select id="preference-rating" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                         <option value="">Select...</option><option value="1">1 - Disliked very much</option><option value="2">2</option><option value="3">3</option><option value="4">4 - Neutral</option><option value="5">5</option><option value="6">6</option><option value="7">7 - Liked very much</option>
+                    </select>
+                </div>
+                <div class="p-4 border rounded-md bg-gray-50">
+                    <label for="feasibility-rating" class="block text-md font-medium text-gray-700 mb-2">After seeing the feedback, how feasible or realistic do you think your initial plan was?</label>
+                    <select id="feasibility-rating" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="">Select...</option><option value="1">1 - Not feasible</option><option value="2">2</option><option value="3">3</option><option value="4">4 - Moderately feasible</option><option value="5">5</option><option value="6">6</option><option value="7">7 - Extremely feasible</option>
+                    </select>
+                </div>
+            </div>
+             <div class="mt-6 flex justify-between items-center">
+                <button id="finish-experiment-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Finish Experiment</button>
+             </div>
+        </div>
+
+         <div id="completion-message" class="hidden text-center p-6 bg-green-50 rounded-lg border border-green-200">
+            <h2 class="text-xl font-semibold text-green-700">Experiment Complete</h2>
+            <p class="mt-2 text-gray-600">Thank you for your participation!</p>
+            <p class="mt-1 text-sm text-gray-500">(In a real study, your responses would be saved here.)</p>
+            <button id="restart-demo-btn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out">Restart Demo</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const REQUIRED_REDUCTION = 15;
+        const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+        const LLM_MODEL = 'gpt-4.1';
+        const HISTORICAL_ICON_SCALE_FACTOR = 100; // 1 icon = 100 kWh for historical data
+        const MAX_HISTORICAL_ICONS_PER_ROW = 10;
+
+        // Appliance definitions including color for charts
+        const appliances = [
+            { id: 'hvac', name: 'Heating & Cooling', icon: '❄️', color: '#ef4444' },
+            { id: 'water_heater', name: 'Water Heater', icon: '💧', color: '#f97316' },
+            { id: 'lighting', name: 'Lighting', icon: '💡', color: '#eab308' },
+            { id: 'refrigeration', name: 'Refrigeration', icon: '🧊', color: '#22c55e' },
+            { id: 'electronics', name: 'Electronics', icon: '📺', color: '#3b82f6' },
+            { id: 'other', name: 'Other', icon: '🍳', color: '#a855f7' }
+        ];
+
+        // Sample Historical Data (kWh per month)
+        const historicalData = {
+            months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            hvac:         [600, 500, 400, 100, 150, 300, 600, 1100, 400, 100, 450, 550],
+            water_heater: [150, 140, 130, 120, 120, 130, 140, 150, 140, 130, 140, 150],
+            lighting:     [100,  90,  80,  70,  70,  80,  90, 100,  90,  80,  90, 100],
+            refrigeration:[ 50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50],
+            electronics:  [150, 140, 150, 140, 150, 160, 170, 180, 170, 160, 150, 150],
+            other:        [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+        };
+        historicalData.totals = historicalData.months.map((_, monthIndex) => {
+            let monthTotal = 0;
+            appliances.forEach(app => { monthTotal += historicalData[app.id][monthIndex] || 0; });
+            return monthTotal;
+        });
+        const maxMonthlyTotal = Math.max(...historicalData.totals);
+
+        // --- State Variables ---
+        let userPlan = {};
+        let apiKey = null;
+        let selectedUncertaintyCondition = 'confident';
+        let selectedLengthCondition = 'long';
+        let selectedFormatCondition = 'table';
+        let llmResponse = '';
+
+        // --- DOM Elements ---
+        const setupStepDiv = document.getElementById('setup-step');
+        const instructionsDiv = document.getElementById('instructions');
+        const planningTaskDiv = document.getElementById('planning-task');
+        const critiqueSectionDiv = document.getElementById('critique-section');
+        const dvQuestionsDiv = document.getElementById('dv-questions');
+        const completionMessageDiv = document.getElementById('completion-message');
+        const apiKeyInput = document.getElementById('api-key');
+        const uncertaintyRadios = document.querySelectorAll('input[name="condition"]');
+        const lengthRadios = document.querySelectorAll('input[name="length"]');
+        const formatRadios = document.querySelectorAll('input[name="format"]');
+        const startDemoBtn = document.getElementById('start-demo-btn');
+        const startPlanningBtn = document.getElementById('start-planning-btn');
+        const skipInstructionsBtn = document.getElementById('skip-instructions-btn');
+        const historicalDataDisplayDiv = document.getElementById('historical-data-display');
+        const applianceSlidersDiv = document.getElementById('appliance-sliders');
+        const formatDisplaySpan = document.getElementById('format-display');
+        const totalReductionSpan = document.getElementById('total-reduction');
+        const submitPlanBtn = document.getElementById('submit-plan-btn');
+        const skipPlanningBtn = document.getElementById('skip-planning-btn');
+        const critiqueLoader = document.getElementById('critique-loader');
+        const llmCritiqueTextP = document.getElementById('llm-critique-text');
+        const critiqueStyleDisplay = document.getElementById('critique-style-display');
+        const critiqueLengthDisplay = document.getElementById('critique-length-display');
+        const proceedToQuestionsBtn = document.getElementById('proceed-to-questions-btn');
+        const skipCritiqueBtn = document.getElementById('skip-critique-btn');
+        const finishExperimentBtn = document.getElementById('finish-experiment-btn');
+        const restartDemoBtn = document.getElementById('restart-demo-btn');
+        const messageBox = document.getElementById('message-box');
+
+
+        // --- Functions ---
+
+        function showMessage(message, type = 'success', duration = 3000) {
+            // (Implementation remains the same)
+             messageBox.textContent = message;
+            messageBox.className = `px-4 py-2 rounded-md shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            messageBox.classList.remove('hidden');
+            messageBox.style.opacity = 1;
+            if (messageBox.timeoutId) clearTimeout(messageBox.timeoutId);
+            if (messageBox.transitionListener) messageBox.removeEventListener('transitionend', messageBox.transitionListener);
+            messageBox.timeoutId = setTimeout(() => {
+                messageBox.style.opacity = 0;
+                messageBox.transitionListener = () => { messageBox.classList.add('hidden'); messageBox.timeoutId = null; messageBox.transitionListener = null; };
+                messageBox.addEventListener('transitionend', messageBox.transitionListener, { once: true });
+            }, duration);
+        }
+
+        function updateTotalReduction() {
+            // (Implementation remains the same)
+             let total = 0;
+            document.querySelectorAll('.appliance-slider').forEach(slider => { total += parseFloat(slider.value); });
+            total = Math.round(total * 10) / 10;
+            totalReductionSpan.textContent = `${total}%`;
+            userPlan = {};
+            document.querySelectorAll('.appliance-slider').forEach(slider => { userPlan[slider.dataset.applianceId] = parseFloat(slider.value); });
+            if (Math.abs(total - REQUIRED_REDUCTION) < 0.01) {
+                submitPlanBtn.disabled = false;
+                totalReductionSpan.classList.remove('text-red-600'); totalReductionSpan.classList.add('text-green-600');
+            } else {
+                submitPlanBtn.disabled = true;
+                totalReductionSpan.classList.remove('text-green-600'); totalReductionSpan.classList.add(total > REQUIRED_REDUCTION ? 'text-red-600' : 'text-blue-600');
+            }
+        }
+
+        /**
+         * Displays the historical appliance usage data in the selected format.
+         */
+        function displayHistoricalData() {
+            // (Implementation remains the same as previous version)
+            historicalDataDisplayDiv.innerHTML = '';
+             formatDisplaySpan.textContent = selectedFormatCondition.charAt(0).toUpperCase() + selectedFormatCondition.slice(1).replace('bar', 'Stacked Bar Graph').replace('icon', 'Icon Graph');
+
+            if (selectedFormatCondition === 'table') {
+                const table = document.createElement('table'); table.className = 'historical-table';
+                const thead = table.createTHead(); const headerRow = thead.insertRow();
+                const thAppliance = document.createElement('th'); thAppliance.textContent = 'Appliance'; headerRow.appendChild(thAppliance);
+                historicalData.months.forEach(month => { const thMonth = document.createElement('th'); thMonth.textContent = month; headerRow.appendChild(thMonth); });
+                const tbody = table.createTBody();
+                appliances.forEach(app => {
+                    const row = tbody.insertRow(); const cellAppliance = row.insertCell(); cellAppliance.textContent = app.name;
+                    historicalData.months.forEach((_, monthIndex) => { const cellValue = row.insertCell(); cellValue.textContent = historicalData[app.id][monthIndex] !== undefined ? historicalData[app.id][monthIndex] : 'N/A'; });
+                });
+                 const tfoot = table.createTFoot(); const totalRow = tfoot.insertRow(); totalRow.className = 'total-row';
+                 const cellTotalLabel = totalRow.insertCell(); cellTotalLabel.textContent = 'Total (kWh)';
+                 historicalData.totals.forEach(total => { const cellTotal = totalRow.insertCell(); cellTotal.textContent = total; });
+                historicalDataDisplayDiv.appendChild(table);
+            } else if (selectedFormatCondition === 'bar') {
+                const chartContainer = document.createElement('div'); chartContainer.className = 'stacked-bar-chart-container';
+                historicalData.months.forEach((month, monthIndex) => {
+                    const monthlyBar = document.createElement('div'); monthlyBar.className = 'monthly-bar'; monthlyBar.title = `${month}: ${historicalData.totals[monthIndex]} kWh Total`;
+                    const monthTotal = historicalData.totals[monthIndex];
+                    if (monthTotal > 0) {
+                        [...appliances].reverse().forEach(app => {
+                            const value = historicalData[app.id][monthIndex] || 0;
+                            if (value > 0) {
+                                const segment = document.createElement('div'); segment.className = 'appliance-segment'; segment.style.backgroundColor = app.color || '#cccccc';
+                                segment.style.height = `${(value / maxMonthlyTotal) * 100}%`; segment.title = `${app.name}: ${value} kWh`;
+                                monthlyBar.appendChild(segment);
+                            }
+                        });
+                    }
+                    const label = document.createElement('span'); label.className = 'monthly-bar-label'; label.textContent = month; monthlyBar.appendChild(label);
+                    chartContainer.appendChild(monthlyBar);
+                });
+                 historicalDataDisplayDiv.appendChild(chartContainer); historicalDataDisplayDiv.appendChild(createLegend());
+            } else if (selectedFormatCondition === 'icon') {
+                const iconChartContainer = document.createElement('div'); iconChartContainer.className = 'icon-chart-container';
+                historicalData.months.forEach((month, monthIndex) => {
+                    const monthlyGroup = document.createElement('div'); monthlyGroup.className = 'monthly-icon-group';
+                    const monthLabel = document.createElement('span'); monthLabel.className = 'monthly-icon-label'; monthLabel.textContent = month; monthlyGroup.appendChild(monthLabel);
+                    const iconsWrapper = document.createElement('div'); iconsWrapper.style.display = 'flex'; iconsWrapper.style.flexWrap = 'wrap';
+                    appliances.forEach(app => {
+                        const value = historicalData[app.id][monthIndex] || 0; const numIcons = Math.ceil(value / HISTORICAL_ICON_SCALE_FACTOR);
+                        if (numIcons > 0) {
+                             const applianceStack = document.createElement('div'); applianceStack.className = 'appliance-icon-stack'; applianceStack.title = `${app.name}: ${value} kWh`;
+                            for (let i = 0; i < numIcons; i++) {
+                                const iconSpan = document.createElement('span'); iconSpan.className = 'icon'; iconSpan.style.color = app.color || '#fbbf24'; iconSpan.textContent = app.icon || '●';
+                                applianceStack.appendChild(iconSpan);
+                            }
+                             iconsWrapper.appendChild(applianceStack);
+                        }
+                    });
+                    monthlyGroup.appendChild(iconsWrapper); iconChartContainer.appendChild(monthlyGroup);
+                });
+                 historicalDataDisplayDiv.appendChild(iconChartContainer); historicalDataDisplayDiv.appendChild(createLegend());
+                 const scaleInfo = document.createElement('p'); scaleInfo.className = 'text-xs text-gray-500 mt-2 pl-14'; scaleInfo.textContent = `Each icon ≈ ${HISTORICAL_ICON_SCALE_FACTOR} kWh`; historicalDataDisplayDiv.appendChild(scaleInfo);
+            }
+        }
+
+        /** Helper function to create a legend */
+        function createLegend() {
+            // (Implementation remains the same)
+            const legendContainer = document.createElement('div'); legendContainer.className = 'icon-legend';
+            appliances.forEach(app => {
+                const legendItem = document.createElement('span'); const colorBox = document.createElement('span');
+                colorBox.className = 'inline-block w-3 h-3 mr-1.5 rounded-sm'; colorBox.style.backgroundColor = app.color || '#cccccc';
+                legendItem.appendChild(colorBox); legendItem.appendChild(document.createTextNode(app.name)); legendContainer.appendChild(legendItem);
+            });
+            return legendContainer;
+        }
+
+
+        /**
+         * Creates only the sliders for the reduction plan.
+         */
+        function createApplianceSliders() {
+            // (Implementation remains the same)
+            applianceSlidersDiv.innerHTML = '';
+            appliances.forEach(appliance => {
+                const containerDiv = document.createElement('div'); containerDiv.className = 'p-3 border rounded-md bg-gray-50 shadow-sm';
+                const label = document.createElement('label'); label.htmlFor = `slider-${appliance.id}`; label.className = 'block text-md font-medium text-gray-700 mb-2'; label.textContent = `Reduction for ${appliance.name}:`; containerDiv.appendChild(label);
+                const sliderContainer = document.createElement('div'); sliderContainer.className = 'flex items-center space-x-3';
+                const slider = document.createElement('input'); slider.type = 'range'; slider.id = `slider-${appliance.id}`; slider.name = `slider-${appliance.id}`; slider.min = '0'; slider.max = REQUIRED_REDUCTION.toString(); slider.step = '0.5'; slider.value = '0'; slider.className = 'appliance-slider flex-grow'; slider.dataset.applianceId = appliance.id;
+                const valueSpan = document.createElement('span'); valueSpan.id = `value-${appliance.id}`; valueSpan.className = 'text-md font-semibold text-blue-700 w-12 text-right'; valueSpan.textContent = '0%';
+                slider.addEventListener('input', () => { valueSpan.textContent = `${slider.value}%`; updateTotalReduction(); });
+                sliderContainer.appendChild(slider); sliderContainer.appendChild(valueSpan); containerDiv.appendChild(sliderContainer);
+                applianceSlidersDiv.appendChild(containerDiv);
+            });
+            updateTotalReduction();
+        }
+
+
+        function createDefaultPlan() {
+             // (Implementation remains the same)
+             userPlan = { hvac: 8.0, water_heater: 4.0, lighting: 1.0, refrigeration: 0.5, electronics: 1.0, other: 0.5 };
+             console.log("Using default plan:", userPlan);
+        }
+
+        /**
+         * Calls the OpenAI API to get a critique, with refined 'uncertainty_only' prompt.
+         */
+        async function getLlmCritique() {
+            if (!apiKey) { showMessage("API Key is missing.", "error"); return "Error: API Key not provided."; }
+            if (!userPlan || Object.keys(userPlan).length === 0) { createDefaultPlan(); }
+
+            let planDetails = "User's Energy Reduction Plan (Target: 15%):\n";
+            for (const [key, value] of Object.entries(userPlan)) {
+                const applianceName = appliances.find(a => a.id === key)?.name || key;
+                planDetails += `- ${applianceName}: Reduce by ${value}%\n`;
+            }
+
+            const uncertaintyPhrase = { confident: "sure", somewhat_sure: "somewhat sure", unsure: "not sure" }[selectedUncertaintyCondition] || "somewhat sure";
+
+            // --- Refined Prompt Logic ---
+            let lengthInstruction = "";
+            let finalUserPrompt = "";
+            const systemPrompt = `You are an AI assistant providing feedback on household energy reduction plans. Your feedback should be constructive and reflect a specific level of uncertainty and explanation length as requested. Start your response directly with the critique.`;
+
+            if (selectedLengthCondition === 'uncertainty_only') {
+                // Refined prompt for 'uncertainty_only'
+                lengthInstruction = `State your level of certainty first (e.g., "I am ${uncertaintyPhrase} about this plan."). Then, add exactly one brief, generic sentence acknowledging a general factor influencing plan success (like variability, behavior dependence, or targeting common areas), without critiquing the specific plan numbers or choices. Do not add any other explanation.`;
+                 finalUserPrompt = `Critique the following energy reduction plan aiming for a ${REQUIRED_REDUCTION}% total reduction:\n\n${planDetails}\n\nInstructions for your critique:\n1. Adopt the uncertainty level: State "I am ${uncertaintyPhrase} about this plan." first.\n2. Follow the explanation length instruction: ${lengthInstruction}\n3. Begin your response *directly* with the certainty statement.`;
+
+            } else {
+                 // Prompts for 'short' and 'long'
+                 if (selectedLengthCondition === 'short') {
+                     lengthInstruction = "Use as few words as possible while still providing a meaningful critique of the plan's potential effectiveness or feasibility.";
+                 } else { // long
+                     lengthInstruction = "Provide a standard, reasonably detailed explanation critiquing the plan's potential effectiveness or feasibility.";
+                 }
+                  finalUserPrompt = `Critique the following energy reduction plan aiming for a ${REQUIRED_REDUCTION}% total reduction:\n\n${planDetails}\n\nInstructions for your critique:\n1. Adopt the specified uncertainty level: Mention you are "${uncertaintyPhrase}" regarding the plan's effectiveness or feasibility within your critique.\n2. Follow the explanation length instruction: ${lengthInstruction}\n3. Begin your response *directly* with the critique itself, without any introductory phrases like "Here is the critique:".`;
+            }
+            // --- End Refined Prompt Logic ---
+
+
+            critiqueLoader.classList.remove('hidden'); llmCritiqueTextP.textContent = ''; proceedToQuestionsBtn.disabled = true;
+
+            try {
+                console.log("Sending Prompt to LLM:", finalUserPrompt); // Log the prompt for debugging
+                const response = await fetch(OPENAI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                    body: JSON.stringify({
+                        model: LLM_MODEL,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: finalUserPrompt } // Use the constructed prompt
+                        ],
+                        temperature: 0.7
+                    })
+                });
+                if (!response.ok) { const errorData = await response.json(); console.error("API Error:", errorData); throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`); }
+                const data = await response.json();
+                llmResponse = data.choices[0]?.message?.content?.trim() || "No response content received.";
+
+                // Optional: Fallback check specifically for the refined uncertainty_only prompt
+                if (selectedLengthCondition === 'uncertainty_only' && !llmResponse.toLowerCase().startsWith(`i am ${uncertaintyPhrase}`)) {
+                     console.warn("LLM response for uncertainty_only didn't start as expected. Using fallback.");
+                     llmResponse = `I am ${uncertaintyPhrase} about this plan. Actual savings often depend on specific usage habits.`; // Example fallback
+                }
+
+                return llmResponse;
+            } catch (error) {
+                console.error('Error fetching LLM critique:', error);
+                showMessage(`Error getting feedback: ${error.message}`, 'error', 5000);
+                return `Error: Could not fetch feedback. (${error.message})`;
+            } finally { critiqueLoader.classList.add('hidden'); proceedToQuestionsBtn.disabled = false; }
+        }
+
+        async function displayCritique() {
+            // (Implementation remains the same)
+             critiqueStyleDisplay.textContent = selectedUncertaintyCondition.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+             critiqueLengthDisplay.textContent = selectedLengthCondition.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+             const critiqueText = await getLlmCritique();
+             llmCritiqueTextP.textContent = critiqueText;
+        }
+
+        // --- Navigation/Flow Functions ---
+        function showSection(sectionId) {
+            // (Implementation remains the same)
+             [setupStepDiv, instructionsDiv, planningTaskDiv, critiqueSectionDiv, dvQuestionsDiv, completionMessageDiv].forEach(div => { if (div) div.classList.add('hidden'); });
+            const sectionToShow = document.getElementById(sectionId);
+            if (sectionToShow) sectionToShow.classList.remove('hidden');
+            else console.error("Section not found:", sectionId);
+        }
+
+        function goToInstructions() { showSection('instructions'); }
+        function goToPlanning() {
+            displayHistoricalData(); // Display historical data first
+            createApplianceSliders(); // Then create sliders
+            showSection('planning-task');
+        }
+        function goToCritique() { displayCritique(); showSection('critique-section'); }
+        function goToQuestions() { showSection('dv-questions'); }
+        function goToCompletion() {
+             const dvData = {
+                 plan: userPlan,
+                 uncertaintyCondition: selectedUncertaintyCondition,
+                 lengthCondition: selectedLengthCondition,
+                 formatCondition: selectedFormatCondition,
+                 llmResponse: llmResponse,
+                 usefulness: document.getElementById('usefulness-rating').value,
+                 trust: document.getElementById('trust-rating').value,
+                 preference: document.getElementById('preference-rating').value,
+                 feasibility: document.getElementById('feasibility-rating').value
+             };
+             console.log("Final Data Collected:", dvData);
+             showSection('completion-message');
+             showMessage("Responses recorded. Thank you!", 'success');
+        }
+
+        function restartDemo() {
+            // (Implementation remains the same)
+            userPlan = {}; apiKey = null; llmResponse = '';
+            selectedUncertaintyCondition = 'confident'; selectedLengthCondition = 'long'; selectedFormatCondition = 'table';
+            apiKeyInput.value = '';
+            document.querySelector('input[name="condition"][value="confident"]').checked = true;
+            document.querySelector('input[name="length"][value="long"]').checked = true;
+            document.querySelector('input[name="format"][value="table"]').checked = true;
+            document.getElementById('usefulness-rating').value = ""; document.getElementById('trust-rating').value = "";
+            document.getElementById('preference-rating').value = ""; document.getElementById('feasibility-rating').value = "";
+            historicalDataDisplayDiv.innerHTML = ''; // Clear historical data display
+            applianceSlidersDiv.innerHTML = ''; llmCritiqueTextP.textContent = '';
+            critiqueLoader.classList.add('hidden'); proceedToQuestionsBtn.disabled = true;
+            showSection('setup-step');
+        }
+
+        // --- Event Listeners ---
+        startDemoBtn.addEventListener('click', () => {
+            apiKey = apiKeyInput.value.trim();
+            if (!apiKey) { showMessage("Please enter your OpenAI API key.", "error"); return; }
+            const selectedUncertaintyRadio = document.querySelector('input[name="condition"]:checked');
+            selectedUncertaintyCondition = selectedUncertaintyRadio ? selectedUncertaintyRadio.value : 'confident';
+            const selectedLengthRadio = document.querySelector('input[name="length"]:checked');
+            selectedLengthCondition = selectedLengthRadio ? selectedLengthRadio.value : 'long';
+            const selectedFormatRadio = document.querySelector('input[name="format"]:checked');
+            selectedFormatCondition = selectedFormatRadio ? selectedFormatRadio.value : 'table';
+
+            console.log("Starting Demo - API Key Set:", apiKey.substring(0, 5) + "...", "Uncertainty:", selectedUncertaintyCondition, "Length:", selectedLengthCondition, "Format:", selectedFormatCondition);
+            goToInstructions();
+        });
+
+        // (Other event listeners remain the same)
+        startPlanningBtn.addEventListener('click', goToPlanning);
+        skipInstructionsBtn.addEventListener('click', goToPlanning);
+        submitPlanBtn.addEventListener('click', () => { console.log("User Plan Submitted:", userPlan); goToCritique(); });
+        skipPlanningBtn.addEventListener('click', () => { createDefaultPlan(); goToCritique(); });
+        proceedToQuestionsBtn.addEventListener('click', goToQuestions);
+        skipCritiqueBtn.addEventListener('click', goToQuestions);
+        finishExperimentBtn.addEventListener('click', goToCompletion);
+        restartDemoBtn.addEventListener('click', restartDemo);
+
+
+        // --- Initialization ---
+        showSection('setup-step'); // Start at setup
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+---
+title: "Demo Dashboard"
+format: html
+---
+
+
+```{r}
+#| results: 'asis'
+#| echo: false
+
+files <- list.files("demos/dash", pattern = "\\.html$", full.names = TRUE)
+names <- tools::file_path_sans_ext(basename(files))
+cat('<select id="demo-select">')
+for (i in seq_along(files)) {
+  cat(sprintf('<option value="%s">%s</option>', files[i], names[i]))
+}
+cat('</select>')
+```
+
+
+<div id="iframe-container" style="margin-top: 1em; position: relative; /* Needed for absolute positioning trick */">
+  <iframe id="demo-iframe" src="" height="1000px" style="border:1px solid #ccc; width: 98vw; position: relative; left: 50%; transform: translateX(-50%);"></iframe>
+</div>
+
+<script>
+  const select = document.getElementById('demo-select');
+  const iframe = document.getElementById('demo-iframe');
+  // Set initial iframe src to first option
+  if (select.options.length > 0) {
+    iframe.src = select.options[0].value;
+  }
+  select.addEventListener('change', function() {
+    iframe.src = this.value;
+  });
+</script>

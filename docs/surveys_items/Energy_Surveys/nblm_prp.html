@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>nblm_prp – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content column-page" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>As a cognitive science expert tasked with rigorously evaluating research proposals, I approach this analysis by first establishing a clear understanding of the problem domain and the theoretical underpinnings relevant to the proposed study. The query outlines a research proposal focusing on the intersection of human cognition and artificial intelligence, specifically Large Language Models (LLMs), within the context of energy literacy, appliance knowledge, AI literacy, human-AI reliance, uncertainty perception, and trust in AI. This area is particularly pertinent given the increasing integration of AI into systems that influence human decision-making, demanding a nuanced understanding of cognitive processes, human-AI interaction dynamics, and robust evaluation methodologies.</p>
+<p><strong>Analysis of the Problem’s Nature, Scope, and Core Requirements</strong></p>
+<p>The core problem lies in understanding how humans interact with, perceive, and utilize AI, particularly LLMs, in domains requiring specific knowledge and decision-making. This involves several intertwined cognitive and social constructs:</p>
+<ol type="1">
+<li><strong>Domain Knowledge (e.g., Energy Literacy, Appliance Knowledge):</strong> This refers to an individual’s understanding of concepts, facts, and processes within a specific area, such as energy consumption or appliance operation. While the provided sources do not directly address energy or appliance knowledge, they discuss the importance of domain-specific evaluation of LLMs and the broader concept of human knowledge influencing interaction. Critically, the proposal posits investigating this domain, which necessitates measures for assessing human knowledge in these areas and evaluating LLMs’ capabilities within them.</li>
+<li><strong>AI Literacy:</strong> This construct encompasses an individual’s understanding of AI, including its capabilities, limitations, ethical implications, and how to effectively use it. Assessing AI literacy is crucial for understanding how users approach AI interaction and evaluate its outputs. Valid and reliable instruments are required to measure different facets of AI literacy, such as ‘Recognize’, ‘Use &amp; Apply’, ‘Evaluate’, and ‘Ethics’.</li>
+<li><strong>Trust in AI (TiA):</strong> TiA is a multifaceted construct influenced by factors like the AI’s perceived trustworthiness, reliability, capability, and user’s dispositional trust. Evaluating TiA is essential as it significantly impacts reliance. Measurement requires capturing specific components of trust, moving beyond monolithic views. Challenges include encompassing all factors and the dynamic nature of trust.</li>
+<li><strong>Human-AI Reliance and Uncertainty Perception:</strong> Reliance refers to the degree to which humans follow AI advice. Appropriate reliance involves leveraging AI when correct but overriding it when incorrect, influenced by trust and uncertainty perception. Understanding how humans perceive and respond to AI-expressed uncertainty is critical for calibration. Reliance can be affected by AI characteristics (e.g., explanation style, anthropomorphism, confidence signaling) and human factors (e.g., cognitive biases, metacognition).</li>
+<li><strong>Mental Models of LLMs:</strong> This refers to a human user’s internal representation and understanding of how the LLM works, its capabilities, limitations, and decision-making process. Accurate mental models are vital for effective human-AI collaboration and appropriate reliance. Measuring these mental models is challenging, often relying on methods like open-ended questions and coding.</li>
+</ol>
+<p>The scope of the problem requires integrating insights from cognitive psychology, human-computer interaction, AI evaluation, and potentially domain-specific fields (like energy studies, not explicitly in sources). Core requirements for a rigorous study include: * Developing clear operational definitions for each construct. * Selecting or developing validated and reliable measurement tools for human knowledge (domain, AI literacy), trust, reliance, uncertainty perception, and mental models. * Establishing metrics for evaluating LLM performance within the chosen domain tasks. * Designing experiments or surveys that allow for assessing the relationships between these constructs and human-AI interaction outcomes (e.g., decision accuracy, efficiency). * Considering potential confounding factors, such as individual differences (e.g., cognitive abilities, attitudes towards AI).</p>
+<p>Grounded in real-world constraints, this research acknowledges that AI systems, including LLMs, are often “black boxes”, their performance can be non-deterministic and continuously evolving, and human cognitive resources (e.g., time, attention) are limited. Therefore, evaluations must account for opacity, dynamic nature, and cognitive load.</p>
+<p><strong>Conceptual Framework</strong></p>
+<p>Drawing upon the sources, a potential conceptual framework to guide this research could be an adaptation of the AI-person-environment fit framework, integrated with cognitive models and theories of trust and reliance.</p>
+<pre class="ascii"><code>+-------------------+     +------------------------+     +-------------------+
+| Environment (Task)| --&gt; | AI (LLM) Characteristics| --&gt; | Human Decision-   |
+| (e.g., Energy Qs, |     | (Capabilities, Explan. |     |  Maker            |
+|  Appliance Issues)|     |  Style, Confidence, etc)|     | (Domain Knowledge,|
++-------------------+     +------------------------+     |  AI Literacy,     |
+        ^                               ^              |  Dispositional    |
+        |                               |              |  Trust, Metacogn.)|
+        |                               |              +-------------------+
+        |                               |                       |
+        |                               |                       | Perception &amp; Cognitive Processes
+        |                               |                       v
++---------------------------------------------------------------------+
+|  Mediating/Moderating Factors:                                     |
+|  - Human's Mental Model of AI                           |
+|  - Perceived Trustworthiness of AI                         |
+|  - Perceived Uncertainty in AI Output                          |
+|  - Cognitive Load during Interaction                           |
+|  - Human Metacognition (monitoring AI &amp; self)                  |
++---------------------------------------------------------------------+
+        ^                               v
+        |                               |
++---------------------------------------------------------------------+
+|  Outcomes:                                                          |
+|  - Human-AI Reliance (Appropriate vs. Inappropriate)   |
+|  - Decision Performance (Accuracy, Efficiency)       |
+|  - User Satisfaction/Experience                                     |
++---------------------------------------------------------------------+</code></pre>
+<p>This framework suggests that AI characteristics and the task environment influence human cognitive processes and perceptions (mental models, trust, uncertainty, load, metacognition), which in turn mediate or moderate the relationship between the AI/Task and the interaction outcomes. Relevant cognitive psychology frameworks include theories of decision-making under uncertainty, resource-rationality (trading off accuracy/time), and critical thinking (evaluating information). Philosophical underpinnings touch upon the nature of knowledge representation in humans and machines, the distinction between normative rationality and psychological processes, and the ethical implications of AI influence.</p>
+<p><strong>Evaluation of the Current Survey Draft for Proposal</strong></p>
+<p>Given that the “Current Survey Draft for Proposal” is not provided, this evaluation will address common potential deficiencies and requirements based on the outlined problem and relevant literature from the sources. A meticulously critical agent would scrutinize the proposal along the following lines:</p>
+<ol type="1">
+<li><strong>Thoroughness of Measurement:</strong>
+<ul>
+<li><strong>Deficiency:</strong> Does the survey thoroughly measure all specified constructs (domain knowledge, AI literacy, trust, reliance, uncertainty perception, mental models)? Many existing measures, particularly for trust, may capture only specific components (e.g., capability, benevolence) rather than a holistic view. Reliance needs to assess not just agreement but <em>appropriate</em> reliance (agreement when AI is correct, disagreement when incorrect).</li>
+<li><strong>Requirement:</strong> The proposal must detail how <em>each</em> construct is operationalized and measured, justifying the selection or development of instruments. It should articulate which facets of multi-dimensional constructs (like trust or AI literacy) are being assessed. Measurement of mental models of LLMs, a key focus, requires methods beyond simple quantitative scales, such as open-ended questions analyzed with techniques like coding and inter-rater reliability (e.g., Cohen’s Kappa).</li>
+</ul></li>
+<li><strong>Accuracy and Relevance of Measurement:</strong>
+<ul>
+<li><strong>Deficiency:</strong> Are the selected measures valid and reliable for the target population and context? Validity (construct, external, ecological) and reliability (internal consistency, test-retest, inter-rater) are paramount. For example, a measure of AI literacy might have satisfactory convergent validity overall but unreliable distinct sub-constructs. Relying on single-item measures can raise concerns about reliability. Measurement validation is a non-trivial consideration, especially for complex constructs or when adapting measures to new contexts (e.g., traditional psychological tests for LLMs). Applying measures designed for human-human trust or traditional automation to LLMs requires careful consideration and validation.</li>
+<li><strong>Requirement:</strong> The proposal must provide evidence (from literature or pilot testing) for the reliability and validity of <em>all</em> measures. If existing measures are adapted or new ones developed, the proposal must outline a clear plan for validation. This includes specifying types of validity/reliability assessed (e.g., construct validity via CFA, inter-rater reliability via Cohen’s Kappa) and reporting relevant metrics (e.g., Cronbach’s alpha, RMSEA, CFI) with established thresholds. Domain-specific questions (e.g., energy/appliance) must accurately reflect relevant knowledge.</li>
+</ul></li>
+<li><strong>Novelty and Justification of Research Questions/Hypotheses:</strong>
+<ul>
+<li><strong>Deficiency:</strong> Does the proposal clearly articulate how its research questions and hypotheses extend existing knowledge? Studies on trust, reliance, and AI literacy exist. The novelty must come from the specific combination of constructs, the application domain (energy/appliances - <em>not in sources, must be justified</em>), the focus on LLMs, or the methods for assessing mental models. Without proper justification against the current literature, the research could be seen as merely replicating known findings. Hypotheses must be precisely formulated and directly derivable from theory or prior empirical findings.</li>
+<li><strong>Requirement:</strong> The proposal must include a thorough literature review that clearly identifies gaps in research concerning the <em>specific</em> interplay between domain knowledge (e.g., energy, noting this is outside the provided sources’ scope), AI literacy, trust, reliance, and mental models in the context of LLMs. The research questions must logically flow from these gaps, and hypotheses must be explicitly linked to theoretical frameworks (e.g., AI-person-environment fit, trust calibration, resource-rationality) or empirical evidence.</li>
+</ul></li>
+<li><strong>Logical Structure and Justification of Design:</strong>
+<ul>
+<li><strong>Deficiency:</strong> Is the overall study design (e.g., survey, experiment) logically structured to test the hypotheses? Does it account for potential confounds? For example, simply correlating survey measures might not establish causal relationships. An experimental design would be stronger for investigating causal influences (e.g., manipulating AI explanation style or confidence signaling). The choice of LLM model and prompting strategy must be justified, acknowledging the non-deterministic and evolving nature of LLMs and their sensitivity to prompts.</li>
+<li><strong>Requirement:</strong> The proposal needs a clear methodology section detailing the study design, participant recruitment (justifying sample size and characteristics for generalizability), procedure, and data analysis plan. It must explain how the design allows for answering the research questions and testing hypotheses. For experimental elements, variables (independent, dependent, mediating, moderating) should be clearly defined. The selection of the LLM(s) and interaction paradigm (e.g., AI as tool, collaborator, teammate) should be justified. Strategies for handling LLM variability (e.g., using consistent API versions, presenting multiple trials) should be discussed. The proposal must also consider potential biases (e.g., social desirability bias in surveys, anchoring bias to AI) and outline mitigation strategies.</li>
+</ul></li>
+<li><strong>Focus on Measuring Mental Models of LLMs:</strong>
+<ul>
+<li><strong>Deficiency:</strong> Is the approach to measuring human mental models of LLMs sufficiently robust and aligned with established (or emerging) methods? Simply asking participants if they “understand” the AI is insufficient. Measures need to probe the <em>content</em> and <em>structure</em> of the mental model. Over-reliance on single quantitative items or scales may lack the necessary granularity.</li>
+<li><strong>Requirement:</strong> As highlighted in the sources, measuring mental models of AI can involve using open-ended questions asking humans to explain the AI’s underlying model or reasoning process. The proposal must detail the prompts used, the coding scheme for analyzing responses, and the method for establishing inter-rater reliability (e.g., Cohen’s Kappa) for the coding process. The goal is to identify categories of errors or inaccuracies in human understanding, which can inform how to improve AI explanations or interaction design. The proposal should justify why this qualitative or mixed-methods approach is necessary and how the findings will contribute to understanding reliance and collaboration.</li>
+</ul></li>
+</ol>
+<p>In summary, a critical evaluation of the “Current Survey Draft for Proposal” would focus on the precision, validation, and justification of its measurement tools and design against the complex, multi-faceted nature of human-AI interaction, drawing heavily on the principles of psychometrics and experimental design discussed in the sources.</p>
+<p><strong>Scenario-Based LLM Beliefs Questions</strong></p>
+<p>To measure a human user’s mental model of an LLM (i.e., what the user <em>thinks</em> the LLM knows or believes), scenario-based questions can be particularly effective. These scenarios should probe the user’s understanding of the LLM’s knowledge limits, reasoning capabilities, and potential biases. Here are some examples, incorporating the (hypothetical) energy/appliance domain:</p>
+<ol type="1">
+<li><strong>Scenario (Knowledge Limit):</strong> “Imagine you asked an LLM about the energy consumption of a very obscure vintage appliance from the 1950s that wasn’t widely documented online. What kind of answer do you think the LLM would most likely give?
+<ul>
+<li><ol type="a">
+<li>A precise number for energy consumption.</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>A general estimate based on similar modern appliances.</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>State that it doesn’t have information on that specific appliance.</li>
+</ol></li>
+<li><ol start="4" type="a">
+<li>Fabricate a plausible-sounding but incorrect number.”</li>
+</ol></li>
+<li><em>(Follow-up, open-ended): Why do you think the LLM would give that answer? What does this tell you about the LLM’s knowledge?</em> (Probes understanding of training data limits and potential for hallucination).</li>
+</ul></li>
+<li><strong>Scenario (Reasoning/Updating Beliefs):</strong> “Suppose you told the LLM that you read in a recent scientific paper (published last month) that a popular smart home device actually consumes significantly <em>more</em> energy than previously thought due to a software bug. If you then ask the LLM about that device’s energy use, what would it most likely say?
+<ul>
+<li><ol type="a">
+<li>Provide the old, widely known energy consumption figure.</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>Provide the new figure from the recent paper.</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>Mention both figures and perhaps express uncertainty.</li>
+</ol></li>
+<li><ol start="4" type="a">
+<li>Ask for more information about the paper.”</li>
+</ol></li>
+<li><em>(Follow-up, open-ended): Why would the LLM respond that way? Does the LLM seem to ‘learn’ or update its information from your input?</em> (Probes understanding of LLM’s static knowledge base vs.&nbsp;dynamic learning, sensitivity to input).</li>
+</ul></li>
+<li><strong>Scenario (Bias Awareness):</strong> “You ask the LLM for advice on choosing the most energy-efficient appliance from a list that includes both standard models and more expensive ‘eco-friendly’ models from companies that heavily advertise online (which the LLM was likely trained on). If the ‘eco-friendly’ models are not actually significantly more efficient, how do you think the LLM would describe them?
+<ul>
+<li><ol type="a">
+<li>Objectively state the energy consumption figures for all models.</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>Strongly recommend the ‘eco-friendly’ models, highlighting their purported benefits.</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>Express uncertainty or caution about the ‘eco-friendly’ claims.</li>
+</ol></li>
+<li><ol start="4" type="a">
+<li>Provide a generic comparison without specific recommendations.”</li>
+</ol></li>
+<li><em>(Follow-up, open-ended): What factors do you think might influence the LLM’s description or recommendation in this case?</em> (Probes understanding of potential training data biases and their influence on output).</li>
+</ul></li>
+<li><strong>Scenario (Explaining Process):</strong> “The LLM just recommended a specific sequence of steps to troubleshoot an appliance issue, and the steps seemed somewhat counter-intuitive but ended up working. In your own words, how would you describe <em>why</em> you think the LLM suggested that specific sequence of steps?”
+<ul>
+<li><em>(Open-ended): Please explain your reasoning.</em> (Directly probes the user’s attempt to construct a mental model of the LLM’s problem-solving or reasoning process).</li>
+</ul></li>
+</ol>
+<p>These questions are designed to elicit responses that reveal the user’s implicit assumptions about the LLM’s capabilities and limitations, providing data points for qualitative coding and assessment of mental model accuracy.</p>
+<p><strong>Novel Survey Ideas Combining Measurement Approaches</strong></p>
+<p>The query requests brainstorming survey ideas that combine elements of human estimation (like Attari studies, though these are not in the sources provided), rating LLM accuracy, and potentially other measures from the sources. Since I cannot directly reference researchers outside the provided sources, I will focus on combining the <em>types of measurements and constructs</em> discussed in the sources (human estimation/performance, AI evaluation/accuracy, AI literacy, trust, reliance, uncertainty perception, mental models) within the context of a knowledge-based domain (using the hypothetical energy/appliance domain while noting it is outside the sources).</p>
+<p>Here are several brainstormed ideas for novel survey/experimental designs:</p>
+<ol type="1">
+<li><strong>Comparative Estimation &amp; Reliance Calibration Study:</strong>
+<ul>
+<li><strong>Setup:</strong> Present participants with a series of knowledge questions about energy consumption or appliance characteristics (e.g., “Estimate the average annual energy consumption of a standard refrigerator,” “What is the most energy-intensive typical household appliance?”). This assesses their domain knowledge and estimation ability <em>before</em> interacting with the AI.</li>
+<li><strong>AI Interaction:</strong> For each question, after the human provides their estimate/answer, provide an answer generated by an LLM. Crucially, vary the LLM’s presented confidence level (e.g., explicit statement of confidence, or implicit through answer phrasing). The LLM’s answers would be pre-generated and controlled for accuracy on a subset of questions (some correct, some incorrect) and associated with varied <em>presented</em> confidence levels, which may or may not align with actual accuracy (probing calibration).</li>
+<li><strong>Measurement:</strong>
+<ul>
+<li>Human Initial Estimate/Answer (Baseline Domain Knowledge).</li>
+<li>Human Rating of LLM Confidence for each answer.</li>
+<li>Human Rating of LLM Accuracy for each answer.</li>
+<li>Human Final Answer/Decision (allowing measurement of reliance – agreement/disagreement with LLM).</li>
+<li>Post-task survey measures: AI Literacy (e.g., MAILS or similar constructs), Trust in AI (specific components like competence, reliability), Dispositional Trust.</li>
+<li>Open-ended questions probing <em>why</em> the human agreed/disagreed with the AI, especially in cases of high-confidence errors or low-confidence correct answers, to assess elements of their mental model and reasoning process.</li>
+</ul></li>
+<li><strong>Analysis:</strong> Analyze human vs.&nbsp;LLM accuracy, human-AI agreement rates (overall reliance), appropriate reliance rates (agreement on correct, disagreement on incorrect), and how these relate to human initial knowledge, AI literacy, trust measures, perceived AI confidence/accuracy, and qualitative insights from mental model questions. Examine calibration gaps between perceived AI confidence and actual accuracy. This design allows for investigating anchoring bias to AI advice.</li>
+</ul></li>
+<li><strong>Mental Model Elicitation Through Prediction &amp; Explanation:</strong>
+<ul>
+<li><strong>Setup:</strong> Introduce participants to an LLM designed for a specific task (e.g., recommending energy-saving behaviors). Describe some of its general capabilities but keep its internal workings opaque. Present a series of scenarios involving user queries and potential LLM responses (including correct, incorrect, or subtly biased ones).</li>
+<li><strong>Measurement:</strong>
+<ul>
+<li>For each scenario, ask participants to <em>predict</em> what the LLM would say or do.</li>
+<li>Ask participants to <em>explain why</em> they think the LLM would respond that way, probing their understanding of its underlying mechanisms, data sources, or programming.</li>
+<li>Present the <em>actual</em> pre-generated LLM response. Ask participants if the response matched their expectation and to explain any discrepancies.</li>
+<li>Include targeted questions about LLM limitations (e.g., “Can the LLM access real-time energy price data?”, “Can the LLM understand <em>your personal</em> energy habits?”).</li>
+<li>Administer AI Literacy questionnaire and a measure of confidence in one’s own understanding of AI.</li>
+</ul></li>
+<li><strong>Analysis:</strong> Analyze the accuracy of human predictions about LLM behavior. Code the human explanations for themes related to mental model components (e.g., understands training data, recognizes limitations, attributes reasoning style) using inter-rater reliability. Correlate mental model accuracy/sophistication with AI literacy scores and self-reported confidence. This design focuses directly on eliciting and evaluating the <em>structure and content</em> of the human mental model.</li>
+</ul></li>
+<li><strong>Impact of Explanation Style on Mental Models and Reliance:</strong>
+<ul>
+<li><strong>Setup:</strong> Replicate a task requiring LLM assistance (e.g., diagnosing appliance issues based on symptoms). Vary the <em>style</em> of the LLM’s explanation for its diagnosis (e.g., brief answer vs.&nbsp;detailed, step-by-step reasoning vs.&nbsp;citing hypothetical examples). Use multiple trials with some scenarios where the AI is intentionally incorrect.</li>
+<li><strong>Measurement:</strong>
+<ul>
+<li>Decision Outcome (correct diagnosis or troubleshooting step taken).</li>
+<li>Reliance (agreement with AI diagnosis/steps).</li>
+<li>Appropriate Reliance (agreement on correct, disagreement on incorrect).</li>
+<li>After each trial or set of trials, use targeted open-ended questions to assess the human’s understanding of <em>how</em> the AI arrived at its conclusion, tailored to the explanation style received.</li>
+<li>Measures of cognitive load during the task.</li>
+<li>Post-task measures of perceived trustworthiness and AI literacy.</li>
+</ul></li>
+<li><strong>Analysis:</strong> Compare appropriate reliance and decision performance across explanation style conditions. Analyze the coded open-ended responses to see if different explanation styles lead to more accurate or complete mental models of the AI’s reasoning process. Investigate whether mental model quality mediates the relationship between explanation style and appropriate reliance. Assess the relationship between cognitive load and mental model formation or reliance.</li>
+</ul></li>
+</ol>
+<p>These ideas leverage different measurement techniques mentioned in the sources—quantitative scales, behavioral outcomes (decisions, reliance), and qualitative data (open-ended responses coded for mental models)—to explore the complex relationships between human factors and AI interaction. They emphasize the importance of assessing human understanding <em>of the AI</em> as a key variable, as suggested by sources focusing on mental models and metacognition.</p>
+<p><strong>Annotated Bibliography of Relevant Validated Surveys/Measures</strong></p>
+<p>Identifying precisely 15 distinct, <em>fully described and validated</em> surveys within the provided excerpts is challenging, as the sources often refer to types of measures, specific scales in passing, or discuss validation criteria rather than presenting instruments. However, based on the mentions and discussions of validity/reliability:</p>
+<ol type="1">
+<li><strong>MAILS (Meta AI Literacy Scale):</strong> A subjective assessment scale with 34 items covering core AI literacy constructs, AI self-efficacy, and AI self-management. Confirmatory factor analysis (CFA) results discussed, noting ‘Create’ as a separate factor and ‘Evaluate’ relating to ‘Know &amp; Understand’. Validity requires refinement and validation across diverse contexts.
+<ul>
+<li><em>Relevance:</em> Directly measures AI literacy, a core construct. Discussion of CFA indicates attention to construct validity.</li>
+</ul></li>
+<li><strong>Laupichler et al.&nbsp;Assessment Tool:</strong> A general AI literacy instrument for non-experts (38 items), formulated using the Delphi method based on accepted definitions. Covers core AI literacy constructs. Authors suggest item reduction and further validation.
+<ul>
+<li><em>Relevance:</em> Measures AI literacy. Mention of Delphi method implies content validation. Need for further validation noted.</li>
+</ul></li>
+<li><strong>Wang et al.&nbsp;AI Literacy Scale:</strong> Psychometric scale (12 items) covering ‘Recognize’, ‘Use and Apply’, ‘Evaluate’, and ‘Ethics’. Reported satisfactory convergent validity, but distinct constructs alone may not yield reliable results.
+<ul>
+<li><em>Relevance:</em> Measures AI literacy. Explicit mention of psychometric rigor and convergent validity.</li>
+</ul></li>
+<li><strong>Mayer’s Process-Oriented Trust Model Components:</strong> Discussed not as a survey itself, but as a framework components (Factors of Perceived Trustworthiness, Risk-Taking in Relationship) that measures <em>should</em> map onto. Emphasizes need to capture specific components beyond monolithic ‘trust’.
+<ul>
+<li><em>Relevance:</em> Provides theoretical basis for measuring trust components. Essential for construct validity of trust measures.</li>
+</ul></li>
+<li><strong>Jian’s Checklist for Trust (2000):</strong> Mentioned as a measure whose outcomes (e.g., on trust components) might differ from reliance outcomes because they capture different elements of the trust process. Implies it measures specific facets of trust or trustworthiness.
+<ul>
+<li><em>Relevance:</em> Example of a measure attempting to capture aspects of trust, highlighting the challenge of distinct trust components vs.&nbsp;reliance.</li>
+</ul></li>
+<li><strong>Measures Discussed in Razin &amp; Feigh Meta-Analysis:</strong> The meta-analysis reviews Human-Machine Trust Questionnaires, discussing validation criteria (Statistical Conclusion, Instrument, Content, Construct Validity). Recommends multi-factorial instruments tested for reliability (Cronbach’s alpha, McDonald’s l, inter-item correlation) and validity (loadings, communalities, CFA metrics: chi-squared, RMSEA, SRMR, CFI, TLI). While specific survey names aren’t always the focus, the <em>criteria</em> for evaluating them are detailed.
+<ul>
+<li><em>Relevance:</em> Provides a comprehensive framework and specific statistical metrics for evaluating the reliability and validity of trust questionnaires, crucial for assessing measures used in the proposal.</li>
+</ul></li>
+<li><strong>Scholz et al.&nbsp;Propensity to Trust in Automated Technology (PTT-A) Scale:</strong> Discussed as a measure of dispositional trust in automation, developed via item pre-selection based on expert ratings and testing competing models. Acknowledges need for further validation.
+<ul>
+<li><em>Relevance:</em> Provides a measure for dispositional trust in AI, a potential antecedent to situational trust and reliance. Mention of expert rating and model testing implies validation steps.</li>
+</ul></li>
+<li><strong>Cohen’s Kappa:</strong> A statistical metric used to measure inter-rater reliability. Recommended for use when coding qualitative data, such as responses to open-ended questions about a user’s understanding of an AI agent’s model.
+<ul>
+<li><em>Relevance:</em> Not a survey, but a validated method essential for ensuring reliability when coding data used to assess human mental models of AI from open-ended responses.</li>
+</ul></li>
+<li><strong>Questionnaires/Protocols in AI Trust Evaluation:</strong> Sources mention the use of questionnaires, experimental protocols, and qualitative evaluations to assess trust between humans and AI. Challenges include encompassing all trust factors and the dynamic nature of trust.
+<ul>
+<li><em>Relevance:</em> Indicates typical methods used for trust evaluation, reinforcing the points about multi-dimensionality and validation challenges.</li>
+</ul></li>
+<li><strong>Open-ended Questions for Mental Models:</strong> A method described for assessing human understanding of an AI agent’s underlying model. Involves asking users to explain the AI and then coding responses.
+<ul>
+<li><em>Relevance:</em> A key technique specifically mentioned for assessing mental models of AI, a focus area of the query. Reliability relies on coding and inter-rater agreement (Cohen’s Kappa).</li>
+</ul></li>
+<li><strong>Psychometric Tests (General):</strong> Referenced in the context of measuring cognitive constraints or capacities and psychological attributes of LLMs (internal consistency, parallel forms reliability). Includes examples like Big Five Inventory or cultural orientation survey (used for LLMs). Item Response Theory (IRT) and Classical Test Theory (CTT) are discussed as frameworks for test development and evaluation.
+<ul>
+<li><em>Relevance:</em> Provides the psychometric foundation for developing or selecting any scales/questionnaires used in the study (e.g., AI literacy, domain knowledge, trust facets), emphasizing concepts like item difficulty and ability estimation.</li>
+</ul></li>
+<li><strong>LSAT Questions:</strong> Used in a study to assess logical reasoning ability in humans interacting with AI. Validity for logical reasoning is assumed due to typical use, but limitations regarding diversity of real-world reasoning and overlap with AI training data are noted.
+<ul>
+<li><em>Relevance:</em> Example of using standardized tests adapted from other domains to assess human cognitive abilities relevant to AI interaction (e.g., reasoning, critical thinking). Need for careful consideration of limitations.</li>
+</ul></li>
+<li><strong>Decision-Making Paradigms (e.g., Decisions from Description):</strong> Used to test cognitive biases and decision processes in humans and LLMs. Involves structured choices between options with defined outcomes/probabilities. Rigorous experimental control needed.
+<ul>
+<li><em>Relevance:</em> Represents a class of validated experimental tasks from cognitive psychology for assessing human decision-making, which can be used to measure reliance and performance in AI-assisted contexts.</li>
+</ul></li>
+<li><strong>Real-world Exams (e.g., USMLE, AIIMS/NEET, OKAP, Surgical Board Exams):</strong> Used to evaluate LLMs’ domain-specific knowledge in fields like medicine. These are validated tests for human knowledge.
+<ul>
+<li><em>Relevance:</em> Suggests that validated tests from a domain (like hypothetically, energy efficiency certifications or quizzes) could be adapted to measure human <em>and</em> potentially AI domain knowledge in the proposal’s specified area.</li>
+</ul></li>
+<li><strong>Self-report Ratings (e.g., Likert scales):</strong> Widely used across many areas mentioned (trust, factual consistency of summaries, perceived confidence). While common, their validity depends heavily on careful wording and study design to mitigate biases (e.g., social desirability) and ensure they capture the intended construct component.
+<ul>
+<li><em>Relevance:</em> A fundamental method of data collection requiring careful validation. Discussed in sources regarding measuring trust components, AI literacy, and confidence/perception.</li>
+</ul></li>
+</ol>
+<p>This list reflects the types of measures and validation considerations prominent in the provided sources. A strong research proposal would engage with these points, demonstrating a clear understanding of the measurement challenges and proposing robust solutions grounded in psychometric principles and validated methodologies.</p>
+
+
+<!-- -->
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>As a cognitive science expert tasked with rigorously evaluating research proposals, I approach this analysis by first establishing a clear understanding of the problem domain and the theoretical underpinnings relevant to the proposed study. The query outlines a research proposal focusing on the intersection of human cognition and artificial intelligence, specifically Large Language Models (LLMs), within the context of energy literacy, appliance knowledge, AI literacy, human-AI reliance, uncertainty perception, and trust in AI. This area is particularly pertinent given the increasing integration of AI into systems that influence human decision-making, demanding a nuanced understanding of cognitive processes, human-AI interaction dynamics, and robust evaluation methodologies.</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>**Analysis of the Problem's Nature, Scope, and Core Requirements**</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>The core problem lies in understanding how humans interact with, perceive, and utilize AI, particularly LLMs, in domains requiring specific knowledge and decision-making. This involves several intertwined cognitive and social constructs:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Domain Knowledge (e.g., Energy Literacy, Appliance Knowledge):** This refers to an individual's understanding of concepts, facts, and processes within a specific area, such as energy consumption or appliance operation. While the provided sources do not directly address energy or appliance knowledge, they discuss the importance of domain-specific evaluation of LLMs and the broader concept of human knowledge influencing interaction. Critically, the proposal posits investigating this domain, which necessitates measures for assessing human knowledge in these areas and evaluating LLMs' capabilities within them.</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**AI Literacy:** This construct encompasses an individual's understanding of AI, including its capabilities, limitations, ethical implications, and how to effectively use it. Assessing AI literacy is crucial for understanding how users approach AI interaction and evaluate its outputs. Valid and reliable instruments are required to measure different facets of AI literacy, such as 'Recognize', 'Use &amp; Apply', 'Evaluate', and 'Ethics'.</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Trust in AI (TiA):** TiA is a multifaceted construct influenced by factors like the AI's perceived trustworthiness, reliability, capability, and user's dispositional trust. Evaluating TiA is essential as it significantly impacts reliance. Measurement requires capturing specific components of trust, moving beyond monolithic views. Challenges include encompassing all factors and the dynamic nature of trust.</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Human-AI Reliance and Uncertainty Perception:** Reliance refers to the degree to which humans follow AI advice. Appropriate reliance involves leveraging AI when correct but overriding it when incorrect, influenced by trust and uncertainty perception. Understanding how humans perceive and respond to AI-expressed uncertainty is critical for calibration. Reliance can be affected by AI characteristics (e.g., explanation style, anthropomorphism, confidence signaling) and human factors (e.g., cognitive biases, metacognition).</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Mental Models of LLMs:** This refers to a human user's internal representation and understanding of how the LLM works, its capabilities, limitations, and decision-making process. Accurate mental models are vital for effective human-AI collaboration and appropriate reliance. Measuring these mental models is challenging, often relying on methods like open-ended questions and coding.</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>The scope of the problem requires integrating insights from cognitive psychology, human-computer interaction, AI evaluation, and potentially domain-specific fields (like energy studies, not explicitly in sources). Core requirements for a rigorous study include:</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Developing clear operational definitions for each construct.</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Selecting or developing validated and reliable measurement tools for human knowledge (domain, AI literacy), trust, reliance, uncertainty perception, and mental models.</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Establishing metrics for evaluating LLM performance within the chosen domain tasks.</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Designing experiments or surveys that allow for assessing the relationships between these constructs and human-AI interaction outcomes (e.g., decision accuracy, efficiency).</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Considering potential confounding factors, such as individual differences (e.g., cognitive abilities, attitudes towards AI).</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>Grounded in real-world constraints, this research acknowledges that AI systems, including LLMs, are often "black boxes", their performance can be non-deterministic and continuously evolving, and human cognitive resources (e.g., time, attention) are limited. Therefore, evaluations must account for opacity, dynamic nature, and cognitive load.</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>**Conceptual Framework**</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>Drawing upon the sources, a potential conceptual framework to guide this research could be an adaptation of the AI-person-environment fit framework, integrated with cognitive models and theories of trust and reliance.</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">```ascii</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------+     +------------------------+     +-------------------+</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">| Environment (Task)| --&gt; | AI (LLM) Characteristics| --&gt; | Human Decision-   |</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in">| (e.g., Energy Qs, |     | (Capabilities, Explan. |     |  Maker            |</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in">|  Appliance Issues)|     |  Style, Confidence, etc)|     | (Domain Knowledge,|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------+     +------------------------+     |  AI Literacy,     |</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">        ^                               ^              |  Dispositional    |</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |              |  Trust, Metacogn.)|</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |              +-------------------+</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |                       |</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |                       | Perception &amp; Cognitive Processes</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |                       v</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">+---------------------------------------------------------------------+</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">|  Mediating/Moderating Factors:                                     |</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Human's Mental Model of AI                           |</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Perceived Trustworthiness of AI                         |</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Perceived Uncertainty in AI Output                          |</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Cognitive Load during Interaction                           |</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Human Metacognition (monitoring AI &amp; self)                  |</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">+---------------------------------------------------------------------+</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">        ^                               v</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">        |                               |</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="in">+---------------------------------------------------------------------+</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">|  Outcomes:                                                          |</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Human-AI Reliance (Appropriate vs. Inappropriate)   |</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="in">|  - Decision Performance (Accuracy, Efficiency)       |</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="in">|  - User Satisfaction/Experience                                     |</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">+---------------------------------------------------------------------+</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>This framework suggests that AI characteristics and the task environment influence human cognitive processes and perceptions (mental models, trust, uncertainty, load, metacognition), which in turn mediate or moderate the relationship between the AI/Task and the interaction outcomes. Relevant cognitive psychology frameworks include theories of decision-making under uncertainty, resource-rationality (trading off accuracy/time), and critical thinking (evaluating information). Philosophical underpinnings touch upon the nature of knowledge representation in humans and machines, the distinction between normative rationality and psychological processes, and the ethical implications of AI influence.</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>**Evaluation of the Current Survey Draft for Proposal**</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>Given that the "Current Survey Draft for Proposal" is not provided, this evaluation will address common potential deficiencies and requirements based on the outlined problem and relevant literature from the sources. A meticulously critical agent would scrutinize the proposal along the following lines:</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Thoroughness of Measurement:**</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Deficiency:** Does the survey thoroughly measure all specified constructs (domain knowledge, AI literacy, trust, reliance, uncertainty perception, mental models)? Many existing measures, particularly for trust, may capture only specific components (e.g., capability, benevolence) rather than a holistic view. Reliance needs to assess not just agreement but *appropriate* reliance (agreement when AI is correct, disagreement when incorrect).</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Requirement:** The proposal must detail how *each* construct is operationalized and measured, justifying the selection or development of instruments. It should articulate which facets of multi-dimensional constructs (like trust or AI literacy) are being assessed. Measurement of mental models of LLMs, a key focus, requires methods beyond simple quantitative scales, such as open-ended questions analyzed with techniques like coding and inter-rater reliability (e.g., Cohen's Kappa).</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Accuracy and Relevance of Measurement:**</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Deficiency:** Are the selected measures valid and reliable for the target population and context? Validity (construct, external, ecological) and reliability (internal consistency, test-retest, inter-rater) are paramount. For example, a measure of AI literacy might have satisfactory convergent validity overall but unreliable distinct sub-constructs. Relying on single-item measures can raise concerns about reliability. Measurement validation is a non-trivial consideration, especially for complex constructs or when adapting measures to new contexts (e.g., traditional psychological tests for LLMs). Applying measures designed for human-human trust or traditional automation to LLMs requires careful consideration and validation.</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Requirement:** The proposal must provide evidence (from literature or pilot testing) for the reliability and validity of *all* measures. If existing measures are adapted or new ones developed, the proposal must outline a clear plan for validation. This includes specifying types of validity/reliability assessed (e.g., construct validity via CFA, inter-rater reliability via Cohen's Kappa) and reporting relevant metrics (e.g., Cronbach's alpha, RMSEA, CFI) with established thresholds. Domain-specific questions (e.g., energy/appliance) must accurately reflect relevant knowledge.</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Novelty and Justification of Research Questions/Hypotheses:**</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Deficiency:** Does the proposal clearly articulate how its research questions and hypotheses extend existing knowledge? Studies on trust, reliance, and AI literacy exist. The novelty must come from the specific combination of constructs, the application domain (energy/appliances - *not in sources, must be justified*), the focus on LLMs, or the methods for assessing mental models. Without proper justification against the current literature, the research could be seen as merely replicating known findings. Hypotheses must be precisely formulated and directly derivable from theory or prior empirical findings.</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Requirement:** The proposal must include a thorough literature review that clearly identifies gaps in research concerning the *specific* interplay between domain knowledge (e.g., energy, noting this is outside the provided sources' scope), AI literacy, trust, reliance, and mental models in the context of LLMs. The research questions must logically flow from these gaps, and hypotheses must be explicitly linked to theoretical frameworks (e.g., AI-person-environment fit, trust calibration, resource-rationality) or empirical evidence.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Logical Structure and Justification of Design:**</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Deficiency:** Is the overall study design (e.g., survey, experiment) logically structured to test the hypotheses? Does it account for potential confounds? For example, simply correlating survey measures might not establish causal relationships. An experimental design would be stronger for investigating causal influences (e.g., manipulating AI explanation style or confidence signaling). The choice of LLM model and prompting strategy must be justified, acknowledging the non-deterministic and evolving nature of LLMs and their sensitivity to prompts.</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Requirement:** The proposal needs a clear methodology section detailing the study design, participant recruitment (justifying sample size and characteristics for generalizability), procedure, and data analysis plan. It must explain how the design allows for answering the research questions and testing hypotheses. For experimental elements, variables (independent, dependent, mediating, moderating) should be clearly defined. The selection of the LLM(s) and interaction paradigm (e.g., AI as tool, collaborator, teammate) should be justified. Strategies for handling LLM variability (e.g., using consistent API versions, presenting multiple trials) should be discussed. The proposal must also consider potential biases (e.g., social desirability bias in surveys, anchoring bias to AI) and outline mitigation strategies.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Focus on Measuring Mental Models of LLMs:**</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Deficiency:** Is the approach to measuring human mental models of LLMs sufficiently robust and aligned with established (or emerging) methods? Simply asking participants if they "understand" the AI is insufficient. Measures need to probe the *content* and *structure* of the mental model. Over-reliance on single quantitative items or scales may lack the necessary granularity.</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Requirement:** As highlighted in the sources, measuring mental models of AI can involve using open-ended questions asking humans to explain the AI's underlying model or reasoning process. The proposal must detail the prompts used, the coding scheme for analyzing responses, and the method for establishing inter-rater reliability (e.g., Cohen's Kappa) for the coding process. The goal is to identify categories of errors or inaccuracies in human understanding, which can inform how to improve AI explanations or interaction design. The proposal should justify why this qualitative or mixed-methods approach is necessary and how the findings will contribute to understanding reliance and collaboration.</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>In summary, a critical evaluation of the "Current Survey Draft for Proposal" would focus on the precision, validation, and justification of its measurement tools and design against the complex, multi-faceted nature of human-AI interaction, drawing heavily on the principles of psychometrics and experimental design discussed in the sources.</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>**Scenario-Based LLM Beliefs Questions**</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>To measure a human user's mental model of an LLM (i.e., what the user *thinks* the LLM knows or believes), scenario-based questions can be particularly effective. These scenarios should probe the user's understanding of the LLM's knowledge limits, reasoning capabilities, and potential biases. Here are some examples, incorporating the (hypothetical) energy/appliance domain:</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Scenario (Knowledge Limit):** "Imagine you asked an LLM about the energy consumption of a very obscure vintage appliance from the 1950s that wasn't widely documented online. What kind of answer do you think the LLM would most likely give?</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>a) A precise number for energy consumption.</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>b) A general estimate based on similar modern appliances.</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>c) State that it doesn't have information on that specific appliance.</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>d) Fabricate a plausible-sounding but incorrect number."</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*(Follow-up, open-ended): Why do you think the LLM would give that answer? What does this tell you about the LLM's knowledge?* (Probes understanding of training data limits and potential for hallucination).</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Scenario (Reasoning/Updating Beliefs):** "Suppose you told the LLM that you read in a recent scientific paper (published last month) that a popular smart home device actually consumes significantly *more* energy than previously thought due to a software bug. If you then ask the LLM about that device's energy use, what would it most likely say?</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>a) Provide the old, widely known energy consumption figure.</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>b) Provide the new figure from the recent paper.</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>c) Mention both figures and perhaps express uncertainty.</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>d) Ask for more information about the paper."</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*(Follow-up, open-ended): Why would the LLM respond that way? Does the LLM seem to 'learn' or update its information from your input?* (Probes understanding of LLM's static knowledge base vs. dynamic learning, sensitivity to input).</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Scenario (Bias Awareness):** "You ask the LLM for advice on choosing the most energy-efficient appliance from a list that includes both standard models and more expensive 'eco-friendly' models from companies that heavily advertise online (which the LLM was likely trained on). If the 'eco-friendly' models are not actually significantly more efficient, how do you think the LLM would describe them?</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>a) Objectively state the energy consumption figures for all models.</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>b) Strongly recommend the 'eco-friendly' models, highlighting their purported benefits.</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>c) Express uncertainty or caution about the 'eco-friendly' claims.</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>d) Provide a generic comparison without specific recommendations."</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*(Follow-up, open-ended): What factors do you think might influence the LLM's description or recommendation in this case?* (Probes understanding of potential training data biases and their influence on output).</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Scenario (Explaining Process):** "The LLM just recommended a specific sequence of steps to troubleshoot an appliance issue, and the steps seemed somewhat counter-intuitive but ended up working. In your own words, how would you describe *why* you think the LLM suggested that specific sequence of steps?"</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*(Open-ended): Please explain your reasoning.* (Directly probes the user's attempt to construct a mental model of the LLM's problem-solving or reasoning process).</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>These questions are designed to elicit responses that reveal the user's implicit assumptions about the LLM's capabilities and limitations, providing data points for qualitative coding and assessment of mental model accuracy.</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>**Novel Survey Ideas Combining Measurement Approaches**</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>The query requests brainstorming survey ideas that combine elements of human estimation (like Attari studies, though these are not in the sources provided), rating LLM accuracy, and potentially other measures from the sources. Since I cannot directly reference researchers outside the provided sources, I will focus on combining the *types of measurements and constructs* discussed in the sources (human estimation/performance, AI evaluation/accuracy, AI literacy, trust, reliance, uncertainty perception, mental models) within the context of a knowledge-based domain (using the hypothetical energy/appliance domain while noting it is outside the sources).</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>Here are several brainstormed ideas for novel survey/experimental designs:</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Comparative Estimation &amp; Reliance Calibration Study:**</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Setup:** Present participants with a series of knowledge questions about energy consumption or appliance characteristics (e.g., "Estimate the average annual energy consumption of a standard refrigerator," "What is the most energy-intensive typical household appliance?"). This assesses their domain knowledge and estimation ability *before* interacting with the AI.</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**AI Interaction:** For each question, after the human provides their estimate/answer, provide an answer generated by an LLM. Crucially, vary the LLM's presented confidence level (e.g., explicit statement of confidence, or implicit through answer phrasing). The LLM's answers would be pre-generated and controlled for accuracy on a subset of questions (some correct, some incorrect) and associated with varied *presented* confidence levels, which may or may not align with actual accuracy (probing calibration).</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Measurement:**</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Human Initial Estimate/Answer (Baseline Domain Knowledge).</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Human Rating of LLM Confidence for each answer.</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Human Rating of LLM Accuracy for each answer.</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Human Final Answer/Decision (allowing measurement of reliance – agreement/disagreement with LLM).</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Post-task survey measures: AI Literacy (e.g., MAILS or similar constructs), Trust in AI (specific components like competence, reliability), Dispositional Trust.</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Open-ended questions probing *why* the human agreed/disagreed with the AI, especially in cases of high-confidence errors or low-confidence correct answers, to assess elements of their mental model and reasoning process.</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Analysis:** Analyze human vs. LLM accuracy, human-AI agreement rates (overall reliance), appropriate reliance rates (agreement on correct, disagreement on incorrect), and how these relate to human initial knowledge, AI literacy, trust measures, perceived AI confidence/accuracy, and qualitative insights from mental model questions. Examine calibration gaps between perceived AI confidence and actual accuracy. This design allows for investigating anchoring bias to AI advice.</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Mental Model Elicitation Through Prediction &amp; Explanation:**</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Setup:** Introduce participants to an LLM designed for a specific task (e.g., recommending energy-saving behaviors). Describe some of its general capabilities but keep its internal workings opaque. Present a series of scenarios involving user queries and potential LLM responses (including correct, incorrect, or subtly biased ones).</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Measurement:**</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>For each scenario, ask participants to *predict* what the LLM would say or do.</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Ask participants to *explain why* they think the LLM would respond that way, probing their understanding of its underlying mechanisms, data sources, or programming.</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Present the *actual* pre-generated LLM response. Ask participants if the response matched their expectation and to explain any discrepancies.</span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Include targeted questions about LLM limitations (e.g., "Can the LLM access real-time energy price data?", "Can the LLM understand *your personal* energy habits?").</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Administer AI Literacy questionnaire and a measure of confidence in one's own understanding of AI.</span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Analysis:** Analyze the accuracy of human predictions about LLM behavior. Code the human explanations for themes related to mental model components (e.g., understands training data, recognizes limitations, attributes reasoning style) using inter-rater reliability. Correlate mental model accuracy/sophistication with AI literacy scores and self-reported confidence. This design focuses directly on eliciting and evaluating the *structure and content* of the human mental model.</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Impact of Explanation Style on Mental Models and Reliance:**</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Setup:** Replicate a task requiring LLM assistance (e.g., diagnosing appliance issues based on symptoms). Vary the *style* of the LLM's explanation for its diagnosis (e.g., brief answer vs. detailed, step-by-step reasoning vs. citing hypothetical examples). Use multiple trials with some scenarios where the AI is intentionally incorrect.</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Measurement:**</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Decision Outcome (correct diagnosis or troubleshooting step taken).</span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Reliance (agreement with AI diagnosis/steps).</span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Appropriate Reliance (agreement on correct, disagreement on incorrect).</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>After each trial or set of trials, use targeted open-ended questions to assess the human's understanding of *how* the AI arrived at its conclusion, tailored to the explanation style received.</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Measures of cognitive load during the task.</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="ss">        *   </span>Post-task measures of perceived trustworthiness and AI literacy.</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Analysis:** Compare appropriate reliance and decision performance across explanation style conditions. Analyze the coded open-ended responses to see if different explanation styles lead to more accurate or complete mental models of the AI's reasoning process. Investigate whether mental model quality mediates the relationship between explanation style and appropriate reliance. Assess the relationship between cognitive load and mental model formation or reliance.</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>These ideas leverage different measurement techniques mentioned in the sources—quantitative scales, behavioral outcomes (decisions, reliance), and qualitative data (open-ended responses coded for mental models)—to explore the complex relationships between human factors and AI interaction. They emphasize the importance of assessing human understanding *of the AI* as a key variable, as suggested by sources focusing on mental models and metacognition.</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>**Annotated Bibliography of Relevant Validated Surveys/Measures**</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>Identifying precisely 15 distinct, *fully described and validated* surveys within the provided excerpts is challenging, as the sources often refer to types of measures, specific scales in passing, or discuss validation criteria rather than presenting instruments. However, based on the mentions and discussions of validity/reliability:</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**MAILS (Meta AI Literacy Scale):** A subjective assessment scale with 34 items covering core AI literacy constructs, AI self-efficacy, and AI self-management. Confirmatory factor analysis (CFA) results discussed, noting 'Create' as a separate factor and 'Evaluate' relating to 'Know &amp; Understand'. Validity requires refinement and validation across diverse contexts.</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Directly measures AI literacy, a core construct. Discussion of CFA indicates attention to construct validity.</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Laupichler et al. Assessment Tool:** A general AI literacy instrument for non-experts (38 items), formulated using the Delphi method based on accepted definitions. Covers core AI literacy constructs. Authors suggest item reduction and further validation.</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Measures AI literacy. Mention of Delphi method implies content validation. Need for further validation noted.</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Wang et al. AI Literacy Scale:** Psychometric scale (12 items) covering 'Recognize', 'Use and Apply', 'Evaluate', and 'Ethics'. Reported satisfactory convergent validity, but distinct constructs alone may not yield reliable results.</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Measures AI literacy. Explicit mention of psychometric rigor and convergent validity.</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Mayer's Process-Oriented Trust Model Components:** Discussed not as a survey itself, but as a framework components (Factors of Perceived Trustworthiness, Risk-Taking in Relationship) that measures *should* map onto. Emphasizes need to capture specific components beyond monolithic 'trust'.</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Provides theoretical basis for measuring trust components. Essential for construct validity of trust measures.</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Jian's Checklist for Trust (2000):** Mentioned as a measure whose outcomes (e.g., on trust components) might differ from reliance outcomes because they capture different elements of the trust process. Implies it measures specific facets of trust or trustworthiness.</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Example of a measure attempting to capture aspects of trust, highlighting the challenge of distinct trust components vs. reliance.</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**Measures Discussed in Razin &amp; Feigh Meta-Analysis:** The meta-analysis reviews Human-Machine Trust Questionnaires, discussing validation criteria (Statistical Conclusion, Instrument, Content, Construct Validity). Recommends multi-factorial instruments tested for reliability (Cronbach's alpha, McDonald's l, inter-item correlation) and validity (loadings, communalities, CFA metrics: chi-squared, RMSEA, SRMR, CFI, TLI). While specific survey names aren't always the focus, the *criteria* for evaluating them are detailed.</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Provides a comprehensive framework and specific statistical metrics for evaluating the reliability and validity of trust questionnaires, crucial for assessing measures used in the proposal.</span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**Scholz et al. Propensity to Trust in Automated Technology (PTT-A) Scale:** Discussed as a measure of dispositional trust in automation, developed via item pre-selection based on expert ratings and testing competing models. Acknowledges need for further validation.</span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Provides a measure for dispositional trust in AI, a potential antecedent to situational trust and reliance. Mention of expert rating and model testing implies validation steps.</span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**Cohen's Kappa:** A statistical metric used to measure inter-rater reliability. Recommended for use when coding qualitative data, such as responses to open-ended questions about a user's understanding of an AI agent's model.</span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Not a survey, but a validated method essential for ensuring reliability when coding data used to assess human mental models of AI from open-ended responses.</span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**Questionnaires/Protocols in AI Trust Evaluation:** Sources mention the use of questionnaires, experimental protocols, and qualitative evaluations to assess trust between humans and AI. Challenges include encompassing all trust factors and the dynamic nature of trust.</span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Indicates typical methods used for trust evaluation, reinforcing the points about multi-dimensionality and validation challenges.</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**Open-ended Questions for Mental Models:** A method described for assessing human understanding of an AI agent's underlying model. Involves asking users to explain the AI and then coding responses.</span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* A key technique specifically mentioned for assessing mental models of AI, a focus area of the query. Reliability relies on coding and inter-rater agreement (Cohen's Kappa).</span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**Psychometric Tests (General):** Referenced in the context of measuring cognitive constraints or capacities and psychological attributes of LLMs (internal consistency, parallel forms reliability). Includes examples like Big Five Inventory or cultural orientation survey (used for LLMs). Item Response Theory (IRT) and Classical Test Theory (CTT) are discussed as frameworks for test development and evaluation.</span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Provides the psychometric foundation for developing or selecting any scales/questionnaires used in the study (e.g., AI literacy, domain knowledge, trust facets), emphasizing concepts like item difficulty and ability estimation.</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>**LSAT Questions:** Used in a study to assess logical reasoning ability in humans interacting with AI. Validity for logical reasoning is assumed due to typical use, but limitations regarding diversity of real-world reasoning and overlap with AI training data are noted.</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Example of using standardized tests adapted from other domains to assess human cognitive abilities relevant to AI interaction (e.g., reasoning, critical thinking). Need for careful consideration of limitations.</span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>**Decision-Making Paradigms (e.g., Decisions from Description):** Used to test cognitive biases and decision processes in humans and LLMs. Involves structured choices between options with defined outcomes/probabilities. Rigorous experimental control needed.</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Represents a class of validated experimental tasks from cognitive psychology for assessing human decision-making, which can be used to measure reliance and performance in AI-assisted contexts.</span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>**Real-world Exams (e.g., USMLE, AIIMS/NEET, OKAP, Surgical Board Exams):** Used to evaluate LLMs' domain-specific knowledge in fields like medicine. These are validated tests for human knowledge.</span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* Suggests that validated tests from a domain (like hypothetically, energy efficiency certifications or quizzes) could be adapted to measure human *and* potentially AI domain knowledge in the proposal's specified area.</span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>**Self-report Ratings (e.g., Likert scales):** Widely used across many areas mentioned (trust, factual consistency of summaries, perceived confidence). While common, their validity depends heavily on careful wording and study design to mitigate biases (e.g., social desirability) and ensure they capture the intended construct component.</span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>*Relevance:* A fundamental method of data collection requiring careful validation. Discussed in sources regarding measuring trust components, AI literacy, and confidence/perception.</span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>This list reflects the types of measures and validation considerations prominent in the provided sources. A strong research proposal would engage with these points, demonstrating a clear understanding of the measurement challenges and proposing robust solutions grounded in psychometric principles and validated methodologies.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/Energy_Surveys/nblm_prp.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

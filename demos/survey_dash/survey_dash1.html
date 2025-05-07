@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Instrument Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for active and inactive tabs */
+        .tab-button.active {
+            border-color: #3b82f6; /* blue-500 */
+            color: #3b82f6; /* blue-500 */
+            font-weight: 600;
+            background-color: #eff6ff; /* blue-50 */
+        }
+        .tab-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-content {
+            display: none; /* Hide all tab content by default */
+            animation: fadeIn 0.5s; /* Simple fade-in animation */
+        }
+        .tab-content.active {
+            display: block; /* Show active tab content */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Style for Likert scales (1-7) */
+        .likert-scale-7, .likert-scale-6, .likert-scale-5 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .likert-scale-7 span, .likert-scale-6 span, .likert-scale-5 span {
+            text-align: center;
+            flex: 1;
+            min-width: 50px; /* Ensure minimum width for labels */
+            padding: 4px;
+            font-size: 0.75rem; /* Smaller font for labels */
+        }
+         .likert-scale-7 label, .likert-scale-6 label, .likert-scale-5 label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 2px; /* Spacing between items */
+        }
+        .likert-scale-7 input[type="radio"], .likert-scale-6 input[type="radio"], .likert-scale-5 input[type="radio"] {
+            margin-bottom: 2px;
+        }
+         .likert-scale-7 .scale-label, .likert-scale-6 .scale-label, .likert-scale-5 .scale-label {
+             font-size: 0.7rem; /* Even smaller for numbers */
+             color: #6b7280; /* gray-500 */
+         }
+         /* Specific adjustments for 5 and 6 point scales if needed */
+         .likert-scale-5 { justify-content: space-around; } /* Example */
+         .likert-scale-6 { justify-content: space-around; } /* Example */
+
+
+        /* Style for MAILS Likert scale (0-10) */
+        .likert-scale-11 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            flex-wrap: wrap; /* Allow wrapping */
+            overflow-x: auto; /* Allow horizontal scroll on small screens if needed */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            gap: 2px; /* Add small gap */
+        }
+        .likert-scale-11 span {
+            text-align: center;
+            flex-shrink: 0; /* Prevent labels from shrinking too much */
+            padding: 4px 6px; /* Adjust padding */
+            font-size: 0.75rem; /* Smaller font for labels */
+            white-space: nowrap;
+        }
+        .likert-scale-11 label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 1px; /* Minimal spacing */
+            min-width: 25px; /* Ensure minimum width for each radio button + label */
+        }
+        .likert-scale-11 input[type="radio"] {
+            margin-bottom: 2px;
+        }
+        .likert-scale-11 .scale-label {
+            font-size: 0.7rem; /* Even smaller for numbers */
+             color: #6b7280; /* gray-500 */
+        }
+
+        /* Style for estimation inputs */
+        .estimation-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap; /* Allow wrapping */
+        }
+         .estimation-item .item-content {
+            display: flex;
+            align-items: center;
+            flex-basis: 100%; /* Full width on small screens */
+             margin-bottom: 4px;
+        }
+        .estimation-item .item-icon {
+             width: 20px; /* Slightly smaller icons */
+             height: 20px;
+             margin-right: 8px;
+             flex-shrink: 0; /* Prevent icon from shrinking */
+             color: #4b5563; /* gray-600 */
+        }
+        .estimation-item label {
+            flex-grow: 1; /* Allow label to take remaining space */
+            font-size: 0.875rem; /* text-sm */
+            color: #374151; /* gray-700 */
+        }
+        .estimation-item input[type="number"], .estimation-item input[type="text"] {
+            flex-basis: 100%; /* Full width on small screens */
+            min-width: 80px; /* Minimum width for input */
+            margin-top: 4px; /* Add space above input on small screens */
+            padding: 0.5rem;
+             border: 1px solid #d1d5db; /* gray-300 */
+             border-radius: 0.375rem; /* rounded-md */
+             box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+             font-size: 0.875rem; /* text-sm */
+        }
+        /* Adjust layout for medium screens and up */
+        @media (min-width: 768px) {
+             .estimation-item .item-content {
+                 flex-basis: 70%;
+                 margin-right: 10px;
+                 margin-bottom: 0;
+             }
+            .estimation-item input[type="number"], .estimation-item input[type="text"] {
+                flex-basis: 25%;
+                 margin-top: 0;
+            }
+        }
+        /* Numeracy item styling */
+        .numeracy-item {
+            margin-bottom: 1.5rem; /* Increased spacing */
+            padding: 1rem;
+            background-color: #f9fafb; /* gray-50 */
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        .numeracy-item p {
+            margin-bottom: 0.75rem; /* Increased spacing */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.5;
+            color: #374151; /* gray-700 */
+        }
+         .numeracy-item .input-group {
+            display: flex;
+            align-items: center;
+         }
+         .numeracy-item input[type="text"] { /* Changed to text for % sign */
+             /* width: 100%; */
+             /* max-width: 150px; Limit width */
+             flex-grow: 1; /* Take available space */
+             max-width: 120px; /* Adjust max width */
+             padding: 0.5rem;
+             border: 1px solid #d1d5db; /* gray-300 */
+             border-radius: 0.375rem; /* rounded-md */
+             box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+             font-size: 0.875rem; /* text-sm */
+         }
+         .numeracy-item span {
+             margin-left: 0.5rem;
+             color: #6b7280; /* gray-500 */
+             font-size: 0.875rem; /* text-sm */
+         }
+        .citation {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* gray-500 */
+            margin-top: 0.5rem;
+            display: block;
+        }
+        .survey-section {
+            background-color: #f9fafb; /* gray-50 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            border: 1px solid #e5e7eb; /* gray-200 */
+            margin-bottom: 1.5rem; /* Add space between sections */
+        }
+        .survey-section h3 {
+             font-size: 1.125rem; /* text-lg */
+             font-semibold: 600; /* font-semibold */
+             color: #1f2937; /* gray-800 */
+             margin-bottom: 0.75rem; /* mb-3 */
+             border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+             padding-bottom: 0.5rem; /* pb-2 */
+        }
+        .survey-section h4 {
+            font-size: 1rem; /* text-base */
+            font-weight: 500; /* font-medium */
+            color: #374151; /* gray-700 */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .question-text {
+            font-size: 0.875rem; /* text-sm */
+            color: #374151; /* gray-700 */
+            margin-bottom: 0.5rem; /* mb-2 */
+            line-height: 1.5;
+        }
+        .scale-description {
+             font-size: 0.875rem; /* text-sm */
+             color: #4b5563; /* gray-600 */
+             margin-bottom: 1rem; /* mb-4 */
+             font-style: italic;
+        }
+        .choice-item label {
+            display: block; /* Ensure labels take full width */
+            margin-bottom: 0.25rem;
+        }
+         .choice-item input[type="radio"] {
+             margin-right: 0.5rem;
+             vertical-align: middle;
+         }
+         .choice-item span {
+             font-size: 0.875rem; /* text-sm */
+             vertical-align: middle;
+         }
+         .semantic-diff-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0;
+            flex-wrap: wrap; /* Wrap on small screens */
+         }
+         .semantic-diff-item > span {
+             font-size: 0.875rem; /* text-sm */
+             color: #374151; /* gray-700 */
+             padding: 0 0.5rem;
+             flex-basis: 20%; /* Allocate space */
+             text-align: center;
+         }
+        .semantic-diff-item > span:first-child { text-align: left;}
+        .semantic-diff-item > span:last-child { text-align: right;}
+
+         .semantic-diff-item .radios {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            flex-basis: 60%; /* Allocate space */
+         }
+        .semantic-diff-item label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 2px;
+            font-size: 0.7rem;
+            color: #6b7280;
+         }
+        .semantic-diff-item input[type="radio"] { margin-bottom: 2px; }
+
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Survey Instruments Dashboard</h1>
+        <p class="text-gray-600 mb-8 text-center">This dashboard presents compiled survey instruments related to AI Literacy, Energy Literacy, Numeracy, Trust, and Behavior. Use the tabs below to navigate.</p>
+
+        <div class="mb-6 border-b border-gray-200">
+            <nav class="-mb-px flex flex-wrap space-x-1 md:space-x-4" aria-label="Tabs">
+                <button class="tab-button active whitespace-nowrap py-3 px-2 md:px-4 border-b-2 font-medium text-sm text-gray-500 hover:text-blue-600 hover:border-blue-300 rounded-t-md" data-tab="literacy-numeracy">
+                    Literacy & Numeracy
+                </button>
+                <button class="tab-button whitespace-nowrap py-3 px-2 md:px-4 border-b-2 font-medium text-sm text-gray-500 hover:text-blue-600 hover:border-blue-300 rounded-t-md" data-tab="ai-literacy">
+                    AI Literacy Scales
+                </button>
+                <button class="tab-button whitespace-nowrap py-3 px-2 md:px-4 border-b-2 font-medium text-sm text-gray-500 hover:text-blue-600 hover:border-blue-300 rounded-t-md" data-tab="llm-beliefs">
+                    LLM Beliefs & Perceptions
+                </button>
+                 <button class="tab-button whitespace-nowrap py-3 px-2 md:px-4 border-b-2 font-medium text-sm text-gray-500 hover:text-blue-600 hover:border-blue-300 rounded-t-md" data-tab="trust-reliance">
+                    Trust & Reliance
+                </button>
+                <button class="tab-button whitespace-nowrap py-3 px-2 md:px-4 border-b-2 font-medium text-sm text-gray-500 hover:text-blue-600 hover:border-blue-300 rounded-t-md" data-tab="behavior">
+                    Behavior & Intentions
+                </button>
+            </nav>
+        </div>
+
+        <div>
+            <!-- ############################# -->
+            <!-- LITERACY & NUMERACY TAB -->
+            <!-- ############################# -->
+            <div id="literacy-numeracy" class="tab-content active space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Literacy & Numeracy Measures</h2>
+
+                 <div class="survey-section">
+                    <h3>AI Literacy (Overview)</h3>
+                    <p class="text-sm text-gray-600">AI Literacy is assessed using dedicated scales found on the <strong class="font-medium">"AI Literacy Scales"</strong> tab. This includes the MAILS-SF (Koch, Carolus, et al., 2024) and scales from Rheu & Cho (2025).</p>
+                </div>
+
+                <div class="survey-section">
+                    <h3>Multidimensional Energy Literacy (Examples)</h3>
+                    <p class="text-sm text-gray-600 mb-4">Items probe knowledge about device consumption, action savings, heuristics, and comparisons. Examples drawn conceptually from Attari et al. (2010), Kantenbacher & Attari (2021), Marghetis et al. (2019).</p>
+                    
+                    <div>
+                        <h4>Device Energy Literacy (Estimation)</h4>
+                        <p class="scale-description">Instruction Example: A 100-Watt incandescent light bulb uses 100 units of energy in one hour. How many units of energy do you think each of the following devices typically uses in one hour? (Provide best estimate, whole numbers only)</p>
+                        <div class="estimation-item">
+                            <div class="item-content">
+                                 <svg class="item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m18 0h-1.5m-15.75 0H1.5V6a1.5 1.5 0 0 1 1.5-1.5h18A1.5 1.5 0 0 1 22.5 6v6.75m-18 0v6.75a1.5 1.5 0 0 0 1.5 1.5h15a1.5 1.5 0 0 0 1.5-1.5V12.75m-18 0h1.5m15 0h1.5M9 12.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Zm0 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Z" /></svg>
+                                <label for="el-device-1">A typical refrigerator:</label>
+                            </div>
+                            <input type="number" id="el-device-1" name="el-device-1" placeholder="Units">
+                        </div>
+                         <div class="estimation-item">
+                            <div class="item-content">
+                                 <svg class="item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+                                <label for="el-device-3">Clothes dryer:</label>
+                            </div>
+                            <input type="number" id="el-device-3" name="el-device-3" placeholder="Units">
+                        </div>
+                         <span class="citation">Example based on Attari et al. (2010), Marghetis et al. (2019), Kantenbacher & Attari (2021)</span>
+                    </div>
+
+                     <div>
+                        <h4>Action Energy Literacy (Estimation)</h4>
+                        <p class="scale-description">Instruction Example: Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy. How many units of energy do you think each of the following changes will save?</p>
+                         <div class="estimation-item">
+                             <div class="item-content">
+                                 <svg class="item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" /></svg>
+                                <label for="el-action-1">Drying clothes on a clothes line (not using the dryer) for one load of laundry:</label>
+                            </div>
+                            <input type="number" id="el-action-1" name="el-action-1" placeholder="Units Saved">
+                        </div>
+                         <div class="estimation-item">
+                            <div class="item-content">
+                                <svg class="item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
+                                <label for="el-action-2">In the winter: turning down the thermostat on your heater by 5°F for one hour:</label>
+                            </div>
+                            <input type="number" id="el-action-2" name="el-action-2" placeholder="Units Saved">
+                        </div>
+                        <span class="citation">Example based on Attari et al. (2010)</span>
+                    </div>
+
+                    <div>
+                        <h4>Behavioral Choice Task (Comparison)</h4>
+                        <p class="scale-description">Instruction Example: In the following sets, please choose the option that uses the LEAST amount of energy. Assume typical appliance usage and time.</p>
+                        <div class="choice-item mb-4">
+                            <p class="question-text">Which uses less energy?</p>
+                            <label>
+                                <input type="radio" name="choice-1" value="ac">
+                                <span>A window air conditioning unit</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="choice-1" value="oven">
+                                <span>An electric oven</span>
+                            </label>
+                        </div>
+                         <div class="choice-item mb-4">
+                            <p class="question-text">Which saves the most electricity?</p>
+                            <label>
+                                <input type="radio" name="choice-2" value="heater">
+                                <span>Purchasing a space heater that is 20% more efficient</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="choice-2" value="tv">
+                                <span>Purchasing a television that is 20% more efficient</span>
+                            </label>
+                        </div>
+                        <span class="citation">Example based on Kantenbacher & Attari (2021), Marghetis et al. (2019)</span>
+                    </div>
+
+                    <div>
+                        <h4>Heuristic Accuracy Rating</h4>
+                        <p class="scale-description">Instruction Example: Please indicate how accurate or inaccurate you think each of the following rules are for energy use by devices in the home. (Scale: 1=Mostly inaccurate, 2=Somewhat inaccurate, 3=Somewhat accurate, 4=Mostly accurate)</p>
+                        <div class="mb-4">
+                            <p class="question-text">"Devices that primarily heat or cool use more energy than devices with a primary function involving motion."</p>
+                            <!-- Placeholder for 1-4 rating scale (e.g., radio buttons) -->
+                            <div class="text-sm text-gray-500">(Display 1-4 rating options here)</div>
+                        </div>
+                        <div class="mb-4">
+                             <p class="question-text">"LED lights do not use a lot of energy."</p>
+                             <!-- Placeholder for 1-4 rating scale (e.g., radio buttons) -->
+                             <div class="text-sm text-gray-500">(Display 1-4 rating options here)</div>
+                         </div>
+                        <span class="citation">Example based on Kantenbacher & Attari (2021)</span>
+                    </div>
+
+                    <div>
+                        <h4>Knowledge/Ranking</h4>
+                         <p class="scale-description">Instruction Example: Which of the following uses the most energy per mile to transport one ton of goods? Rank from Most (1) to Least (4).</p>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 ml-4">
+                            <li>Ship</li>
+                            <li>Train</li>
+                            <li>Airplane</li>
+                            <li>Truck</li>
+                        </ul>
+                        <span class="citation">Example based on Attari et al. (2010)</span>
+                    </div>
+                </div>
+
+                <div class="survey-section">
+                    <h3>Objective Numeracy (Berlin Numeracy Test - Traditional Format)</h3>
+                    <p class="scale-description">Instructions: Please answer all four questions **without a calculator**. Feel free to use scratch paper.</p>
+                    <span class="citation">Source: Cokely, E. T., et al. (2012). Measuring Risk Literacy: The Berlin Numeracy Test. JDM, 7(1), 25–47.</span>
+                    <div class="space-y-6 mt-4">
+                        <div class="numeracy-item">
+                            <p><strong>1.</strong> Imagine we are throwing a five-sided die 50 times. On average, out of these 50 throws, how many times would this five-sided die show an odd number (1, 3, or 5)?</p>
+                            <div class="input-group">
+                                <input type="text" id="bnt-1" name="bnt-1" class="sm:text-sm">
+                                <span>out of 50 throws</span>
+                            </div>
+                        </div>
+                         <div class="numeracy-item">
+                            <p><strong>2.</strong> Out of 1,000 people in a small town 500 are members of a choir. Out of these 500 members in the choir 100 are men. Out of the 500 inhabitants that are not in the choir 300 are men. What is the probability that a randomly drawn man is a member of the choir? (please indicate the probability in percent).</p>
+                             <div class="input-group">
+                                <input type="text" id="bnt-2" name="bnt-2" class="sm:text-sm">
+                                <span>%</span>
+                            </div>
+                        </div>
+                         <div class="numeracy-item">
+                             <p><strong>3.</strong> Imagine we are throwing a loaded die (6 sides). The probability that the die shows a 6 is twice as high as the probability of each of the other numbers. On average, out of these 70 throws, how many times would the die show the number 6?</p>
+                             <div class="input-group">
+                                <input type="text" id="bnt-3" name="bnt-3" class="sm:text-sm">
+                                <span>out of 70 throws</span>
+                            </div>
+                        </div>
+                         <div class="numeracy-item">
+                            <p><strong>4.</strong> In a forest 20% of mushrooms are red, 50% brown and 30% white. A red mushroom is poisonous with a probability of 20%. A mushroom that is not red is poisonous with a probability of 5%. What is the probability that a poisonous mushroom in the forest is red?</p>
+                             <div class="input-group">
+                                <input type="text" id="bnt-4" name="bnt-4" class="sm:text-sm">
+                                <span>%</span>
+                            </div>
+                        </div>
+                    </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Count correct answers (0-4). Correct: 30; 25; 20; 50. Other formats (Multiple Choice, Single Item, Adaptive) and related items (e.g., Marghetis et al., 2019 subset) also exist.</p>
+                </div>
+
+                <div class="survey-section">
+                    <h3>Critical Thinking (Example Items)</h3>
+                    <p class="scale-description">Instructions: Please indicate how often you engage in the following or your agreement with the statements. (Scale: 1=Never/Strongly Disagree to 6=Always/Strongly Agree)</p>
+                     <span class="citation">Based on Gerlich (2025), Societies, 15(1), 6; adapted from Terenzini et al. [30] & HCTA.</span>
+                    <div class="space-y-4 mt-4">
+                         <div>
+                             <p class="question-text">How often do you critically evaluate the sources of information you encounter?</p>
+                             <div class="likert-scale-6">
+                                 <span class="text-xs text-gray-500">Never</span>
+                                 <label><input type="radio" name="crit-think-1" value="1"><span class="scale-label">1</span></label>
+                                 <label><input type="radio" name="crit-think-1" value="2"><span class="scale-label">2</span></label>
+                                 <label><input type="radio" name="crit-think-1" value="3"><span class="scale-label">3</span></label>
+                                 <label><input type="radio" name="crit-think-1" value="4"><span class="scale-label">4</span></label>
+                                 <label><input type="radio" name="crit-think-1" value="5"><span class="scale-label">5</span></label>
+                                 <label><input type="radio" name="crit-think-1" value="6"><span class="scale-label">6</span></label>
+                                 <span class="text-xs text-gray-500">Always</span>
+                             </div>
+                         </div>
+                         <div>
+                             <p class="question-text">I compare multiple sources of information before forming an opinion based on AI recommendations.</p>
+                             <div class="likert-scale-6">
+                                 <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                 <label><input type="radio" name="crit-think-2" value="1"><span class="scale-label">1</span></label>
+                                 <label><input type="radio" name="crit-think-2" value="2"><span class="scale-label">2</span></label>
+                                 <label><input type="radio" name="crit-think-2" value="3"><span class="scale-label">3</span></label>
+                                 <label><input type="radio" name="crit-think-2" value="4"><span class="scale-label">4</span></label>
+                                 <label><input type="radio" name="crit-think-2" value="5"><span class="scale-label">5</span></label>
+                                 <label><input type="radio" name="crit-think-2" value="6"><span class="scale-label">6</span></label>
+                                 <span class="text-xs text-gray-500">Strongly Agree</span>
+                             </div>
+                         </div>
+                         <div>
+                            <p class="question-text">I question the assumptions underlying the information provided by AI tools.</p>
+                            <div class="likert-scale-6">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="crit-think-3" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="crit-think-3" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="crit-think-3" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="crit-think-3" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="crit-think-3" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="crit-think-3" value="6"><span class="scale-label">6</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ############################# -->
+            <!-- AI LITERACY SCALES TAB -->
+            <!-- ############################# -->
+            <div id="ai-literacy" class="tab-content space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">AI Literacy Scales</h2>
+
+                <div class="survey-section">
+                    <h3>Meta AI Literacy Scale - Short Form (MAILS-SF)</h3>
+                    <p class="scale-description">Instructions: In the following, you will read descriptions of different abilities that one can have when dealing with artificial intelligence. These abilities can be more or less pronounced. Please rate yourself: How pronounced are your abilities? (Scale: 0 = Not at all / hardly pronounced to 10 = Very well / (almost) perfectly pronounced)</p>
+                    <span class="citation">Source: Koch, M. J., et al. (2024). Meta AI literacy scale: Further validation and development of a short version. Heliyon, 10(21), e39686.</span>
+
+                    <div class="mt-4 space-y-5">
+                        <div>
+                            <p class="question-text">1. I can tell if I am dealing with an application based on artificial intelligence.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-1" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-1" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-1" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-1" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-1" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">2. I can program new applications in the field of "artificial intelligence”.</p>
+                             <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-2" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-2" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-2" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-2" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-2" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-2" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-2" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-2" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-2" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-2" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-2" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">3. Although there are often new AI applications, I manage to always be "up-to-date”.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-3" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-3" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-3" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-3" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-3" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-3" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-3" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-3" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-3" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-3" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-3" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">4. I can handle it when interactions with AI frustrate or frighten me.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-4" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-4" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-4" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-4" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-4" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-4" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-4" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-4" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-4" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-4" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-4" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">5. I can weigh the consequences of using AI for society.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-5" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-5" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-5" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-5" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-5" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-5" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-5" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-5" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-5" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-5" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-5" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">6. I can design new AI applications.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-6" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-6" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-6" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-6" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-6" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-6" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-6" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-6" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-6" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-6" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-6" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">7. I can use artificial intelligence meaningfully to achieve my goals.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-7" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-7" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-7" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-7" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-7" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-7" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-7" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-7" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-7" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-7" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-7" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">8. I can also usually solve strenuous and complicated tasks when working with artificial intelligence well.</p>
+                             <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-8" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-8" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-8" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-8" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-8" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-8" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-8" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-8" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-8" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-8" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-8" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">9. I can prevent an AI from influencing me in my decisions.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-9" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-9" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-9" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-9" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-9" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-9" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-9" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-9" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-9" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-9" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-9" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">10. I can assess what advantages and disadvantages the use of an artificial intelligence entails.</p>
+                            <div class="likert-scale-11">
+                                <span class="text-xs text-gray-500">Not at all / Hardly</span>
+                                <label><input type="radio" name="mails-10" value="0"><span class="scale-label">0</span></label>
+                                <label><input type="radio" name="mails-10" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="mails-10" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="mails-10" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="mails-10" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="mails-10" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="mails-10" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="mails-10" value="7"><span class="scale-label">7</span></label>
+                                <label><input type="radio" name="mails-10" value="8"><span class="scale-label">8</span></label>
+                                <label><input type="radio" name="mails-10" value="9"><span class="scale-label">9</span></label>
+                                <label><input type="radio" name="mails-10" value="10"><span class="scale-label">10</span></label>
+                                <span class="text-xs text-gray-500">Very well / Perfectly</span>
+                            </div>
+                        </div>
+                    </div>
+                     <p class="text-xs text-gray-500 mt-4">Note: Subscales are calculated as follows: AI Literacy (Detect AI: 1, Apply AI: 7, Understand AI: 10, AI Ethics: 5); Create AI (Items 2, 6); AI Self-Efficacy (Learning: 3, AI Problem-Solving: 8); AI Self-Competency (Persuasion Literacy: 9, Emotion Regulation: 4).</p>
+                </div>
+
+                <div class="survey-section">
+                    <h3>AI Literacy Components (Rheu & Cho)</h3>
+                    <p class="scale-description">Instructions: Please read the following statements carefully and indicate the extent to which you agree or disagree with each statement. (Scale: 1=Strongly disagree to 7=Strongly agree)</p>
+                    <span class="citation">Source: Rheu, M., & Cho, J. (2025). The Trap of AI Literacy... CHI EA '25.</span>
+
+                    <div class="mt-4 space-y-4">
+                        <h4>Self-Efficacy</h4>
+                        <div>
+                            <p class="question-text">1. I am confident I will perform well on LLM-related tasks.</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-se-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-se-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">2. I am confident I will do well on LLMs related projects.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">3. I believe I can master LLMs knowledge and skills.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">4. I believe I can earn good grades in LLMs related assessments.</p> (Scale 1-7)</div>
+
+                        <h4>Cognitive Learning</h4>
+                        <div>
+                            <p class="question-text">1. I know what LLM is and its definition.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-cl-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-cl-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">2. I know how to use LLM applications (e.g., ChatGPT, Claude).</p> (Scale 1-7)</div>
+                        <div><p class="question-text">3. I can compare the differences between AI concepts (e.g., deep learning, machine learning).</p> (Scale 1-7)</div>
+                        <div><p class="question-text">4. I can apply LLM applications to solve problems.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">5. I can create LLM-driven solutions (e.g., Chatbots) to solve problems.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">6. I can evaluate LLM applications and concepts to different situations.</p> (Scale 1-7)</div>
+
+                        <h4>AI Technology Knowledge</h4>
+                         <p class="scale-description">Instructions: Please indicate the extent to which you agree or disagree with each statement on a scale from 1 to 7. I have knowledge of...</p>
+                         <div>
+                            <p class="question-text">1. The types of technology that LLM is built on.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-tk-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-tk-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">2. how LLMs and other AI technologies are distinct.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">3. Use cases for LLMs.</p> (Scale 1-7)</div>
+                        <div><p class="question-text">4. The roles that LLMs can have in human-AI interaction.</p> (Scale 1-7)</div>
+
+                        <h4>AI-Steps Knowledge</h4>
+                        <p class="scale-description">Instructions: Please indicate the extent to which you agree or disagree with each statement on a scale from 1 to 7. I have knowledge of...</p>
+                         <div>
+                            <p class="question-text">1. The input data requirements for LLMs.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-sk-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-sk-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                         <div><p class="question-text">2. How input data is perceived by LLMs.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">3. Potential impacts that input data has on LLMs.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">4. Which input data types LLMs can use.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">5. LLMs processing methods and models.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">6. How information is presented for LLMs processing.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">7. The risks LLMs processing poses.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">8. Why LLMs processing can be described as a learning process.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">9. Using LLMs output and interpreting it.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">10. LLMs output limitations.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">11. How to handle LLMs output.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">12. Which LLMs outputs are obtainable with current methods.</p> (Scale 1-7)</div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score for each sub-dimension or an overall average.</p>
+                </div>
+            </div>
+
+            <!-- ############################# -->
+            <!-- LLM BELIEFS & PERCEPTIONS TAB -->
+            <!-- ############################# -->
+            <div id="llm-beliefs" class="tab-content space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">LLM Beliefs & Perceptions</h2>
+                <p class="text-sm text-gray-600 mb-4">Assessing perceptions of LLM capabilities, heuristics, and underlying assumptions about their operation, particularly in the energy domain.</p>
+
+                 <div class="survey-section">
+                    <h3>Perceived Accuracy & Competence (Energy Domain Examples)</h3>
+                    <p class="scale-description">How accurate/good do you believe a state-of-the-art AI chatbot (e.g., ChatGPT, Gemini) would be at the following tasks? (Scale: 1=Very Inaccurate/Poor to 7=Very Accurate/Good)</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="question-text"><strong>Factual Accuracy:</strong> Answering questions like "Which type of water heater generally uses less energy?"</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Inaccurate</span>
+                                <label><input type="radio" name="factual-q1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="factual-q1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="factual-q1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="factual-q1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="factual-q1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="factual-q1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="factual-q1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Accurate</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text"><strong>Estimation Accuracy:</strong> Estimating the typical annual energy cost for a household refrigerator.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Inaccurate</span>
+                                <label><input type="radio" name="estimate-acc-2" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="estimate-acc-2" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Accurate</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text"><strong>Planning Competence:</strong> Generating an effective and realistic personalized energy-saving plan.</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Poor</span>
+                                <label><input type="radio" name="plan-effective" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="plan-effective" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="plan-effective" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="plan-effective" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="plan-effective" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="plan-effective" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="plan-effective" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Good</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="survey-section">
+                    <h3>Machine Heuristics (LLM Perception)</h3>
+                    <p class="scale-description">Instructions: The following statements describe your perception of the LLMs applications you use (e.g., ChatGPT, Gemini). Please indicate the extent to which you agree or disagree. (Scale: 1=Strongly disagree to 7=Strongly agree)</p>
+                     <span class="citation">Source: Rheu, M., & Cho, J. (2025). The Trap of AI Literacy... CHI EA '25.</span>
+                     <p class="text-sm text-gray-600 mb-4">LLMs applications are...</p>
+                    <div class="space-y-4 mt-4">
+                         <div>
+                            <p class="question-text">1. Knowledgeable</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-mh-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-mh-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">2. Smart</p> (Scale 1-7)</div>
+                        <div><p class="question-text">3. Clever</p> (Scale 1-7)</div>
+                        <div><p class="question-text">4. Unbiased</p> (Scale 1-7)</div>
+                        <div><p class="question-text">5. Non-discriminatory</p> (Scale 1-7)</div>
+                        <div><p class="question-text">6. Impartial</p> (Scale 1-7)</div>
+                        <div><p class="question-text">7. Not-prejudiced</p> (Scale 1-7)</div>
+                        <div><p class="question-text">8. Even-handed</p> (Scale 1-7)</div>
+                        <div><p class="question-text">9. Neutral</p> (Scale 1-7)</div>
+                         <div>
+                            <p class="question-text">10. Precise</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="rheu-mh-10" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rheu-mh-10" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">11. Accurate</p> (Scale 1-7)</div>
+                        <div><p class="question-text">12. Exact</p> (Scale 1-7)</div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Scoring Note: Items 1-3 relate to 'expert', 4-9 to 'objective', 10-12 to 'accurate' perception. Can be averaged overall or by sub-factor.</p>
+                </div>
+
+                <div class="survey-section">
+                    <h3>Attributional Beliefs / Mental Models (Energy Domain Examples)</h3>
+                    <p class="scale-description">Please rate your agreement with the following statements about how AI chatbots operate when providing energy information. (Scale: 1=Strongly Disagree to 7=Strongly Agree)</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="question-text">"The chatbot has real-time access to comprehensive and up-to-date energy usage databases."</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="attrib-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="attrib-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="attrib-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="attrib-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="attrib-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="attrib-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="attrib-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">"The chatbot might sometimes confidently invent ('hallucinate') numbers or facts about energy that sound plausible but are incorrect."</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="attrib-2" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="attrib-2" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="attrib-2" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="attrib-2" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="attrib-2" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="attrib-2" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="attrib-2" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">"The chatbot genuinely understands energy principles in a way similar to a human expert."</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Strongly Disagree</span>
+                                <label><input type="radio" name="attrib-4" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="attrib-4" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="attrib-4" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="attrib-4" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="attrib-4" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="attrib-4" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="attrib-4" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Strongly Agree</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- ############################# -->
+            <!-- TRUST & RELIANCE TAB -->
+            <!-- ############################# -->
+             <div id="trust-reliance" class="tab-content space-y-6">
+                 <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Trust & Reliance Measures</h2>
+
+                 <div class="survey-section">
+                    <h3>Task-Specific Trust (Energy Domain Examples)</h3>
+                    <p class="scale-description">How much would you trust the following outputs from an AI chatbot regarding energy? (Scale: 1=Do not trust at all to 7=Trust completely)</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="question-text">The <strong>factual accuracy</strong> of energy information (e.g., verifying an energy myth).</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Do not trust at all</span>
+                                <label><input type="radio" name="trust-factual" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="trust-factual" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="trust-factual" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="trust-factual" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="trust-factual" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="trust-factual" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="trust-factual" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Trust completely</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">An AI-generated <strong>estimate</strong> of your refrigerator's annual energy cost.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Do not trust at all</span>
+                                <label><input type="radio" name="trust-estimate" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="trust-estimate" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="trust-estimate" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="trust-estimate" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="trust-estimate" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="trust-estimate" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="trust-estimate" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Trust completely</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">An AI-generated personalized energy-saving <strong>plan</strong>.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Do not trust at all</span>
+                                <label><input type="radio" name="trust-plan" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="trust-plan" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="trust-plan" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="trust-plan" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="trust-plan" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="trust-plan" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="trust-plan" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Trust completely</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="survey-section">
+                    <h3>Trust between People and Automation (TPA) - AI Context</h3>
+                    <p class="scale-description">Instructions: Please mark each statement with the number that best describes your feelings or your impression of trust with the AI [you are considering / you just interacted with]. (Scale: 1=Not at all to 7=Extremely)</p>
+                    <span class="citation">Adapted from Jian, J.-Y., et al. (2000), Int J Cog Ergonomics, 4(1), 53-71. As used in Scharowski et al. (2025), arXiv:2403.00582.</span>
+                    <div class="space-y-4 mt-4">
+                        <div>
+                            <p class="question-text">1. The AI is deceptive</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Not at all</span>
+                                <label><input type="radio" name="tpa-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="tpa-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="tpa-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="tpa-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="tpa-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="tpa-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="tpa-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Extremely</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">2. The AI behaves in an underhanded manner</p> (Scale 1-7)</div>
+                        <div><p class="question-text">3. I am suspicious of the AI's intent, action, or outputs</p> (Scale 1-7)</div>
+                        <div><p class="question-text">4. I am wary of the AI</p> (Scale 1-7)</div>
+                        <div><p class="question-text">5. The AI's actions will have a harmful or injurious outcome</p> (Scale 1-7)</div>
+                        <div>
+                            <p class="question-text">6. I am confident in the AI</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Not at all</span>
+                                <label><input type="radio" name="tpa-6" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="tpa-6" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="tpa-6" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="tpa-6" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="tpa-6" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="tpa-6" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="tpa-6" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Extremely</span>
+                            </div>
+                        </div>
+                        <div><p class="question-text">7. The AI provides security</p> (Scale 1-7)</div>
+                        <div><p class="question-text">8. The AI has integrity</p> (Scale 1-7)</div>
+                        <div><p class="question-text">9. The AI is dependable</p> (Scale 1-7)</div>
+                        <div><p class="question-text">10. The AI is reliable</p> (Scale 1-7)</div>
+                        <div><p class="question-text">11. I can trust the AI</p> (Scale 1-7)</div>
+                        <div><p class="question-text">12. I am familiar with the AI</p> (Scale 1-7)</div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Items 1-5 measure Distrust (reverse code for total trust score). Items 6-12 measure Trust.</p>
+                 </div>
+
+                 <div class="survey-section">
+                    <h3>Trust in Artificial Intelligence (TXAI)</h3>
+                     <p class="scale-description">Instructions: Please mark each statement with the number that best describes your feelings or your impression of trust with the AI [you are considering / you just saw]. (Scale: 1=I disagree strongly, 2=I disagree somewhat, 3=I'm neutral about it, 4=I agree somewhat, 5=I agree strongly)</p>
+                    <span class="citation">Source: Scharowski, N., et al. (2025). To Trust or Distrust Trust Measures... arXiv:2403.00582.</span>
+                    <div class="space-y-4 mt-4">
+                         <div>
+                             <p class="question-text">1. I am confident in the AI. I feel that it works well.</p>
+                             <div class="likert-scale-5">
+                                <span class="text-xs text-gray-500">Disagree Strongly</span>
+                                <label><input type="radio" name="txai-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="txai-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="txai-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="txai-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="txai-1" value="5"><span class="scale-label">5</span></label>
+                                <span class="text-xs text-gray-500">Agree Strongly</span>
+                             </div>
+                         </div>
+                         <div><p class="question-text">2. The outputs of the AI are very predictable.</p> (Scale 1-5)</div>
+                         <div><p class="question-text">3. The AI is very reliable. I can count on it to be correct all the time.</p> (Scale 1-5)</div>
+                         <div><p class="question-text">4. I feel safe that when I rely on the AI I will get the right answers.</p> (Scale 1-5)</div>
+                         <div><p class="question-text">5. The AI is efficient in that it works very quickly.</p> (Scale 1-5)</div>
+                         <div><p class="question-text">6. I am wary of the AI.</p> (Scale 1-5, *Reverse code*)</div>
+                         <div><p class="question-text">7. The AI can perform the task better than a novice human user.</p> (Scale 1-5)</div>
+                         <div><p class="question-text">8. I like using the AI for decision making.</p> (Scale 1-5)</div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score. Item 6 is typically reverse-coded.</p>
+                 </div>
+
+                 <div class="survey-section">
+                    <h3>Situation-Specific Trust (STS - Examples)</h3>
+                     <p class="scale-description">Instructions: Please mark each statement with the number that best describes your feeling or your impression [about the AI in this situation]. (Scale: 1=Fully disagree to 7=Fully agree)</p>
+                    <span class="citation">Source: Scharowski, N., et al. (2025). To Trust or Distrust Trust Measures... arXiv:2403.00582. (Adapted for AD/Chatbot contexts)</span>
+                    <div class="space-y-4 mt-4">
+                        <h4>Example Items (Could be adapted for Energy AI context)</h4>
+                         <div>
+                             <p class="question-text">1. I trust the [AI/system] in this situation.</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Fully Disagree</span>
+                                <label><input type="radio" name="sts-1" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="sts-1" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="sts-1" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="sts-1" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="sts-1" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="sts-1" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="sts-1" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Fully Agree</span>
+                            </div>
+                         </div>
+                         <div><p class="question-text">2. I would have performed better than the [AI/system] in this situation.</p> (Scale 1-7, *Reverse code*)</div>
+                         <div><p class="question-text">3. Given the system's performance, there was no need to monitor it continuously.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">4. The situation was risky.</p> (Scale 1-7, *Reverse code for trust*)</div>
+                         <div><p class="question-text">5. The [AI/system] made an unsafe judgement in this situation.</p> (Scale 1-7, *Reverse code*)</div>
+                         <div><p class="question-text">6. The [AI/system] reacted appropriately in this situation.</p> (Scale 1-7)</div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score. Items 2, 4, 5 typically reverse-coded for a total trust score.</p>
+                 </div>
+
+                  <div class="survey-section">
+                    <h3>Perceived Credibility (LLM Perception)</h3>
+                    <p class="scale-description">Instructions: In general, how credible do you perceive the LLMs you use? Please mark the position on the scale that best reflects your perception.</p>
+                     <span class="citation">Source: Rheu, M., & Cho, J. (2025). The Trap of AI Literacy... CHI EA '25.</span>
+                    <div class="space-y-2 mt-4">
+                         <div class="semantic-diff-item">
+                            <span>Not Credible</span>
+                             <div class="radios">
+                                <label>-3<input type="radio" name="cred-1" value="-3"></label>
+                                <label>-2<input type="radio" name="cred-1" value="-2"></label>
+                                <label>-1<input type="radio" name="cred-1" value="-1"></label>
+                                <label>0<input type="radio" name="cred-1" value="0"></label>
+                                <label>1<input type="radio" name="cred-1" value="1"></label>
+                                <label>2<input type="radio" name="cred-1" value="2"></label>
+                                <label>3<input type="radio" name="cred-1" value="3"></label>
+                            </div>
+                            <span>Credible</span>
+                         </div>
+                         <div class="semantic-diff-item">
+                            <span>Unreliable</span>
+                            <div class="radios">
+                                <label>-3<input type="radio" name="cred-2" value="-3"></label>
+                                <label>-2<input type="radio" name="cred-2" value="-2"></label>
+                                <label>-1<input type="radio" name="cred-2" value="-1"></label>
+                                <label>0<input type="radio" name="cred-2" value="0"></label>
+                                <label>1<input type="radio" name="cred-2" value="1"></label>
+                                <label>2<input type="radio" name="cred-2" value="2"></label>
+                                <label>3<input type="radio" name="cred-2" value="3"></label>
+                            </div>
+                             <span>Reliable</span>
+                         </div>
+                         <div class="semantic-diff-item">
+                             <span>Not expert</span>
+                             <div class="radios">
+                                <label>-3<input type="radio" name="cred-3" value="-3"></label>
+                                <label>-2<input type="radio" name="cred-3" value="-2"></label>
+                                <label>-1<input type="radio" name="cred-3" value="-1"></label>
+                                <label>0<input type="radio" name="cred-3" value="0"></label>
+                                <label>1<input type="radio" name="cred-3" value="1"></label>
+                                <label>2<input type="radio" name="cred-3" value="2"></label>
+                                <label>3<input type="radio" name="cred-3" value="3"></label>
+                            </div>
+                             <span>Expert</span>
+                         </div>
+                         <div class="semantic-diff-item">
+                             <span>Not trustworthy</span>
+                             <div class="radios">
+                                <label>-3<input type="radio" name="cred-4" value="-3"></label>
+                                <label>-2<input type="radio" name="cred-4" value="-2"></label>
+                                <label>-1<input type="radio" name="cred-4" value="-1"></label>
+                                <label>0<input type="radio" name="cred-4" value="0"></label>
+                                <label>1<input type="radio" name="cred-4" value="1"></label>
+                                <label>2<input type="radio" name="cred-4" value="2"></label>
+                                <label>3<input type="radio" name="cred-4" value="3"></label>
+                             </div>
+                             <span>Trustworthy</span>
+                         </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score across items.</p>
+                 </div>
+
+                  <div class="survey-section">
+                    <h3>Affective Response (PANAS - Positive and Negative Affect Schedule)</h3>
+                    <p class="scale-description">Instructions: Indicate to what extent you felt this way [while considering the AI / while watching the video]. (Scale: 1=Very slightly or not at all, 2=A little, 3=Moderately, 4=Quite a bit, 5=Extremely)</p>
+                    <span class="citation">Source: Watson, Clark, & Tellegen (1988), used in Scharowski et al. (2025), arXiv:2403.00582.</span>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 mt-4 text-sm">
+                        <div>Interested</div> <div>Distressed</div>
+                        <div>Excited</div> <div>Upset</div>
+                        <div>Strong</div> <div>Guilty</div>
+                        <div>Scared</div> <div>Hostile</div>
+                        <div>Enthusiastic</div> <div>Proud</div>
+                        <div>Irritable</div> <div>Alert</div>
+                        <div>Ashamed</div> <div>Inspired</div>
+                        <div>Nervous</div> <div>Determined</div>
+                        <div>Attentive</div> <div>Jittery</div>
+                        <div>Active</div> <div>Afraid</div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Scoring Note: Sum/average Positive Affect items (Interested, Excited, Strong, Enthusiastic, Proud, Alert, Inspired, Determined, Attentive, Active) and Negative Affect items (Distressed, Upset, Guilty, Scared, Hostile, Irritable, Ashamed, Nervous, Jittery, Afraid).</p>
+                 </div>
+
+                <div class="survey-section">
+                    <h3>Risk Perception (Sliders)</h3>
+                    <p class="scale-description">Instructions: Please rate the following on a scale from 0 to 100.</p>
+                    <span class="citation">Source: Scharowski, N., et al. (2025). To Trust or Distrust Trust Measures... arXiv:2403.00582.</span>
+                     <div class="space-y-4 mt-4">
+                         <div>
+                            <p class="question-text">How risky did you consider the [scenario/use of AI for energy advice] to be?</p>
+                            <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                            <div class="flex justify-between text-xs text-gray-500 px-1"><span>0 (not at all risky)</span><span>100 (extremely risky)</span></div>
+                        </div>
+                         <div>
+                            <p class="question-text">How unfavorable did you consider the actions/advice of the AI to be?</p>
+                            <input type="range" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                             <div class="flex justify-between text-xs text-gray-500 px-1"><span>0 (not at all unfavorable)</span><span>100 (extremely unfavorable)</span></div>
+                        </div>
+                     </div>
+                </div>
+
+
+            </div>
+
+            <!-- ############################# -->
+            <!-- BEHAVIOR & INTENTIONS TAB -->
+            <!-- ############################# -->
+            <div id="behavior" class="tab-content space-y-6">
+                 <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Behavior & Intentions</h2>
+
+                 <div class="survey-section">
+                    <h3>Willingness to Use LLMs for Energy Decisions</h3>
+                    <p class="scale-description">How likely would you be to use an AI chatbot (like ChatGPT or Gemini) in the future for the following energy-related tasks? (Scale: 1=Very Unlikely to 7=Very Likely)</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="question-text">To get information about how much energy specific appliances use.</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Unlikely</span>
+                                <label><input type="radio" name="willing-info" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="willing-info" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="willing-info" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="willing-info" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="willing-info" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="willing-info" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="willing-info" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Likely</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">To estimate potential energy or cost savings from specific actions (e.g., replacing bulbs).</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Unlikely</span>
+                                <label><input type="radio" name="willing-estimate" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="willing-estimate" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="willing-estimate" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="willing-estimate" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="willing-estimate" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="willing-estimate" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="willing-estimate" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Likely</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">To help create a personalized energy-saving plan for your household.</p>
+                            <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Unlikely</span>
+                                <label><input type="radio" name="willing-plan" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="willing-plan" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="willing-plan" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="willing-plan" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="willing-plan" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="willing-plan" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="willing-plan" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Likely</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="survey-section">
+                    <h3>Intended Reliance (Task-Specific Energy Examples)</h3>
+                    <p class="scale-description">How likely would you be to act on the AI's output without seeking a second opinion? (Scale: 1=Very Unlikely to 7=Very Likely)</p>
+                     <div class="space-y-4">
+                        <div>
+                            <p class="question-text">Act on specific energy-saving advice from an AI chatbot (e.g., change thermostat settings)?</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Unlikely</span>
+                                <label><input type="radio" name="rely-advice" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rely-advice" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rely-advice" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rely-advice" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rely-advice" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rely-advice" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rely-advice" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Likely</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="question-text">Follow an AI-generated personalized energy-saving plan without verifying its recommendations?</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Very Unlikely</span>
+                                <label><input type="radio" name="rely-plan" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="rely-plan" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="rely-plan" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="rely-plan" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="rely-plan" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="rely-plan" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="rely-plan" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Very Likely</span>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="question-text">I would use the AI [in the scenario / for energy advice].</p>
+                             <div class="likert-scale-7">
+                                <span class="text-xs text-gray-500">Fully Disagree</span>
+                                <label><input type="radio" name="schar-use" value="1"><span class="scale-label">1</span></label>
+                                <label><input type="radio" name="schar-use" value="2"><span class="scale-label">2</span></label>
+                                <label><input type="radio" name="schar-use" value="3"><span class="scale-label">3</span></label>
+                                <label><input type="radio" name="schar-use" value="4"><span class="scale-label">4</span></label>
+                                <label><input type="radio" name="schar-use" value="5"><span class="scale-label">5</span></label>
+                                <label><input type="radio" name="schar-use" value="6"><span class="scale-label">6</span></label>
+                                <label><input type="radio" name="schar-use" value="7"><span class="scale-label">7</span></label>
+                                <span class="text-xs text-gray-500">Fully Agree</span>
+                            </div>
+                            <span class="citation">Source: Single item from Scharowski, N., et al. (2025).</span>
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="survey-section">
+                    <h3>Fact-checking Behavior (LLM Context)</h3>
+                     <p class="scale-description">Instructions: When using LLMs, how often do you engage in the following behaviors? (Scale: 1=Never, 2=Rarely, 3=Occasionally, 4=Sometimes, 5=Frequently, 6=Most of the time, 7=Always)</p>
+                     <span class="citation">Source: Rheu, M., & Cho, J. (2025). The Trap of AI Literacy... CHI EA '25.</span>
+                     <div class="space-y-4 mt-4">
+                          <div>
+                             <p class="question-text">1. Verify the credentials or qualifications of authors or source of information.</p>
+                              <div class="likert-scale-7">
+                                 <span class="text-xs text-gray-500">Never</span>
+                                 <label><input type="radio" name="factcheck-1" value="1"><span class="scale-label">1</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="2"><span class="scale-label">2</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="3"><span class="scale-label">3</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="4"><span class="scale-label">4</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="5"><span class="scale-label">5</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="6"><span class="scale-label">6</span></label>
+                                 <label><input type="radio" name="factcheck-1" value="7"><span class="scale-label">7</span></label>
+                                 <span class="text-xs text-gray-500">Always</span>
+                             </div>
+                          </div>
+                         <div><p class="question-text">2. Consider the currency of the information (e.g., how recent it is).</p> (Scale 1-7)</div>
+                         <div><p class="question-text">3. Consider the reputation on trustworthiness of the website or source.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">4. Use other search engines to further research on the topic.</p> (Scale 1-7)</div>
+                         <div><p class="question-text">5. Seek opinions or expertise of other individuals.</p> (Scale 1-7)</div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score across items.</p>
+                </div>
+
+                <div class="survey-section">
+                    <h3>AI Tool Usage (General)</h3>
+                     <p class="scale-description">Instructions: Respond based on the provided scale. (Scale: Generally 1=Never/Not at all/Strongly Disagree to 6=Always/Completely/Strongly Agree)</p>
+                     <span class="citation">Source: Gerlich, M. (2025). AI Tools in Society... Societies, 15(1), 6.</span>
+                     <div class="space-y-4 mt-4">
+                          <div>
+                             <p class="question-text">How often do you use AI tools (e.g., virtual assistants, recommendation algorithms) to find information or solve problems?</p>
+                             <div class="likert-scale-6">
+                                 <span class="text-xs text-gray-500">Never</span>
+                                 <label><input type="radio" name="gerlich-use-1" value="1"><span class="scale-label">1</span></label>
+                                 <label><input type="radio" name="gerlich-use-1" value="2"><span class="scale-label">2</span></label>
+                                 <label><input type="radio" name="gerlich-use-1" value="3"><span class="scale-label">3</span></label>
+                                 <label><input type="radio" name="gerlich-use-1" value="4"><span class="scale-label">4</span></label>
+                                 <label><input type="radio" name="gerlich-use-1" value="5"><span class="scale-label">5</span></label>
+                                 <label><input type="radio" name="gerlich-use-1" value="6"><span class="scale-label">6</span></label>
+                                 <span class="text-xs text-gray-500">Always</span>
+                             </div>
+                          </div>
+                          <div><p class="question-text">To what extent do you rely on AI tools for decision-making?</p> (Scale 1=Not at all to 6=Completely)</div>
+                          <div><p class="question-text">I find AI tools help me save time when searching for information.</p> (Scale 1=Strongly Disagree to 6=Strongly Agree)</div>
+                          <div><p class="question-text">I trust the recommendations provided by AI tools.</p> (Scale 1=Strongly Disagree to 6=Strongly Agree)</div>
+                          <div><p class="question-text">I often cross-check information provided by AI tools with other sources.</p> (Scale 1=Strongly Disagree to 6=Strongly Agree, *Note: May indicate less blind reliance*)</div>
+                     </div>
+                     <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score. Item 10 might need reverse coding depending on interpretation in a reliance context.</p>
+                </div>
+
+                 <div class="survey-section">
+                    <h3>Cognitive Offloading (General)</h3>
+                     <p class="scale-description">Instructions: Respond based on the provided scale. (Scale: Generally 1=Never/Strongly Disagree/Very Unlikely/Not dependent to 6=Always/Strongly Agree/Very Likely/Completely dependent)</p>
+                     <span class="citation">Source: Gerlich, M. (2025). AI Tools in Society... Societies, 15(1), 6.</span>
+                     <div class="space-y-4 mt-4">
+                          <div>
+                             <p class="question-text">How often do you use search engines like Google to find information quickly?</p>
+                            <div class="likert-scale-6">
+                                 <span class="text-xs text-gray-500">Never</span>
+                                 <label><input type="radio" name="gerlich-offload-1" value="1"><span class="scale-label">1</span></label>
+                                 <label><input type="radio" name="gerlich-offload-1" value="2"><span class="scale-label">2</span></label>
+                                 <label><input type="radio" name="gerlich-offload-1" value="3"><span class="scale-label">3</span></label>
+                                 <label><input type="radio" name="gerlich-offload-1" value="4"><span class="scale-label">4</span></label>
+                                 <label><input type="radio" name="gerlich-offload-1" value="5"><span class="scale-label">5</span></label>
+                                 <label><input type="radio" name="gerlich-offload-1" value="6"><span class="scale-label">6</span></label>
+                                 <span class="text-xs text-gray-500">Always</span>
+                             </div>
+                          </div>
+                          <div><p class="question-text">Compared to the past, do you feel that finding information has become faster and more convenient with technology?</p> (Scale 1=Strongly Disagree to 6=Strongly Agree)</div>
+                          <div><p class="question-text">How often do you use your smartphone or other digital devices to remember tasks or information?</p> (Scale 1=Never to 6=Always)</div>
+                          <div><p class="question-text">When faced with a problem or question, how likely are you to search for the answer online rather than trying to figure it out yourself?</p> (Scale 1=Very Unlikely to 6=Very Likely)</div>
+                          <div><p class="question-text">On a scale of 1 to 6, how dependent are you on digital devices for day-to-day tasks and information retrieval?</p> (Scale 1=Not dependent at all to 6=Completely dependent)</div>
+                     </div>
+                      <p class="text-xs text-gray-500 mt-4">Scoring Note: Calculate average score.</p>
+                </div>
+
+                 <div class="survey-section">
+                    <h3>Self-Reported Past-Month Frequency of Using LLMs for Energy Decisions</h3>
+                    <p class="scale-description">In the past month, how often have you used any AI chatbot (e.g., ChatGPT, Gemini, Claude) for tasks related to understanding or reducing your household energy consumption?</p>
+                     <div class="mt-2 space-y-1 choice-item">
+                        <label><input type="radio" name="frequency" value="never"><span>Never</span></label>
+                        <label><input type="radio" name="frequency" value="rarely"><span>Rarely (1-2 times)</span></label>
+                        <label><input type="radio" name="frequency" value="sometimes"><span>Sometimes (3-5 times)</span></label>
+                         <label><input type="radio" name="frequency" value="often"><span>Often (6-10 times)</span></label>
+                         <label><input type="radio" name="frequency" value="very_often"><span>Very Often (More than 10 times)</span></label>
+                    </div>
+                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Get all tab buttons and content divs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Function to switch tabs
+        function switchTab(targetTabId) {
+             // Remove 'active' class from all buttons and content divs
+             tabButtons.forEach(btn => btn.classList.remove('active'));
+             tabContents.forEach(content => content.classList.remove('active'));
+
+             // Find the button and content div corresponding to the target ID
+             const targetButton = document.querySelector(`.tab-button[data-tab="${targetTabId}"]`);
+             const targetContent = document.getElementById(targetTabId);
+
+             // Add 'active' class to the target button and content div
+             if (targetButton && targetContent) {
+                 targetButton.classList.add('active');
+                 targetContent.classList.add('active');
+             } else {
+                 // Fallback to the first tab if target not found
+                 if (tabButtons.length > 0 && tabContents.length > 0) {
+                    tabButtons[0].classList.add('active');
+                    tabContents[0].classList.add('active');
+                 }
+             }
+        }
+
+        // Add click event listener to each tab button
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                switchTab(targetTab);
+            });
+        });
+
+        // Ensure the first tab is active on initial load
+        document.addEventListener('DOMContentLoaded', () => {
+             const initialTab = tabButtons.length > 0 ? tabButtons[0].dataset.tab : null;
+             if (initialTab) {
+                 switchTab(initialTab); // Default to first tab
+             }
+        });
+
+    </script>
+</body>
+</html>

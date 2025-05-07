@@ -1,0 +1,1348 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Reduction Planner with AI Feedback</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            },
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+        }
+        /* Dark mode styles */
+        .dark .slider::-webkit-slider-thumb {
+            background: #7776ED;
+        }
+        .dark .slider::-moz-range-thumb {
+            background: #7776ED;
+        }
+    </style>
+</head>
+<body class="antialiased bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-primary mb-4">Energy Reduction Planner with AI Feedback</h1>
+            <p class="text-lg max-w-3xl mx-auto">Plan how to reduce your household energy consumption by 20% and receive AI-generated feedback on your strategy.</p>
+        </header>
+
+        <div id="app-container">
+            <!-- Step indicator -->
+            <div class="flex items-center justify-between mb-8 px-2">
+                <div id="step1-indicator" class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+                    <span class="mt-2 text-sm">Energy Usage</span>
+                </div>
+                <div class="h-1 flex-1 bg-gray-300 mx-2"></div>
+                <div id="step2-indicator" class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">2</div>
+                    <span class="mt-2 text-sm">Create Plan</span>
+                </div>
+                <div class="h-1 flex-1 bg-gray-300 mx-2"></div>
+                <div id="step3-indicator" class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">3</div>
+                    <span class="mt-2 text-sm">AI Feedback</span>
+                </div>
+                <div class="h-1 flex-1 bg-gray-300 mx-2"></div>
+                <div id="step4-indicator" class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold">4</div>
+                    <span class="mt-2 text-sm">Evaluate</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Energy Assessment and Information Presentation -->
+            <div id="step1" class="step-content">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Your Household Energy Usage</h2>
+                    
+                    <!-- Energy Literacy Quiz -->
+                    <div id="energy-literacy-quiz" class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4">Energy Literacy Assessment</h3>
+                        <p class="mb-4">Please answer these quick questions to help us understand your energy knowledge:</p>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-300 dark:border-gray-700 rounded-lg">
+                                <p class="font-medium mb-2">1. Which of these appliances typically uses the most electricity in the average home?</p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q1" value="a" class="mr-2">
+                                        <span>Refrigerator</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q1" value="b" class="mr-2">
+                                        <span>LED light bulb</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q1" value="c" class="mr-2">
+                                        <span>Air conditioner</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q1" value="d" class="mr-2">
+                                        <span>Toaster</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 border border-gray-300 dark:border-gray-700 rounded-lg">
+                                <p class="font-medium mb-2">2. What does kWh stand for?</p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q2" value="a" class="mr-2">
+                                        <span>Kilowatt heat</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q2" value="b" class="mr-2">
+                                        <span>Kilowatt hour</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q2" value="c" class="mr-2">
+                                        <span>Kinetic watt hybrid</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q2" value="d" class="mr-2">
+                                        <span>Kilovolt watt height</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 border border-gray-300 dark:border-gray-700 rounded-lg">
+                                <p class="font-medium mb-2">3. Which action would save the most energy?</p>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q3" value="a" class="mr-2">
+                                        <span>Turning off lights when not in use</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q3" value="b" class="mr-2">
+                                        <span>Adjusting thermostat by 2 degrees</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q3" value="c" class="mr-2">
+                                        <span>Unplugging phone chargers</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="q3" value="d" class="mr-2">
+                                        <span>Switching to LED light bulbs</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Format Selection (hidden in real experiment) -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3">Information Format Preference</h3>
+                        <p class="mb-3">Choose how you'd like to view your energy usage information:</p>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="table" checked="" class="mr-2">
+                                <span>Table</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="bar" class="mr-2">
+                                <span>Bar Graph</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="icon" class="mr-2">
+                                <span>Icon Graph</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Data Views (will be shown based on format selection) -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-4">Your Monthly Electricity Usage</h3>
+                        
+                        <!-- Table Format -->
+                        <div id="table-format" class="format-display">
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-100 dark:bg-gray-700">
+                                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Appliance Category</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Monthly Usage (kWh)</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">% of Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Heating &amp; Cooling</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">420</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">35%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Water Heating</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">180</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">15%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Lighting</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">120</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">10%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Refrigeration</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">144</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">12%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Electronics</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">156</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">13%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Cooking</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">96</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Laundry</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">84</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">7%</td>
+                                        </tr>
+                                        <tr class="bg-gray-100 dark:bg-gray-700 font-bold">
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1200</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">100%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Bar Graph Format -->
+                        <div id="bar-format" class="format-display hidden">
+                            <canvas id="bar-chart" height="300"></canvas>
+                        </div>
+                        
+                        <!-- Icon Graph Format -->
+                        <div id="icon-format" class="format-display hidden">
+                            <div class="icon-graph">
+                                <div class="flex flex-col">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Heating &amp; Cooling:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡⚡⚡⚡⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">35% (420 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Water Heating:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">15% (180 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Lighting:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">10% (120 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Refrigeration:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">12% (144 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Electronics:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">13% (156 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Cooking:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡⚡</div>
+                                            </div>
+                                            <span class="ml-2">8% (96 kWh)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-32 font-medium">Laundry:</div>
+                                        <div class="flex items-center">
+                                            <div class="flex">
+                                                <div class="text-primary">⚡</div>
+                                            </div>
+                                            <span class="ml-2">7% (84 kWh)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comparison to Average -->
+                        <div class="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <h4 class="font-semibold mb-2">How your usage compares to neighbors:</h4>
+                            <p>Your monthly usage of 1,200 kWh is <span class="font-bold text-amber-600">15% higher</span> than similar households in your area (average: 1,043 kWh).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="step1-next" class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition">
+                        Continue to Create Plan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Create Reduction Plan -->
+            <div id="step2" class="step-content hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Create Your Energy Reduction Plan</h2>
+                    <p class="mb-6">Your goal is to reduce your monthly energy consumption by 20% (240 kWh). Allocate how much you'll reduce each category:</p>
+                    
+                    <div id="remaining-budget" class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                        <h3 class="font-semibold mb-2">Reduction Budget Remaining:</h3>
+                        <div class="flex items-center">
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6 mr-4">
+                                <div id="budget-bar" class="bg-primary h-6 rounded-full text-center text-white text-sm flex items-center justify-center" style="width: 100%">240 kWh</div>
+                            </div>
+                            <span id="budget-percent" class="font-bold">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6" id="reduction-sliders">
+                        <!-- Heating & Cooling -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Heating &amp; Cooling</h4>
+                                <span class="text-sm">Current: 420 kWh (35%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="heating-slider" data-category="Heating &amp; Cooling" data-current="420">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="heating-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="heating-new">420 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Water Heating -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Water Heating</h4>
+                                <span class="text-sm">Current: 180 kWh (15%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="water-slider" data-category="Water Heating" data-current="180">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="water-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="water-new">180 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Lighting -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Lighting</h4>
+                                <span class="text-sm">Current: 120 kWh (10%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="lighting-slider" data-category="Lighting" data-current="120">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="lighting-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="lighting-new">120 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Refrigeration -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Refrigeration</h4>
+                                <span class="text-sm">Current: 144 kWh (12%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="refrigeration-slider" data-category="Refrigeration" data-current="144">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="refrigeration-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="refrigeration-new">144 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Electronics -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Electronics</h4>
+                                <span class="text-sm">Current: 156 kWh (13%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="electronics-slider" data-category="Electronics" data-current="156">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="electronics-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="electronics-new">156 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Cooking -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Cooking</h4>
+                                <span class="text-sm">Current: 96 kWh (8%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="cooking-slider" data-category="Cooking" data-current="96">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="cooking-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="cooking-new">96 kWh</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Laundry -->
+                        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-semibold">Laundry</h4>
+                                <span class="text-sm">Current: 84 kWh (7%)</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input type="range" min="0" max="100" value="0" class="slider w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer" id="laundry-slider" data-category="Laundry" data-current="84">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Reduction: <span id="laundry-value">0 kWh (0%)</span></span>
+                                <span>New usage: <span id="laundry-new">84 kWh</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="step2-back" class="border border-gray-300 dark:border-gray-600 px-6 py-2 rounded font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        Back
+                    </button>
+                    <button id="step2-next" class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition" disabled="">
+                        Submit Plan for AI Feedback
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: AI Feedback -->
+            <div id="step3" class="step-content hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4">AI Feedback on Your Energy Reduction Plan</h2>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3">Your Submitted Plan</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100 dark:bg-gray-700">
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Category</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Original Usage</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Reduction</th>
+                                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">New Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plan-summary">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded">
+                            <p>Total Reduction: <span id="total-reduction-display">0 kWh (0%)</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Feedback Section with Different Uncertainty Styles-->
+                    <div id="ai-feedback" class="mt-8 mb-6">
+                        <h3 class="text-xl font-semibold mb-4">AI Assistant Feedback</h3>
+                        
+                        <!-- The actual AI feedback shown will be one of these, based on experimental condition -->
+                        
+                        <!-- High Confidence Style -->
+                        <div id="ai-high-confidence" class="ai-feedback-style p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <div class="flex items-start mb-4">
+                                <div class="bg-primary text-white p-2 rounded-full mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="font-semibold mb-1">Energy AI Assistant</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">High Confidence Style</div>
+                                </div>
+                            </div>
+                            <div class="prose dark:prose-invert max-w-none">
+                                <p>Your energy reduction plan is ineffective. The majority of your reductions are focused on lighting, which only accounts for 10% of your total usage. The most energy-consuming category is heating and cooling (35%), but you've barely reduced it.</p>
+                                
+                                <p>Here's what you should do instead:</p>
+                                <ul>
+                                    <li>Reduce heating and cooling by 15% (63 kWh) by adjusting your thermostat by 2-3 degrees</li>
+                                    <li>Cut water heating by 20% (36 kWh) by washing clothes in cold water and taking shorter showers</li>
+                                    <li>Decrease electronics usage by 25% (39 kWh) by unplugging devices and using power strips</li>
+                                    <li>Lower refrigeration by 10% (14.4 kWh) by setting proper temperatures and ensuring good airflow</li>
+                                    <li>Reduce lighting by 40% (48 kWh) by switching to LEDs and using natural light</li>
+                                    <li>Cut cooking usage by 20% (19.2 kWh) by using microwave instead of oven when possible</li>
+                                    <li>Decrease laundry by 25% (21 kWh) by running full loads and air-drying when possible</li>
+                                </ul>
+                                
+                                <p>This balanced approach will yield 240.6 kWh in savings while minimizing impact on your lifestyle.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Medium Confidence Style -->
+                        <div id="ai-medium-confidence" class="ai-feedback-style hidden p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <div class="flex items-start mb-4">
+                                <div class="bg-primary text-white p-2 rounded-full mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="font-semibold mb-1">Energy AI Assistant</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">Medium Confidence Style</div>
+                                </div>
+                            </div>
+                            <div class="prose dark:prose-invert max-w-none">
+                                <p>I think your energy reduction plan could be more efficient. You appear to focus heavily on lighting, which only accounts for about 10% of your total usage. The largest energy-consuming category is likely heating and cooling (around 35%), but you've allocated relatively little reduction there.</p>
+                                
+                                <p>Here's what might work better:</p>
+                                <ul>
+                                    <li>Consider reducing heating and cooling by approximately 15% (around 63 kWh) by adjusting your thermostat by 2-3 degrees</li>
+                                    <li>You might cut water heating by about 20% (roughly 36 kWh) by washing clothes in cold water and taking shorter showers</li>
+                                    <li>Try decreasing electronics usage by around 25% (approximately 39 kWh) by unplugging devices and using power strips</li>
+                                    <li>You could lower refrigeration by about 10% (around 14 kWh) by setting proper temperatures and ensuring good airflow</li>
+                                    <li>Consider reducing lighting by up to 40% (about 48 kWh) by switching to LEDs and using natural light</li>
+                                    <li>You might cut cooking usage by approximately 20% (roughly 19 kWh) by using microwave instead of oven when possible</li>
+                                    <li>Try decreasing laundry by around 25% (about 21 kWh) by running full loads and air-drying when possible</li>
+                                </ul>
+                                
+                                <p>This more balanced approach should yield approximately 240 kWh in savings while probably minimizing impact on your lifestyle, though individual results may vary depending on your specific appliances and habits.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Low Confidence Style -->
+                        <div id="ai-low-confidence" class="ai-feedback-style hidden p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <div class="flex items-start mb-4">
+                                <div class="bg-primary text-white p-2 rounded-full mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="font-semibold mb-1">Energy AI Assistant</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">Low Confidence Style</div>
+                                </div>
+                            </div>
+                            <div class="prose dark:prose-invert max-w-none">
+                                <p>I'm not entirely sure, but your energy reduction plan might not be the most effective approach. It seems like you're focusing heavily on lighting, which according to the data only represents about 10% of your total usage. The largest energy-consuming category appears to be heating and cooling (approximately 35%), but I notice you've allocated relatively little reduction there.</p>
+                                
+                                <p>Here are some possibilities that might work better, though I'm not certain:</p>
+                                <ul>
+                                    <li>You could possibly reduce heating and cooling by roughly 15% (maybe around 63 kWh?) by adjusting your thermostat by 2-3 degrees, but this depends on many factors like your climate and home insulation</li>
+                                    <li>Perhaps you might cut water heating by about 20% (possibly around 36 kWh) by washing clothes in cold water and taking shorter showers, though your actual savings will vary</li>
+                                    <li>It's possible that decreasing electronics usage by around 25% (perhaps 39 kWh?) by unplugging devices and using power strips could help, but I'm uncertain how much this would save in your specific case</li>
+                                    <li>You might be able to lower refrigeration by approximately 10% (maybe 14 kWh?) by setting proper temperatures and ensuring good airflow, though this depends on your specific appliance</li>
+                                    <li>I think reducing lighting by up to 40% (potentially 48 kWh?) by switching to LEDs and using natural light could work, but I'm not sure if you've already implemented these measures</li>
+                                    <li>Perhaps cutting cooking usage by roughly 20% (maybe 19 kWh?) by using microwave instead of oven when possible might help, though your cooking habits might make this difficult</li>
+                                    <li>You might try decreasing laundry by around 25% (approximately 21 kWh?) by running full loads and air-drying when possible, but I'm not certain how feasible this is for your household</li>
+                                </ul>
+                                
+                                <p>This approach might yield around 240 kWh in savings, but I'm really not sure how it would affect your lifestyle or if these estimates are accurate for your specific situation. You should probably consult with a professional energy auditor for more personalized advice.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="step3-back" class="border border-gray-300 dark:border-gray-600 px-6 py-2 rounded font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        Back
+                    </button>
+                    <button id="step3-next" class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition">
+                        Continue to Evaluation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Evaluation -->
+            <div id="step4" class="step-content hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-6">Evaluation of the AI Feedback</h2>
+                    
+                    <div class="space-y-8">
+                        <!-- Perceived Usefulness -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Perceived Usefulness</h3>
+                            <p class="mb-3">Please rate how useful you found the AI feedback:</p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="mb-2">1. How useful was the AI's feedback for understanding how to better reduce your energy usage?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all useful</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="usefulness" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very useful</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="mb-2">2. How clear was the AI's explanation of the problems with your energy reduction plan?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all clear</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="clarity" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very clear</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Trust -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Trust in the AI's Recommendations</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="mb-2">3. How much do you trust the AI's recommendations for energy reduction?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="trust" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Completely</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="mb-2">4. How accurate do you believe the AI's energy savings calculations are?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all accurate</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="accuracy" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very accurate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Intention to Follow Recommendations -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Intention to Follow Recommendations</h3>
+                            
+                            <div>
+                                <p class="mb-2">5. How likely are you to follow the AI's recommendations for energy reduction?</p>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm">Not at all likely</span>
+                                    <div class="flex-1 flex justify-between">
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="1">
+                                            <span class="text-xs mt-1">1</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="2">
+                                            <span class="text-xs mt-1">2</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="3">
+                                            <span class="text-xs mt-1">3</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="4">
+                                            <span class="text-xs mt-1">4</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="5">
+                                            <span class="text-xs mt-1">5</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="6">
+                                            <span class="text-xs mt-1">6</span>
+                                        </label>
+                                        <label class="flex flex-col items-center">
+                                            <input type="radio" name="follow" value="7">
+                                            <span class="text-xs mt-1">7</span>
+                                        </label>
+                                    </div>
+                                    <span class="text-sm">Very likely</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mental Models -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Perceptions of AI Capabilities</h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="mb-2">6. How confident do you think the AI system was in its recommendations?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all confident</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_confidence" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very confident</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="mb-2">7. How knowledgeable do you think the AI system is about energy usage?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all knowledgeable</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_knowledge" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very knowledgeable</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <p class="mb-2">8. Did the AI communicate its level of certainty appropriately?</p>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm">Not at all</span>
+                                        <div class="flex-1 flex justify-between">
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="1">
+                                                <span class="text-xs mt-1">1</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="2">
+                                                <span class="text-xs mt-1">2</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="3">
+                                                <span class="text-xs mt-1">3</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="4">
+                                                <span class="text-xs mt-1">4</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="5">
+                                                <span class="text-xs mt-1">5</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="6">
+                                                <span class="text-xs mt-1">6</span>
+                                            </label>
+                                            <label class="flex flex-col items-center">
+                                                <input type="radio" name="ai_certainty" value="7">
+                                                <span class="text-xs mt-1">7</span>
+                                            </label>
+                                        </div>
+                                        <span class="text-sm">Very appropriately</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Revised Plan -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Would You Like to Revise Your Plan?</h3>
+                            <p class="mb-4">Based on the AI feedback, would you like to revise your energy reduction plan?</p>
+                            
+                            <div class="flex space-x-4">
+                                <button id="revise-plan-btn" class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition">
+                                    Yes, Revise Plan
+                                </button>
+                                <button id="keep-plan-btn" class="border border-gray-300 dark:border-gray-600 px-6 py-2 rounded font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                    No, Keep My Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="step4-back" class="border border-gray-300 dark:border-gray-600 px-6 py-2 rounded font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        Back
+                    </button>
+                    <button id="finish-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition">
+                        Complete Study
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Final Screen (hidden initially) -->
+            <div id="final-screen" class="hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8 text-center">
+                    <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <h2 class="text-2xl font-bold mb-4">Thank You!</h2>
+                    <p class="mb-6">Your responses have been recorded. Thank you for participating in this study.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">This was a demonstration of how different uncertainty styles in AI feedback might affect user perceptions and decisions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // DOM elements
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const step4 = document.getElementById('step4');
+        const finalScreen = document.getElementById('final-screen');
+        
+        const step1Indicator = document.getElementById('step1-indicator');
+        const step2Indicator = document.getElementById('step2-indicator');
+        const step3Indicator = document.getElementById('step3-indicator');
+        const step4Indicator = document.getElementById('step4-indicator');
+        
+        const tableFormat = document.getElementById('table-format');
+        const barFormat = document.getElementById('bar-format');
+        const iconFormat = document.getElementById('icon-format');
+        
+        const step1Next = document.getElementById('step1-next');
+        const step2Back = document.getElementById('step2-back');
+        const step2Next = document.getElementById('step2-next');
+        const step3Back = document.getElementById('step3-back');
+        const step3Next = document.getElementById('step3-next');
+        const step4Back = document.getElementById('step4-back');
+        const finishBtn = document.getElementById('finish-btn');
+        
+        const revisePlanBtn = document.getElementById('revise-plan-btn');
+        const keepPlanBtn = document.getElementById('keep-plan-btn');
+        
+        const budgetBar = document.getElementById('budget-bar');
+        const budgetPercent = document.getElementById('budget-percent');
+        
+        const highConfidenceStyle = document.getElementById('ai-high-confidence');
+        const mediumConfidenceStyle = document.getElementById('ai-medium-confidence');
+        const lowConfidenceStyle = document.getElementById('ai-low-confidence');
+        
+        // Application state
+        let currentStep = 1;
+        let selectedFormat = 'table';
+        let confidenceStyle = 'high'; // Default to high confidence style, but would be randomized in real experiment
+        let energyLiteracyScore = 0;
+        let totalBudget = 240; // 20% of 1200 kWh
+        let usedBudget = 0;
+        let reductions = {
+            'Heating & Cooling': 0,
+            'Water Heating': 0,
+            'Lighting': 0,
+            'Refrigeration': 0,
+            'Electronics': 0,
+            'Cooking': 0,
+            'Laundry': 0
+        };
+        
+        // Initialize Charts
+        function initializeCharts() {
+            // Initialize bar chart
+            const barChartCtx = document.getElementById('bar-chart').getContext('2d');
+            const barChart = new Chart(barChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Heating & Cooling', 'Water Heating', 'Lighting', 'Refrigeration', 'Electronics', 'Cooking', 'Laundry'],
+                    datasets: [{
+                        label: 'Monthly Usage (kWh)',
+                        data: [420, 180, 120, 144, 156, 96, 84],
+                        backgroundColor: '#5D5CDE',
+                        borderColor: '#4B4BB2',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'kWh'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const total = 1200;
+                                    const percentage = ((value / total) * 100).toFixed(0);
+                                    return `${value} kWh (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize application
+        function initializeApp() {
+            initializeCharts();
+            
+            // Format selection
+            document.querySelectorAll('input[name="format"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    selectedFormat = e.target.value;
+                    updateFormatDisplay();
+                });
+            });
+            
+            // Setup sliders
+            setupSliders();
+            
+            // Randomly select a confidence style (would be proper randomization in real experiment)
+            const styles = ['high', 'medium', 'low'];
+            confidenceStyle = styles[Math.floor(Math.random() * styles.length)];
+            
+            // Event listeners for navigation
+            step1Next.addEventListener('click', () => {
+                calculateEnergyLiteracyScore();
+                goToStep(2);
+            });
+            
+            step2Back.addEventListener('click', () => goToStep(1));
+            step2Next.addEventListener('click', () => {
+                populatePlanSummary();
+                showAIFeedback();
+                goToStep(3);
+            });
+            
+            step3Back.addEventListener('click', () => goToStep(2));
+            step3Next.addEventListener('click', () => goToStep(4));
+            
+            step4Back.addEventListener('click', () => goToStep(3));
+            finishBtn.addEventListener('click', finishStudy);
+            
+            revisePlanBtn.addEventListener('click', () => goToStep(2));
+            keepPlanBtn.addEventListener('click', finishStudy);
+        }
+        
+        // Update display based on selected format
+        function updateFormatDisplay() {
+            tableFormat.classList.add('hidden');
+            barFormat.classList.add('hidden');
+            iconFormat.classList.add('hidden');
+            
+            if (selectedFormat === 'table') {
+                tableFormat.classList.remove('hidden');
+            } else if (selectedFormat === 'bar') {
+                barFormat.classList.remove('hidden');
+            } else if (selectedFormat === 'icon') {
+                iconFormat.classList.remove('hidden');
+            }
+        }
+        
+        // Calculate energy literacy score
+        function calculateEnergyLiteracyScore() {
+            const correctAnswers = {
+                q1: 'c', // Air conditioner
+                q2: 'b', // Kilowatt hour
+                q3: 'b'  // Adjusting thermostat
+            };
+            
+            let score = 0;
+            
+            ['q1', 'q2', 'q3'].forEach(question => {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                    score++;
+                }
+            });
+            
+            energyLiteracyScore = score / 3; // Score as a proportion
+            console.log(`Energy literacy score: ${energyLiteracyScore * 100}%`);
+        }
+        
+        // Setup sliders for reduction plan
+        function setupSliders() {
+            const sliders = document.querySelectorAll('.slider');
+            
+            sliders.forEach(slider => {
+                const category = slider.dataset.category;
+                const currentUsage = parseInt(slider.dataset.current);
+                const valueDisplay = document.getElementById(`${slider.id.split('-')[0]}-value`);
+                const newUsageDisplay = document.getElementById(`${slider.id.split('-')[0]}-new`);
+                
+                slider.addEventListener('input', () => {
+                    const percentage = parseInt(slider.value);
+                    const reduction = Math.round((percentage / 100) * currentUsage);
+                    const newUsage = currentUsage - reduction;
+                    
+                    // Update displays
+                    valueDisplay.textContent = `${reduction} kWh (${percentage}%)`;
+                    newUsageDisplay.textContent = `${newUsage} kWh`;
+                    
+                    // Update reductions state
+                    const oldReduction = reductions[category];
+                    reductions[category] = reduction;
+                    usedBudget = usedBudget - oldReduction + reduction;
+                    
+                    // Update budget display
+                    updateBudgetDisplay();
+                    
+                    // Enable/disable next button
+                    step2Next.disabled = usedBudget < totalBudget * 0.9; // At least 90% of budget used
+                });
+            });
+        }
+        
+        // Update budget display
+        function updateBudgetDisplay() {
+            const remainingBudget = totalBudget - usedBudget;
+            const percentUsed = (usedBudget / totalBudget) * 100;
+            
+            // Update progress bar
+            budgetBar.style.width = `${100 - percentUsed}%`;
+            budgetBar.textContent = `${remainingBudget} kWh`;
+            
+            // Update percentage
+            budgetPercent.textContent = `${Math.round(100 - percentUsed)}%`;
+            
+            // Change color based on usage
+            if (percentUsed > 95) {
+                budgetBar.classList.add('bg-green-500');
+                budgetBar.classList.remove('bg-primary');
+            } else {
+                budgetBar.classList.remove('bg-green-500');
+                budgetBar.classList.add('bg-primary');
+            }
+        }
+        
+        // Populate plan summary
+        function populatePlanSummary() {
+            const planSummary = document.getElementById('plan-summary');
+            planSummary.innerHTML = '';
+            
+            let totalReduction = 0;
+            
+            Object.entries(reductions).forEach(([category, reduction]) => {
+                const currentUsage = document.querySelector(`input[data-category="${category}"]`).dataset.current;
+                const newUsage = currentUsage - reduction;
+                const percentReduction = ((reduction / currentUsage) * 100).toFixed(0);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${category}</td>
+                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${currentUsage} kWh</td>
+                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${reduction} kWh (${percentReduction}%)</td>
+                    <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">${newUsage} kWh</td>
+                `;
+                
+                planSummary.appendChild(row);
+                totalReduction += reduction;
+            });
+            
+            const totalPercentage = ((totalReduction / 1200) * 100).toFixed(1);
+            document.getElementById('total-reduction-display').textContent = `${totalReduction} kWh (${totalPercentage}%)`;
+        }
+        
+        // Show AI feedback based on selected confidence style
+        function showAIFeedback() {
+            // Hide all styles
+            highConfidenceStyle.classList.add('hidden');
+            mediumConfidenceStyle.classList.add('hidden');
+            lowConfidenceStyle.classList.add('hidden');
+            
+            // Show selected style
+            if (confidenceStyle === 'high') {
+                highConfidenceStyle.classList.remove('hidden');
+            } else if (confidenceStyle === 'medium') {
+                mediumConfidenceStyle.classList.remove('hidden');
+            } else if (confidenceStyle === 'low') {
+                lowConfidenceStyle.classList.remove('hidden');
+            }
+        }
+        
+        // Navigation between steps
+        function goToStep(step) {
+            // Hide all steps
+            step1.classList.add('hidden');
+            step2.classList.add('hidden');
+            step3.classList.add('hidden');
+            step4.classList.add('hidden');
+            
+            // Reset step indicators
+            step1Indicator.querySelector('div').classList.remove('bg-primary', 'text-white');
+            step1Indicator.querySelector('div').classList.add('bg-gray-300', 'text-gray-600');
+            step2Indicator.querySelector('div').classList.remove('bg-primary', 'text-white');
+            step2Indicator.querySelector('div').classList.add('bg-gray-300', 'text-gray-600');
+            step3Indicator.querySelector('div').classList.remove('bg-primary', 'text-white');
+            step3Indicator.querySelector('div').classList.add('bg-gray-300', 'text-gray-600');
+            step4Indicator.querySelector('div').classList.remove('bg-primary', 'text-white');
+            step4Indicator.querySelector('div').classList.add('bg-gray-300', 'text-gray-600');
+            
+            // Show selected step
+            if (step === 1) {
+                step1.classList.remove('hidden');
+                step1Indicator.querySelector('div').classList.remove('bg-gray-300', 'text-gray-600');
+                step1Indicator.querySelector('div').classList.add('bg-primary', 'text-white');
+            } else if (step === 2) {
+                step2.classList.remove('hidden');
+                step2Indicator.querySelector('div').classList.remove('bg-gray-300', 'text-gray-600');
+                step2Indicator.querySelector('div').classList.add('bg-primary', 'text-white');
+            } else if (step === 3) {
+                step3.classList.remove('hidden');
+                step3Indicator.querySelector('div').classList.remove('bg-gray-300', 'text-gray-600');
+                step3Indicator.querySelector('div').classList.add('bg-primary', 'text-white');
+            } else if (step === 4) {
+                step4.classList.remove('hidden');
+                step4Indicator.querySelector('div').classList.remove('bg-gray-300', 'text-gray-600');
+                step4Indicator.querySelector('div').classList.add('bg-primary', 'text-white');
+            }
+            
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+        
+        // Finish study
+        function finishStudy() {
+            // Collect data (would be sent to server in real experiment)
+            const formData = {
+                energyLiteracyScore,
+                selectedFormat,
+                confidenceStyle,
+                reductions,
+                ratings: {
+                    usefulness: document.querySelector('input[name="usefulness"]:checked')?.value,
+                    clarity: document.querySelector('input[name="clarity"]:checked')?.value,
+                    trust: document.querySelector('input[name="trust"]:checked')?.value,
+                    accuracy: document.querySelector('input[name="accuracy"]:checked')?.value,
+                    follow: document.querySelector('input[name="follow"]:checked')?.value,
+                    ai_confidence: document.querySelector('input[name="ai_confidence"]:checked')?.value,
+                    ai_knowledge: document.querySelector('input[name="ai_knowledge"]:checked')?.value,
+                    ai_certainty: document.querySelector('input[name="ai_certainty"]:checked')?.value
+                }
+            };
+            
+            console.log('Study completed with data:', formData);
+            
+            // Show final screen
+            step1.classList.add('hidden');
+            step2.classList.add('hidden');
+            step3.classList.add('hidden');
+            step4.classList.add('hidden');
+            finalScreen.classList.remove('hidden');
+            
+            // Hide step indicators
+            document.querySelector('.flex.items-center.justify-between.mb-8').classList.add('hidden');
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+
+
+</body></html>

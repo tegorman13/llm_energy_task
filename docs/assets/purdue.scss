@@ -1,0 +1,44 @@
+/* purdue-theme.scss */
+
+// Purdue Primary Colors
+$purdue-gold: #DAAA00;
+$purdue-black: #000000;
+
+// Supporting Colors
+$purdue-steel: #555960;
+$purdue-steam: #C4BFC0;
+
+/*-- scss:defaults --*/
+
+// General Site Variables
+$body-bg: #ffffff;
+$body-color: $purdue-black;
+$link-color: $purdue-steel; // Steel for links on white could be good, or a darker gold
+$headings-color: $purdue-black;
+
+// Navbar Variables
+// For a black navbar with gold text/icons:
+$navbar-bg: $purdue-black;
+$navbar-brand-color: $purdue-gold;
+$navbar-title-color: $purdue-gold;
+$navbar-color: $purdue-gold;
+$navbar-hover-color: lighten($purdue-gold, 15%); // Lighter gold for hover
+$navbar-active-color: lighten($purdue-gold, 10%); // Or white for strong contrast on active
+$navbar-toggler-icon-color: $purdue-gold;
+
+// Sidebar styling might need to be considered to ensure it harmonizes.
+// If the general body background is light and the navbar is dark,
+// the default `background: light` for the docked sidebar might be acceptable.
+// $sidebar-bg: $purdue-steam;
+// $sidebar-fg: $purdue-black;
+
+
+/*-- scss:rules --*/
+// Custom CSS rules if needed
+// body {
+//   font-family: "Your Preferred Font", sans-serif;
+// }
+
+// a {
+//   // Link styling
+// }

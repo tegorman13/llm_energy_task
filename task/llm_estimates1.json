@@ -1,0 +1,230 @@
+{
+  "metadata": {
+    "generation_info": {
+      "script_name": "generate_llm_energy_data.R",
+      "r_version": "R version 4.4.3 (2025-02-28)",
+      "package_versions": {
+        "httr2": "1.1.2",
+        "jsonlite": "2.0.0",
+        "dplyr": "1.1.4",
+        "tidyr": "1.3.1"
+      },
+      "timestamp_utc": "2025-05-07T10:21:37Z"
+    },
+    "llm_parameters": {
+      "estimation_stage": {
+        "model": "gpt-4.1-nano",
+        "temperature": 0,
+        "max_tokens": 15,
+        "top_n_logprobs": 5
+      },
+      "explanation_stage": {
+        "model": "gpt-4.1-nano",
+        "temperature": 0.5,
+        "max_tokens": 70
+      }
+    },
+    "dataset_info": {
+      "name": "LLM Energy Consumption & Saving Estimates",
+      "version": "1.0",
+      "description": "LLM estimations for energy usage and savings, based on a 100W bulb reference. Confidence score is the average token probability for the numeric estimate. Explanations generated based on confidence level."
+    }
+  },
+  "data": [
+    {
+      "item_name": "Compact fluorescent bulb",
+      "item_label": "Compact fluorescent bulb",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nA compact fluorescent light bulb that is as bright as a 100-Watt incandescent light bulb\n\nProvide only a single number as your answer.",
+      "actual_value": 27,
+      "type": "Energy Used",
+      "estimation_task_key": "est_cfl",
+      "llm_estimate": 20,
+      "llm_confidence_score": 0.9317,
+      "confidence_level": "High",
+      "llm_explanation": "A compact fluorescent bulb typically consumes about 20 units of energy per hour, making it significantly more energy-efficient than a standard 100W incandescent bulb, which uses 100 units per hour. This efficiency contributes to lower electricity costs and reduced environmental impact.",
+      "_row": "Compact fluorescent bulb"
+    },
+    {
+      "item_name": "Desktop computer",
+      "item_label": "Desktop computer",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nDesktop computer\n\nProvide only a single number as your answer.",
+      "actual_value": 140,
+      "type": "Energy Used",
+      "estimation_task_key": "est_desktop",
+      "llm_estimate": 50,
+      "llm_confidence_score": 0.4098,
+      "confidence_level": "Low",
+      "llm_explanation": "It's hard to be precise, but an estimate of about 50 units per hour for a desktop computer suggests it consumes roughly 50 watts of power during typical use, considering a 100W bulb as a reference. Actual energy use can vary depending on the computer's specifications and workload.",
+      "_row": "Desktop computer"
+    },
+    {
+      "item_name": "Laptop computer",
+      "item_label": "Laptop computer",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nLaptop computer\n\nProvide only a single number as your answer.",
+      "actual_value": 48,
+      "type": "Energy Used",
+      "estimation_task_key": "est_laptop",
+      "llm_estimate": 50,
+      "llm_confidence_score": 0.9269,
+      "confidence_level": "High",
+      "llm_explanation": "The estimated energy consumption of a laptop computer at approximately 50 units per hour reflects typical usage, which is about half the energy of a 100W light bulb running for the same duration, indicating moderate power efficiency for portable devices.",
+      "_row": "Laptop computer"
+    },
+    {
+      "item_name": "Stereo",
+      "item_label": "Stereo",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nStereo\n\nProvide only a single number as your answer.",
+      "actual_value": 128,
+      "type": "Energy Used",
+      "estimation_task_key": "est_stereo",
+      "llm_estimate": 20,
+      "llm_confidence_score": 0.8113,
+      "confidence_level": "Medium",
+      "llm_explanation": "The estimated energy use for the 'Stereo' is around 20 units per hour, which is typical for many standard stereo systems that often consume between 10 to 50 watts during operation.",
+      "_row": "Stereo"
+    },
+    {
+      "item_name": "Electric clothes dryer",
+      "item_label": "Electric clothes dryer",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nElectric clothes dryer\n\nProvide only a single number as your answer.",
+      "actual_value": 3400,
+      "type": "Energy Used",
+      "estimation_task_key": "est_electric_clothes_dryer",
+      "llm_estimate": 3000,
+      "llm_confidence_score": 0.8722,
+      "confidence_level": "High",
+      "llm_explanation": "The estimate indicates that an electric clothes dryer consumes roughly 3,000 units of energy per hour, which is significantly higher than a 100W bulb, reflecting its substantial power usage during operation.",
+      "_row": "Electric clothes dryer"
+    },
+    {
+      "item_name": "Portable heater",
+      "item_label": "Portable heater",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nPortable heater\n\nProvide only a single number as your answer.",
+      "actual_value": 925,
+      "type": "Energy Used",
+      "estimation_task_key": "est_portable_heater",
+      "llm_estimate": 150,
+      "llm_confidence_score": 0.9962,
+      "confidence_level": "High",
+      "llm_explanation": "The estimated energy usage of 150 units per hour for the portable heater indicates it consumes significantly more power than a standard 100W bulb, reflecting its higher wattage and heating capacity. This estimate helps in understanding the potential energy costs and efficiency of using the heater.",
+      "_row": "Portable heater"
+    },
+    {
+      "item_name": "Room air-conditioner",
+      "item_label": "Room air-conditioner",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nRoom air-conditioner\n\nProvide only a single number as your answer.",
+      "actual_value": 1000,
+      "type": "Energy Used",
+      "estimation_task_key": "est_room_air_conditioner",
+      "llm_estimate": 150,
+      "llm_confidence_score": 0.6044,
+      "confidence_level": "Medium",
+      "llm_explanation": "A typical room air-conditioner often consumes around 150 units of energy per hour, though actual usage can vary depending on the size, efficiency, and settings of the unit.",
+      "_row": "Room air-conditioner"
+    },
+    {
+      "item_name": "Central air conditioner",
+      "item_label": "Central air conditioner",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nCentral air conditioner\n\nProvide only a single number as your answer.",
+      "actual_value": 3500,
+      "type": "Energy Used",
+      "estimation_task_key": "est_central_air_conditioner",
+      "llm_estimate": 3000,
+      "llm_confidence_score": 0.6363,
+      "confidence_level": "Medium",
+      "llm_explanation": "A central air conditioner often consumes around 3,000 units per hour, though actual energy use can vary depending on the size, efficiency, and operating conditions of the unit.",
+      "_row": "Central air conditioner"
+    },
+    {
+      "item_name": "Dish washer",
+      "item_label": "Dish washer",
+      "prompt": "A 100-Watt incandescent light bulb uses 100 units of energy in one hour.\n\nHow many units of energy do you think the following device typically uses in one hour?\n\nDish washer\n\nProvide only a single number as your answer.",
+      "actual_value": 1800,
+      "type": "Energy Used",
+      "estimation_task_key": "est_dish_washer",
+      "llm_estimate": 2,
+      "llm_confidence_score": 0.4547,
+      "confidence_level": "Low",
+      "llm_explanation": "It's hard to be precise, but an estimate of about 2 units per hour for a dishwasher suggests it consumes roughly 200W during operation, which is within typical ranges. Keep in mind that actual energy use can vary based on the model and cycle duration.",
+      "_row": "Dish washer"
+    },
+    {
+      "item_name": "Replace incandescent with CFL",
+      "item_label": "Replace incandescent with CFL",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nReplacing one 100-watt incandescent bulb with equally bright compact fluorescent bulb that is used for one hour would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 73,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_replace_incandescent_with_cfl",
+      "llm_estimate": 20,
+      "llm_confidence_score": 0.8059,
+      "confidence_level": "Medium",
+      "llm_explanation": "Replacing an incandescent bulb with a CFL typically saves around 20 units per hour, since a 100W incandescent (using 100 units) often consumes about four times more energy than a comparable CFL, which uses roughly 20 units per hour.",
+      "_row": "Replace incandescent with CFL"
+    },
+    {
+      "item_name": "Lower wattage bulb",
+      "item_label": "Lower wattage bulb",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nReplacing one 100-watt kitchen bulb with a 75-watt bulb that is used for one hour would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 25,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_lower_wattage_bulb",
+      "llm_estimate": 25,
+      "llm_confidence_score": 0.9999,
+      "confidence_level": "High",
+      "llm_explanation": "Replacing a 100W bulb with a lower wattage bulb significantly reduces energy consumption, saving approximately 25 units per hour, which reflects a 75% reduction in energy use and results in lower electricity bills.",
+      "_row": "Lower wattage bulb"
+    },
+    {
+      "item_name": "Line-dry clothes",
+      "item_label": "Line-dry clothes",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nDrying clothes on a clothes line (not using the dryer) for one load of laundry would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 3400,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_line_dry_clothes",
+      "llm_estimate": 10,
+      "llm_confidence_score": 0.6319,
+      "confidence_level": "Medium",
+      "llm_explanation": "Line-drying clothes often saves around 10 energy units per hour compared to using a clothes dryer, though this estimate can vary depending on factors like climate and drying time. It provides a typical measure of the energy savings associated with avoiding electric drying appliances.",
+      "_row": "Line-dry clothes"
+    },
+    {
+      "item_name": "Summer thermostat",
+      "item_label": "Summer thermostat",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nIn the summer: turning up the thermostat on your air conditioner (making your home warmer) by 5° F for one hour would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 115,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_summer_thermostat",
+      "llm_estimate": 5,
+      "llm_confidence_score": 0.9562,
+      "confidence_level": "High",
+      "llm_explanation": "The estimated energy savings of approximately 5 units per hour from the 'Summer thermostat' reflect its efficiency in reducing cooling energy consumption by optimizing temperature settings during warmer months. This estimate demonstrates its significant impact on lowering overall energy use compared to standard operation.",
+      "_row": "Summer thermostat"
+    },
+    {
+      "item_name": "Winter thermostat",
+      "item_label": "Winter thermostat",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nIn the winter: turning down the thermostat on your heater (making your home cooler) by 5° F for one hour would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 546,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_winter_thermostat",
+      "llm_estimate": 5,
+      "llm_confidence_score": 0.7222,
+      "confidence_level": "Medium",
+      "llm_explanation": "The estimated energy savings of around 5 units per hour for a winter thermostat typically reflects the reduction in heating energy consumption when the thermostat is used to optimize temperature settings, though actual savings can vary based on home insulation and climate.",
+      "_row": "Winter thermostat"
+    },
+    {
+      "item_name": "Washer setting",
+      "item_label": "Washer setting",
+      "prompt": "Turning off a 100-Watt incandescent light bulb for one hour SAVES 100 units of energy.\n\nChanging washer temperature settings from “hot wash, warm rinse” to “warm wash, cold rinse” for one load of laundry would reduce energy use by how many units?\n\nProvide only a single number as your answer.",
+      "actual_value": 4000,
+      "type": "Energy Saved",
+      "estimation_task_key": "est_washer_setting",
+      "llm_estimate": 10,
+      "llm_confidence_score": 0.6532,
+      "confidence_level": "Medium",
+      "llm_explanation": "The estimated energy savings of around 10 units per hour for the 'Washer setting' is an approximate figure, often reflecting the typical reduction in energy consumption when using energy-efficient wash cycles compared to standard settings.",
+      "_row": "Washer setting"
+    }
+  ]
+}

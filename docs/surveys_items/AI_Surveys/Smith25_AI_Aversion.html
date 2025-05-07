@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>smith25_ai_aversion – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#surveys-and-questionnaires-from-smith-et-al.-2025" id="toc-surveys-and-questionnaires-from-smith-et-al.-2025" class="nav-link active" data-scroll-target="#surveys-and-questionnaires-from-smith-et-al.-2025">Surveys and Questionnaires from Smith et al.&nbsp;(2025)</a>
+  <ul class="collapse">
+  <li><a href="#algorithm-aversion-scale-developed-in-study-3" id="toc-algorithm-aversion-scale-developed-in-study-3" class="nav-link" data-scroll-target="#algorithm-aversion-scale-developed-in-study-3">Algorithm Aversion Scale (Developed in Study 3)</a></li>
+  <li><a href="#other-scales-mentioned-items-not-provided-in-text" id="toc-other-scales-mentioned-items-not-provided-in-text" class="nav-link" data-scroll-target="#other-scales-mentioned-items-not-provided-in-text">Other Scales Mentioned (Items Not Provided in Text)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Smith25_AI_Aversion.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="surveys-and-questionnaires-from-smith-et-al.-2025" class="level1">
+<h1>Surveys and Questionnaires from Smith et al.&nbsp;(2025)</h1>
+<p>Smith, A., van Wagoner, H. P., Keplinger, K., &amp; Celebi, C. (2025). Navigating AI Convergence in Human–Artificial Intelligence Teams: A Signaling Theory Approach. Journal of Organizational Behavior. https://doi.org/10.1002/job.2856 https://onlinelibrary.wiley.com/doi/pdf/10.1002/job.2856 https://osf.io/zjwta/?view_only=74a15f71b21c4b0abb69f3e5de543537</p>
+<section id="algorithm-aversion-scale-developed-in-study-3" class="level2">
+<h2 class="anchored" data-anchor-id="algorithm-aversion-scale-developed-in-study-3">Algorithm Aversion Scale (Developed in Study 3)</h2>
+<p><strong>Source:</strong> Section 4.7.2.1, Table 7 (Smith et al., 2025)</p>
+<p><strong>Description:</strong> This scale was developed for Study 3 to measure algorithm aversion. An initial list of 60 content-valid items was generated capturing four hypothesized dimensions (Fear of Inaccuracy, Lack of Trust, Fear of Loss of Control, and Resistance to Change). Participants completed all 60 items. Exploratory factor analysis resulted in a final scale of 45 items across four factors.</p>
+<p><strong>Response Scale:</strong> The specific response scale (e.g., Likert 1-5 or 1-7, Strongly Disagree to Strongly Agree) used for these items was <strong>not explicitly stated</strong> in the provided text sections or Table 7 description.</p>
+<p><strong>Items:</strong> <em>(Note: Participants in Study 3 responded to all 60 items listed below for the initial Exploratory Factor Analysis. The factor loadings from Table 7 are indicated. The final measure retained 45 items, typically those with higher or cleaner loadings, often indicated by bolding in the original table note, though precise bolding isn’t perfectly clear from OCR. Items are grouped by the factor they primarily loaded onto based on Table 7)</em></p>
+<p><strong>Factor 1: Fear of Inaccuracy</strong> 1. I am concerned about the reliability of algorithms. (Loading: 0.648) 2. Algorithms could make errors that would negatively impact my life. (Loading: 0.7582) 3. I feel uncertain about the dependability of algorithm-based decisions. (Loading: 0.6559) 4. The potential for inaccuracies in algorithmic results worries me. (Loading: 0.7461) 5. I question the correctness of outcomes produced by algorithms. (Loading: 0.7262) 6. Algorithms might not handle unexpected situations well. (Loading: 0.7465) 7. I believe that algorithms can easily misinterpret complex data. (Loading: 0.737) 8. The risk of error in algorithmic decisions is too high for comfort. (Loading: 0.6523) 9. Algorithms may not always provide consistent results. (Loading: 0.6921) 10. I am skeptical about the accuracy of algorithms when they process large amounts of data. (Loading: 0.6862) 11. The thought of relying solely on algorithmic accuracy makes me uneasy. (Loading: 0.6815) 12. Algorithms are not infallible and this can lead to serious mistakes. (Loading: 0.6819) 13. I distrust algorithms when the stakes of the decision are high. (Loading: 0.6219) 14. Algorithms could generate incorrect results without any warning signs. (Loading: 0.7461) 15. I am wary of using algorithms for decisions that have long-term consequences. (Loading: 0.6519) 23. I worry about biases embedded in algorithms affecting their judgments. (Loading: 0.4047 - Also loaded on Lack of Trust) 43. I worry about the consequences of errors when control is ceded to algorithms. (Loading: 0.4743)</p>
+<p><strong>Factor 2: Resistance to Change</strong> 39. I prefer decisions made by people because it keeps control within human hands. (Loading: 0.438) 46. I am hesitant to adopt new technologies that rely heavily on algorithms. (Loading: 0.6497) 47. I prefer traditional methods over algorithmic solutions. (Loading: 0.8141) 48. The pace of change toward more algorithm use is concerning. (Loading: 0.622) 49. I am skeptical about replacing human roles with algorithms. (Loading: 0.5336) 50. I prefer the way things were done before algorithms were involved. (Loading: 0.8686) 51. Rapid technological changes involving algorithms are unsettling. (Loading: 0.6641) 52. I resist changes that involve using algorithms in my daily activities. (Loading: 0.7925) 53. I believe that some things are better left unchanged, especially regarding algorithm use. (Loading: 0.6663) 54. The movement toward algorithm-driven processes is too fast for my comfort. (Loading: 0.7089) 55. I am cautious about the increasing reliance on algorithms in professional settings. (Loading: 0.6269) 56. I prefer to stick to methods that have proven successful over time rather than adopting new algorithmic techniques. (Loading: 0.8912) 57. I am wary of changes that could make algorithms central to my life or work. (Loading: 0.7064) 58. I am not ready to embrace the widespread use of algorithms. (Loading: 0.8122) 59. I find it difficult to accept the shift from human expertise to algorithmic control. (Loading: 0.8074) 60. The trend toward automating more with algorithms does not sit well with me. (Loading: 0.7914)</p>
+<p><strong>Factor 3: Loss of Control</strong> 31. Relying on algorithms makes me feel like I am losing control over decisions. (Loading: 0.5915) 32. I prefer to keep important decision-making processes directly under human control. (Loading: 0.5915) 33. Algorithms taking over tasks leave me feeling helpless. (Loading: 0.6165) 34. I am uneasy about delegating critical decisions to algorithms. (Loading: 0.6165) 35. I believe that excessive use of algorithms can erode personal autonomy. (Loading: 0.4447 - <em>Not marked bold in source</em>) 36. Algorithms decide too much, too quickly, reducing my control. (Loading: 0.6547) 37. I am concerned about becoming overly dependent on algorithms. (Loading: 0.6418) 38. Using algorithms feels like putting my fate in the hands of a machine. (Loading: 0.5138) 40. The use of algorithms in decision-making processes makes me feel disconnected. (Loading: 0.6046) 45. The shift toward algorithmic decision-making diminishes individual influence. (Loading: 0.4004)</p>
+<p><strong>Factor 4: Lack of Trust</strong> 16. I do not trust algorithms to understand my individual needs. (Loading: 0.4031) 17. Algorithms lack the human insight necessary for many decisions. (Loading: 0.4067) 18. I find it hard to trust a process I cannot easily understand or see. (Loading: 0.6) 19. I am not confident in algorithms to handle tasks that require emotional sensitivity. (Loading: 0.4881) 20. The impersonal nature of algorithms makes them hard to trust. (Loading: 0.6629) 21. I feel that algorithms do not have the capability to adapt to new or evolving situations. (Loading: 0.5061) 22. Algorithms are not transparent enough for me to trust their decisions. (Loading: 0.5947) 24. Trusting algorithms with personal information makes me uncomfortable. (Loading: 0.4584) 25. I am skeptical about the fairness of algorithmic decisions. (Loading: 0.5247) 26. Algorithms do not provide the rationale for their decisions, which diminishes my trust. (Loading: 0.4482) 27. I am concerned that algorithms prioritize efficiency over ethical considerations. (Loading: 0.4473 - <em>Not marked bold in source</em>) 28. Algorithms cannot be held accountable in the same way humans can. (Loading: 0.4473) 29. I distrust algorithms because I cannot negotiate or reason with them. (Loading: 0.5247) 30. The idea of algorithms making decisions without human oversight is troubling to me. (Loading: 0.4482) 41. I think that algorithms can make choices that aren’t in my best interest. (<em>Not marked bold in source</em>) 42. Algorithms reduce the human touch in decisions that affect me. (Loading: 0.4743) 44. I am reluctant to accept decisions made without human involvement. (Loading: 0.4004)</p>
+<hr>
+</section>
+<section id="other-scales-mentioned-items-not-provided-in-text" class="level2">
+<h2 class="anchored" data-anchor-id="other-scales-mentioned-items-not-provided-in-text">Other Scales Mentioned (Items Not Provided in Text)</h2>
+<p>The following scales were used in the studies, but their specific items were not listed in the provided text. Only the source and sample items (where available) were mentioned.</p>
+<ol type="1">
+<li><strong>Trust in AI (Study 1, 2, 3, 4)</strong>
+<ul>
+<li><strong>Source:</strong> Merritt (2011), modified for the specific context (facial recognition or CV screening).</li>
+<li><strong>Description:</strong> Measures trust in the AI system.</li>
+<li><strong>Sample Items (from Section 4.1.3.6):</strong> “I believe facial recognition systems are competent performers,” “I have confidence in the advice given by facial recognition systems,” and “I can rely on facial recognition systems to do its best every time I take its advice.”</li>
+<li><strong>Response Scale:</strong> 1 (strongly disagree) to 5 (strongly agree).</li>
+</ul></li>
+<li><strong>Explicit Gender Bias (Study 1, 2, 3, 4)</strong>
+<ul>
+<li><strong>Source:</strong> Swim et al.&nbsp;(1995).</li>
+<li><strong>Description:</strong> Measures explicit bias related to gender.</li>
+<li><strong>Sample Items (from Section 4.1.3.7):</strong> “On average, people in our society treat men and women equally” and “Society has reached the point where women and men have equal opportunities for achievement.”</li>
+<li><strong>Response Scale:</strong> 1 (strongly disagree) to 7 (strongly agree).</li>
+</ul></li>
+<li><strong>Explicit Racial Bias (Study 1, 2, 3, 4)</strong>
+<ul>
+<li><strong>Source:</strong> Uhlmann, Brescoll, and Machery (2010).</li>
+<li><strong>Description:</strong> Measures explicit bias related to race/ethnicity.</li>
+<li><strong>Sample Items (from Section 4.1.3.8):</strong> “If your personal safety is at stake, it’s sensible to avoid members of ethnic groups known to behave more aggressively” and “Law enforcement officers should act as if members of all racial groups are equally likely to commit crimes.”</li>
+<li><strong>Response Scale:</strong> 1 (strongly disagree) to 7 (strongly agree).</li>
+</ul></li>
+</ol>
+<hr>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Surveys and Questionnaires from Smith et al. (2025)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Smith, A., van Wagoner, H. P., Keplinger, K., &amp; Celebi, C. (2025). Navigating AI Convergence in Human–Artificial Intelligence Teams: A Signaling Theory Approach. Journal of Organizational Behavior. https://doi.org/10.1002/job.2856 https://onlinelibrary.wiley.com/doi/pdf/10.1002/job.2856 </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>https://osf.io/zjwta/?view_only=74a15f71b21c4b0abb69f3e5de543537</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Algorithm Aversion Scale (Developed in Study 3)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>**Source:** Section 4.7.2.1, Table 7 (Smith et al., 2025)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>**Description:** This scale was developed for Study 3 to measure algorithm aversion. An initial list of 60 content-valid items was generated capturing four hypothesized dimensions (Fear of Inaccuracy, Lack of Trust, Fear of Loss of Control, and Resistance to Change). Participants completed all 60 items. Exploratory factor analysis resulted in a final scale of 45 items across four factors.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>**Response Scale:** The specific response scale (e.g., Likert 1-5 or 1-7, Strongly Disagree to Strongly Agree) used for these items was **not explicitly stated** in the provided text sections or Table 7 description.</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>*(Note: Participants in Study 3 responded to all 60 items listed below for the initial Exploratory Factor Analysis. The factor loadings from Table 7 are indicated. The final measure retained 45 items, typically those with higher or cleaner loadings, often indicated by bolding in the original table note, though precise bolding isn't perfectly clear from OCR. Items are grouped by the factor they primarily loaded onto based on Table 7)*</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>**Factor 1: Fear of Inaccuracy**</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>I am concerned about the reliability of algorithms. (Loading: 0.648)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Algorithms could make errors that would negatively impact my life. (Loading: 0.7582)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>I feel uncertain about the dependability of algorithm-based decisions. (Loading: 0.6559)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>The potential for inaccuracies in algorithmic results worries me. (Loading: 0.7461)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>I question the correctness of outcomes produced by algorithms. (Loading: 0.7262)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>Algorithms might not handle unexpected situations well. (Loading: 0.7465)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>I believe that algorithms can easily misinterpret complex data. (Loading: 0.737)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>The risk of error in algorithmic decisions is too high for comfort. (Loading: 0.6523)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>Algorithms may not always provide consistent results. (Loading: 0.6921)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>I am skeptical about the accuracy of algorithms when they process large amounts of data. (Loading: 0.6862)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>The thought of relying solely on algorithmic accuracy makes me uneasy. (Loading: 0.6815)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>Algorithms are not infallible and this can lead to serious mistakes. (Loading: 0.6819)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>I distrust algorithms when the stakes of the decision are high. (Loading: 0.6219)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>Algorithms could generate incorrect results without any warning signs. (Loading: 0.7461)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>I am wary of using algorithms for decisions that have long-term consequences. (Loading: 0.6519)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">23. </span>I worry about biases embedded in algorithms affecting their judgments. (Loading: 0.4047 - Also loaded on Lack of Trust)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">43. </span>I worry about the consequences of errors when control is ceded to algorithms. (Loading: 0.4743)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>**Factor 2: Resistance to Change**</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">39. </span>I prefer decisions made by people because it keeps control within human hands. (Loading: 0.438)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">46. </span>I am hesitant to adopt new technologies that rely heavily on algorithms. (Loading: 0.6497)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">47. </span>I prefer traditional methods over algorithmic solutions. (Loading: 0.8141)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">48. </span>The pace of change toward more algorithm use is concerning. (Loading: 0.622)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">49. </span>I am skeptical about replacing human roles with algorithms. (Loading: 0.5336)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">50. </span>I prefer the way things were done before algorithms were involved. (Loading: 0.8686)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">51. </span>Rapid technological changes involving algorithms are unsettling. (Loading: 0.6641)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">52. </span>I resist changes that involve using algorithms in my daily activities. (Loading: 0.7925)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">53. </span>I believe that some things are better left unchanged, especially regarding algorithm use. (Loading: 0.6663)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">54. </span>The movement toward algorithm-driven processes is too fast for my comfort. (Loading: 0.7089)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">55. </span>I am cautious about the increasing reliance on algorithms in professional settings. (Loading: 0.6269)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">56. </span>I prefer to stick to methods that have proven successful over time rather than adopting new algorithmic techniques. (Loading: 0.8912)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">57. </span>I am wary of changes that could make algorithms central to my life or work. (Loading: 0.7064)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">58. </span>I am not ready to embrace the widespread use of algorithms. (Loading: 0.8122)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="ss">59. </span>I find it difficult to accept the shift from human expertise to algorithmic control. (Loading: 0.8074)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="ss">60. </span>The trend toward automating more with algorithms does not sit well with me. (Loading: 0.7914)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>**Factor 3: Loss of Control**</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="ss">31. </span>Relying on algorithms makes me feel like I am losing control over decisions. (Loading: 0.5915)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="ss">32. </span>I prefer to keep important decision-making processes directly under human control. (Loading: 0.5915)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="ss">33. </span>Algorithms taking over tasks leave me feeling helpless. (Loading: 0.6165)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="ss">34. </span>I am uneasy about delegating critical decisions to algorithms. (Loading: 0.6165)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">35. </span>I believe that excessive use of algorithms can erode personal autonomy. (Loading: 0.4447 - *Not marked bold in source*)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">36. </span>Algorithms decide too much, too quickly, reducing my control. (Loading: 0.6547)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">37. </span>I am concerned about becoming overly dependent on algorithms. (Loading: 0.6418)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="ss">38. </span>Using algorithms feels like putting my fate in the hands of a machine. (Loading: 0.5138)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="ss">40. </span>The use of algorithms in decision-making processes makes me feel disconnected. (Loading: 0.6046)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="ss">45. </span>The shift toward algorithmic decision-making diminishes individual influence. (Loading: 0.4004)</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>**Factor 4: Lack of Trust**</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>I do not trust algorithms to understand my individual needs. (Loading: 0.4031)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">17. </span>Algorithms lack the human insight necessary for many decisions. (Loading: 0.4067)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">18. </span>I find it hard to trust a process I cannot easily understand or see. (Loading: 0.6)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="ss">19. </span>I am not confident in algorithms to handle tasks that require emotional sensitivity. (Loading: 0.4881)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="ss">20. </span>The impersonal nature of algorithms makes them hard to trust. (Loading: 0.6629)</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="ss">21. </span>I feel that algorithms do not have the capability to adapt to new or evolving situations. (Loading: 0.5061)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="ss">22. </span>Algorithms are not transparent enough for me to trust their decisions. (Loading: 0.5947)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">24. </span>Trusting algorithms with personal information makes me uncomfortable. (Loading: 0.4584)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">25. </span>I am skeptical about the fairness of algorithmic decisions. (Loading: 0.5247)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ss">26. </span>Algorithms do not provide the rationale for their decisions, which diminishes my trust. (Loading: 0.4482)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="ss">27. </span>I am concerned that algorithms prioritize efficiency over ethical considerations. (Loading: 0.4473 - *Not marked bold in source*)</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="ss">28. </span>Algorithms cannot be held accountable in the same way humans can. (Loading: 0.4473)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">29. </span>I distrust algorithms because I cannot negotiate or reason with them. (Loading: 0.5247)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="ss">30. </span>The idea of algorithms making decisions without human oversight is troubling to me. (Loading: 0.4482)</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="ss">41. </span>I think that algorithms can make choices that aren’t in my best interest. (*Not marked bold in source*)</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">42. </span>Algorithms reduce the human touch in decisions that affect me. (Loading: 0.4743)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="ss">44. </span>I am reluctant to accept decisions made without human involvement. (Loading: 0.4004)</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="fu">## Other Scales Mentioned (Items Not Provided in Text)</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>The following scales were used in the studies, but their specific items were not listed in the provided text. Only the source and sample items (where available) were mentioned.</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Trust in AI (Study 1, 2, 3, 4)**</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Source:** Merritt (2011), modified for the specific context (facial recognition or CV screening).</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Description:** Measures trust in the AI system.</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Sample Items (from Section 4.1.3.6):** "I believe facial recognition systems are competent performers,” “I have confidence in the advice given by facial recognition systems," and "I can rely on facial recognition systems to do its best every time I take its advice."</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Response Scale:** 1 (strongly disagree) to 5 (strongly agree).</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Explicit Gender Bias (Study 1, 2, 3, 4)**</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Source:** Swim et al. (1995).</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Description:** Measures explicit bias related to gender.</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Sample Items (from Section 4.1.3.7):** "On average, people in our society treat men and women equally" and "Society has reached the point where women and men have equal opportunities for achievement."</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Response Scale:** 1 (strongly disagree) to 7 (strongly agree).</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Explicit Racial Bias (Study 1, 2, 3, 4)**</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Source:** Uhlmann, Brescoll, and Machery (2010).</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Description:** Measures explicit bias related to race/ethnicity.</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Sample Items (from Section 4.1.3.8):** "If your personal safety is at stake, it's sensible to avoid members of ethnic groups known to behave more aggressively" and "Law enforcement officers should act as if members of all racial groups are equally likely to commit crimes."</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>**Response Scale:** 1 (strongly disagree) to 7 (strongly agree).</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>------</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Smith25_AI_Aversion.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

@@ -1,0 +1,207 @@
+project:
+  type: website
+  output-dir: docs
+  # preview:
+  #   port: 4205
+  render:
+    - "*.qmd"
+   # - "*.md"
+    - "!_*" # ignore any file that starts with a _
+    # all md files in surveys_items/Energy_Surveys/
+    - "surveys_items/Energy_Surveys/*.md"
+    - "surveys_items/AI_Surveys/*.md"
+    - demos/*.html
+    - "!surveys_items/AI_Surveys/AI_Survey_Concat.md"
+    - "!surveys_items/Energy_Surveys/energy_survey_concat.md"
+    - "!surveys_items/AI_Surveys/Ravselj25_AI_Survey.md"
+    - "!surveys_items/AI_Surveys/Soto-Sanfiel_AI_Survey.md"
+
+
+    
+  resources:
+    - "demos/*"
+    - "demos/dash/*"
+    - "task/llm_estimates1.json"
+    - "task/prop_task.html"
+
+
+website:
+  title: "Energy AI Study"
+  repo-url: https://github.com/tegorman13/llm_energy_task
+  site-url: https://tegorman13.github.io/llm_energy_task/
+  repo-actions: [source]
+  #reader-mode: true
+  navbar:
+    left:
+      - text: "Task"
+        href: task.qmd
+      - text: "Dash"
+        href: survey_dash.qmd
+      # - text: "Dash_js"
+      #   menu: 
+      #     - text: "Dash"
+      #       href: demos/dash/dash5.html
+      #     # - text: "Dash_js"
+      #     #   href: demos/dash/dash3.html
+      #     - dash.qmd
+      # - sidebar:dash
+
+  # sidebar:
+  #   - id: dash
+  #     title: "Tutorials"
+  #     style: "docked"
+  #     background: light
+  #     collapse-level: 2
+  #     contents: demos
+      # contents: 
+      #   - href: demos2/pd.md
+
+
+  page-navigation: true
+  bread-crumbs: false
+
+
+
+execute:
+  #freeze: auto
+  #cache: true
+  tidy: true
+  warning: false
+  
+# bibliography: [assets/ccl_bib.bib] #, assets/grateful-refs.bib
+# csl: assets/apa.csl
+# google-scholar: false
+
+format:
+  html:
+    theme:
+      light: [cosmo, assets/purdue.scss]
+    date: today
+    css: 
+      - "assets/purdue.scss"
+      #- "assets/custom.scss"
+    page-layout: full
+    tbl-cap-location: top
+    fig-cap-location: bottom
+    toc: true
+    toc-location: right
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    code-link: true
+    code-line-numbers: false
+    code-summary: "Display code"
+    citations-hover: true
+    code-overflow: scroll
+    code-copy: true
+    number-depth: 3
+    #smooth-scroll: true
+    link-citations: true
+    lightbox: true
+    # code-block-bg: "#f8f8f8" #"#272822"
+    # highlight-style: monochrome #monokai #github #a11y
+    html-math-method: mathjax
+    link-external-newwindow: true
+  # pdf: 
+  #   documentclass: article
+  #   papersize: letter
+  #   toc: false
+  #   fontsize: 11pt
+  #   linestretch: 1.5
+  #   geometry:
+  #       - paperwidth=12in
+  #       - paperheight=18in
+  #       - top=.2in     
+  #       - bottom=.1in  
+  #       - left=.2in    
+  #       - right=.2in  
+
+
+
+
+
+  # navbar:
+  #   pinned: true
+  #   background: dark # "#F5F5F5"
+  #   search: true
+  #   right:
+  #     - text: Study Info 
+  #       file: background/bg.qmd
+  #     - text: Analysis
+  #       file: nb/analysis.qmd
+  #     - text: Paper
+  #       file: paper.qmd
+  #   left: 
+  #     - icon: github
+  #       aria-label: github
+  #       href: https://github.com/tegorman13/Representation_Study
+
+
+  # sidebar:
+  #  # search: true
+  #   style: docked #floating
+  #   background: "#ECECEC" #light
+  #   contents:
+  #     - href: index.qmd
+  #       text: Home
+  #     - section: <strong>Paper</strong>
+  #       contents: 
+  #         - href:  paper.qmd  #manuscript/output/manuscript.html
+  #           text: "Manuscript"
+  #           icon: file-text-fill
+  #         - href: mpa/mpa_abstract.md
+  #           text: MPA
+  #           icon: file-text-fill
+  #     - section: <strong>Analysis</strong>
+  #       contents: 
+  #         - href: nb/study1.qmd
+  #           text: "Study 1"
+  #           icon: laptop
+  #         - href: nb/study2.qmd
+  #           text: "Study 2"
+  #           icon: laptop
+  #         - href: nb/results.qmd
+  #           icon: bar-chart-fill
+  #         - href: nb/overview.qmd
+  #           text: Overview
+  #           icon: signpost-split-fill
+  #         - href: misc/outlier.qmd
+  #           text: Outliers
+  #           icon: graph-down
+  #         - href: misc/indiv.qmd
+  #           icon: bar-chart-steps
+  #         - href: misc/discrep.qmd
+  #           icon: columns-gap
+  #         - href: misc/ordinal.qmd
+  #           icon: grid-3x2-gap-fill
+  #         - href: mpa/mpa_analysis.qmd
+  #           text: MPA
+  #           icon: clipboard
+  #     - section: <strong>Background</strong>
+  #       contents:
+  #         - href: background/study_stim.md
+  #           text: "Design and Stimulii"
+  #           icon: pencil
+  #         - href: background/study_info.md
+  #           text: "study 2 full info"
+  #           icon: file-earmark
+  #         - href: background/initial_slides.md
+  #           text: "MPA_Slides"
+  #           icon: file-earmark-slides-fill
+  #         - href: background/study1_info.md
+  #           text: "study 1 codebook"
+  #           icon: file-post
+  #         - href: background/study2_info.md
+  #           text: "study 2 codebook"
+  #           icon: file-post
+
+
+  # page-footer:
+  #   left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
+  #   center: "site made with [{{< fa brands r-project >}}](https://cran.r-project.org/) and [Quarto](https://quarto.org/)"
+  #   right: 
+  #     - text: "{{< fa brands github size=2.0x >}}"
+  #       aria-label: GitHub
+  #       target: _blank
+  #       href: https://github.com/tegorman13/Representation_Study
+

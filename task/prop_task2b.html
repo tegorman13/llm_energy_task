@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with an AI Energy Advisor (Admin Mode - v5 Fixed)</title>
+    <style>
+        /* --- PASTE FULL CSS FROM v3 Improved HERE --- */
+        :root {
+            /* Using UCI Palette primarily */
+            --uci-blue: #003366;
+            --uci-blue-light: #0064a4;
+            --uci-gold: #ffc72c; /* Accent, admin buttons */
+            --text-color: #212529; /* Darker gray for text */
+            --text-muted: #6c757d; /* Lighter gray */
+            --bg-color: #f8f9fa;
+            --container-bg: #ffffff;
+            --section-bg: #ffffff; /* Keep sections clean */
+            --ai-response-bg: #e9f5e9; /* Keep distinct */
+            --ai-response-border: #b2d8b2;
+            --scenario-box-bg: #f0f8ff;
+            --scenario-box-border: #add8e6;
+            --border-color: #dee2e6; /* Standard border */
+            --input-border-focus: var(--uci-blue-light); /* Focus color */
+            --progress-bar-bg: #e9ecef;
+            --progress-bar-fill: var(--uci-blue-light);
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --warning-yellow: var(--uci-gold); /* Alias for consistency */
+            --info-blue: #17a2b8;
+        }
+
+        /* Apply a basic reset and box-sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* System font stack */
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 60px;
+            font-size: 16px; /* Base font size */
+        }
+        .header-bar {
+            background-color: var(--uci-blue);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.75em; /* Slightly larger */
+            font-weight: 600; /* Semibold */
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #progress-bar-container {
+            width: 80%;
+            max-width: 850px;
+            margin: 15px auto 10px auto; /* Adjusted margins */
+            height: 18px; /* Slightly taller */
+            background-color: var(--progress-bar-bg);
+            border-radius: 9px; /* Match height/2 */
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--progress-bar-fill);
+            border-radius: 9px 0 0 9px;
+            transition: width 0.4s ease-in-out; /* Smoother transition */
+        }
+        #progress-text {
+             text-align: center;
+             font-size: 0.9em;
+             color: var(--text-muted);
+             margin-bottom: 25px;
+        }
+        #experiment-container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 30px; /* Increased padding */
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07); /* Softer shadow */
+        }
+        .section {
+            display: none;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            background-color: var(--section-bg);
+            position: relative;
+        }
+        .section.active {
+            display: block;
+        }
+        h1, h2, h3 {
+            color: var(--uci-blue);
+            margin-bottom: 0.75em; /* Consistent bottom margin */
+        }
+        h2 {
+             border-bottom: 2px solid var(--uci-blue);
+             padding-bottom: 10px;
+             margin-top: 0;
+             font-size: 1.8em; /* Larger section titles */
+        }
+         h3 { font-size: 1.4em; margin-bottom: 1em; }
+
+        button {
+            background-color: var(--uci-blue-light);
+            color: white;
+            border: none;
+            padding: 12px 24px; /* Balanced padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 500; /* Medium weight */
+            margin-top: 15px;
+            margin-right: 8px;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background-color: var(--uci-blue);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        button:disabled {
+            background-color: #adb5bd; /* Muted gray */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        /* Specific button IDs for listeners */
+        #start-button, #confirm-items-button, #scenario-next-button, #restart-button { /* Add specific IDs if needed */ }
+
+        .navigation-buttons {
+            margin-top: 30px;
+            text-align: right;
+            border-top: 1px solid var(--border-color); /* Separator */
+            padding-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600; /* Semibold labels */
+            color: #495057;
+            font-size: 1.1em; /* Slightly larger labels */
+        }
+         /* Specific label for radio/checkbox groups */
+         .input-group-label {
+             margin-bottom: 15px; /* More space before options */
+         }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select { /* Style selects too */
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%;
+            font-size: 1em;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--input-border-focus);
+            box-shadow: 0 0 0 0.2rem rgba(0, 100, 164, 0.25); /* Focus ring */
+        }
+
+        input[type="number"]{ width: 150px; /* Even more space */ }
+        textarea { min-height: 100px; }
+
+        .question-block {
+            margin-bottom: 30px; /* Increased separation */
+            padding: 25px;
+            border: 1px solid #f1f3f5;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
+        }
+         .question-block:last-of-type { margin-bottom: 0; }
+
+        .likert-scale ul, .multiple-choice ul, .true-false ul {
+            list-style: none; padding: 0; margin: 10px 0 0 5px;
+        }
+        .likert-scale li, .multiple-choice li, .true-false li {
+            margin-bottom: 12px; padding: 6px 0;
+        }
+         /* Style for the radio/checkbox label itself */
+        .option-label {
+             font-weight: normal; display: inline; margin-left: 10px;
+             vertical-align: middle; cursor: pointer; font-size: 1em;
+             color: var(--text-color);
+         }
+         input[type="radio"], input[type="checkbox"]{
+             margin-right: 5px; vertical-align: middle; cursor: pointer;
+             transform: scale(1.2); /* Larger controls */
+             accent-color: var(--uci-blue-light); /* Modern way to color radios */
+         }
+         /* Visible focus state for keyboard nav */
+        input[type="radio"]:focus-visible + .option-label,
+        input[type="checkbox"]:focus-visible + .option-label {
+             outline: 2px solid var(--input-border-focus);
+             outline-offset: 2px;
+             border-radius: 2px;
+        }
+        .scale-endpoints { /* For Likert/Slider labels */
+             display: flex;
+             justify-content: space-between;
+             font-size: 0.9em;
+             color: var(--text-muted);
+             margin-top: -5px; /* Pull up below radios */
+             margin-bottom: 10px; /* Space after */
+             padding: 0 5px; /* Align with slider ends */
+        }
+
+        /* --- Slider Styles --- */
+        .slider-container {
+            margin-top: 10px; margin-bottom: 5px; /* Reduced bottom margin */
+            display: flex; align-items: center; gap: 15px;
+        }
+        .slider-container .range-label { font-weight: bold; min-width: 50px; text-align: center; color: #555;} /* Endpoint values */
+        .slider-container input[type="range"] { /* Track styling */
+            flex-grow: 1; cursor: pointer; -webkit-appearance: none; appearance: none;
+            height: 10px; background: linear-gradient(to right, var(--uci-blue-light), var(--uci-blue-light) 50%, var(--progress-bar-bg) 50%, var(--progress-bar-bg)); /* Default middle fill */
+            border-radius: 5px; outline: none; transition: background 0.2s ease;
+        }
+         /* Thumb styling */
+         .slider-container input[type="range"]::-webkit-slider-thumb {
+             -webkit-appearance: none; appearance: none; width: 22px; height: 22px; /* Larger thumb */
+             background: var(--uci-blue); border-radius: 50%; cursor: pointer;
+             border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+         }
+         .slider-container input[type="range"]::-moz-range-thumb { /* Firefox */
+             width: 22px; height: 22px; background: var(--uci-blue); border-radius: 50%;
+             cursor: pointer; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+         }
+         /* Live value display */
+         .slider-value-display {
+            font-weight: bold;
+            color: var(--uci-blue);
+            font-size: 1.1em;
+            min-width: 50px;
+            text-align: right;
+         }
+
+
+        /* --- Scenario & AI Styles --- */
+        .scenario-box {
+            border: 1px solid var(--scenario-box-border); background-color: var(--scenario-box-bg);
+            padding: 25px; margin-bottom: 0; border-radius: 6px;
+        }
+        .scenario-prompt {
+             margin-bottom: 15px; color: var(--text-color); white-space: pre-wrap;
+             font-style: normal; font-weight: 500; border-bottom: 1px dashed var(--scenario-box-border); padding-bottom: 15px;
+        }
+        .ai-response-container {
+            margin-top: 20px; background-color: var(--ai-response-bg); border: 1px solid var(--ai-response-border);
+            padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .ai-response-container .ai-prefix {
+             font-weight: 700; display: block; margin-bottom: 10px; color: #005700;
+             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 1.1em;
+        }
+        .ai-response-estimate {
+             font-weight: bold; font-size: 1.2em; color: var(--uci-blue);
+             display: block; margin-bottom: 10px;
+        }
+        .ai-response-explanation { white-space: pre-wrap; line-height: 1.7; font-size: 1em; }
+        .ai-confidence-display {
+            margin-top: 15px; font-size: 0.9em; font-style: italic; color: var(--text-muted);
+            border-top: 1px dashed var(--ai-response-border); padding-top: 10px;
+        }
+
+
+        /* --- Estimation Table --- */
+        .estimation-table-wrapper { overflow-x: auto; margin-top: 15px; border: 1px solid var(--border-color); border-radius: 5px;}
+        .estimation-table { width: 100%; min-width: 550px; border-collapse: collapse; }
+        .estimation-table th, .estimation-table td { border: none; border-bottom: 1px solid var(--border-color); padding: 12px 15px; text-align: left; vertical-align: middle; }
+        .estimation-table th { background-color: #f8f9fa; font-weight: 600; color: #495057; border-bottom-width: 2px; }
+        .estimation-table tr:last-child td { border-bottom: none; }
+        .estimation-table tr:hover td { background-color: #f1f9ff; } /* Subtle hover */
+        .estimation-table input[type="number"] { width: 140px; text-align: right; }
+
+
+        /* --- Admin Styles --- */
+        #admin-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: rgba(40, 40, 40, 0.97); color: #f8f9fa;
+            padding: 8px 10px; text-align: center; font-size: 0.9em;
+            z-index: 1000; box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px 10px;
+        }
+        #admin-bar span { margin: 0 5px; font-weight: 500; }
+        #admin-bar strong { color: var(--uci-gold); }
+        #admin-bar button { /* Give admin bar buttons unique IDs for listeners */ }
+        .admin-jump-button { /* Class for admin jump buttons */
+            background-color: var(--warning-yellow); color: var(--text-color);
+            padding: 5px 12px; font-size: 0.85em; margin: 2px 3px;
+            border: 1px solid #d6a100; border-radius: 4px; font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+         .admin-jump-button:hover { background-color: #e0a800; }
+        .skip-section-button { /* Class for skip buttons */
+            position: absolute; top: 18px; right: 18px;
+            background-color: var(--warning-yellow); color: var(--text-color);
+            padding: 6px 12px; font-size: 0.85em; border: 1px solid #d6a100;
+            border-radius: 4px; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        #item-selector { /* Updated ID from condition-selector */
+             border: 2px solid var(--uci-blue); padding: 25px; margin-bottom: 25px;
+             background-color: var(--scenario-box-bg); border-radius: 6px;
+         }
+         #item-selector h3 { margin-top: 0; }
+         #item-selector label { font-weight: 600; display: block; margin-bottom: 10px;}
+         #item-selector select { padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); width: 100%; margin-bottom: 15px;}
+         #item-selector div { margin-bottom: 20px; }
+
+
+        /* --- Basic Responsiveness --- (Keep from v3) */
+        @media (max-width: 768px) {
+             body { padding-bottom: 90px; font-size: 15px; }
+             #experiment-container { padding: 20px; }
+             .section { padding: 20px; }
+             h2 { font-size: 1.6em; }
+             button { padding: 10px 20px; }
+             #admin-bar { justify-content: flex-start; padding: 8px 15px;}
+        }
+         @media (max-width: 480px) {
+             .header-bar { font-size: 1.4em; }
+             h2 { font-size: 1.5em; }
+             input[type="number"] { width: 120px; }
+             .estimation-table input[type="number"] { width: 110px; }
+             .slider-container { flex-direction: column; gap: 8px; align-items: stretch;}
+             .slider-value-display { text-align: center; margin-top: 5px;}
+             .scale-endpoints { font-size: 0.85em;}
+             .likert-scale li, .multiple-choice li, .true-false li { margin-bottom: 8px; }
+             .option-label { margin-left: 6px; }
+             input[type="radio"], input[type="checkbox"] { transform: scale(1.1); }
+             .navigation-buttons button { width: 100%; margin-top: 10px;}
+             #admin-bar { font-size: 0.8em; }
+             #admin-bar button { font-size: 0.8em; padding: 4px 8px;}
+         }
+
+         /* Error message styling */
+         .error-message { color: var(--danger-red); font-weight: 500; font-size: 0.9em; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        AI Energy Advisor Task (Admin Mode - v5 Fixed)
+    </div>
+
+     <div id="progress-bar-container"><div id="progress-bar"></div></div>
+     <div id="progress-text">Section 1 of 8</div>
+
+    <div id="experiment-container">
+
+        <!-- Instructions Section -->
+        <div id="section-instructions" class="section active">
+            <button class="skip-section-button" data-skip-target="energy-knowledge">Skip Section</button> <!-- Data attribute for target -->
+            <h2>Instructions</h2>
+            <p>Welcome to this study on interacting with an AI energy advisor.</p>
+            <p><strong>ADMIN MODE:</strong> Skip sections via buttons or admin bar.</p>
+            <!-- FIXED Markdown -->
+            <p>Flow: Energy Knowledge -> Numeracy -> AI Familiarity -> <strong>Item Selection</strong> -> <strong>Scenario Interaction (JSON-based)</strong> -> Post-Task -> Debriefing.</p>
+            <div class="navigation-buttons">
+                <button id="start-button">Start</button> <!-- ID for listener -->
+            </div>
+        </div>
+
+        <!-- Section 1: Energy Knowledge -->
+        <div id="section-energy-knowledge" class="section">
+            <button class="skip-section-button" data-skip-target="numeracy">Skip Section</button>
+            <h2>Section 1: Energy Knowledge & Perception</h2>
+            <p>Assess energy knowledge. Best guesses are fine.</p>
+            <!-- Questions dynamically inserted -->
+            <div class="navigation-buttons">
+                <button class="next-section-button" data-next-target="numeracy">Next</button> <!-- Class for listener -->
+            </div>
+        </div>
+
+        <!-- Section 2: Numeracy -->
+        <div id="section-numeracy" class="section">
+            <button class="skip-section-button" data-skip-target="ai-familiarity">Skip Section</button>
+            <h2>Section 2: Numeracy Questions</h2>
+            <p>Questions on numbers and probabilities.</p>
+            <!-- Questions dynamically inserted -->
+            <div class="navigation-buttons">
+                <button class="next-section-button" data-next-target="ai-familiarity">Next</button>
+            </div>
+        </div>
+
+        <!-- Section 3: AI Familiarity -->
+        <div id="section-ai-familiarity" class="section">
+            <button class="skip-section-button" data-skip-target="item-selector">Skip Section</button>
+            <h2>Section 3: AI Familiarity & Trust Propensity</h2>
+            <p>Questions about AI experience and trust in technology.</p>
+            <!-- Questions dynamically inserted -->
+            <div class="navigation-buttons">
+                 <button class="next-section-button" data-next-target="item-selector">Next</button>
+            </div>
+        </div>
+
+        <!-- Item Selector -->
+        <div id="section-item-selector" class="section">
+             <button class="skip-section-button" data-skip-target="scenario-task">Skip Selection (Defaults)</button>
+             <h2>Admin: Select Scenario Items (4 Trials)</h2>
+             <p>Choose 4 items from the loaded JSON data to present in the next section.</p>
+             <div id="item-selector-form"></div>
+             <div class="navigation-buttons">
+                 <button id="confirm-items-button">Confirm Items & Start Scenarios</button>
+             </div>
+         </div>
+
+        <!-- Scenario Task (JSON-driven) -->
+        <div id="section-scenario-task" class="section">
+            <button class="skip-section-button" data-skip-target="post-task">Skip Scenarios</button>
+            <h2>Section 4: AI Advisor Interaction</h2>
+            <p>Read the prompt and the AI's response, then answer the questions below.</p>
+            <div id="scenario-content"></div>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-color);">
+            <div id="scenario-questions"></div>
+            <div class="navigation-buttons">
+                <button id="scenario-next-button">Next Scenario</button>
+            </div>
+        </div>
+
+        <!-- Section 5: Post-Task -->
+        <div id="section-post-task" class="section">
+             <button class="skip-section-button" data-skip-target="debriefing">Skip Section</button>
+            <h2>Section 5: Post-Scenario Trust & Perception</h2>
+            <p>Final questions about overall impressions.</p>
+             <!-- Questions dynamically inserted -->
+              <div class="navigation-buttons">
+                  <button class="next-section-button" data-next-target="debriefing">Next</button>
+              </div>
+        </div>
+
+        <!-- Debriefing Section -->
+        <div id="section-debriefing" class="section">
+            <!-- No skip needed -->
+            <h2>Debriefing</h2>
+            <p>Thank you!</p>
+            <p><strong>Study Purpose:</strong> AI uncertainty expression effects.</p>
+            <p><strong>Items Shown:</strong> Based on admin selection from JSON data.</p>
+             <p><strong>Item Ground Truths:</strong></p>
+             <ul id="debrief-clarifications"></ul>
+            <p><strong>Collected Responses (Admin Mode):</strong></p>
+            <textarea id="final-results" readonly rows="12"></textarea>
+            <div class="navigation-buttons">
+                <button id="restart-button">Restart</button> <!-- Use ID -->
+            </div>
+        </div>
+
+    </div> <!-- End experiment-container -->
+
+    <!-- Admin Bar -->
+    <div id="admin-bar">
+        <span>ADMIN | Current: <strong id="admin-current-section">...</strong></span>|<span>Jump:</span>
+        <!-- Use data-section-index attribute for jump targets -->
+        <button class="admin-jump-button" data-section-index="0">Instr</button>
+        <button class="admin-jump-button" data-section-index="1">Energy</button>
+        <button class="admin-jump-button" data-section-index="2">Num</button>
+        <button class="admin-jump-button" data-section-index="3">AI</button>
+        <button class="admin-jump-button" data-section-index="4">Select</button>
+        <button class="admin-jump-button" data-section-index="5">Interact</button>
+        <button class="admin-jump-button" data-section-index="6">Post</button>
+        <button class="admin-jump-button" data-section-index="7">Debrief</button>
+    </div>
+
+
+    <script>
+    // --- Constants ---
+    const NUM_SCENARIOS_TO_SELECT = 4;
+    const LLM_ESTIMATES_URL = 'llm_estimates1.json';
+    // Define paths for the new question JSON files
+    const ENERGY_KNOWLEDGE_QUESTIONS_URL = 'energy_knowledge_questions.json';
+    const NUMERACY_QUESTIONS_URL = 'numeracy_questions.json';
+    const AI_FAMILIARITY_QUESTIONS_URL = 'ai_familiarity_questions.json';
+    const POST_TASK_QUESTIONS_URL = 'post_task_questions.json';
+    const SCENARIO_QUESTIONS_TEMPLATE_URL = 'scenario_questions_template.json';
+
+
+    // --- Data Definitions ---
+    // The 'questions' object is now removed and will be loaded dynamically
+
+    // Scenarios array is no longer used
+
+    // --- Experiment Logic (v5 - Event Listeners Fixed) ---
+
+    const experiment = {
+        allQuestions: {}, // Object to hold all loaded questions
+        scenarioQuestionTemplates: {}, // Object to hold scenario question templates
+        currentState: { /* Keep currentState structure from v4 */
+            isAdmin: true,
+            sectionIndex: 0,
+            scenarioIndex: -1,
+            sections: [
+                'instructions', 'energy-knowledge', 'numeracy', 'ai-familiarity',
+                'item-selector', 'scenario-task', 'post-task', 'debriefing'
+            ],
+            get totalSections() { return this.sections.length; },
+            currentSectionQuestions: [],
+            participantResponses: {},
+            llmEstimatesData: null,
+            availableItems: [],
+            selectedItems: [],
+        },
+
+        async init() {
+            console.log("Experiment v5 Initializing...");
+             try {
+                 // Load all question data in parallel
+                 await Promise.all([
+                     this.loadLLMEstimates(),
+                     this.loadQuestionData() // New function to load all question JSONs
+                 ]);
+                 this.prepareAvailableItems();
+                 this.attachEventListeners(); // Attach listeners AFTER object is defined
+                 this.showSection(this.currentState.sections[0]); // Show initial section
+                 this.updateAdminBar();
+                 this.updateProgressBar();
+                 console.log("Experiment v5 Initialized successfully.");
+             } catch (error) {
+                 console.error("FATAL: Initialization failed:", error);
+                 alert("A critical error occurred during initialization. Cannot continue.");
+                 const container = document.getElementById('experiment-container');
+                 if (container) container.innerHTML = `<h2 style="color:red;">Initialization Error</h2><p>Check console (F12), ensure JSON files are accessible.</p><pre>${error.stack}</pre>`;
+             }
+        },
+
+        // ... existing attachEventListeners ...
+        attachEventListeners() {
+             console.log("Attaching event listeners...");
+             try {
+                 // Start button
+                 document.getElementById('start-button')?.addEventListener('click', () => this.nextSection());
+
+                 // Generic Next buttons
+                 document.querySelectorAll('.next-section-button').forEach(button => {
+                     button.addEventListener('click', () => this.nextSection());
+                 });
+
+                 // Skip buttons
+                 document.querySelectorAll('.skip-section-button').forEach(button => {
+                     button.addEventListener('click', (event) => {
+                         const targetSectionId = event.target.dataset.skipTarget;
+                         this.skipSection(targetSectionId); // Pass target if needed, or just advance
+                     });
+                 });
+
+                 // Confirm Items button
+                 document.getElementById('confirm-items-button')?.addEventListener('click', () => this.confirmItems());
+
+                 // Scenario Next button
+                 document.getElementById('scenario-next-button')?.addEventListener('click', () => this.nextScenario());
+
+                 // Restart button
+                 document.getElementById('restart-button')?.addEventListener('click', () => window.location.reload());
+
+                 // Admin Jump buttons
+                 document.querySelectorAll('.admin-jump-button').forEach(button => {
+                     button.addEventListener('click', (event) => {
+                         const sectionIndex = parseInt(event.target.dataset.sectionIndex, 10);
+                         if (!isNaN(sectionIndex)) {
+                             this.goToSection(sectionIndex);
+                         }
+                     });
+                 });
+                 console.log("Event listeners attached.");
+             } catch (error) {
+                 console.error("Error attaching event listeners:", error);
+                 // This might happen if the DOM isn't fully ready, though DOMContentLoaded should prevent it.
+             }
+         },
+
+        async loadLLMEstimates() { /* Keep from v4 */
+             console.log(`Attempting to load LLM estimates from: ${LLM_ESTIMATES_URL}`);
+            try {
+                const response = await fetch(LLM_ESTIMATES_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${LLM_ESTIMATES_URL}`);
+                this.currentState.llmEstimatesData = await response.json();
+                if (!Array.isArray(this.currentState.llmEstimatesData) || this.currentState.llmEstimatesData.length === 0) {
+                     throw new Error("Loaded data is not a valid non-empty array.");
+                }
+                console.log(`LLM estimates loaded successfully: ${this.currentState.llmEstimatesData.length} items.`);
+            } catch (error) {
+                console.error(`Error loading LLM estimates:`, error);
+                throw new Error(`Failed to load/parse '${LLM_ESTIMATES_URL}'. ${error.message}`);
+            }
+        },
+
+        // New function to load all question JSON files
+        async loadQuestionData() {
+            console.log("Loading question data from JSON files...");
+            const urls = [
+                ENERGY_KNOWLEDGE_QUESTIONS_URL,
+                NUMERACY_QUESTIONS_URL,
+                AI_FAMILIARITY_QUESTIONS_URL,
+                POST_TASK_QUESTIONS_URL,
+                SCENARIO_QUESTIONS_TEMPLATE_URL
+            ];
+            try {
+                const responses = await Promise.all(urls.map(url => fetch(url)));
+                responses.forEach((response, index) => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${urls[index]}`);
+                });
+                const jsonData = await Promise.all(responses.map(res => res.json()));
+
+                // Combine section questions into allQuestions
+                this.allQuestions = {
+                    ...jsonData[0], // energy knowledge
+                    ...jsonData[1], // numeracy
+                    ...jsonData[2], // ai familiarity
+                    ...jsonData[3]  // post task
+                };
+                // Store scenario templates separately
+                this.scenarioQuestionTemplates = jsonData[4];
+
+                console.log("All question data loaded successfully.");
+                console.log("Total section questions loaded:", Object.keys(this.allQuestions).length);
+                console.log("Scenario templates loaded:", this.scenarioQuestionTemplates);
+
+            } catch (error) {
+                console.error("Error loading question data:", error);
+                throw new Error(`Failed to load/parse question JSON files. ${error.message}`);
+            }
+        },
+
+        // ... existing prepareAvailableItems ...
+        prepareAvailableItems() { /* Keep from v4 */
+            if (!this.currentState.llmEstimatesData) return;
+            this.currentState.availableItems = this.currentState.llmEstimatesData.map((item, index) => ({
+                 name: item.item_name || item._row || `Item Index ${index}`, // Fallback name using index
+                 label: item.item_label || item.item_name || `Item Index ${index}` // Display label
+            }));
+            console.log("Available items prepared:", this.currentState.availableItems);
+        },
+        // ... existing showSection ...
+        showSection(sectionId) { /* Keep from v4 */
+            console.log(`Showing section: ${sectionId} (Index: ${this.currentState.sectionIndex})`);
+             try {
+                 document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+                 const sectionElement = document.getElementById(`section-${sectionId}`);
+                 if (!sectionElement) throw new Error(`Section element '#section-${sectionId}' not found.`);
+                 sectionElement.classList.add('active');
+
+                 // Find navigation button container within the specific section
+                 const navButtonContainer = sectionElement.querySelector('.navigation-buttons');
+
+                 // Hide all nav buttons within the section initially
+                 if (navButtonContainer) {
+                      navButtonContainer.style.display = 'none';
+                 }
+
+
+                 // Conditionally show navigation and render content
+                 if (['energy-knowledge', 'numeracy', 'ai-familiarity', 'post-task'].includes(sectionId)) {
+                     this.renderQuestionsForSection(sectionId);
+                     if (navButtonContainer) navButtonContainer.style.display = 'block'; // Show generic next
+                 } else if (sectionId === 'item-selector') {
+                     this.renderItemSelector();
+                      if (navButtonContainer) navButtonContainer.style.display = 'block'; // Show confirm button
+                 } else if (sectionId === 'scenario-task') {
+                      if (this.currentState.selectedItems.length !== NUM_SCENARIOS_TO_SELECT) {
+                          console.warn("Items not fully selected! Redirecting to selector.");
+                           this.goToSection(this.currentState.sections.indexOf('item-selector'));
+                           return;
+                      }
+                      if (this.currentState.scenarioIndex < 0) this.currentState.scenarioIndex = 0;
+                      this.loadScenario(this.currentState.scenarioIndex);
+                      if (navButtonContainer) navButtonContainer.style.display = 'block'; // Show scenario next/finish button
+                 } else if (sectionId === 'debriefing') {
+                     this.populateDebriefing();
+                     this.displayResults();
+                     if (navButtonContainer) navButtonContainer.style.display = 'block'; // Show restart button
+                 } else if (sectionId === 'instructions') {
+                    if (navButtonContainer) navButtonContainer.style.display = 'block'; // Show start button
+                 }
+
+                 this.updateAdminBar();
+                 this.updateProgressBar();
+                 window.scrollTo(0, 0);
+
+             } catch (error) {
+                 console.error(`Error showing section ${sectionId}:`, error);
+                 alert(`An error occurred displaying section '${sectionId}'. Check console.`);
+             }
+        },
+        // Modify renderQuestionsForSection to use experiment.allQuestions
+        renderQuestionsForSection(sectionId) {
+             const container = document.getElementById(`section-${sectionId}`);
+             if (!container) { console.error(`Container not found: ${sectionId}`); return; }
+             const navButtons = container.querySelector('.navigation-buttons');
+             container.querySelectorAll('.question-block').forEach(block => block.remove()); // Clear previous questions
+
+             // Filter questions from the loaded allQuestions object
+             this.currentState.currentSectionQuestions = Object.values(this.allQuestions).filter(q => q.section === sectionId);
+
+             if (this.currentState.currentSectionQuestions.length === 0) {
+                 console.warn(`No questions found for section: ${sectionId}`);
+                 // Optionally display a message
+                 const noQuestionsHtml = `<p>No questions defined for this section.</p>`;
+                 if (navButtons) navButtons.insertAdjacentHTML('beforebegin', noQuestionsHtml);
+                 else container.insertAdjacentHTML('beforeend', noQuestionsHtml);
+                 return;
+             }
+
+             this.currentState.currentSectionQuestions.forEach(q => {
+                  try {
+                      // Replace Markdown bold with <strong> tags in question text
+                      const questionTextHtml = q.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                      const questionHtml = this.createQuestionHtml({...q, text: questionTextHtml }); // Pass updated text
+
+                      if (navButtons) navButtons.insertAdjacentHTML('beforebegin', questionHtml);
+                      else container.insertAdjacentHTML('beforeend', questionHtml);
+
+                      if (q.type === 'slider') {
+                          this.attachSliderListener(container, q.id); // Use helper
+                      }
+                 } catch (error) {
+                     console.error(`Error creating HTML for question ${q.id}:`, error);
+                     const errorHtml = `<div class="question-block" style="border-color:red;"><p style="color:red;">Error loading question: ${q.id}</p></div>`;
+                      if (navButtons) navButtons.insertAdjacentHTML('beforebegin', errorHtml);
+                      else container.insertAdjacentHTML('beforeend', errorHtml);
+                 }
+             });
+        },
+        // ... existing createQuestionHtml ...
+        createQuestionHtml(q) { /* Keep from v4 */
+             // --- Consolidated Likert Logic ---
+             if (q.type === 'likert') {
+                 const points = q.points || 5;
+                 let listItems = '';
+                 for (let i = 1; i <= points; i++) {
+                     let labelText = `${i}`;
+                     listItems += `<li><input type="radio" id="${q.id}-${i}" name="${q.id}" value="${i}"><label for="${q.id}-${i}" class="option-label">${labelText}</label></li>`;
+                 }
+                 let endpoints = '';
+                 if (q.scale && q.scale.length === 2) {
+                     endpoints = `<div class="scale-endpoints"><span>1 - ${q.scale[0]}</span><span>${points} - ${q.scale[1]}</span></div>`;
+                 }
+                 // Use input-group-label class for the main label
+                 return `<div class="question-block" id="block-${q.id}">
+                             <label class="input-group-label" for="${q.id}">${q.text}</label>
+                             <ul class="likert-scale">${listItems}</ul>
+                             ${endpoints}
+                         </div>`;
+             }
+             // --- Slider Logic with Live Value Display ---
+              else if (q.type === 'slider') {
+                 const min = q.min !== undefined ? q.min : 0;
+                 const max = q.max !== undefined ? q.max : 100;
+                 const step = q.step !== undefined ? q.step : (q.id.includes('confidence') ? 10 : 1);
+                 const initialValue = q.id.includes('confidence') ? 50 : Math.round(min + (max - min) / 2);
+                 // Add scale endpoints for sliders if defined
+                 let endpoints = `<div class="scale-endpoints"><span>${min}${q.unit || ''}</span><span>${max}${q.unit || ''}</span></div>`;
+                 if (q.scale && q.scale.length === 2) {
+                     endpoints = `<div class="scale-endpoints"><span>${q.scale[0]} (${min}${q.unit || ''})</span><span>${q.scale[1]} (${max}${q.unit || ''})</span></div>`;
+                 }
+                 return `<div class="question-block" id="block-${q.id}">
+                             <label for="${q.id}">${q.text}</label>
+                              ${endpoints}
+                             <div class="slider-container">
+                                 <input type="range" id="${q.id}" name="${q.id}" min="${min}" max="${max}" step="${step}" value="${initialValue}" data-unit="${q.unit || ''}">
+                                 <span class="${q.id}-value-display slider-value-display">${initialValue}${q.unit || ''}</span>
+                               </div>
+                          </div>`;
+             }
+             // --- Other types ---
+             else if (q.type === 'multiple-choice' || q.type === 'true-false') {
+                 let listItems = '';
+                 q.options.forEach(opt => {
+                     listItems += `<li><input type="radio" id="${q.id}-${opt.value}" name="${q.id}" value="${opt.value}"><label for="${q.id}-${opt.value}" class="option-label">${opt.text}</label></li>`;
+                 });
+                  // Use input-group-label class for the main label
+                  return `<div class="question-block" id="block-${q.id}">
+                             <label class="input-group-label" for="${q.id}">${q.text}</label>
+                             <ul class="${q.type}">${listItems}</ul>
+                          </div>`;
+             }
+             else if (q.type === 'estimation-table') {
+                  let tableRows = '';
+                  q.items.forEach(item => {
+                      tableRows += `<tr>
+                                         <td>${item.name}</td>
+                                         <td><input type="number" id="${item.key}" name="${item.key}" min="0" pattern="[0-9]*"></td>
+                                      </tr>`;
+                  });
+                  // Use input-group-label class for the main label
+                  return `<div class="question-block" id="block-${q.id}">
+                              <label class="input-group-label">${q.text || 'Energy Estimation'}</label>
+                              <p>Reference: 100W incandescent bulb = 100 units/hour. Best guess is fine.</p>
+                              <div class="estimation-table-wrapper">
+                                  <table class="estimation-table">
+                                      <thead><tr><th>Device</th><th>Your estimate (Units/Hour)</th></tr></thead>
+                                      <tbody>${tableRows}</tbody>
+                                  </table>
+                              </div>
+                          </div>`;
+             }
+             else if (q.type === 'open-ended') {
+                  return `<div class="question-block" id="block-${q.id}">
+                             <label for="${q.id}">${q.text}</label>
+                             <textarea id="${q.id}" name="${q.id}" rows="4"></textarea>
+                          </div>`;
+             }
+             // --- Fallback for unknown ---
+             else {
+                 console.warn("Unknown question type:", q.type, "for question:", q.id);
+                  return `<div class="question-block" id="block-${q.id}" style="border-color:red;">...Error loading question ${q.id}...</div>`;
+             }
+        },
+        // ... existing renderItemSelector, confirmItems, getItemDataByName, determineCorrectness, determineTone, skipToScenarios ...
+        renderItemSelector() { /* Keep from v4 */
+             const container = document.getElementById('item-selector-form');
+            if (!container) { console.error("Item selector container not found"); return; }
+            container.innerHTML = ''; // Clear previous
+
+            if (!this.currentState.availableItems || this.currentState.availableItems.length === 0) {
+                 container.innerHTML = `<p class="error-message">Error: No items available from JSON data.</p>`;
+                 return;
+            }
+
+            for (let i = 0; i < NUM_SCENARIOS_TO_SELECT; i++) {
+                const div = document.createElement('div');
+                const selectId = `item-select-${i}`;
+                let optionsHtml = `<option value="">-- Select Item ${i + 1} --</option>`;
+                this.currentState.availableItems.forEach(item => {
+                     const isSelected = this.currentState.selectedItems[i]?.item_name === item.name;
+                     optionsHtml += `<option value="${item.name}" ${isSelected ? 'selected' : ''}>${item.label}</option>`;
+                });
+
+                div.innerHTML = `
+                    <label for="${selectId}">Select Item for Trial ${i + 1}:</label>
+                    <select id="${selectId}" name="${selectId}">
+                        ${optionsHtml}
+                    </select>
+                `;
+                container.appendChild(div);
+            }
+        },
+        confirmItems() { /* Keep from v4 */
+            this.currentState.selectedItems = []; // Clear previous
+            let allSelected = true;
+            const selectedNames = new Set(); // To check for duplicates
+
+            try {
+                for (let i = 0; i < NUM_SCENARIOS_TO_SELECT; i++) {
+                    const selectElement = document.getElementById(`item-select-${i}`);
+                    if (!selectElement) throw new Error(`Selector element item-select-${i} not found`);
+                    const selectedName = selectElement.value;
+
+                    if (!selectedName) { allSelected = false; break; }
+                    if (selectedNames.has(selectedName)) {
+                        alert(`Error: Item "${selectedName}" selected more than once. Please choose unique items.`);
+                        return;
+                    }
+                    selectedNames.add(selectedName);
+                    const itemData = this.getItemDataByName(selectedName);
+                    if (!itemData) throw new Error(`Data not found for selected item: ${selectedName}`);
+
+                    this.currentState.selectedItems.push({
+                        item_name: selectedName,
+                        effective_correctness: this.determineCorrectness(itemData),
+                        effective_tone: this.determineTone(itemData.confidence_level)
+                    });
+                }
+
+                if (!allSelected) {
+                    alert(`Please select an item for all ${NUM_SCENARIOS_TO_SELECT} trials.`);
+                    return;
+                }
+                console.log("Admin selected items:", this.currentState.selectedItems);
+                this.currentState.scenarioIndex = -1;
+                this.nextSection();
+            } catch (error) {
+                console.error("Error confirming items:", error);
+                alert("An error occurred confirming selected items. Check console.");
+            }
+        },
+        getItemDataByName(itemName) { /* Keep from v4 */
+             if (!this.currentState.llmEstimatesData) return null;
+             // Match against potential keys
+             return this.currentState.llmEstimatesData.find(item =>
+                item.item_name === itemName || item._row === itemName || item.item_label === itemName);
+        },
+        determineCorrectness(itemData) { /* Keep example logic from v4 */
+            const estimate = parseFloat(itemData.llm_estimate);
+            const actual = parseFloat(itemData.actual_value);
+            if (isNaN(estimate) || isNaN(actual)) return 'unknown';
+            if (actual === 0) return estimate === 0 ? 'correct' : 'incorrect'; // Handle zero actual value
+
+            // Specific overrides based on known bad estimates from JSON example
+            if (itemData.item_name === "Dish washer" && estimate === 2) return 'incorrect';
+            if (itemData.item_name === "Line-dry clothes" && estimate === 10) return 'incorrect';
+            if (itemData.item_name === "Summer thermostat" && estimate === 5) return 'incorrect';
+            if (itemData.item_name === "Winter thermostat" && estimate === 5) return 'incorrect';
+            if (itemData.item_name === "Washer setting" && estimate === 10) return 'incorrect';
+
+            const ratio = estimate / actual;
+            // Simple ratio check (e.g., within 50% range)
+            if (ratio >= 0.5 && ratio <= 1.5) return 'correct';
+            return 'incorrect';
+         },
+        determineTone(confidenceLevel) { /* Keep from v4 */
+             switch (String(confidenceLevel).toLowerCase()) {
+                 case 'high': return 'confident';
+                 case 'medium': return 'hedged';
+                 case 'low': return 'hedged';
+                 default: return 'unknown';
+             }
+        },
+        skipToScenarios() { /* Keep from v4 */
+             if (this.currentState.selectedItems.length !== NUM_SCENARIOS_TO_SELECT) {
+                console.log("Assigning default items for skip.");
+                 // Find the actual item data for the first N available items
+                 const defaultItemsData = this.currentState.availableItems
+                     .slice(0, NUM_SCENARIOS_TO_SELECT)
+                     .map(availItem => this.getItemDataByName(availItem.name)) // Get full data
+                     .filter(itemData => itemData !== null); // Filter out if data not found
+
+                 // Map the found data to the selectedItems structure
+                 this.currentState.selectedItems = defaultItemsData.map(itemData => ({
+                     item_name: itemData.item_name || itemData._row, // Use the name found
+                     effective_correctness: this.determineCorrectness(itemData),
+                     effective_tone: this.determineTone(itemData.confidence_level)
+                 }));
+
+
+                 if (this.currentState.selectedItems.length !== NUM_SCENARIOS_TO_SELECT) {
+                     alert("Error: Could not select default items. JSON data might be incomplete or names mismatch.");
+                     this.goToSection(this.currentState.sections.indexOf('item-selector'));
+                     return;
+                 }
+                 console.log("Default items assigned:", this.currentState.selectedItems);
+            }
+            this.currentState.scenarioIndex = -1;
+            this.goToSection(this.currentState.sections.indexOf('scenario-task'));
+        },
+
+        // Modify loadScenario to use templates
+        loadScenario(index) {
+            if (index >= this.currentState.selectedItems.length || index < 0) {
+                 if (index >= this.currentState.selectedItems.length) {
+                    this.goToSection(this.currentState.sections.indexOf('post-task'));
+                 }
+                 return;
+            }
+            try {
+                const selectedItemInfo = this.currentState.selectedItems[index];
+                const itemData = this.getItemDataByName(selectedItemInfo.item_name);
+                if (!itemData) throw new Error(`Data not found for item: ${selectedItemInfo.item_name}`);
+
+                const trialPrefix = `trial_${index + 1}`;
+                // Save basic trial info
+                this.currentState.participantResponses[`${trialPrefix}_item_name`] = itemData.item_name;
+                this.currentState.participantResponses[`${trialPrefix}_prompt`] = itemData.prompt;
+                this.currentState.participantResponses[`${trialPrefix}_actual_value`] = itemData.actual_value;
+                this.currentState.participantResponses[`${trialPrefix}_llm_estimate`] = itemData.llm_estimate;
+                this.currentState.participantResponses[`${trialPrefix}_llm_explanation`] = itemData.llm_explanation;
+                this.currentState.participantResponses[`${trialPrefix}_llm_confidence_score`] = itemData.llm_confidence_score;
+                this.currentState.participantResponses[`${trialPrefix}_llm_confidence_level`] = itemData.confidence_level;
+                this.currentState.participantResponses[`${trialPrefix}_effective_correctness`] = selectedItemInfo.effective_correctness;
+                this.currentState.participantResponses[`${trialPrefix}_effective_tone`] = selectedItemInfo.effective_tone;
+
+                const scenarioContentContainer = document.getElementById('scenario-content');
+                const scenarioQuestionsContainer = document.getElementById('scenario-questions');
+                if (!scenarioContentContainer || !scenarioQuestionsContainer) throw new Error("Scenario DOM elements missing");
+
+                // Display scenario content (prompt, AI response)
+                scenarioContentContainer.innerHTML = `
+                    <h3>Trial ${index + 1} of ${NUM_SCENARIOS_TO_SELECT}: ${itemData.item_label || itemData.item_name}</h3>
+                    <div class="scenario-box">
+                        <p><strong>Your Prompt:</strong> ${itemData.prompt || 'N/A'}</p>
+                        <hr>
+                        <p><strong>AI Advisor Response:</strong></p>
+                        <p><em>Estimate:</em> ${itemData.llm_estimate !== undefined ? itemData.llm_estimate : 'N/A'}</p>
+                        <p><em>Explanation:</em> ${itemData.llm_explanation || 'N/A'}</p>
+                        <p><em>Confidence Level:</em> ${itemData.confidence_level || 'N/A'} ${itemData.llm_confidence_score !== undefined ? '('+itemData.llm_confidence_score+')' : ''}</p>
+                    </div>
+                `;
+
+                // Generate questions for this scenario using templates
+                scenarioQuestionsContainer.innerHTML = ''; // Clear previous
+                const sliderListenersToAttach = [];
+
+                Object.values(this.scenarioQuestionTemplates).forEach(template => {
+                    const questionId = `${trialPrefix}_${template.baseId}`;
+                    const questionData = { ...template, id: questionId }; // Create specific question object
+                    scenarioQuestionsContainer.innerHTML += this.createQuestionHtml(questionData);
+                    if (questionData.type === 'slider') {
+                        sliderListenersToAttach.push(questionId);
+                    }
+                });
+
+                // Attach listeners for any sliders created
+                sliderListenersToAttach.forEach(sliderId => {
+                    this.attachSliderListener(scenarioQuestionsContainer, sliderId);
+                });
+
+
+                const nextButton = document.getElementById('scenario-next-button');
+                if (!nextButton) throw new Error("Scenario next button missing");
+                nextButton.textContent = (index === NUM_SCENARIOS_TO_SELECT - 1) ? "Finish Interaction Task" : "Next Item";
+
+            } catch (error) {
+                 console.error(`Error loading scenario item ${index} (${this.currentState.selectedItems[index]?.item_name}):`, error);
+                 alert(`An error occurred loading trial ${index + 1}. Check console.`);
+                 const scenarioQuestionsContainer = document.getElementById('scenario-questions');
+                 if(scenarioQuestionsContainer) scenarioQuestionsContainer.innerHTML = `<p class="error-message">Could not load this trial. <button onclick="experiment.skipScenarioItem()">Skip this Item</button></p>`;
+                 // Re-attach skip listener if needed, or just let admin bar handle it
+            }
+        },
+        // ... existing attachSliderListener ...
+        attachSliderListener(container, sliderId) {
+            const slider = container.querySelector(`#${sliderId}`);
+            const valueDisplay = container.querySelector(`.${sliderId}-value-display`); // Use class selector
+            if (slider && valueDisplay) {
+                slider.addEventListener('input', (event) => {
+                    valueDisplay.textContent = event.target.value + (event.target.dataset.unit || '');
+                });
+            } else {
+                console.warn(`Slider or value display not found for ID: ${sliderId}`);
+            }
+        },
+        // ... existing skipScenarioItem ...
+        skipScenarioItem() { /* Keep from v4 */
+             console.warn(`Admin skipping scenario item index: ${this.currentState.scenarioIndex}`);
+             this.currentState.scenarioIndex++;
+             if (this.currentState.scenarioIndex < NUM_SCENARIOS_TO_SELECT) {
+                 this.loadScenario(this.currentState.scenarioIndex);
+             } else {
+                 console.log("Finished all scenario items (or skipped last one).");
+                 this.goToSection(this.currentState.sections.indexOf('post-task'));
+             }
+        },
+        // ... existing validateCurrentSection ...
+        validateCurrentSection() { return true; }, // Keep admin override
+        // Modify saveCurrentSectionResponses to handle dynamic scenario IDs
+        saveCurrentSectionResponses() {
+             const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+             console.log(`Saving responses for section: ${currentSectionId}`);
+             const container = document.getElementById(`section-${currentSectionId}`);
+             if (!container) { console.warn(`Container not found for saving: ${currentSectionId}`); return; }
+
+             try {
+                 let questionsToSave = [];
+                 if (currentSectionId === 'scenario-task') {
+                     // For scenario task, get the dynamically generated question IDs for the current trial
+                     const trialPrefix = `trial_${this.currentState.scenarioIndex + 1}`;
+                     questionsToSave = Object.values(this.scenarioQuestionTemplates).map(template => ({
+                         id: `${trialPrefix}_${template.baseId}`, // Construct the dynamic ID
+                         type: template.type,
+                         // Add other properties if needed for saving logic (e.g., estimation table items)
+                     }));
+                 } else {
+                     // For other sections, use the pre-filtered list
+                     questionsToSave = this.currentState.currentSectionQuestions;
+                 }
+
+
+                 questionsToSave.forEach(q => {
+                     const qId = q.id;
+                     let value = null;
+                     if (q.type === 'multiple-choice' || q.type === 'true-false' || q.type === 'likert') {
+                         const checked = container.querySelector(`input[name="${qId}"]:checked`);
+                         value = checked ? checked.value : null;
+                     } else if (q.type === 'slider') {
+                         const slider = container.querySelector(`#${qId}`);
+                         value = slider ? slider.value : null;
+                     } else if (q.type === 'open-ended') {
+                         const textarea = container.querySelector(`#${qId}`);
+                         value = textarea ? textarea.value : null;
+                     } else if (q.type === 'estimation-table') {
+                         value = {}; // Store as an object
+                         q.items.forEach(item => {
+                             const input = container.querySelector(`#${item.key}`);
+                             value[item.key] = input ? input.value : null;
+                         });
+                     }
+                     // Only save if a value was found (or it's an estimation table)
+                     if (value !== null || q.type === 'estimation-table') {
+                         this.currentState.participantResponses[qId] = value;
+                     } else {
+                         // Optionally record that the question was seen but not answered
+                         // this.currentState.participantResponses[qId] = 'SKIPPED_OR_ERROR';
+                     }
+                 });
+                 console.log("Responses saved for section:", currentSectionId, this.currentState.participantResponses);
+
+             } catch (error) {
+                 console.error(`Error saving responses for ${currentSectionId}:`, error);
+             }
+        },
+        // ... existing nextSection, skipSection, goToSection, nextScenario, populateDebriefing, displayResults, updateProgressBar, updateAdminBar ...
+        nextSection(forceSkipValidation = false) {
+            if (!forceSkipValidation && !this.validateCurrentSection()) {
+                console.log("Validation failed, staying on section:", this.currentState.sectionIndex);
+                return; // Stop if validation fails
+            }
+            this.saveCurrentSectionResponses(); // Save before moving
+            if (this.currentState.sectionIndex < this.currentState.totalSections - 1) {
+                this.currentState.sectionIndex++;
+                this.showSection(this.currentState.sections[this.currentState.sectionIndex]);
+            } else {
+                console.log("End of experiment sections.");
+                // Potentially trigger final save or completion logic here
+            }
+        },
+        skipSection(targetSectionId = null) {
+            console.log(`Attempting to skip section ${this.currentState.sectionIndex}`);
+            let targetIndex = -1;
+
+            if (targetSectionId) {
+                targetIndex = this.currentState.sections.indexOf(targetSectionId);
+            }
+
+            // If no specific target, or target not found, just go to the next section
+            if (targetIndex === -1) {
+                 targetIndex = this.currentState.sectionIndex + 1;
+            }
+
+            // Special case: Skipping from item selector might mean using defaults
+            if (this.currentState.sections[this.currentState.sectionIndex] === 'item-selector' && targetSectionId === 'scenario-task') {
+                 console.log("Skipping item selection, attempting to use defaults...");
+                 this.skipToScenarios(); // This handles assigning defaults and moving
+                 return; // skipToScenarios handles the navigation
+            }
+
+            if (targetIndex >= 0 && targetIndex < this.currentState.totalSections) {
+                this.currentState.sectionIndex = targetIndex;
+                this.showSection(this.currentState.sections[this.currentState.sectionIndex]);
+            } else {
+                console.warn("Cannot skip further or invalid target:", targetSectionId);
+                // If skipping the last section, maybe go to debriefing?
+                if (targetIndex >= this.currentState.totalSections) {
+                    this.goToSection(this.currentState.sections.indexOf('debriefing'));
+                }
+            }
+        },
+        goToSection(index) {
+            if (index >= 0 && index < this.currentState.totalSections) {
+                // No validation or saving needed for admin jump
+                this.currentState.sectionIndex = index;
+                // Reset scenario index if jumping out of or into scenario task
+                if (this.currentState.sections[index] !== 'scenario-task' && this.currentState.scenarioIndex !== -1) {
+                     this.currentState.scenarioIndex = -1; // Reset if leaving scenarios
+                } else if (this.currentState.sections[index] === 'scenario-task' && this.currentState.scenarioIndex === -1) {
+                     // If jumping INTO scenarios and index is reset, start from 0
+                     // Check if items are selected first
+                     if (this.currentState.selectedItems.length !== NUM_SCENARIOS_TO_SELECT) {
+                         console.warn("Cannot jump to scenarios: Items not selected. Going to item selector.");
+                         this.goToSection(this.currentState.sections.indexOf('item-selector'));
+                         return;
+                     }
+                     this.currentState.scenarioIndex = 0;
+                }
+                this.showSection(this.currentState.sections[index]);
+            } else {
+                console.warn("Invalid section index:", index);
+            }
+        },
+        nextScenario() {
+            if (!this.validateCurrentSection()) {
+                 console.log("Validation failed for scenario:", this.currentState.scenarioIndex);
+                 return;
+            }
+            this.saveCurrentSectionResponses(); // Save current scenario responses
+            this.currentState.scenarioIndex++;
+            if (this.currentState.scenarioIndex < NUM_SCENARIOS_TO_SELECT) {
+                this.loadScenario(this.currentState.scenarioIndex);
+            } else {
+                console.log("Finished all scenario items.");
+                this.goToSection(this.currentState.sections.indexOf('post-task')); // Move to post-task
+            }
+        },
+        populateDebriefing() {
+            const listElement = document.getElementById('debrief-clarifications');
+            if (!listElement) return;
+            listElement.innerHTML = ''; // Clear previous
+
+            if (!this.currentState.llmEstimatesData || this.currentState.selectedItems.length === 0) {
+                listElement.innerHTML = '<li>No scenario items were selected or loaded.</li>';
+                return;
+            }
+
+            this.currentState.selectedItems.forEach(selected => {
+                const itemData = this.getItemDataByName(selected.item_name);
+                if (itemData) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${itemData.item_label || itemData.item_name}:</strong> Actual Value = ${itemData.actual_value !== undefined ? itemData.actual_value : 'N/A'}, AI Estimate = ${itemData.llm_estimate !== undefined ? itemData.llm_estimate : 'N/A'} (Correctness: ${selected.effective_correctness}, Tone: ${selected.effective_tone})`;
+                    listElement.appendChild(li);
+                } else {
+                     const li = document.createElement('li');
+                     li.innerHTML = `<strong>${selected.item_name}:</strong> Data not found for debriefing.`;
+                     listElement.appendChild(li);
+                }
+            });
+        },
+        displayResults() {
+            const resultsTextarea = document.getElementById('final-results');
+            if (resultsTextarea) {
+                try {
+                    // Include selected items info for context
+                    const resultsData = {
+                        selectedItems: this.currentState.selectedItems,
+                        responses: this.currentState.participantResponses
+                    };
+                    resultsTextarea.value = JSON.stringify(resultsData, null, 2);
+                } catch (error) {
+                    resultsTextarea.value = "Error stringifying results: " + error.message;
+                }
+            }
+        },
+        updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            if (!progressBar || !progressText) return;
+
+            // Calculate progress based on main sections, treating scenario task as one block
+            const currentMainSectionIndex = this.currentState.sections.indexOf(
+                 this.currentState.sections[this.currentState.sectionIndex]
+            );
+            const totalMainSections = this.currentState.totalSections; // Count all defined sections
+
+            let progressPercent = 0;
+            if (totalMainSections > 0) {
+                 // Simple linear progress through sections
+                 progressPercent = ((currentMainSectionIndex + 1) / totalMainSections) * 100;
+            }
+
+            progressBar.style.width = `${progressPercent}%`;
+            progressText.textContent = `Section ${currentMainSectionIndex + 1} of ${totalMainSections}`;
+
+             // Add trial progress within scenario task
+             if (this.currentState.sections[this.currentState.sectionIndex] === 'scenario-task' && this.currentState.scenarioIndex >= 0) {
+                 progressText.textContent += ` (Trial ${this.currentState.scenarioIndex + 1} of ${NUM_SCENARIOS_TO_SELECT})`;
+             }
+        },
+        updateAdminBar() {
+            const currentSectionElement = document.getElementById('admin-current-section');
+            if (currentSectionElement) {
+                let sectionName = this.currentState.sections[this.currentState.sectionIndex];
+                 if (sectionName === 'scenario-task' && this.currentState.scenarioIndex >= 0) {
+                     sectionName += ` (Trial ${this.currentState.scenarioIndex + 1})`;
+                 }
+                currentSectionElement.textContent = sectionName;
+            }
+            // Highlight active admin jump button
+            document.querySelectorAll('.admin-jump-button').forEach(button => {
+                 const buttonIndex = parseInt(button.dataset.sectionIndex, 10);
+                 if (buttonIndex === this.currentState.sectionIndex) {
+                     button.classList.add('active');
+                 } else {
+                     button.classList.remove('active');
+                 }
+            });
+        }
+
+    }; // End experiment object
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        experiment.init();
+    });
+
+    </script>
+
+</body>
+</html>

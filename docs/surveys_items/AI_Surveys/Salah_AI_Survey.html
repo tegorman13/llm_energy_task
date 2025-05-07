@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>salah_ai_survey – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#survey-items-from-salah-et-al.-2024" id="toc-survey-items-from-salah-et-al.-2024" class="nav-link active" data-scroll-target="#survey-items-from-salah-et-al.-2024">Survey Items from Salah et al.&nbsp;(2024)</a>
+  <ul class="collapse">
+  <li><a href="#items-from-table-a1" id="toc-items-from-table-a1" class="nav-link" data-scroll-target="#items-from-table-a1">Items from Table A1</a>
+  <ul class="collapse">
+  <li><a href="#knowledge-application" id="toc-knowledge-application" class="nav-link" data-scroll-target="#knowledge-application">Knowledge Application</a></li>
+  <li><a href="#perceived-intelligence" id="toc-perceived-intelligence" class="nav-link" data-scroll-target="#perceived-intelligence">Perceived Intelligence</a></li>
+  <li><a href="#usability" id="toc-usability" class="nav-link" data-scroll-target="#usability">Usability</a></li>
+  <li><a href="#attitude" id="toc-attitude" class="nav-link" data-scroll-target="#attitude">Attitude</a></li>
+  <li><a href="#subjective-norms" id="toc-subjective-norms" class="nav-link" data-scroll-target="#subjective-norms">Subjective Norms</a></li>
+  <li><a href="#perceived-behavioral-control" id="toc-perceived-behavioral-control" class="nav-link" data-scroll-target="#perceived-behavioral-control">Perceived Behavioral Control</a></li>
+  <li><a href="#trust" id="toc-trust" class="nav-link" data-scroll-target="#trust">Trust</a></li>
+  <li><a href="#behavioral-intention" id="toc-behavioral-intention" class="nav-link" data-scroll-target="#behavioral-intention">Behavioral Intention</a></li>
+  <li><a href="#actual-use" id="toc-actual-use" class="nav-link" data-scroll-target="#actual-use">Actual Use</a></li>
+  </ul></li>
+  <li><a href="#items-from-items-description-list" id="toc-items-from-items-description-list" class="nav-link" data-scroll-target="#items-from-items-description-list">Items from “Items Description” List</a>
+  <ul class="collapse">
+  <li><a href="#potential-items-related-to-perceptionslearningknowledge" id="toc-potential-items-related-to-perceptionslearningknowledge" class="nav-link" data-scroll-target="#potential-items-related-to-perceptionslearningknowledge">Potential Items related to Perceptions/Learning/Knowledge</a></li>
+  <li><a href="#potential-items-related-to-user-experienceperceptions" id="toc-potential-items-related-to-user-experienceperceptions" class="nav-link" data-scroll-target="#potential-items-related-to-user-experienceperceptions">Potential Items related to User Experience/Perceptions</a></li>
+  <li><a href="#potential-items-related-to-trustprivacy-concerns" id="toc-potential-items-related-to-trustprivacy-concerns" class="nav-link" data-scroll-target="#potential-items-related-to-trustprivacy-concerns">Potential Items related to Trust/Privacy Concerns</a></li>
+  <li><a href="#potential-items-related-to-ai-anxietythreat-perception" id="toc-potential-items-related-to-ai-anxietythreat-perception" class="nav-link" data-scroll-target="#potential-items-related-to-ai-anxietythreat-perception">Potential Items related to AI Anxiety/Threat Perception</a></li>
+  <li><a href="#potential-items-related-to-psychological-well-being-affect" id="toc-potential-items-related-to-psychological-well-being-affect" class="nav-link" data-scroll-target="#potential-items-related-to-psychological-well-being-affect">Potential Items related to Psychological Well-being (Affect)</a></li>
+  <li><a href="#potential-items-related-to-innovativenesstechnology-adoption" id="toc-potential-items-related-to-innovativenesstechnology-adoption" class="nav-link" data-scroll-target="#potential-items-related-to-innovativenesstechnology-adoption">Potential Items related to Innovativeness/Technology Adoption</a></li>
+  <li><a href="#potential-items-related-to-behavioral-intention-actual-use" id="toc-potential-items-related-to-behavioral-intention-actual-use" class="nav-link" data-scroll-target="#potential-items-related-to-behavioral-intention-actual-use">Potential Items related to Behavioral Intention / Actual Use</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Salah_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="survey-items-from-salah-et-al.-2024" class="level1">
+<h1>Survey Items from Salah et al.&nbsp;(2024)</h1>
+<p>Salah, M., Alhalbusi, H., Ismail, M. M., &amp; Abdelfattah, F. (2024). Chatting with ChatGPT: Decoding the mind of Chatbot users and unveiling the intricate connections between user perception, trust and stereotype perception on self-esteem and psychological well-being. Current Psychology, 43(9), 7843–7858. https://doi.org/10.1007/s12144-023-04989-0</p>
+<p>https://educationaltechnologyjournal.springeropen.com/articles/10.1186/s41239-024-00471-4/tables/6</p>
+<p><em>Rating Scale: 5-point Likert scale (1 = Strongly Disagree, 5 = Strongly Agree), except where noted.</em></p>
+<hr>
+<section id="items-from-table-a1" class="level2">
+<h2 class="anchored" data-anchor-id="items-from-table-a1">Items from Table A1</h2>
+<section id="knowledge-application" class="level3">
+<h3 class="anchored" data-anchor-id="knowledge-application">Knowledge Application</h3>
+<p><em>Source: Al-Sharafi et al.&nbsp;(2022)</em> 1. <strong>KAP1:</strong> ChatGPT provides me with instant access to various types of knowledge. 2. <strong>KAP2:</strong> ChatGPT allows me to integrate different types of knowledge. 3. <strong>KAP3:</strong> ChatGPT helps me better master the knowledge I learn in university.</p>
+</section>
+<section id="perceived-intelligence" class="level3">
+<h3 class="anchored" data-anchor-id="perceived-intelligence">Perceived Intelligence</h3>
+<p><em>Source: Rafiq et al.&nbsp;(2022)</em> 1. <strong>PIE1:</strong> I feel that ChatGPT is competent. 2. <strong>PIE2:</strong> I feel that ChatGPT is knowledgeable. 3. <strong>PIE3:</strong> I feel that ChatGPT is intelligent.</p>
+</section>
+<section id="usability" class="level3">
+<h3 class="anchored" data-anchor-id="usability">Usability</h3>
+<p><em>Source: Rafiq et al.&nbsp;(2022); Borsci et al.&nbsp;(2022); Almaiah and Man (2016)</em> 1. <strong>USB1:</strong> The provided contents on ChatGPT are easily accessible. 2. <strong>USB2:</strong> The provided contents on ChatGPT are easily downloadable. 3. <strong>USB3:</strong> The provided contents on ChatGPT are easily retrievable.</p>
+</section>
+<section id="attitude" class="level3">
+<h3 class="anchored" data-anchor-id="attitude">Attitude</h3>
+<p><em>Source: Ajzen (1991)</em> 1. <strong>ATT1:</strong> ChatGPT is useful. 2. <strong>ATT2:</strong> ChatGPT is valuable. 3. <strong>ATT3:</strong> ChatGPT is beneficial.</p>
+</section>
+<section id="subjective-norms" class="level3">
+<h3 class="anchored" data-anchor-id="subjective-norms">Subjective Norms</h3>
+<p><em>Source: Ajzen (1991)</em> 1. <strong>SNO1:</strong> Most people who are important to me think it is okay for me to use ChatGPT. 2. <strong>SNO2:</strong> Most people who are important to me support that I use ChatGPT. 3. <strong>SNO3:</strong> Most people who are important to me understand that I use ChatGPT.</p>
+</section>
+<section id="perceived-behavioral-control" class="level3">
+<h3 class="anchored" data-anchor-id="perceived-behavioral-control">Perceived Behavioral Control</h3>
+<p><em>Source: Ajzen (1991)</em> 1. <strong>PBC1:</strong> I am capable of using ChatGPT. 2. <strong>PBC2:</strong> I am confident that if I want to, I can use ChatGPT. 3. <strong>PBC3:</strong> I have enough resources, time, and opportunities to use ChatGPT.</p>
+</section>
+<section id="trust" class="level3">
+<h3 class="anchored" data-anchor-id="trust">Trust</h3>
+<p><em>Source: Nguyen et al.&nbsp;(2019)</em> <em>(Note: This likely contributes to the ‘Trust in ChatGPT (TCGPT)’ construct analyzed, which used 7 items according to the main paper).</em> 1. <strong>TRU1:</strong> When using ChatGPT, I trust that my personal information will not be used for any other purpose. 2. <strong>TRU2:</strong> When using ChatGPT, I believe that my personal information is protected. 3. <strong>TRU3:</strong> When using ChatGPT, I’m confident that my personal information is secure.</p>
+</section>
+<section id="behavioral-intention" class="level3">
+<h3 class="anchored" data-anchor-id="behavioral-intention">Behavioral Intention</h3>
+<p><em>Source: Ajzen (1991)</em> 1. <strong>BIT1:</strong> I’d like to continue to use ChatGPT. 2. <strong>BIT2:</strong> I’ll continue to use the shared ChatGPT a lot in the future. 3. <strong>BIT3:</strong> I plan to use ChatGPT in the future.</p>
+</section>
+<section id="actual-use" class="level3">
+<h3 class="anchored" data-anchor-id="actual-use">Actual Use</h3>
+<p><em>Source: Aparicio et al.&nbsp;(2017); McLean and Osei-Frimpong (2019)</em> 1. <strong>ACU1:</strong> How frequently do you use ChatGPT? 2. <strong>ACU2:</strong> At present, I consider myself to be a frequent user of ChatGPT.</p>
+<hr>
+</section>
+</section>
+<section id="items-from-items-description-list" class="level2">
+<h2 class="anchored" data-anchor-id="items-from-items-description-list">Items from “Items Description” List</h2>
+<p><em>(Note: The specific constructs these items map onto in the final analysis is not always explicitly stated in the provided material. Headings are inferred where possible based on item content).</em></p>
+<section id="potential-items-related-to-perceptionslearningknowledge" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-perceptionslearningknowledge">Potential Items related to Perceptions/Learning/Knowledge</h3>
+<ol type="1">
+<li><strong>SEL1:</strong> ChatGPT can become better through learning.</li>
+<li><strong>SEL2:</strong> ChatGPT’s ability is enhanced through learning.</li>
+<li><strong>SEL3:</strong> ChatGPT can learn to improve themselves well.</li>
+<li><strong>KAO1:</strong> ChatGPT allows me to generate a new knowledge based on my existing knowledge.</li>
+<li><strong>KAO2:</strong> ChatGPT enables me to acquire the knowledge through various resources.</li>
+<li><strong>KAO3:</strong> ChatGPT assists me to acquire the knowledge that suits my needs.</li>
+<li><strong>KAP1:</strong> ChatGPT provides me with instant access to various types of knowledge. <em>(Repeated from Table A1)</em></li>
+<li><strong>KAP2:</strong> ChatGPT allows me to integrate different types of knowledge. <em>(Repeated from Table A1)</em></li>
+<li><strong>KAP3:</strong> ChatGPT can help us for better managing the course materials within the university. <em>(Slightly different wording from Table A1)</em></li>
+<li><strong>PSN1:</strong> ChatGPT can provide targeted answers to my questions.</li>
+<li><strong>PSN2:</strong> ChatGPT can make a personalized response to my request.</li>
+<li><strong>PSN3:</strong> I feel that ChatGPT knows me.</li>
+</ol>
+</section>
+<section id="potential-items-related-to-user-experienceperceptions" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-user-experienceperceptions">Potential Items related to User Experience/Perceptions</h3>
+<p><em>(Note: These likely contribute to the ‘ChatGPT’s User Perceptions (UPCGPT)’ construct analyzed, which used 5 items).</em> 1. <strong>NVT1:</strong> Using ChatGPT is a unique experience. 2. <strong>NVT2:</strong> Using ChatGPT is an educational experience. 3. <strong>NVT3:</strong> The experience of using ChatGPT satisfies my curiosity. 4. <strong>IDI1:</strong> The ChatGPT enables me to accomplish tasks more quickly. 5. <strong>IDI2:</strong> The ChatGPT increases my productivity. 6. <strong>IDI3:</strong> The ChatGPT makes it easier to accomplish tasks. 7. <strong>BNF1:</strong> Using ChatGPT has increased my knowledge and helped me to be successful in increasing knowledge. 8. <strong>BNF2:</strong> ChatGPT is a very effective educational tool and has helped me to improve my work ability. 9. <strong>BNF3:</strong> ChatGPT has helped me to achieve the goals.</p>
+</section>
+<section id="potential-items-related-to-trustprivacy-concerns" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-trustprivacy-concerns">Potential Items related to Trust/Privacy Concerns</h3>
+<p><em>(Note: These likely contribute to the ‘Trust in ChatGPT (TCGPT)’ construct analyzed, which used 7 items).</em> 1. <strong>PRC1:</strong> My personal information could be misused by ChatGPT system. 2. <strong>PRC2:</strong> I am concerned that ChatGPT uses my personal information for purposes that I am not being notified of. 3. <strong>PRC3:</strong> It is dangerous to provide my personal information to ChatGPT.</p>
+</section>
+<section id="potential-items-related-to-ai-anxietythreat-perception" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-ai-anxietythreat-perception">Potential Items related to AI Anxiety/Threat Perception</h3>
+<p><em>(Note: These might relate loosely to Perceived Stereotyping or Job Anxiety, but the exact mapping isn’t provided. The Perceived Stereotyping construct used 8 items and Job Anxiety used 7 items in the analysis).</em> 1. <strong>TPH1:</strong> I believe the evolution of AI is intimidating. 2. <strong>TPH2:</strong> AI appears threatening to me. 3. <strong>TPH3:</strong> For reasons unclear to me, AI induces fear.</p>
+</section>
+<section id="potential-items-related-to-psychological-well-being-affect" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-psychological-well-being-affect">Potential Items related to Psychological Well-being (Affect)</h3>
+<p><em>(Note: The Psychological Well-being construct used 16 items in the analysis, likely based on Ryff’s scales adapted by Babnik et al.&nbsp;(2022). These items only represent a small part, likely negative affect).</em> <em>Instruction:</em> This list consists of a number of words and phrases that describe different feelings and emotions you may have had when using ChatGPT. Please reflect on your last week of use of ChatGPT and indicate to what extent you have felt this way when using the website: (1 = Very slightly or not at all; 7 = Extremely) 1. <strong>GFE1:</strong> Guilty 2. <strong>GFE2:</strong> Ashamed 3. <strong>GFE3:</strong> Blameworthy</p>
+</section>
+<section id="potential-items-related-to-innovativenesstechnology-adoption" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-innovativenesstechnology-adoption">Potential Items related to Innovativeness/Technology Adoption</h3>
+<ol type="1">
+<li><strong>INO1:</strong> I like to experiment with new technologies.</li>
+<li><strong>INO2:</strong> Among my peers, I am usually the first to try out new information technologies.</li>
+<li><strong>INO3:</strong> In general, I would not hesitate to try out new information technologies.</li>
+</ol>
+</section>
+<section id="potential-items-related-to-behavioral-intention-actual-use" class="level3">
+<h3 class="anchored" data-anchor-id="potential-items-related-to-behavioral-intention-actual-use">Potential Items related to Behavioral Intention / Actual Use</h3>
+<p><em>(Note: These supplement/repeat items from Table A1)</em> 1. <strong>BIT1:</strong> I intend to continue using ChatGPT in the future. 2. <strong>BIT2:</strong> I will always try to use ChatGPT in my daily life. 3. <strong>BIT3:</strong> I plan to continue to use ChatGPT frequently. 4. <strong>BEH1:</strong> How often do you use ChatGPT? 5. <strong>BEH2:</strong> I consider myself a frequent user of ChatGPT.</p>
+<hr>
+
+
+<!-- -->
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Survey Items from Salah et al. (2024)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Salah, M., Alhalbusi, H., Ismail, M. M., &amp; Abdelfattah, F. (2024). Chatting with ChatGPT: Decoding the mind of Chatbot users and unveiling the intricate connections between user perception, trust and stereotype perception on self-esteem and psychological well-being. Current Psychology, 43(9), 7843–7858. https://doi.org/10.1007/s12144-023-04989-0</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>https://educationaltechnologyjournal.springeropen.com/articles/10.1186/s41239-024-00471-4/tables/6</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>*Rating Scale: 5-point Likert scale (1 = Strongly Disagree, 5 = Strongly Agree), except where noted.*</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Items from Table A1</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Knowledge Application</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>*Source: Al-Sharafi et al. (2022)*</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**KAP1:** ChatGPT provides me with instant access to various types of knowledge.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**KAP2:** ChatGPT allows me to integrate different types of knowledge.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**KAP3:** ChatGPT helps me better master the knowledge I learn in university.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### Perceived Intelligence</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>*Source: Rafiq et al. (2022)*</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**PIE1:** I feel that ChatGPT is competent.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**PIE2:** I feel that ChatGPT is knowledgeable.</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**PIE3:** I feel that ChatGPT is intelligent.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">### Usability</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>*Source: Rafiq et al. (2022); Borsci et al. (2022); Almaiah and Man (2016)*</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**USB1:** The provided contents on ChatGPT are easily accessible.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**USB2:** The provided contents on ChatGPT are easily downloadable.</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**USB3:** The provided contents on ChatGPT are easily retrievable.</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Attitude</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>*Source: Ajzen (1991)*</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**ATT1:** ChatGPT is useful.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**ATT2:** ChatGPT is valuable.</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**ATT3:** ChatGPT is beneficial.</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### Subjective Norms</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>*Source: Ajzen (1991)*</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**SNO1:** Most people who are important to me think it is okay for me to use ChatGPT.</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**SNO2:** Most people who are important to me support that I use ChatGPT.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**SNO3:** Most people who are important to me understand that I use ChatGPT.</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="fu">### Perceived Behavioral Control</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>*Source: Ajzen (1991)*</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**PBC1:** I am capable of using ChatGPT.</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**PBC2:** I am confident that if I want to, I can use ChatGPT.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**PBC3:** I have enough resources, time, and opportunities to use ChatGPT.</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### Trust</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>*Source: Nguyen et al. (2019)*</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>*(Note: This likely contributes to the 'Trust in ChatGPT (TCGPT)' construct analyzed, which used 7 items according to the main paper).*</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**TRU1:** When using ChatGPT, I trust that my personal information will not be used for any other purpose.</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**TRU2:** When using ChatGPT, I believe that my personal information is protected.</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**TRU3:** When using ChatGPT, I'm confident that my personal information is secure.</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### Behavioral Intention</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>*Source: Ajzen (1991)*</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**BIT1:** I'd like to continue to use ChatGPT.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**BIT2:** I'll continue to use the shared ChatGPT a lot in the future.</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**BIT3:** I plan to use ChatGPT in the future.</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### Actual Use</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>*Source: Aparicio et al. (2017); McLean and Osei-Frimpong (2019)*</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**ACU1:** How frequently do you use ChatGPT?</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**ACU2:** At present, I consider myself to be a frequent user of ChatGPT.</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="fu">## Items from "Items Description" List</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>*(Note: The specific constructs these items map onto in the final analysis is not always explicitly stated in the provided material. Headings are inferred where possible based on item content).*</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to Perceptions/Learning/Knowledge</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**SEL1:** ChatGPT can become better through learning.</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**SEL2:** ChatGPT's ability is enhanced through learning.</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**SEL3:** ChatGPT can learn to improve themselves well.</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**KAO1:** ChatGPT allows me to generate a new knowledge based on my existing knowledge.</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**KAO2:** ChatGPT enables me to acquire the knowledge through various resources.</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**KAO3:** ChatGPT assists me to acquire the knowledge that suits my needs.</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**KAP1:** ChatGPT provides me with instant access to various types of knowledge. *(Repeated from Table A1)*</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**KAP2:** ChatGPT allows me to integrate different types of knowledge. *(Repeated from Table A1)*</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**KAP3:** ChatGPT can help us for better managing the course materials within the university. *(Slightly different wording from Table A1)*</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**PSN1:** ChatGPT can provide targeted answers to my questions.</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**PSN2:** ChatGPT can make a personalized response to my request.</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>**PSN3:** I feel that ChatGPT knows me.</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to User Experience/Perceptions</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>*(Note: These likely contribute to the 'ChatGPT's User Perceptions (UPCGPT)' construct analyzed, which used 5 items).*</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**NVT1:** Using ChatGPT is a unique experience.</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**NVT2:** Using ChatGPT is an educational experience.</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**NVT3:** The experience of using ChatGPT satisfies my curiosity.</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**IDI1:** The ChatGPT enables me to accomplish tasks more quickly.</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**IDI2:** The ChatGPT increases my productivity.</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**IDI3:** The ChatGPT makes it easier to accomplish tasks.</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**BNF1:** Using ChatGPT has increased my knowledge and helped me to be successful in increasing knowledge.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**BNF2:** ChatGPT is a very effective educational tool and has helped me to improve my work ability.</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**BNF3:** ChatGPT has helped me to achieve the goals.</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to Trust/Privacy Concerns</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>*(Note: These likely contribute to the 'Trust in ChatGPT (TCGPT)' construct analyzed, which used 7 items).*</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**PRC1:** My personal information could be misused by ChatGPT system.</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**PRC2:** I am concerned that ChatGPT uses my personal information for purposes that I am not being notified of.</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**PRC3:** It is dangerous to provide my personal information to ChatGPT.</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to AI Anxiety/Threat Perception</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>*(Note: These might relate loosely to Perceived Stereotyping or Job Anxiety, but the exact mapping isn't provided. The Perceived Stereotyping construct used 8 items and Job Anxiety used 7 items in the analysis).*</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**TPH1:** I believe the evolution of AI is intimidating.</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**TPH2:** AI appears threatening to me.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**TPH3:** For reasons unclear to me, AI induces fear.</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to Psychological Well-being (Affect)</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>*(Note: The Psychological Well-being construct used 16 items in the analysis, likely based on Ryff's scales adapted by Babnik et al. (2022). These items only represent a small part, likely negative affect).*</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>*Instruction:* This list consists of a number of words and phrases that describe different feelings and emotions you may have had when using ChatGPT. Please reflect on your last week of use of ChatGPT and indicate to what extent you have felt this way when using the website: (1 = Very slightly or not at all; 7 = Extremely)</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**GFE1:** Guilty</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**GFE2:** Ashamed</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**GFE3:** Blameworthy</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to Innovativeness/Technology Adoption</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**INO1:** I like to experiment with new technologies.</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**INO2:** Among my peers, I am usually the first to try out new information technologies.</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**INO3:** In general, I would not hesitate to try out new information technologies.</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="fu">### Potential Items related to Behavioral Intention / Actual Use</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>*(Note: These supplement/repeat items from Table A1)*</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**BIT1:** I intend to continue using ChatGPT in the future.</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**BIT2:** I will always try to use ChatGPT in my daily life.</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**BIT3:** I plan to continue to use ChatGPT frequently.</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**BEH1:** How often do you use ChatGPT?</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**BEH2:** I consider myself a frequent user of ChatGPT.</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>------</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Salah_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

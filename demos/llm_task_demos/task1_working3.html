@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Plan Consultation Demo v2</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Purdue Blue */
+            --secondary-color: #e87722; /* Purdue Orange */
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --success-bg: #e9f7ec;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --info-bg: #e8f7fa;
+            --error-color: #dc3545;
+            --error-bg: #f8d7da;
+            --font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --border-radius: 8px;
+            --box-shadow: 0 3px 8px rgba(0,0,0,0.07);
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.7; /* Slightly more spacing */
+            padding: 20px;
+            max-width: 850px; /* Adjusted width */
+            margin: 25px auto;
+            background-color: var(--light-gray);
+            color: #333;
+            font-size: 16px; /* Base font size */
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.2em;
+            font-weight: 600;
+        }
+        h1 { font-size: 2.1em; }
+        h2 { font-size: 1.7em; }
+        h3 { font-size: 1.4em; text-align: left; margin-top: 1.5em; border-bottom: 2px solid var(--medium-gray); padding-bottom: 8px;}
+        h4 { font-size: 1.15em; text-align: left; color: var(--dark-gray); margin-top: 1.2em; margin-bottom: 0.6em; font-weight: 600;}
+
+        /* Card Styling for Sections */
+        .card {
+            margin-bottom: 30px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: #ffffff;
+            box-shadow: var(--box-shadow);
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #api-key-section { background-color: #fffef0; border-color: var(--warning-color); }
+        #client-brief { background-color: var(--info-bg); border-color: var(--info-color); }
+        #feedback-section { background-color: var(--info-bg); border-color: var(--info-color); }
+        #results-section { background-color: var(--success-bg); border-color: var(--success-color); }
+
+        label {
+            display: block; margin-bottom: 8px; font-weight: 600; color: #555;
+        }
+
+        select, input[type="text"] {
+            padding: 12px 14px; /* More padding */
+            margin-bottom: 18px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1rem;
+            max-width: 480px;
+            transition: border-color 0.2s ease;
+        }
+        select:focus, input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 90, 156, 0.2);
+        }
+
+        button {
+            padding: 12px 28px;
+            margin-top: 15px;
+            margin-right: 10px; /* Spacing between buttons */
+            border-radius: 5px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: inline-block; /* Allow side-by-side */
+             text-align: center;
+             vertical-align: middle; /* Align if text wraps */
+        }
+        button:hover:not(:disabled) {
+            background-color: #004175;
+            transform: translateY(-1px);
+        }
+         button:active:not(:disabled) {
+            transform: translateY(0px);
+        }
+
+        /* Make main action buttons stand out */
+        #start-button, #submit-plan-button, #accept-plan-button {
+            background-color: var(--secondary-color); /* Orange */
+        }
+         #start-button:hover:not(:disabled), #submit-plan-button:hover:not(:disabled), #accept-plan-button:hover:not(:disabled) {
+             background-color: #c76415; /* Darker orange */
+         }
+
+        /* Center single button */
+        #setup button, #task > button {
+            display: block; margin-left: auto; margin-right: auto;
+        }
+        /* Group action buttons */
+        .action-buttons { text-align: center; margin-top: 20px; }
+        .action-buttons button { margin-left: 5px; margin-right: 5px; } /* Tighter spacing in groups */
+
+
+        button:disabled {
+             background-color: var(--medium-gray);
+             cursor: not-allowed;
+             transform: none;
+        }
+
+
+        /* Table Styling */
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.98rem;
+        }
+        th, td {
+            border: 1px solid var(--border-color); padding: 14px; text-align: right; vertical-align: middle;
+        }
+        th {
+            background-color: var(--medium-gray); font-weight: 700; /* Bolder */ text-align: center;
+        }
+        td:first-child {
+            text-align: left; font-weight: 600; width: 30%;
+        }
+        td:nth-child(4) { width: 45%; } /* Slider column */
+        tbody tr:nth-child(odd) { background-color: #fdfdfd; }
+        tbody tr:hover { background-color: var(--medium-gray); }
+        tfoot { font-weight: 700; background-color: var(--medium-gray); }
+        tfoot td { text-align: center; }
+        tfoot td:first-child { text-align: left; }
+
+        /* Slider Styling */
+        .slider-container { display: flex; align-items: center; gap: 12px; margin: 6px 0; padding: 4px; }
+        .slider {
+            flex-grow: 1; cursor: pointer; appearance: none; height: 10px; background: var(--medium-gray); border-radius: 5px; outline: none; transition: background-color 0.2s ease;
+        }
+        .slider:hover { background-color: #d3d9df; }
+        .slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary-color); border-radius: 50%; cursor: pointer; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .slider::-moz-range-thumb { width: 20px; height: 20px; background: var(--primary-color); border-radius: 50%; cursor: pointer; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .slider-value {
+            min-width: 60px; text-align: right; font-weight: 600; font-size: 0.9rem; background-color: var(--light-gray); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color);
+        }
+
+        .info { font-style: italic; color: var(--dark-gray); margin-bottom: 18px; font-size: 0.95rem; }
+        .error { color: var(--error-color); font-weight: 600; margin-top: 15px; background-color: var(--error-bg); border: 1px solid var(--error-color); padding: 12px 15px; border-radius: 5px; }
+        .client-message {
+             font-style: italic; padding: 15px; border-radius: 5px; background-color: #ffffff; border: 1px dashed var(--primary-color); margin-top: 15px; font-size: 1.05em; /* Slightly larger */
+        }
+        .loading { font-style: italic; color: var(--dark-gray); padding: 15px; text-align: center; }
+        #results-section p { font-size: 1.1em; text-align: center; }
+
+    </style>
+</head>
+<body>
+
+    <h1>Energy Plan Consultation</h1>
+
+    <div id="api-key-section" class="card">
+        <h4>API Configuration</h4>
+        <label for="api-key">Purdue GenAI API Key:</label>
+        <input type="text" id="api-key" placeholder="Enter your API Key here" value="sk-4597455063b242e9a43187a32115c04a">
+        <p class="info" style="background-color: transparent; border: none; padding: 0; margin-top: 5px; font-style: normal;">
+            A valid API key is needed. A default key is provided for convenience. ([source: 1, 2, 3, 4])
+        </p>
+    </div>
+
+    <div id="setup" class="card">
+        <h2>Consultation Setup</h2>
+        <label for="family">Select Family Scenario:</label>
+        <select id="family">
+            <option value="">-- Select Family --</option>
+            <option value="davis">Davis Family (Massachusetts)</option>
+            <option value="adams">Adams Family (California)</option>
+             </select>
+        <button id="start-button" onclick="startConsultation()">Start Consultation</button>
+    </div>
+
+     <div id="client-brief" class="card" style="display: none;">
+        <h3>Client Introduction</h3>
+        <div id="client-initial-statement" class="client-message loading">Loading client statement...</div>
+     </div>
+
+    <div id="task" class="card" style="display: none;">
+        <h3>Develop Your Plan</h3>
+        <p id="task-instructions"></p>
+        <p id="task-note" class="info"></p>
+        <table id="energy-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Last Year (kWh)</th>
+                    <th>State Average (kWh)</th>
+                    <th>Your Proposed Plan (New kWh)</th>
+                </tr>
+            </thead>
+            <tbody id="energy-table-body"></tbody>
+            <tfoot>
+                <tr>
+                    <th>Total kWh</th>
+                    <td id="last-year-total"></td>
+                    <td id="average-total"></td>
+                    <td id="plan-total" style="font-weight: 700;">0</td>
+                </tr>
+                 <tr>
+                    <td colspan="2">Approx. Target Reduction</td>
+                    <td colspan="2" id="target-goal" style="font-weight: 700;"></td>
+                 </tr>
+                 <tr>
+                    <td colspan="2">Your Plan's Reduction</td>
+                    <td colspan="2" id="plan-reduction" style="font-weight: 700;">0 kWh</td>
+                 </tr>
+            </tfoot>
+        </table>
+         <p id="error-message-plan" class="error" style="display: none;"></p>
+         <button id="submit-plan-button" onclick="submitPlanForFeedback(this)">Submit Plan for Feedback</button>
+    </div>
+
+    <div id="feedback-section" class="card" style="display: none;">
+         <h3>Client Feedback</h3>
+         <div id="client-feedback-text" class="client-message loading">Waiting for client feedback...</div>
+         <p id="feedback-prompt" style="margin-top: 15px; text-align: center; display: none;">What would you like to do next?</p>
+         <div id="feedback-actions" class="action-buttons" style="display: none;">
+             <button id="accept-plan-button" onclick="acceptPlan()">Accept Plan & Finish</button>
+             <button id="adjust-plan-button" onclick="adjustPlan()">Adjust Plan</button>
+             <button id="new-client-button" onclick="resetToSetup()">Start Over (New Client)</button>
+         </div>
+    </div>
+
+     <div id="results-section" class="card" style="display: none;">
+        <h3>Consultation Complete</h3>
+        <p id="results-message">Plan accepted for the <span id="results-family-name"></span> family!</p>
+         <div class="action-buttons">
+             <button onclick="resetToSetup()">Start New Consultation</button>
+             <button onclick="restartCurrentClient()">Restart with <span id="results-family-name-restart"></span> Family</button>
+         </div>
+    </div>
+
+
+    <script>
+        // --- Constants and Data ---
+        const familiesData = {
+            'davis': {
+                name: "Davis", state: "Massachusetts",
+                kwhPerDollar: 46293 / (6944 / 0.15), diffVsAverage: 14086,
+                categories: { 'Cooling': { ly: 419, avg: 322 }, 'Heating': { ly: 26751, avg: 19108 }, 'Water Heating': { ly: 10543, avg: 5070 }, 'Refrigerator': { ly: 1230, avg: 1025 }, 'Other': { ly: 7350, avg: 6682 } },
+                preferences: { comfortWeight: 0.7, savingsWeight: 0.3, categoryImpact: { 'Heating': 0.9, 'Cooling': 0.7, 'Water Heating': 0.5, 'Refrigerator': 0.1, 'Other': 0.2 } }
+            },
+            'adams': {
+                name: "Adams", state: "California",
+                kwhPerDollar: 0.15, diffVsAverage: 3542,
+                categories: { 'Cooling': { ly: 2581, avg: 1289 }, 'Heating': { ly: 6157, avg: 5597 }, 'Water Heating': { ly: 5061, avg: 4601 }, 'Refrigerator': { ly: 1266, avg: 1055 }, 'Other': { ly: 7608, avg: 6916 } },
+                preferences: { comfortWeight: 0.4, savingsWeight: 0.6, categoryImpact: { 'Heating': 0.6, 'Cooling': 0.8, 'Water Heating': 0.5, 'Refrigerator': 0.2, 'Other': 0.1 } }
+            }
+        };
+
+        const config = {
+            apiUrl: "https://genai.rcac.purdue.edu/api/chat/completions", // Purdue API endpoint [cite: 7]
+            model: "llama3.1:latest",
+            maxTokensClient: 200, maxTokensIntro: 200, temperature: 0.3
+        };
+
+        let currentScenario = { // Store current state
+             familyKey: null,
+             familyData: null,
+             plan: {},
+             state: 'setup' // 'setup', 'planning', 'feedback', 'results'
+        };
+        let lastYearTotal = 0;
+        let targetReductionValue = 0; // Target kWh reduction (~10%)
+
+        // --- Logging Helper ---
+        function logEvent(type, details) {
+            console.log(`[${new Date().toLocaleTimeString()}] [${type}]`, details);
+        }
+
+        // --- LLM API Call ---
+       async function callLLM(systemPrompt, userPrompt, maxTokens, callingButton) {
+            const apiKey = document.getElementById('api-key').value;
+            const errorElementGeneral = document.getElementById('error-message-plan');
+             if (errorElementGeneral) displayError("", "error-message-plan");
+
+            if (!apiKey) {
+                 displayError("API Key not set.", "error-message-plan");
+                 logEvent('API_ERROR', 'API Key not set');
+                 throw new Error("API Key not set");
+            }
+
+            logEvent('API_REQUEST', { endpoint: config.apiUrl, model: config.model, maxTokens, promptSummary: systemPrompt.substring(0, 50) + '...' });
+            if (callingButton) callingButton.disabled = true;
+
+            let response;
+            try {
+                 logEvent('API_SENDING', 'Sending request to Purdue GenAI API...');
+                response = await fetch(config.apiUrl, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        "model": config.model,
+                        "messages": [ { "role": "system", "content": systemPrompt }, { "role": "user", "content": userPrompt } ],
+                        "max_tokens": maxTokens, "temperature": config.temperature, "stream": false
+                    })
+                });
+                logEvent('API_RESPONSE_RECEIVED', `Received response from API, status: ${response.status}`);
+
+                let responseBodyText = '';
+                try {
+                    responseBodyText = await response.text();
+                    logEvent('API_RAW_BODY', responseBodyText.substring(0, 200) + (responseBodyText.length > 200 ? '...' : '')); // Log snippet
+                } catch (textError) {
+                     logEvent('API_ERROR', `Failed to read response text: ${textError.message}`);
+                     throw new Error(`Failed to read response text: ${textError.message}`);
+                }
+
+                if (!response.ok) {
+                    const errorMsg = `API Error ${response.status}: ${responseBodyText || response.statusText}`;
+                    displayError(errorMsg, "error-message-plan");
+                    logEvent('API_ERROR', errorMsg);
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                 let data;
+                 try {
+                    data = JSON.parse(responseBodyText);
+                 } catch(parseError){
+                    logEvent('API_ERROR', `Failed to parse JSON. Body: ${responseBodyText.substring(0,100)}...`);
+                    displayError("API returned non-JSON response. Check console.", "error-message-plan");
+                    throw new Error("Failed to parse JSON response.");
+                 }
+                 logEvent('API_PARSE_SUCCESS', 'API response parsed successfully.');
+
+                if (!data.choices?.[0]?.message?.content) {
+                     logEvent('API_ERROR', `Invalid response structure: ${JSON.stringify(data)}`);
+                    displayError("API response missing expected content. Check console.", "error-message-plan");
+                    throw new Error("Invalid API response structure (missing content)");
+                }
+
+                const content = data.choices[0].message.content.trim();
+                logEvent('API_CONTENT_RETURNED', content);
+                return content;
+
+            } catch (error) {
+                 // Error logged where it occurred or above
+                if (errorElementGeneral && !errorElementGeneral.textContent) {
+                   displayError(`LLM communication failed: ${error.message}. Check console.`, "error-message-plan");
+                }
+                throw error;
+            } finally {
+                 if (callingButton) callingButton.disabled = false;
+                 logEvent('API_CALL_FINISH', 'LLM call sequence finished.');
+            }
+        }
+
+        function displayError(message, elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = message ? 'block' : 'none';
+            } else {
+                 logEvent('UI_ERROR', `Error display element not found: #${elementId}`);
+            }
+        }
+
+        // --- Consultation Flow & State Management ---
+
+        function updateUIForState() {
+            logEvent('UI_UPDATE', `Updating UI for state: ${currentScenario.state}`);
+            const state = currentScenario.state;
+
+            // Hide all major sections initially
+             document.getElementById('setup').style.display = 'none';
+             document.getElementById('client-brief').style.display = 'none';
+             document.getElementById('task').style.display = 'none';
+             document.getElementById('feedback-section').style.display = 'none';
+             document.getElementById('results-section').style.display = 'none';
+             // Hide specific buttons within sections
+             document.getElementById('submit-plan-button').style.display = 'none';
+             document.getElementById('feedback-actions').style.display = 'none';
+
+
+             // Show sections based on state
+            if (state === 'setup') {
+                document.getElementById('setup').style.display = 'block';
+            } else if (state === 'planning' || state === 'feedback') {
+                 // Always show brief and task when planning or viewing feedback
+                 document.getElementById('client-brief').style.display = 'block';
+                 document.getElementById('task').style.display = 'block';
+                 // Show submit button only when planning
+                 document.getElementById('submit-plan-button').style.display = (state === 'planning') ? 'block' : 'none';
+
+                 if (state === 'feedback') {
+                     document.getElementById('feedback-section').style.display = 'block';
+                     document.getElementById('feedback-actions').style.display = 'block'; // Show Accept/Adjust/New
+                     document.getElementById('feedback-prompt').style.display = 'block';
+                 }
+            } else if (state === 'results') {
+                 document.getElementById('results-section').style.display = 'block';
+                 // Update family name in results message and restart button
+                 const familyName = currentScenario.familyData?.name || 'Selected';
+                 document.getElementById('results-family-name').textContent = familyName;
+                 document.getElementById('results-family-name-restart').textContent = familyName;
+            }
+        }
+
+        function resetToSetup() {
+             logEvent('FLOW_RESET', 'Resetting to setup state.');
+             currentScenario = { familyKey: null, familyData: null, plan: {}, state: 'setup' };
+             updateUIForState();
+             // Clear dynamic content
+             document.getElementById('family').value = '';
+             document.getElementById('client-initial-statement').textContent = '';
+             document.getElementById('energy-table-body').innerHTML = '';
+             document.getElementById('client-feedback-text').textContent = '';
+             displayError("", "error-message-plan");
+        }
+
+         async function startConsultation() {
+             const startButton = document.getElementById('start-button');
+             startButton.disabled = true;
+
+            const selectedFamilyKey = document.getElementById('family').value;
+            if (!selectedFamilyKey) {
+                alert("Please select a family scenario.");
+                 startButton.disabled = false;
+                return;
+            }
+            logEvent('FLOW_START', `Starting consultation for family: ${selectedFamilyKey}`);
+
+            currentScenario = {
+                familyKey: selectedFamilyKey,
+                familyData: JSON.parse(JSON.stringify(familiesData[selectedFamilyKey])),
+                plan: {},
+                state: 'loading_intro' // Intermediate state
+            };
+
+            calculateInitialTotalsAndTarget();
+            updateUIForState(); // Show loading state potentially
+
+             const introElement = document.getElementById('client-initial-statement');
+             introElement.classList.add('loading');
+             introElement.textContent = 'Loading client statement...';
+             document.getElementById('client-brief').style.display = 'block'; // Show brief section for loading message
+             displayError("", "error-message-plan");
+
+             try {
+                 const statement = await getClientInitialStatement(startButton);
+                 introElement.textContent = statement;
+                 introElement.classList.remove('loading');
+                 currentScenario.state = 'planning'; // Move to planning state
+                 updateUIForState(); // Update UI to show task section etc.
+                 setupTaskInterface();
+             } catch (error) {
+                  introElement.textContent = 'Failed to load client statement.';
+                  introElement.classList.remove('loading');
+                  introElement.style.color = 'var(--error-color)';
+                  currentScenario.state = 'setup'; // Revert state on error
+                  updateUIForState();
+             }
+             // Button re-enabled in callLLM finally
+        }
+
+         function calculateInitialTotalsAndTarget() {
+             lastYearTotal = 0;
+             Object.values(currentScenario.familyData.categories).forEach(data => lastYearTotal += data.ly );
+             targetReductionValue = Math.round(lastYearTotal * 0.10);
+             logEvent('CALCULATION', `Calculated Initial Totals - LastYear: ${lastYearTotal}, TargetReduction: ${targetReductionValue}`);
+         }
+
+        async function getClientInitialStatement(button) {
+            const { name, state, preferences } = currentScenario.familyData;
+            const comfortPref = preferences.comfortWeight > preferences.savingsWeight ? "lean towards maintaining comfort" : "are focused more on savings";
+            const savingsGoal = `around ${targetReductionValue.toLocaleString()} kWh`;
+
+            const systemPrompt = `You are ${name}, head of household in ${state}. Introduce yourself VERY briefly (1 sentence). State your goal to reduce energy by ${savingsGoal} next year. Subtly hint at your preference: you ${comfortPref}. Keep it under 35 words total. Be conversational.`;
+            const userPrompt = `Provide your brief introduction and energy saving goal statement.`;
+
+            return await callLLM(systemPrompt, userPrompt, config.maxTokensIntro, button);
+        }
+
+
+        function setupTaskInterface() {
+            logEvent('UI_SETUP', 'Setting up task interface (table and sliders).');
+            const { name, state, diffVsAverage, categories } = currentScenario.familyData;
+            document.getElementById('task-instructions').textContent = `Help the ${name} family create a plan. Adjust the sliders for next year's proposed usage.`;
+            document.getElementById('task-note').textContent = `Last year: ${lastYearTotal.toLocaleString()} kWh total (${diffVsAverage.toLocaleString()} kWh vs state average).`;
+            document.getElementById('target-goal').textContent = `${targetReductionValue.toLocaleString()} kWh`;
+
+            const tableBody = document.getElementById('energy-table-body');
+            tableBody.innerHTML = '';
+            let averageTotal = 0;
+            currentScenario.plan = {};
+
+            Object.entries(categories).forEach(([category, data]) => {
+                averageTotal += data.avg;
+                currentScenario.plan[category] = data.ly; // Init plan
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = category;
+                row.insertCell().textContent = data.ly.toLocaleString();
+                row.insertCell().textContent = data.avg.toLocaleString();
+                const planCell = row.insertCell();
+                createSlider(planCell, category, data.ly);
+            });
+
+            document.getElementById('last-year-total').textContent = lastYearTotal.toLocaleString();
+            document.getElementById('average-total').textContent = averageTotal.toLocaleString();
+            updateTotals();
+        }
+
+        function createSlider(cell, category, initialValue) {
+            const container = document.createElement('div'); container.className = 'slider-container';
+            const slider = document.createElement('input');
+            slider.type = 'range'; slider.className = 'slider';
+            slider.min = 0; slider.max = Math.max(initialValue * 1.1, 50);
+            slider.value = initialValue; slider.dataset.category = category;
+            slider.oninput = handleSliderChange;
+            slider.setAttribute('aria-label', `${category} proposed usage`);
+            const valueSpan = document.createElement('span');
+            valueSpan.className = 'slider-value'; valueSpan.textContent = initialValue.toLocaleString();
+            valueSpan.id = `plan-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`;
+            container.appendChild(slider); container.appendChild(valueSpan);
+            cell.appendChild(container);
+        }
+
+        function handleSliderChange(event) {
+            const slider = event.target; const category = slider.dataset.category; const value = parseInt(slider.value);
+            const valueSpanId = `plan-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`;
+            const valueSpan = document.getElementById(valueSpanId);
+            if (valueSpan) valueSpan.textContent = value.toLocaleString();
+            if (currentScenario.plan) currentScenario.plan[category] = value;
+            updateTotals();
+             // If user adjusts sliders while in feedback state, revert to planning state
+             if (currentScenario.state === 'feedback') {
+                 logEvent('FLOW_ADJUST', 'User adjusted sliders, reverting to planning state.');
+                 currentScenario.state = 'planning';
+                 updateUIForState(); // Hides feedback section, shows submit button
+             }
+             displayError("", "error-message-plan");
+        }
+
+        function updateTotals() {
+             let planTotal = 0; if (!currentScenario.plan) return;
+             Object.values(currentScenario.plan).forEach(val => planTotal += val);
+             document.getElementById('plan-total').textContent = planTotal.toLocaleString();
+             const planReduction = lastYearTotal - planTotal;
+             document.getElementById('plan-reduction').textContent = `${planReduction.toLocaleString()} kWh`;
+             highlightReduction('plan-reduction', planReduction);
+        }
+
+         function highlightReduction(elementId, reduction) {
+            const element = document.getElementById(elementId); if (!element) return;
+            const targetKwh = targetReductionValue;
+            const lowerBound = targetKwh * 0.8; const upperBound = targetKwh * 1.2;
+            element.style.fontWeight = '700'; // Use numeric weight
+            element.style.transition = 'color 0.3s ease'; // Smooth color change
+            if (reduction >= lowerBound && reduction <= upperBound) element.style.color = 'var(--success-color)';
+            else if (reduction > upperBound) element.style.color = 'var(--info-color)';
+            else if (reduction >= 0) element.style.color = 'var(--warning-color)'; // Changed to >= 0
+            else element.style.color = 'var(--error-color)';
+        }
+
+         // --- Plan Evaluation and Feedback ---
+         function calculatePlanDistance(userPlan, familyData, lastYearTotal) {
+             console.groupCollapsed(`[Distance Calculation] for ${familyData.name}`); // Start log group
+             logEvent('DISTANCE_INPUT', { userPlan, preferences: familyData.preferences, lastYearTotal });
+
+             const { preferences, categories } = familyData;
+             let totalComfortCost = 0; let totalSavings = 0;
+             Object.entries(userPlan).forEach(([category, newValue]) => {
+                 const reduction = Math.max(0, categories[category].ly - newValue);
+                 totalSavings += reduction;
+                 totalComfortCost += reduction * (preferences.categoryImpact[category] || 0.1);
+             });
+
+             const targetKwh = targetReductionValue;
+             const savingsError = Math.abs(totalSavings - targetKwh);
+             const weightedSavingsError = (savingsError / (targetKwh || 1)) * preferences.savingsWeight * 100;
+             let maxComfortCost = 1;
+             Object.entries(categories).forEach(([category, data]) => { maxComfortCost += data.ly * (preferences.categoryImpact[category] || 0.1); });
+             const weightedComfortCost = (totalComfortCost / maxComfortCost) * preferences.comfortWeight * 100;
+             const distanceScore = weightedComfortCost + weightedSavingsError;
+
+             let feedbackSummary = "";
+             if (distanceScore < 15) feedbackSummary = "seems well aligned with priorities.";
+             else if (distanceScore < 35) feedbackSummary = "looks like a reasonable balance.";
+             else feedbackSummary = "might be challenging, potentially affecting comfort or not meeting savings goals well.";
+
+             const savingsRatio = totalSavings / (targetKwh || 1);
+             if (savingsRatio < 0.8 && distanceScore >= 15) feedbackSummary += " Doesn't quite reach the target savings.";
+             else if (savingsRatio > 1.2 && distanceScore >= 15) feedbackSummary += " Exceeds the savings target, maybe unnecessarily impacting comfort.";
+
+             const comfortCostRatio = weightedComfortCost / (preferences.comfortWeight * 100 || 1); // How much of the comfort 'budget' is used
+             if (comfortCostRatio > 0.6 && distanceScore >= 15) { // If >60% of comfort weight is 'spent'
+                 feedbackSummary += " Seems to cut significantly into areas important for comfort.";
+             }
+              // Capitalize first letter of summary
+              feedbackSummary = "This plan " + feedbackSummary.charAt(0).toLowerCase() + feedbackSummary.slice(1);
+
+
+             const results = { totalSavings, totalComfortCost, weightedSavingsError, weightedComfortCost, distanceScore, feedbackSummary };
+             logEvent('DISTANCE_OUTPUT', results);
+             console.groupEnd(); // End log group
+             return results;
+         }
+
+        async function submitPlanForFeedback(button) {
+             logEvent('FLOW_SUBMIT_PLAN', 'User submitted plan for feedback.');
+             const feedbackSection = document.getElementById('feedback-section');
+             const feedbackElement = document.getElementById('client-feedback-text');
+             const feedbackActions = document.getElementById('feedback-actions');
+             const feedbackPrompt = document.getElementById('feedback-prompt');
+
+             currentScenario.state = 'submitting'; // Intermediate state
+             feedbackSection.style.display = 'block';
+             feedbackActions.style.display = 'none'; // Hide actions while loading
+             feedbackPrompt.style.display = 'none';
+             feedbackElement.classList.add('loading');
+             feedbackElement.textContent = 'Analyzing plan and getting feedback...';
+             feedbackElement.style.color = 'inherit';
+             displayError("", "error-message-plan");
+
+             const submitButton = button || document.getElementById('submit-plan-button');
+
+             try {
+                const { familyData, plan } = currentScenario;
+                const { distanceScore, feedbackSummary } = calculatePlanDistance(plan, familyData, lastYearTotal);
+
+                const planText = Object.entries(plan).map(([k, v]) => `- ${k}: ${v.toLocaleString()} kWh`).join('\n');
+                const currentReduction = lastYearTotal - Object.values(plan).reduce((s, v) => s + v, 0);
+
+                const systemPrompt = `You are ${familyData.name}. You want to save ~${targetReductionValue.toLocaleString()} kWh. React VERY TERSLEY (1-2 short sentences MAX) to the proposed plan based *primarily* on the provided analysis of how well it matches your preferences (comfort vs savings). Your underlying preference analysis result is: "${feedbackSummary}". Do not repeat the analysis details, just give your personal-sounding, brief reaction.`;
+                const userPrompt = `Here's the proposed plan:\n${planText}\n(Reduction: ${currentReduction.toLocaleString()} kWh).\n\nReact briefly based on the analysis: "${feedbackSummary}".`;
+
+                const llmResponse = await callLLM(systemPrompt, userPrompt, config.maxTokensClient, submitButton);
+
+                feedbackElement.textContent = llmResponse;
+                currentScenario.state = 'feedback'; // Move to feedback state on success
+                updateUIForState(); // Show feedback section correctly with action buttons
+
+             } catch (error) {
+                  console.error("Failed to get feedback:", error);
+                  feedbackElement.textContent = `Failed to get feedback. ${error.message || 'Check console.'}`;
+                  feedbackElement.style.color = 'var(--error-color)';
+                  currentScenario.state = 'planning'; // Revert to planning on error
+                  updateUIForState(); // Show submit button again etc.
+             } finally {
+                  feedbackElement.classList.remove('loading');
+                  // Button re-enabled in callLLM finally
+             }
+        }
+
+        // --- Action Button Handlers ---
+        function adjustPlan() {
+            logEvent('FLOW_ADJUST', 'User chose to adjust plan.');
+            currentScenario.state = 'planning';
+            updateUIForState(); // Hides feedback actions, shows submit button
+             document.getElementById('submit-plan-button').scrollIntoView({ behavior: 'smooth', block: 'center' }); // Scroll back to submit button
+        }
+
+        function acceptPlan() {
+            logEvent('FLOW_ACCEPT', 'User accepted the current plan.');
+            currentScenario.state = 'results';
+            updateUIForState(); // Shows results section
+        }
+
+        function restartCurrentClient() {
+            logEvent('FLOW_RESTART_CLIENT', `Restarting consultation for ${currentScenario.familyKey}.`);
+            const familyKeyToRestart = currentScenario.familyKey;
+            resetToSetup();
+            // Auto-select the same family and start
+            document.getElementById('family').value = familyKeyToRestart;
+            startConsultation();
+        }
+
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            logEvent('APP_LOAD', 'Application loaded.');
+            updateUIForState(); // Show initial setup screen
+        });
+
+    </script>
+
+</body>
+</html>

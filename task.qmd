@@ -1,0 +1,24 @@
+---
+title: "Energy AI Task Demo"
+subtitle: "A demo of the Energy AI Task is embedded below"
+format:
+    html:
+        page-layout: full 
+---
+
+:::: {.content-visible when-format="html"}
+
+
+
+
+[Open task in separate window (optional - provides more space)](task/prop_task.html)
+
+
+::: column-page
+
+
+![](task/prop_task.html){width="1300" height="1000"}
+
+:::
+
+:::: 

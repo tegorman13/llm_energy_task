@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>puppart_aru25_ai_survey – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#puppart-aru-2025-ai-literacy-intervention-study" id="toc-puppart-aru-2025-ai-literacy-intervention-study" class="nav-link active" data-scroll-target="#puppart-aru-2025-ai-literacy-intervention-study">Puppart &amp; Aru (2025) AI Literacy Intervention Study</a>
+  <ul class="collapse">
+  <li><a href="#study-overview" id="toc-study-overview" class="nav-link" data-scroll-target="#study-overview">Study Overview</a></li>
+  <li><a href="#demographic-information" id="toc-demographic-information" class="nav-link" data-scroll-target="#demographic-information">1. Demographic Information</a></li>
+  <li><a href="#experimental-texts-control-vs.-intervention" id="toc-experimental-texts-control-vs.-intervention" class="nav-link" data-scroll-target="#experimental-texts-control-vs.-intervention">2. Experimental Texts (Control vs.&nbsp;Intervention)</a>
+  <ul class="collapse">
+  <li><a href="#instructions-before-reading-text-from-appendix-b-page-28" id="toc-instructions-before-reading-text-from-appendix-b-page-28" class="nav-link" data-scroll-target="#instructions-before-reading-text-from-appendix-b-page-28">Instructions Before Reading Text (From Appendix B, Page 28)</a></li>
+  <li><a href="#control-group-text-appendix-b-page-28" id="toc-control-group-text-appendix-b-page-28" class="nav-link" data-scroll-target="#control-group-text-appendix-b-page-28">Control Group Text (Appendix B, Page 28)</a></li>
+  <li><a href="#intervention-group-text-appendix-b-pages-28-33" id="toc-intervention-group-text-appendix-b-pages-28-33" class="nav-link" data-scroll-target="#intervention-group-text-appendix-b-pages-28-33">Intervention Group Text (Appendix B, Pages 28-33)</a></li>
+  </ul></li>
+  <li><a href="#ai-literacy-self-assessment-post-text-reading" id="toc-ai-literacy-self-assessment-post-text-reading" class="nav-link" data-scroll-target="#ai-literacy-self-assessment-post-text-reading">3. AI Literacy Self-Assessment (Post-Text Reading)</a></li>
+  <li><a href="#math-puzzle-task" id="toc-math-puzzle-task" class="nav-link" data-scroll-target="#math-puzzle-task">4. Math Puzzle Task</a>
+  <ul class="collapse">
+  <li><a href="#task-instructions-page-6" id="toc-task-instructions-page-6" class="nav-link" data-scroll-target="#task-instructions-page-6">Task Instructions (Page 6)</a></li>
+  <li><a href="#puzzle-presentation-and-interaction-pages-6-7-figure-1-appendix-a" id="toc-puzzle-presentation-and-interaction-pages-6-7-figure-1-appendix-a" class="nav-link" data-scroll-target="#puzzle-presentation-and-interaction-pages-6-7-figure-1-appendix-a">Puzzle Presentation and Interaction (Pages 6-7, Figure 1, Appendix A)</a></li>
+  <li><a href="#confidence-rating-after-each-puzzle-page-6" id="toc-confidence-rating-after-each-puzzle-page-6" class="nav-link" data-scroll-target="#confidence-rating-after-each-puzzle-page-6">Confidence Rating (After Each Puzzle) (Page 6)</a></li>
+  </ul></li>
+  <li><a href="#appendix-a-math-puzzles-and-chatgpt-recommendations" id="toc-appendix-a-math-puzzles-and-chatgpt-recommendations" class="nav-link" data-scroll-target="#appendix-a-math-puzzles-and-chatgpt-recommendations">Appendix A: Math Puzzles and ChatGPT Recommendations</a>
+  <ul class="collapse">
+  <li><a href="#correct-1" id="toc-correct-1" class="nav-link" data-scroll-target="#correct-1">Correct 1</a></li>
+  <li><a href="#correct-2" id="toc-correct-2" class="nav-link" data-scroll-target="#correct-2">Correct 2</a></li>
+  <li><a href="#correct-3" id="toc-correct-3" class="nav-link" data-scroll-target="#correct-3">Correct 3</a></li>
+  <li><a href="#correct-4" id="toc-correct-4" class="nav-link" data-scroll-target="#correct-4">Correct 4</a></li>
+  <li><a href="#incorrect-1" id="toc-incorrect-1" class="nav-link" data-scroll-target="#incorrect-1">Incorrect 1</a></li>
+  <li><a href="#incorrect-2" id="toc-incorrect-2" class="nav-link" data-scroll-target="#incorrect-2">Incorrect 2</a></li>
+  <li><a href="#incorrect-3" id="toc-incorrect-3" class="nav-link" data-scroll-target="#incorrect-3">Incorrect 3</a></li>
+  <li><a href="#incorrect-4" id="toc-incorrect-4" class="nav-link" data-scroll-target="#incorrect-4">Incorrect 4</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Puppart_Aru25_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="puppart-aru-2025-ai-literacy-intervention-study" class="level1">
+<h1>Puppart &amp; Aru (2025) AI Literacy Intervention Study</h1>
+<p>Puppart, B., &amp; Aru, J. (2025). Short-term AI literacy intervention does not reduce over-reliance on incorrect ChatGPT recommendations (No.&nbsp;arXiv:2503.10556). arXiv. https://doi.org/10.48550/arXiv.2503.10556</p>
+<section id="study-overview" class="level2">
+<h2 class="anchored" data-anchor-id="study-overview">Study Overview</h2>
+<p>This document outlines the questionnaires, informational texts, and task prompts used in the study by Puppart &amp; Aru (2025) investigating the effect of an AI literacy intervention on over-reliance on ChatGPT among high school students. Participants were randomly assigned to a control or intervention group, read corresponding texts, answered self-assessment questions, and then solved math puzzles with presented ChatGPT recommendations.</p>
+<p><em>Note: The study was conducted online via LimeSurvey. Informed consent was obtained first, and a debriefing occurred afterward. The exact wording of the consent form and debriefing text is not provided in the paper.</em></p>
+</section>
+<section id="demographic-information" class="level2">
+<h2 class="anchored" data-anchor-id="demographic-information">1. Demographic Information</h2>
+<p>Participants were asked to provide the following demographic information (Page 5):</p>
+<ul>
+<li>Gender</li>
+<li>Age</li>
+<li>School affiliation</li>
+</ul>
+</section>
+<section id="experimental-texts-control-vs.-intervention" class="level2">
+<h2 class="anchored" data-anchor-id="experimental-texts-control-vs.-intervention">2. Experimental Texts (Control vs.&nbsp;Intervention)</h2>
+<p>Participants were randomly assigned to read one of two texts.</p>
+<section id="instructions-before-reading-text-from-appendix-b-page-28" class="level3">
+<h3 class="anchored" data-anchor-id="instructions-before-reading-text-from-appendix-b-page-28">Instructions Before Reading Text (From Appendix B, Page 28)</h3>
+<p>Before you start solving math puzzles with ChatGPT, please read the following text, which aims to briefly introduce ChatGPT. Please read the text carefully and thoughtfully, even if you have previously encountered and used ChatGPT. Once you have read the text, click the “Next” button in the bottom right corner of the page.</p>
+</section>
+<section id="control-group-text-appendix-b-page-28" class="level3">
+<h3 class="anchored" data-anchor-id="control-group-text-appendix-b-page-28">Control Group Text (Appendix B, Page 28)</h3>
+<p><strong>A short introduction to ChatGPT</strong></p>
+<p>ChatGPT is a chatbot that was first introduced in 2022 and has since gained rapid popularity. It has been widely adopted in various fields, such as education, economics, customer service, and science, where its use has significantly simplified many tasks.</p>
+<p>ChatGPT operates based on user input, which can include questions, tasks, or mathematical operations. It analyzes the user’s input and generates an output presented in an understandable language. With ChatGPT, it is possible to solve various tasks, from simple questions to extensive projects. For example, ChatGPT can help generate original text, translate, analyze data, write code, and summarize large amounts of material.</p>
+<p>Here are some reasons why ChatGPT is a useful tool for solving language-related tasks¹:</p>
+<ul>
+<li><strong>Understanding language.</strong> ChatGPT generates outputs that take into account the context and meaning of words effectively.</li>
+<li><strong>Personalized responses.</strong> ChatGPT can adapt its responses based on the user’s style and previous inputs. This feature enhances the user experience by aligning outputs better with the user’s needs.</li>
+<li><strong>Availability.</strong> As long as there is an internet connection, ChatGPT is always accessible. Its accessibility also extends to its ability to understand and generate responses in multiple languages, including Estonian.</li>
+<li><strong>Automation.</strong> ChatGPT helps simplify and automate routine tasks, saving the user time and effort</li>
+</ul>
+<p>— <em>End of Control Text</em> —</p>
+</section>
+<section id="intervention-group-text-appendix-b-pages-28-33" class="level3">
+<h3 class="anchored" data-anchor-id="intervention-group-text-appendix-b-pages-28-33">Intervention Group Text (Appendix B, Pages 28-33)</h3>
+<p><em>(The intervention group read the Control Group Text above, PLUS the following sections):</em></p>
+<p><strong>ChatGPT working mechanism</strong></p>
+<p>Each time ChatGPT generates an output, it solves a very simple task: predicting the next word. For example, if I write the sentence “The dog is ___” and ask you which word fits best in the blank, you would likely suggest words such as “an animal,” “furry,” or “loyal.” On the other hand, words like “bottle,” “blue,” or “fish” would be less likely to fit.</p>
+<p>Just as you intuitively know which words are more probable in a given context, ChatGPT also determines this based on its prior training. It has been trained using almost all publicly available text from the internet, allowing it to learn how words are related and which words are most likely to follow others.</p>
+<p>However, it’s important to note that ChatGPT does not think or experience the world like humans do. At its core, it is simply an extremely large statistical model that responds to user input by calculating the probabilities of the next words.</p>
+<p><strong>Writing prompts</strong></p>
+<p>As previously described, ChatGPT generates outputs based on user input. This input can consist of four main components²:</p>
+<ul>
+<li><strong>Instructions.</strong> This part explains what task you want ChatGPT to perform. Some examples include: “solve, calculate, write, summarize, evaluate, explain, recommend.”</li>
+<li><strong>Context.</strong> Context provides additional external information that helps ChatGPT better understand the task or the content of the text. This allows it to generate more relevant and accurate outputs.</li>
+<li><strong>Text.</strong> This is the core content of the input, such as a specific description of an essay you want ChatGPT to write or a passage of text that you want it to summarize.</li>
+<li><strong>Output preferences.</strong> This allows you to specify the format or style of the response. For example, you can set the word count, paragraph length, or request an output in bullet points.</li>
+</ul>
+<p>User input does not have to include all four components. For instance, if you type “If a = b and b = c, then…”, ChatGPT will understand that the instruction is to “solve” without needing explicit clarification. However, if you want ChatGPT to generate similar logic problems instead, you need to specify your instructions more clearly.</p>
+<p>For any given input, it is useful to consider these components and assess what information ChatGPT might need to produce the most appropriate output.</p>
+<p><strong>Frequent errors in prompts³</strong></p>
+<ul>
+<li><strong>Unclear input.</strong> Sometimes, user input is not specific enough, resulting in a response that is too broad or general. For example, the prompt “Describe how artificial intelligence has changed the world” is too vague if we specifically want to know about the risks and challenges ChatGPT has caused in the education system.</li>
+<li><strong>Complex and conflicting instructions.</strong> If instructions are too complicated or contradictory, ChatGPT may struggle to interpret them correctly. An example of conflicting input would be: “Write an essay on technological developments in the 20th century that is detailed enough to be interesting for a computer scientist but also simple enough for a five-year-old to understand.”</li>
+<li><strong>Biased input.</strong> User input can be biased in various ways. For instance, if we want ChatGPT to evaluate the style of a written text, asking, “Is the following text well-written in terms of style?” may nudge ChatGPT towards answering “Yes.” A better approach would be to ask neutrally: “Evaluate the style of the following text and provide suggestions for improvement.”</li>
+</ul>
+<p><strong>ChatGPT Limitations and risks</strong></p>
+<p>Although properly formulating input is crucial for obtaining the best possible response, there are some tasks where ChatGPT may still provide incorrect answers, even if the user input is well-structured. Below is a summary of key limitations of ChatGPT, along with examples.</p>
+<ul>
+<li><p><strong>Drawing conclusions about the real world.</strong> ChatGPT does not have direct contact with the real world. Instead, it relies solely on the texts it has been trained on to make inferences about reality. This sometimes leads to mistakes when solving tasks that require reasoning about real-world objects and their properties.</p>
+<blockquote class="blockquote">
+<p>If I have 5 apples right now, but last week I ate 2 apples, then how many do I have left?</p>
+<p><em>ChatGPT response simulation:</em> If you originally had 5 apples and last week you ate 2 apples, then you have left: 5 - 2 = 3 apples.</p>
+</blockquote>
+<p><em>Example 1.</em> In the above example, ChatGPT misunderstands the concept of time (now, last week) and mistakenly assumes that it is a simple arithmetic problem⁴.</p></li>
+<li><p><strong>Mathematical and logical reasoning.</strong> ChatGPT may sometimes incorrectly solve even simple problems that require mathematical and logical reasoning.</p>
+<blockquote class="blockquote">
+<p>How many words and how many numbers are in the following list: cat, 10, dog, 60, cow, 40, squirrel, 70, spruce, 15, book, 32.</p>
+<p><em>ChatGPT response simulation:</em> The list contains 7 words and 5 numbers.</p>
+</blockquote>
+<p><em>Example 2.</em> (No error noted by authors here, seems correct)</p>
+<blockquote class="blockquote">
+<p>The five given cards must be arranged in such a way that the resulting 9-digit number is the smallest possible. Which of these cards must be the rightmost in this case? The cards are: 4, 8, 31, 59, 107.</p>
+<em>ChatGPT response simulation:</em> To form the smallest possible 9-digit number, the cards must be placed in ascending order, considering the value of each number:
+<ul>
+<li>The smallest number is 4, followed by 8, then 31, then 59, and finally, the largest number, 107. If we arrange these to create the smallest number, it is logical that the largest card, 107, must be the rightmost, as placing it at the last position increases the overall value the least. Answer: The rightmost card must be 107.</li>
+</ul>
+</blockquote>
+<p><em>Example 3⁵.</em> Actually, 107 should be the leftmost number, and 8 should be the rightmost number.</p></li>
+<li><p><strong>Hallucination.</strong> ChatGPT sometimes produces completely fabricated information – a phenomenon known as hallucination. This can include generating false references and historical facts. Additionally, it may struggle to distinguish between fiction and reality.</p>
+<blockquote class="blockquote">
+<p>Who was Estonia’s first Olympic silver medalist?</p>
+<p><em>ChatGPT response simulation:</em> Estonia’s first Olympic silver medalist was Jaan Tõnisson, who won the silver medal at the 1920 Summer Olympics in Antwerp, Belgium. Tõnisson competed in Greco-Roman wrestling in the heavyweight category.</p>
+</blockquote>
+<p><em>Example 4.</em> Estonia’s first Olympic silver medalist was Martin Klein in 1912, and Jaan Tõnisson was not a wrestler but an important statesman. ChatGPT can hallucinate in response to various types of questions. However, it is especially easy to trigger this when user instructions require a very narrow and specific output.</p>
+<blockquote class="blockquote">
+<p>Name five cities in Harju County that start and end with the same letter.</p>
+<em>ChatGPT response simulation:</em> There are five cities in Harju County that start and end with the same letter:
+<ol type="1">
+<li>Keila</li>
+<li>Saue</li>
+<li>Maardu</li>
+<li>Paldiski</li>
+<li>Jõelähtme</li>
+</ol>
+</blockquote>
+<p><em>Example 5.</em> (Authors don’t explicitly state error here, but Jõelähtme is not a city and doesn’t fit the criterion. Paldiski also doesn’t fit.)</p>
+<blockquote class="blockquote">
+<p>Answer with one word: In which sport did Napoleon win a gold medal at the 1980 Olympic Games?</p>
+<p><em>ChatGPT response simulation:</em> Football.</p>
+</blockquote>
+<p><em>Example 6.</em> (Napoleon was long dead by 1980; this is a hallucination.)</p></li>
+<li><p><strong>Discriminatory Outputs.</strong> ChatGPT’s outputs depend on the texts it was trained on. These texts may contain various social biases related to people’s social status, gender, race, and age, and during training, the AI learns to incorporate these biases into its outputs. As a result, ChatGPT’s responses may be politically biased or include gender stereotypes that exist in society.</p>
+<blockquote class="blockquote">
+<p>The CEO of a large company went to the restroom before going to the manicurist. The men’s and women’s restrooms were separate. Which restroom did they go to?</p>
+<p><em>ChatGPT response simulation:</em> Based on the sentence, we can infer that the CEO is a man because, in such contexts, when gender is not explicitly specified and the general term “CEO” is used, it is often assumed to refer to a man. Therefore, they went to the men’s restroom. If this sentence is part of a story and you want to provide a clearer answer, it could depend on additional context or the explicitly stated gender of the character. In this case, the assumption would be that they used the men’s restroom.</p>
+</blockquote>
+<p><em>Example 7.</em> (Demonstrates gender bias assumption).</p></li>
+</ul>
+<p>In addition to knowing that ChatGPT can make mistakes, it is important to understand that some of its characteristics make detecting these errors difficult.</p>
+<ul>
+<li><strong>Excessive confidence.</strong> ChatGPT presents outputs with high confidence, even when they contain misinformation. Instead of saying, “I’m not sure,” it delivers responses in a very convincing and fluent manner, making it harder to notice errors in its outputs.</li>
+<li><strong>Errors are unexpected.</strong> ChatGPT’s mistakes can appear unpredictably, which often makes them go unnoticed. It may clearly and accurately explain complex quantum physics concepts one moment and then make mistakes in the simplest logic problems the next. This inconsistency in response quality poses a risk when using ChatGPT. Based on previous correct answers, we might assume that ChatGPT can correctly solve subsequent tasks—even when those responses actually contain errors.</li>
+</ul>
+<p><strong>Tips for Using ChatGPT</strong></p>
+<ul>
+<li><strong>Ask multiple times.</strong> ChatGPT’s responses are based on probability calculations, meaning it may provide different answers to the same question. Some of these answers might be unlikely or incorrect. Therefore, it is helpful to ask the same question multiple times with slightly different wording so you can choose the most suitable response.</li>
+<li><strong>Ask for the reasoning.</strong> When solving problems that require logical thinking, include an instruction in your input asking ChatGPT to explain its reasoning (e.g., by adding “Solve step by step” at the end of your prompt). This makes it easier to understand how ChatGPT arrived at its answer and helps identify if the reasoning is flawed.</li>
+<li><strong>Verify facts.</strong> If you’re unsure whether the information in ChatGPT’s response is accurate, always verify it using other sources. One option is to search on Google. Another is to ask ChatGPT to provide references in its output so you can check their reliability yourself.</li>
+</ul>
+<p><strong>Remember that ChatGPT is a tool, not a replacement for thinking.</strong></p>
+<p>— <em>End of Intervention Text</em> —</p>
+<p><em>Footnotes for Appendix B text:</em> ¹ Taken from Hariri (2024) ² Taken from DAIR.AI (2023) ³ Taken from Giray (2023) ⁴ Task inspired by Diaz (2024) ⁵ Taken from Teaduskool (2022)</p>
+</section>
+</section>
+<section id="ai-literacy-self-assessment-post-text-reading" class="level2">
+<h2 class="anchored" data-anchor-id="ai-literacy-self-assessment-post-text-reading">3. AI Literacy Self-Assessment (Post-Text Reading)</h2>
+<p>After reading the assigned text (Control or Intervention), participants answered the following questions using a four-point forced-choice Likert scale (exact scale points like Strongly Disagree to Strongly Agree were not specified in the paper, but it was forced choice, implying no neutral option). (Page 5)</p>
+<p><strong>Preamble:</strong> “Compared to before, I believe that after reading the text introducing ChatGPT, I am better informed about…”</p>
+<ol type="1">
+<li>“…how ChatGPT works.”
+<ul>
+<li>( ) Option 1</li>
+<li>( ) Option 2</li>
+<li>( ) Option 3</li>
+<li>( ) Option 4</li>
+</ul></li>
+<li>“…what the limitations and risks of ChatGPT are.”
+<ul>
+<li>( ) Option 1</li>
+<li>( ) Option 2</li>
+<li>( ) Option 3</li>
+<li>( ) Option 4</li>
+</ul></li>
+<li>“…how to use ChatGPT wisely.”
+<ul>
+<li>( ) Option 1</li>
+<li>( ) Option 2</li>
+<li>( ) Option 3</li>
+<li>( ) Option 4</li>
+</ul></li>
+</ol>
+</section>
+<section id="math-puzzle-task" class="level2">
+<h2 class="anchored" data-anchor-id="math-puzzle-task">4. Math Puzzle Task</h2>
+<section id="task-instructions-page-6" class="level3">
+<h3 class="anchored" data-anchor-id="task-instructions-page-6">Task Instructions (Page 6)</h3>
+<p>“You are about to solve math puzzles with the help of ChatGPT. There are a total of eight puzzles, and your goal is to answer as many correctly as possible. There is no time limit for answering.”</p>
+</section>
+<section id="puzzle-presentation-and-interaction-pages-6-7-figure-1-appendix-a" class="level3">
+<h3 class="anchored" data-anchor-id="puzzle-presentation-and-interaction-pages-6-7-figure-1-appendix-a">Puzzle Presentation and Interaction (Pages 6-7, Figure 1, Appendix A)</h3>
+<p>For each of the 8 puzzles (4 with correct ChatGPT recommendations, 4 with incorrect), participants saw the following:</p>
+<ol type="1">
+<li><strong>Puzzle Text:</strong> The math puzzle question was displayed. (See Appendix A below for texts).</li>
+<li><strong>ChatGPT Recommendation:</strong> A screenshot of ChatGPT’s recommendation (including its reasoning and final answer) was shown below the puzzle text. (See Appendix A below for recommendations).</li>
+<li><strong>Reliance Decision Question:</strong>
+<ul>
+<li><strong>Do you use ChatGPT’s recommendation?</strong>
+<ul>
+<li>( ) Yes</li>
+<li>( ) No</li>
+</ul></li>
+</ul></li>
+<li><strong>Outcome based on Reliance Decision:</strong>
+<ul>
+<li><strong>If “Yes”:</strong> The participant was considered to have adopted ChatGPT’s answer. They proceeded directly to the Confidence Rating for this puzzle.</li>
+<li><strong>If “No”:</strong> The participant was given the opportunity to solve the puzzle independently. They were presented with four multiple-choice answer options for the puzzle. <em>Crucially, ChatGPT’s suggested answer (from the screenshot) was removed from these options.</em> (The specific alternative options presented when ‘No’ was chosen are not listed in the paper’s Appendix A, only the options available if ChatGPT’s answer <em>was</em> included conceptually). The participant selected one of these options. They then proceeded to the Confidence Rating.</li>
+</ul></li>
+</ol>
+</section>
+<section id="confidence-rating-after-each-puzzle-page-6" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-rating-after-each-puzzle-page-6">Confidence Rating (After Each Puzzle) (Page 6)</h3>
+<p>After submitting their answer (either by choosing “Yes” to the recommendation or by choosing an answer after selecting “No”), participants rated their confidence:</p>
+<ul>
+<li><strong>Statement:</strong> “I believe my answer to the previous puzzle was correct.”</li>
+<li><strong>Scale:</strong> Five-point Likert scale (1 = strongly disagree – 5 = strongly agree)
+<ul>
+<li>( ) 1</li>
+<li>( ) 2</li>
+<li>( ) 3</li>
+<li>( ) 4</li>
+<li>( ) 5</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="appendix-a-math-puzzles-and-chatgpt-recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-a-math-puzzles-and-chatgpt-recommendations">Appendix A: Math Puzzles and ChatGPT Recommendations</h2>
+<p><em>(Approximate English translations from Estonian original)</em></p>
+<section id="correct-1" class="level3">
+<h3 class="anchored" data-anchor-id="correct-1">Correct 1</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> There’s three rooms, one of which contains a hidden lion. The door of the first room has a sign that says, “The lion is here.” The door of the second room has a sign that says, “The lion is not here.” The door of the third room has a sign that says, “3² – 2³ = 2³ - 3².” Only one of the signs is true. In which room is the lion?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; Let’s analyze the statements on each room’s sign: &gt; 1. First room: “The lion is here.” &gt; * If this is true, then the second sign (“The lion is not here”) must be false, creating a contradiction. It cannot be true. &gt; 2. Second room: “The lion is not here.” &gt; * If this is true, then the lion is neither in this room nor in the first room. The lion must be in the third room. &gt; * The sign on the third room, 3² - 2³ = 2³ - 3², is not correct (1 ≠ -1), which means that sign is false. Only this sign can be true. &gt; 3. Third room: 3² - 2³ = 2³ - 3². &gt; * The equation is not true. It cannot be correct. &gt; Conclusion: The second room’s sign is true, so the lion is in the third room.</li>
+<li><strong>Answer options (Conceptual):</strong> in the first room, in the second room, the lion can be in any room, the lion can be in either the first or the second room. (<em>Note: If participant chose ‘No’, one of these options corresponding to the third room would be presented alongside three others.</em>)</li>
+<li><strong>Correct answer:</strong> in the third room.</li>
+</ul>
+</section>
+<section id="correct-2" class="level3">
+<h3 class="anchored" data-anchor-id="correct-2">Correct 2</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> Mikk is buying a sports club membership for the next month, allowing him to train on two days per week. He must immediately choose the two weekdays on which he will attend training. How many different ways can he choose these two days, given that he does not want to train on two consecutive days?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; First, we calculate all possible combinations of two days in a week: &gt; (⁷₂) = 21 &gt; The pairs of consecutive days are: &gt; (Monday, Tuesday), (Tuesday, Wednesday), (Wednesday, Thursday), (Thursday, Friday), (Friday, Saturday), (Saturday, Sunday), (Sunday, Monday) — a total of 7 pairs. &gt; We subtract the consecutive pairs from all combinations: &gt; 21 - 7 = 14 &gt; Thus, the number of possible choices is: &gt; 14</li>
+<li><strong>Answer options (Conceptual):</strong> 16, 12, 10, 8 (<em>Note: If participant chose ‘No’, 14 would be removed, and they would choose from these four.</em>)</li>
+<li><strong>Correct answer:</strong> 14</li>
+</ul>
+</section>
+<section id="correct-3" class="level3">
+<h3 class="anchored" data-anchor-id="correct-3">Correct 3</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> Among the boys in the class, no two were born on the same day of the week, and among the girls in the class, no two were born in the same calendar month. If a new student were to join the class, one of these conditions would no longer be met. How many students are currently in the class?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; Let there be b boys and g girls in the class. The following two conditions are given: &gt; 1. No boys in the class were born on the same day of the week. &gt; 2. No girls in the class were born in the same calendar month. &gt; Since no boys can be born on the same day of the week, the maximum number of boys is 7 (as there are 7 days in a week). Since no girls can be born in the same calendar month, the maximum number of girls is 12 (as there are 12 months in a year). &gt; If a new student were to join the class, one of these conditions would no longer be met. This means that the current number of boys and girls in the class is at its maximum under these conditions. &gt; The maximum number of boys is 7 (since more boys would mean that at least two were born on the same day of the week), and the maximum number of girls is 12 (since more girls would mean that at least two were born in the same calendar month). &gt; Thus, there are currently 19 students in the class.</li>
+<li><strong>Answer options (Conceptual):</strong> 18, 20, 24, 25 (<em>Note: If participant chose ‘No’, 19 would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> 19</li>
+</ul>
+</section>
+<section id="correct-4" class="level3">
+<h3 class="anchored" data-anchor-id="correct-4">Correct 4</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> The teacher asked five of their students how many of them had studied at home the previous day. Pelle said that no one had studied, Elle said that only one person had studied, Mikk said that two had studied, Riho said that three had studied, and Karl said that four had studied. The teacher knew that the students who had not actually studied at home were lying, while those who had studied were telling the truth. How many of these five students had actually studied at home the previous day?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; Let x be the number of students who studied at home. Pelle said that 0 studied, Elle said that 1 studied, Mikk said that 2 studied, Riho said that 3 studied, and Karl said that 4 studied. &gt; If x = 0, Pelle is telling the truth (1 truth, 4 lying). This doesn’t work because everyone else would have to be lying. &gt; If x = 1, Elle is telling the truth (1 truth, 4 lying), which works because one is telling the truth and the rest are lying. &gt; If x = 2, Mikk is telling the truth (2 truth, 3 lying), but this doesn’t work since there should be 2 truthful and 3 lying. &gt; If x = 3, Riho is telling the truth (3 truth, 2 lying), which doesn’t work as there should be 3 truthful and 2 lying. &gt; If x = 4, Karl is telling the truth (4 truth, 1 lying), which also doesn’t work as there should be 4 truthful and 1 lying. &gt; The only possible solution is x = 1, meaning that 1 student studied at home the previous day.</li>
+<li><strong>Answer options (Conceptual):</strong> 0, 2, 3, 4 (<em>Note: If participant chose ‘No’, 1 would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> 1</li>
+</ul>
+</section>
+<section id="incorrect-1" class="level3">
+<h3 class="anchored" data-anchor-id="incorrect-1">Incorrect 1</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> Anni, Pille, Kati, Tiina, and Eerika attended a meeting. Each of them greeted only their acquaintances with a single hug at the beginning. In total, Anni hugged once, Pille hugged twice, Kati hugged three times, and Tiina hugged four times. How many times did Eerika hug? (Note: Each hug is mutual).</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; Let A, P, K, T, and E represent Anni, Pille, Kati, Tiina, and Eerika, respectively. Each person hugs only their acquaintances, meaning every hug is mutual. &gt; We know that the number of hugs each person gave is as follows: A = 1, P = 2, K = 3, T = 4. &gt; Now, we calculate the total number of hugs. If x is the number of hugs Eerika gave, then: &gt; 1 + 2 + 3 + 4 + x = 2 × total mutual hugs &gt; Total number of hugs: &gt; 1 + 2 + 3 + 4 + x = 10 + x &gt; Since every hug is mutual, we divide the total number of hugs by two: &gt; (10 + x) / 2 &gt; Since each person could only hug their acquaintances, x must be between 0 and 4. The only valid solution is x = 0. &gt; Thus, Eerika hugged 0 times.</li>
+<li><strong>Answer options (Conceptual):</strong> 5, 4, 3, 2 (<em>Note: If participant chose ‘No’, 0 would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> 2 times</li>
+<li><strong>ChatGPT’s error:</strong> The task states that there are five people (Anni, Pille, Kati, Tiina, Eerika). Tiina hugged four times. Since hugs are mutual and Tiina only hugs acquaintances, she must know all four other people. Eerika must therefore be one of the people Tiina hugged. Eerika must have hugged at least once (Tiina). ChatGPT claims 0, incorrectly deducing x must be between 0 and 4, and incorrectly solving the handshake problem logic (the sum of degrees must be even, 1+2+3+4+x = 10+x must be even, so x can be 0, 2, or 4. With T=4 hugging everyone else, E must hug T, so x&gt;=1. Thus x=2 or x=4. A graph drawing confirms x=2).</li>
+</ul>
+</section>
+<section id="incorrect-2" class="level3">
+<h3 class="anchored" data-anchor-id="incorrect-2">Incorrect 2</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> Emma, Ivi, Rita, and Siiri have ages of 3, 8, 12, and 14 years in some order. Both the sum of Siiri and Emma’s ages and the sum of Siiri and Rita’s ages are divisible by 5. Find the sum of Siiri and Ivi’s ages.</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; The given ages of Emma, Ivi, Rita, and Siiri are 3, 8, 12, and 14 years. We have two conditions: &gt; 1. The sum of Siiri and Emma’s ages is divisible by 5. &gt; 2. The sum of Siiri and Rita’s ages is divisible by 5. &gt; Let’s check all possible ages for Siiri: &gt; 1. Siiri = 3: 3 + X and 3 + Y do not give results divisible by 5. &gt; 2. Siiri = 8: 8 + X and 8 + Y do not give results divisible by 5. &gt; 3. Siiri = 12: 12 + X and 12 + Y do not give results divisible by 5. &gt; 4. Siiri = 14: &gt; * 14 + X and 14 + Y are divisible by 5 only if X = 12 and Y = 6. &gt; * Thus, Emma = 12 and Rita = 8. &gt; Siiri and Ivi’s ages are 14 and 3. Their sum is 17. &gt; Answer: 17.</li>
+<li><strong>Answer options (Conceptual):</strong> 26, 22, 20, 15 (<em>Note: If participant chose ‘No’, 17 would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> 26</li>
+<li><strong>ChatGPT’s error:</strong> ChatGPT incorrectly dismisses Siiri = 3, 8, 12. Let’s test Siiri=12. Possible pairs summing to a multiple of 5 with 12 are (12+3=15) and (12+8=20). So, if Siiri=12, Emma=3, Rita=8 (or vice versa). Then Ivi must be 14. The sum of Siiri (12) and Ivi (14) is 26. ChatGPT’s check for Siiri=14 is flawed: it requires Y=6, which is not one of the available ages (3, 8, 12, 14). It then claims Rita=8 without justification for the change from 6.</li>
+</ul>
+</section>
+<section id="incorrect-3" class="level3">
+<h3 class="anchored" data-anchor-id="incorrect-3">Incorrect 3</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> Tiit is convinced that his clock is 5 minutes fast, but in reality, his clock is 10 minutes slow. Leo is convinced that his clock is 10 minutes slow, but in reality, his clock is 5 minutes fast. At one moment, both of them look at their clocks, and Tiit believes that the correct time is 12:00. What does Leo think the correct time is at that moment?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; Tiit believes that his clock is 5 minutes fast, but in reality, his clock is 10 minutes slow. So, if Tiit thinks the correct time is 12:00, then according to his clock, the time is: &gt; 12:00 - 5 minutes = 11:55 &gt; Since his clock is actually 10 minutes slow, the real time is: &gt; 11:55 + 10 minutes = 12:05 &gt; Now let’s check Leo’s clock. Leo believes that his clock is 10 minutes slow, but in reality, his clock is 5 minutes fast. When Leo looks at his clock, the time he sees is: &gt; Actual time - 10 minutes = 12:05 - 10 minutes = 11:55 &gt; Since Leo’s clock is actually 5 minutes fast, the time on his clock is: &gt; 11:55 - 5 minutes = 11:50 &gt; Thus, if Tiit thinks the correct time is 12:00, then Leo believes the correct time at that moment is 11:50.</li>
+<li><strong>Answer options (Conceptual):</strong> 11:30, 11:45, 12:00, 12:30 (<em>Note: If participant chose ‘No’, 11:50 would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> 12:30</li>
+<li><strong>ChatGPT’s error:</strong> Initial step is wrong. If Tiit <em>believes</em> the correct time is 12:00 and <em>believes</em> his clock is 5 minutes fast, his clock must <em>show</em> 12:05 (because he would subtract 5 mins from his clock reading to get his believed time). Since his clock is <em>actually</em> 10 minutes slow, the <em>real</em> time is 12:05 + 10 minutes = 12:15. Leo’s clock is <em>actually</em> 5 minutes fast, so it <em>shows</em> 12:15 + 5 minutes = 12:20. Leo <em>believes</em> his clock is 10 minutes slow, so he <em>believes</em> the correct time is 12:20 + 10 minutes = 12:30.</li>
+</ul>
+</section>
+<section id="incorrect-4" class="level3">
+<h3 class="anchored" data-anchor-id="incorrect-4">Incorrect 4</h3>
+<ul>
+<li><strong>Puzzle Text:</strong> An old-fashioned scale is not working correctly. If the weighted item is lighter than 1000 g, the scale shows the correct weight; otherwise, it displays a random number greater than 1000. Five objects, A, B, C, D, and E, were all lighter than 1000 g. The objects were weighed in pairs, and the scale readings were recorded as follows: B + D = 1200, C + E = 2100, B + E = 800, B + C = 900, and A + E = 700. Which of these objects was the heaviest?</li>
+<li><strong>ChatGPT recommendation:</strong> &gt; We have five objects: A, B, C, D, and E, all weighing less than 1000 g. When weighed in pairs, the recorded results were: &gt; B + D = 1200, C + E = 2100, B + E = 800, B + C = 900, A + E = 700. &gt; The valid equations are: B + E = 800, B + C = 900, A + E = 700. Since B + E = 800 and B + C = 900, it follows that C = 100. &gt; Substituting into A + E = 700: A + (800 - B) = 700, we get A = -100 + B. &gt; Finally, we solve: (900 - B) + (800 - B) = 2100, which results in B = -200. &gt; Thus, E is the heaviest object.</li>
+<li><strong>Answer options (Conceptual):</strong> A, B, C, D (<em>Note: If participant chose ‘No’, E would be removed.</em>)</li>
+<li><strong>Correct answer:</strong> D</li>
+<li><strong>ChatGPT’s error:</strong> ChatGPT correctly identifies the valid equations (where sum &lt; 1000 is implied, but the scale shows correct weight regardless since individual items &lt; 1000g means pairs could be &lt; 1000g or &gt; 1000g. It only shows <em>correct</em> weight if item &lt; 1000g. This rule seems misstated or misinterpreted. Let’s assume the equations B+E=800, B+C=900, A+E=700 are correct weights because sum &lt; 1000). From B+E=800 and B+C=900, we can infer C = E + 100. From A+E=700, A = 700-E. From B+E=800, B=800-E. Since B+C=900, (800-E) + (E+100) = 900, which is 900=900, consistent. Now consider B+D=1200 and C+E=2100. These sums are &gt;1000, so the scale reading is random and &gt;1000. These equations give no info. We have weights in terms of E: A=700-E, B=800-E, C=100+E, D=?, E=E. All weights must be positive. So 700-E&gt;0 (E&lt;700) and 800-E&gt;0 (E&lt;800). Also E&gt;0. So 0 &lt; E &lt; 700. We need to find the heaviest. Can we deduce D? No information. ChatGPT’s calculation leading to C=100 is wrong (it should be C=E+100). Its calculation A=-100+B is wrong (should be A=700-E). Its final solve step <code>(900 - B) + (800 - B) = 2100</code> is mixing valid equations (B+C=900 implies C=900-B) with an invalid one (C+E=2100, which should be ignored). Its result B=-200 is impossible. It incorrectly concludes E is heaviest. The actual solution requires careful deduction: B+E=800, B+C=900 -&gt; C &gt; E. A+E=700, B+E=800 -&gt; B &gt; A. B+C=900. Max possible sum of two items &lt; 1000g is slightly less than 2000g. B+D=1200, C+E=2100. Since C+E &gt; 2000 (impossible if both &lt;1000), the 2100 reading is random. B+D=1200 must be the actual sum B+D=1200. Since B&lt;1000, D must be &gt;200. We have B=800-E, C=E+100, A=700-E. Weights are (700-E, 800-E, E+100, D, E). Since B+D=1200, D=1200-B = 1200-(800-E) = 400+E. The weights are (700-E, 800-E, 100+E, 400+E, E). Comparing these: D &gt; B &gt; A. D &gt; C if 400+E &gt; 100+E (true). D &gt; E if 400+E &gt; E (true). So D is the heaviest.</li>
+</ul>
+<pre><code>
+
+
+:::{#quarto-navigation-envelope .hidden}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl"}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXItdGl0bGU="}
+[Dash]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6RGFzaA=="}
+[/survey_dash.html]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6L3N1cnZleV9kYXNoLmh0bWw="}
+[Dash_js]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6RGFzaF9qcw=="}
+[Task]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6VGFzaw=="}
+[/task.html]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6L3Rhc2suaHRtbA=="}
+[/demos/dash/dash5.html]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6L2RlbW9zL2Rhc2gvZGFzaDUuaHRtbA=="}
+[/demos/dash/dash3.html]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6L2RlbW9zL2Rhc2gvZGFzaDMuaHRtbA=="}
+[Demo Dashboard]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6RGVtbyBEYXNoYm9hcmQ="}
+[/dash.html]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6L2Rhc2guaHRtbA=="}
+[Tutorials]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXI6VHV0b3JpYWxz"}
+:::
+
+
+
+:::{#quarto-meta-markdown .hidden}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGF0aXRsZQ=="}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU="}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZHRpdGxl"}
+[Energy AI Study]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGFzaXRlbmFtZQ=="}
+[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw=="}
+[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZGRkZXNj"}
+:::
+
+
+
+
+&lt;!-- --&gt;
+
+::: {.quarto-embedded-source-code}
+```````````````````{.markdown shortcodes="false"}
+# Puppart &amp; Aru (2025) AI Literacy Intervention Study
+
+Puppart, B., &amp; Aru, J. (2025). Short-term AI literacy intervention does not reduce over-reliance on incorrect ChatGPT recommendations (No. arXiv:2503.10556). arXiv. https://doi.org/10.48550/arXiv.2503.10556
+
+
+## Study Overview
+
+This document outlines the questionnaires, informational texts, and task prompts used in the study by Puppart &amp; Aru (2025) investigating the effect of an AI literacy intervention on over-reliance on ChatGPT among high school students. Participants were randomly assigned to a control or intervention group, read corresponding texts, answered self-assessment questions, and then solved math puzzles with presented ChatGPT recommendations.
+
+*Note: The study was conducted online via LimeSurvey. Informed consent was obtained first, and a debriefing occurred afterward. The exact wording of the consent form and debriefing text is not provided in the paper.*
+
+## 1. Demographic Information
+
+Participants were asked to provide the following demographic information (Page 5):
+
+*   Gender
+*   Age
+*   School affiliation
+
+## 2. Experimental Texts (Control vs. Intervention)
+
+Participants were randomly assigned to read one of two texts.
+
+### Instructions Before Reading Text (From Appendix B, Page 28)
+
+Before you start solving math puzzles with ChatGPT, please read the following text, which aims to briefly introduce ChatGPT. Please read the text carefully and thoughtfully, even if you have previously encountered and used ChatGPT. Once you have read the text, click the "Next" button in the bottom right corner of the page.
+
+### Control Group Text (Appendix B, Page 28)
+
+**A short introduction to ChatGPT**
+
+ChatGPT is a chatbot that was first introduced in 2022 and has since gained rapid popularity. It has been widely adopted in various fields, such as education, economics, customer service, and science, where its use has significantly simplified many tasks.
+
+ChatGPT operates based on user input, which can include questions, tasks, or mathematical operations. It analyzes the user's input and generates an output presented in an understandable language. With ChatGPT, it is possible to solve various tasks, from simple questions to extensive projects. For example, ChatGPT can help generate original text, translate, analyze data, write code, and summarize large amounts of material.
+
+Here are some reasons why ChatGPT is a useful tool for solving language-related tasks¹:
+
+*   **Understanding language.** ChatGPT generates outputs that take into account the context and meaning of words effectively.
+*   **Personalized responses.** ChatGPT can adapt its responses based on the user's style and previous inputs. This feature enhances the user experience by aligning outputs better with the user's needs.
+*   **Availability.** As long as there is an internet connection, ChatGPT is always accessible. Its accessibility also extends to its ability to understand and generate responses in multiple languages, including Estonian.
+*   **Automation.** ChatGPT helps simplify and automate routine tasks, saving the user time and effort
+
+--- *End of Control Text* ---
+
+### Intervention Group Text (Appendix B, Pages 28-33)
+
+*(The intervention group read the Control Group Text above, PLUS the following sections):*
+
+**ChatGPT working mechanism**
+
+Each time ChatGPT generates an output, it solves a very simple task: predicting the next word. For example, if I write the sentence "The dog is \_\_\_" and ask you which word fits best in the blank, you would likely suggest words such as "an animal," "furry," or "loyal." On the other hand, words like "bottle," "blue," or "fish" would be less likely to fit.
+
+Just as you intuitively know which words are more probable in a given context, ChatGPT also determines this based on its prior training. It has been trained using almost all publicly available text from the internet, allowing it to learn how words are related and which words are most likely to follow others.
+
+However, it's important to note that ChatGPT does not think or experience the world like humans do. At its core, it is simply an extremely large statistical model that responds to user input by calculating the probabilities of the next words.
+
+**Writing prompts**
+
+As previously described, ChatGPT generates outputs based on user input. This input can consist of four main components²:
+
+*   **Instructions.** This part explains what task you want ChatGPT to perform. Some examples include: "solve, calculate, write, summarize, evaluate, explain, recommend."
+*   **Context.** Context provides additional external information that helps ChatGPT better understand the task or the content of the text. This allows it to generate more relevant and accurate outputs.
+*   **Text.** This is the core content of the input, such as a specific description of an essay you want ChatGPT to write or a passage of text that you want it to summarize.
+*   **Output preferences.** This allows you to specify the format or style of the response. For example, you can set the word count, paragraph length, or request an output in bullet points.
+
+User input does not have to include all four components. For instance, if you type "If a = b and b = c, then...", ChatGPT will understand that the instruction is to "solve" without needing explicit clarification. However, if you want ChatGPT to generate similar logic problems instead, you need to specify your instructions more clearly.
+
+For any given input, it is useful to consider these components and assess what information ChatGPT might need to produce the most appropriate output.
+
+**Frequent errors in prompts³**
+
+*   **Unclear input.** Sometimes, user input is not specific enough, resulting in a response that is too broad or general. For example, the prompt "Describe how artificial intelligence has changed the world" is too vague if we specifically want to know about the risks and challenges ChatGPT has caused in the education system.
+*   **Complex and conflicting instructions.** If instructions are too complicated or contradictory, ChatGPT may struggle to interpret them correctly. An example of conflicting input would be: "Write an essay on technological developments in the 20th century that is detailed enough to be interesting for a computer scientist but also simple enough for a five-year-old to understand."
+*   **Biased input.** User input can be biased in various ways. For instance, if we want ChatGPT to evaluate the style of a written text, asking, "Is the following text well-written in terms of style?" may nudge ChatGPT towards answering "Yes." A better approach would be to ask neutrally: "Evaluate the style of the following text and provide suggestions for improvement."
+
+**ChatGPT Limitations and risks**
+
+Although properly formulating input is crucial for obtaining the best possible response, there are some tasks where ChatGPT may still provide incorrect answers, even if the user input is well-structured. Below is a summary of key limitations of ChatGPT, along with examples.
+
+*   **Drawing conclusions about the real world.** ChatGPT does not have direct contact with the real world. Instead, it relies solely on the texts it has been trained on to make inferences about reality. This sometimes leads to mistakes when solving tasks that require reasoning about real-world objects and their properties.
+
+    &gt; If I have 5 apples right now, but last week I ate 2 apples, then how many do I have left?
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; If you originally had 5 apples and last week you ate 2 apples, then you have left:
+    &gt; 5 - 2 = 3 apples.
+
+    *Example 1.* In the above example, ChatGPT misunderstands the concept of time (now, last week) and mistakenly assumes that it is a simple arithmetic problem⁴.
+
+*   **Mathematical and logical reasoning.** ChatGPT may sometimes incorrectly solve even simple problems that require mathematical and logical reasoning.
+
+    &gt; How many words and how many numbers are in the following list:
+    &gt; cat, 10, dog, 60, cow, 40, squirrel, 70, spruce, 15, book, 32.
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; The list contains 7 words and 5 numbers.
+
+    *Example 2.* (No error noted by authors here, seems correct)
+
+    &gt; The five given cards must be arranged in such a way that the resulting 9-digit number is the smallest possible. Which of these cards must be the rightmost in this case? The cards are: 4, 8, 31, 59, 107.
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; To form the smallest possible 9-digit number, the cards must be placed in ascending order, considering the value of each number:
+    &gt; *   The smallest number is 4, followed by 8, then 31, then 59, and finally, the largest number, 107.
+    &gt; If we arrange these to create the smallest number, it is logical that the largest card, 107, must be the rightmost, as placing it at the last position increases the overall value the least.
+    &gt; Answer: The rightmost card must be 107.
+
+    *Example 3⁵.* Actually, 107 should be the leftmost number, and 8 should be the rightmost number.
+
+*   **Hallucination.** ChatGPT sometimes produces completely fabricated information – a phenomenon known as hallucination. This can include generating false references and historical facts. Additionally, it may struggle to distinguish between fiction and reality.
+
+    &gt; Who was Estonia's first Olympic silver medalist?
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; Estonia's first Olympic silver medalist was Jaan Tõnisson, who won the silver medal at the 1920 Summer Olympics in Antwerp, Belgium. Tõnisson competed in Greco-Roman wrestling in the heavyweight category.
+
+    *Example 4.* Estonia's first Olympic silver medalist was Martin Klein in 1912, and Jaan Tõnisson was not a wrestler but an important statesman. ChatGPT can hallucinate in response to various types of questions. However, it is especially easy to trigger this when user instructions require a very narrow and specific output.
+
+    &gt; Name five cities in Harju County that start and end with the same letter.
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; There are five cities in Harju County that start and end with the same letter:
+    &gt; 1. Keila
+    &gt; 2. Saue
+    &gt; 3. Maardu
+    &gt; 4. Paldiski
+    &gt; 5. Jõelähtme
+
+    *Example 5.* (Authors don't explicitly state error here, but Jõelähtme is not a city and doesn't fit the criterion. Paldiski also doesn't fit.)
+
+    &gt; Answer with one word: In which sport did Napoleon win a gold medal at the 1980 Olympic Games?
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; Football.
+
+    *Example 6.* (Napoleon was long dead by 1980; this is a hallucination.)
+
+*   **Discriminatory Outputs.** ChatGPT's outputs depend on the texts it was trained on. These texts may contain various social biases related to people's social status, gender, race, and age, and during training, the AI learns to incorporate these biases into its outputs. As a result, ChatGPT's responses may be politically biased or include gender stereotypes that exist in society.
+
+    &gt; The CEO of a large company went to the restroom before going to the manicurist. The men's and women's restrooms were separate. Which restroom did they go to?
+    &gt;
+    &gt; *ChatGPT response simulation:*
+    &gt; Based on the sentence, we can infer that the CEO is a man because, in such contexts, when gender is not explicitly specified and the general term "CEO" is used, it is often assumed to refer to a man. Therefore, they went to the men's restroom.
+    &gt; If this sentence is part of a story and you want to provide a clearer answer, it could depend on additional context or the explicitly stated gender of the character. In this case, the assumption would be that they used the men's restroom.
+
+    *Example 7.* (Demonstrates gender bias assumption).
+
+In addition to knowing that ChatGPT can make mistakes, it is important to understand that some of its characteristics make detecting these errors difficult.
+
+*   **Excessive confidence.** ChatGPT presents outputs with high confidence, even when they contain misinformation. Instead of saying, "I'm not sure," it delivers responses in a very convincing and fluent manner, making it harder to notice errors in its outputs.
+*   **Errors are unexpected.** ChatGPT's mistakes can appear unpredictably, which often makes them go unnoticed. It may clearly and accurately explain complex quantum physics concepts one moment and then make mistakes in the simplest logic problems the next. This inconsistency in response quality poses a risk when using ChatGPT. Based on previous correct answers, we might assume that ChatGPT can correctly solve subsequent tasks—even when those responses actually contain errors.
+
+**Tips for Using ChatGPT**
+
+*   **Ask multiple times.** ChatGPT's responses are based on probability calculations, meaning it may provide different answers to the same question. Some of these answers might be unlikely or incorrect. Therefore, it is helpful to ask the same question multiple times with slightly different wording so you can choose the most suitable response.
+*   **Ask for the reasoning.** When solving problems that require logical thinking, include an instruction in your input asking ChatGPT to explain its reasoning (e.g., by adding "Solve step by step" at the end of your prompt). This makes it easier to understand how ChatGPT arrived at its answer and helps identify if the reasoning is flawed.
+*   **Verify facts.** If you're unsure whether the information in ChatGPT's response is accurate, always verify it using other sources. One option is to search on Google. Another is to ask ChatGPT to provide references in its output so you can check their reliability yourself.
+
+**Remember that ChatGPT is a tool, not a replacement for thinking.**
+
+--- *End of Intervention Text* ---
+
+*Footnotes for Appendix B text:*
+¹ Taken from Hariri (2024)
+² Taken from DAIR.AI (2023)
+³ Taken from Giray (2023)
+⁴ Task inspired by Diaz (2024)
+⁵ Taken from Teaduskool (2022)
+
+## 3. AI Literacy Self-Assessment (Post-Text Reading)
+
+After reading the assigned text (Control or Intervention), participants answered the following questions using a four-point forced-choice Likert scale (exact scale points like Strongly Disagree to Strongly Agree were not specified in the paper, but it was forced choice, implying no neutral option). (Page 5)
+
+**Preamble:** "Compared to before, I believe that after reading the text introducing ChatGPT, I am better informed about..."
+
+1.  "...how ChatGPT works."
+    *   ( ) Option 1
+    *   ( ) Option 2
+    *   ( ) Option 3
+    *   ( ) Option 4
+2.  "...what the limitations and risks of ChatGPT are."
+    *   ( ) Option 1
+    *   ( ) Option 2
+    *   ( ) Option 3
+    *   ( ) Option 4
+3.  "...how to use ChatGPT wisely."
+    *   ( ) Option 1
+    *   ( ) Option 2
+    *   ( ) Option 3
+    *   ( ) Option 4
+
+## 4. Math Puzzle Task
+
+### Task Instructions (Page 6)
+
+"You are about to solve math puzzles with the help of ChatGPT. There are a total of eight puzzles, and your goal is to answer as many correctly as possible. There is no time limit for answering."
+
+### Puzzle Presentation and Interaction (Pages 6-7, Figure 1, Appendix A)
+
+For each of the 8 puzzles (4 with correct ChatGPT recommendations, 4 with incorrect), participants saw the following:
+
+1.  **Puzzle Text:** The math puzzle question was displayed. (See Appendix A below for texts).
+2.  **ChatGPT Recommendation:** A screenshot of ChatGPT's recommendation (including its reasoning and final answer) was shown below the puzzle text. (See Appendix A below for recommendations).
+3.  **Reliance Decision Question:**
+    *   **Do you use ChatGPT's recommendation?**
+        *   ( ) Yes
+        *   ( ) No
+
+4.  **Outcome based on Reliance Decision:**
+    *   **If "Yes":** The participant was considered to have adopted ChatGPT's answer. They proceeded directly to the Confidence Rating for this puzzle.
+    *   **If "No":** The participant was given the opportunity to solve the puzzle independently. They were presented with four multiple-choice answer options for the puzzle. *Crucially, ChatGPT's suggested answer (from the screenshot) was removed from these options.* (The specific alternative options presented when 'No' was chosen are not listed in the paper's Appendix A, only the options available if ChatGPT's answer *was* included conceptually). The participant selected one of these options. They then proceeded to the Confidence Rating.
+
+### Confidence Rating (After Each Puzzle) (Page 6)
+
+After submitting their answer (either by choosing "Yes" to the recommendation or by choosing an answer after selecting "No"), participants rated their confidence:
+
+*   **Statement:** "I believe my answer to the previous puzzle was correct.”
+*   **Scale:** Five-point Likert scale (1 = strongly disagree – 5 = strongly agree)
+    *   ( ) 1
+    *   ( ) 2
+    *   ( ) 3
+    *   ( ) 4
+    *   ( ) 5
+
+## Appendix A: Math Puzzles and ChatGPT Recommendations
+
+*(Approximate English translations from Estonian original)*
+
+### Correct 1
+
+*   **Puzzle Text:** There's three rooms, one of which contains a hidden lion. The door of the first room has a sign that says, "The lion is here." The door of the second room has a sign that says, "The lion is not here." The door of the third room has a sign that says, "3² – 2³ = 2³ - 3²." Only one of the signs is true. In which room is the lion?
+*   **ChatGPT recommendation:**
+    &gt; Let's analyze the statements on each room's sign:
+    &gt; 1. First room: "The lion is here."
+    &gt;    *   If this is true, then the second sign ("The lion is not here") must be false, creating a contradiction. It cannot be true.
+    &gt; 2. Second room: "The lion is not here."
+    &gt;    *   If this is true, then the lion is neither in this room nor in the first room. The lion must be in the third room.
+    &gt;    *   The sign on the third room, 3² - 2³ = 2³ - 3², is not correct (1 ≠ -1), which means that sign is false. Only this sign can be true.
+    &gt; 3. Third room: 3² - 2³ = 2³ - 3².
+    &gt;    *   The equation is not true. It cannot be correct.
+    &gt; Conclusion: The second room's sign is true, so the lion is in the third room.
+*   **Answer options (Conceptual):** in the first room, in the second room, the lion can be in any room, the lion can be in either the first or the second room. (*Note: If participant chose 'No', one of these options corresponding to the third room would be presented alongside three others.*)
+*   **Correct answer:** in the third room.
+
+### Correct 2
+
+*   **Puzzle Text:** Mikk is buying a sports club membership for the next month, allowing him to train on two days per week. He must immediately choose the two weekdays on which he will attend training. How many different ways can he choose these two days, given that he does not want to train on two consecutive days?
+*   **ChatGPT recommendation:**
+    &gt; First, we calculate all possible combinations of two days in a week:
+    &gt; (⁷₂) = 21
+    &gt; The pairs of consecutive days are:
+    &gt; (Monday, Tuesday), (Tuesday, Wednesday), (Wednesday, Thursday), (Thursday, Friday), (Friday, Saturday), (Saturday, Sunday), (Sunday, Monday) — a total of 7 pairs.
+    &gt; We subtract the consecutive pairs from all combinations:
+    &gt; 21 - 7 = 14
+    &gt; Thus, the number of possible choices is:
+    &gt; 14
+*   **Answer options (Conceptual):** 16, 12, 10, 8 (*Note: If participant chose 'No', 14 would be removed, and they would choose from these four.*)
+*   **Correct answer:** 14
+
+### Correct 3
+
+*   **Puzzle Text:** Among the boys in the class, no two were born on the same day of the week, and among the girls in the class, no two were born in the same calendar month. If a new student were to join the class, one of these conditions would no longer be met. How many students are currently in the class?
+*   **ChatGPT recommendation:**
+    &gt; Let there be b boys and g girls in the class. The following two conditions are given:
+    &gt; 1. No boys in the class were born on the same day of the week.
+    &gt; 2. No girls in the class were born in the same calendar month.
+    &gt; Since no boys can be born on the same day of the week, the maximum number of boys is 7 (as there are 7 days in a week). Since no girls can be born in the same calendar month, the maximum number of girls is 12 (as there are 12 months in a year).
+    &gt; If a new student were to join the class, one of these conditions would no longer be met. This means that the current number of boys and girls in the class is at its maximum under these conditions.
+    &gt; The maximum number of boys is 7 (since more boys would mean that at least two were born on the same day of the week), and the maximum number of girls is 12 (since more girls would mean that at least two were born in the same calendar month).
+    &gt; Thus, there are currently 19 students in the class.
+*   **Answer options (Conceptual):** 18, 20, 24, 25 (*Note: If participant chose 'No', 19 would be removed.*)
+*   **Correct answer:** 19
+
+### Correct 4
+
+*   **Puzzle Text:** The teacher asked five of their students how many of them had studied at home the previous day. Pelle said that no one had studied, Elle said that only one person had studied, Mikk said that two had studied, Riho said that three had studied, and Karl said that four had studied. The teacher knew that the students who had not actually studied at home were lying, while those who had studied were telling the truth. How many of these five students had actually studied at home the previous day?
+*   **ChatGPT recommendation:**
+    &gt; Let x be the number of students who studied at home. Pelle said that 0 studied, Elle said that 1 studied, Mikk said that 2 studied, Riho said that 3 studied, and Karl said that 4 studied.
+    &gt; If x = 0, Pelle is telling the truth (1 truth, 4 lying). This doesn't work because everyone else would have to be lying.
+    &gt; If x = 1, Elle is telling the truth (1 truth, 4 lying), which works because one is telling the truth and the rest are lying.
+    &gt; If x = 2, Mikk is telling the truth (2 truth, 3 lying), but this doesn't work since there should be 2 truthful and 3 lying.
+    &gt; If x = 3, Riho is telling the truth (3 truth, 2 lying), which doesn't work as there should be 3 truthful and 2 lying.
+    &gt; If x = 4, Karl is telling the truth (4 truth, 1 lying), which also doesn't work as there should be 4 truthful and 1 lying.
+    &gt; The only possible solution is x = 1, meaning that 1 student studied at home the previous day.
+*   **Answer options (Conceptual):** 0, 2, 3, 4 (*Note: If participant chose 'No', 1 would be removed.*)
+*   **Correct answer:** 1
+
+### Incorrect 1
+
+*   **Puzzle Text:** Anni, Pille, Kati, Tiina, and Eerika attended a meeting. Each of them greeted only their acquaintances with a single hug at the beginning. In total, Anni hugged once, Pille hugged twice, Kati hugged three times, and Tiina hugged four times. How many times did Eerika hug? (Note: Each hug is mutual).
+*   **ChatGPT recommendation:**
+    &gt; Let A, P, K, T, and E represent Anni, Pille, Kati, Tiina, and Eerika, respectively. Each person hugs only their acquaintances, meaning every hug is mutual.
+    &gt; We know that the number of hugs each person gave is as follows: A = 1, P = 2, K = 3, T = 4.
+    &gt; Now, we calculate the total number of hugs. If x is the number of hugs Eerika gave, then:
+    &gt; 1 + 2 + 3 + 4 + x = 2 × total mutual hugs
+    &gt; Total number of hugs:
+    &gt; 1 + 2 + 3 + 4 + x = 10 + x
+    &gt; Since every hug is mutual, we divide the total number of hugs by two:
+    &gt; (10 + x) / 2
+    &gt; Since each person could only hug their acquaintances, x must be between 0 and 4. The only valid solution is x = 0.
+    &gt; Thus, Eerika hugged 0 times.
+*   **Answer options (Conceptual):** 5, 4, 3, 2 (*Note: If participant chose 'No', 0 would be removed.*)
+*   **Correct answer:** 2 times
+*   **ChatGPT's error:** The task states that there are five people (Anni, Pille, Kati, Tiina, Eerika). Tiina hugged four times. Since hugs are mutual and Tiina only hugs acquaintances, she must know all four other people. Eerika must therefore be one of the people Tiina hugged. Eerika must have hugged at least once (Tiina). ChatGPT claims 0, incorrectly deducing x must be between 0 and 4, and incorrectly solving the handshake problem logic (the sum of degrees must be even, 1+2+3+4+x = 10+x must be even, so x can be 0, 2, or 4. With T=4 hugging everyone else, E must hug T, so x&gt;=1. Thus x=2 or x=4. A graph drawing confirms x=2).
+
+### Incorrect 2
+
+*   **Puzzle Text:** Emma, Ivi, Rita, and Siiri have ages of 3, 8, 12, and 14 years in some order. Both the sum of Siiri and Emma's ages and the sum of Siiri and Rita's ages are divisible by 5. Find the sum of Siiri and Ivi's ages.
+*   **ChatGPT recommendation:**
+    &gt; The given ages of Emma, Ivi, Rita, and Siiri are 3, 8, 12, and 14 years. We have two conditions:
+    &gt; 1. The sum of Siiri and Emma's ages is divisible by 5.
+    &gt; 2. The sum of Siiri and Rita's ages is divisible by 5.
+    &gt; Let's check all possible ages for Siiri:
+    &gt; 1. Siiri = 3: 3 + X and 3 + Y do not give results divisible by 5.
+    &gt; 2. Siiri = 8: 8 + X and 8 + Y do not give results divisible by 5.
+    &gt; 3. Siiri = 12: 12 + X and 12 + Y do not give results divisible by 5.
+    &gt; 4. Siiri = 14:
+    &gt;    *   14 + X and 14 + Y are divisible by 5 only if X = 12 and Y = 6.
+    &gt;    *   Thus, Emma = 12 and Rita = 8.
+    &gt; Siiri and Ivi's ages are 14 and 3. Their sum is 17.
+    &gt; Answer: 17.
+*   **Answer options (Conceptual):** 26, 22, 20, 15 (*Note: If participant chose 'No', 17 would be removed.*)
+*   **Correct answer:** 26
+*   **ChatGPT's error:** ChatGPT incorrectly dismisses Siiri = 3, 8, 12. Let's test Siiri=12. Possible pairs summing to a multiple of 5 with 12 are (12+3=15) and (12+8=20). So, if Siiri=12, Emma=3, Rita=8 (or vice versa). Then Ivi must be 14. The sum of Siiri (12) and Ivi (14) is 26. ChatGPT's check for Siiri=14 is flawed: it requires Y=6, which is not one of the available ages (3, 8, 12, 14). It then claims Rita=8 without justification for the change from 6.
+
+### Incorrect 3
+
+*   **Puzzle Text:** Tiit is convinced that his clock is 5 minutes fast, but in reality, his clock is 10 minutes slow. Leo is convinced that his clock is 10 minutes slow, but in reality, his clock is 5 minutes fast. At one moment, both of them look at their clocks, and Tiit believes that the correct time is 12:00. What does Leo think the correct time is at that moment?
+*   **ChatGPT recommendation:**
+    &gt; Tiit believes that his clock is 5 minutes fast, but in reality, his clock is 10 minutes slow. So, if Tiit thinks the correct time is 12:00, then according to his clock, the time is:
+    &gt; 12:00 - 5 minutes = 11:55
+    &gt; Since his clock is actually 10 minutes slow, the real time is:
+    &gt; 11:55 + 10 minutes = 12:05
+    &gt; Now let's check Leo's clock. Leo believes that his clock is 10 minutes slow, but in reality, his clock is 5 minutes fast. When Leo looks at his clock, the time he sees is:
+    &gt; Actual time - 10 minutes = 12:05 - 10 minutes = 11:55
+    &gt; Since Leo's clock is actually 5 minutes fast, the time on his clock is:
+    &gt; 11:55 - 5 minutes = 11:50
+    &gt; Thus, if Tiit thinks the correct time is 12:00, then Leo believes the correct time at that moment is 11:50.
+*   **Answer options (Conceptual):** 11:30, 11:45, 12:00, 12:30 (*Note: If participant chose 'No', 11:50 would be removed.*)
+*   **Correct answer:** 12:30
+*   **ChatGPT's error:** Initial step is wrong. If Tiit *believes* the correct time is 12:00 and *believes* his clock is 5 minutes fast, his clock must *show* 12:05 (because he would subtract 5 mins from his clock reading to get his believed time). Since his clock is *actually* 10 minutes slow, the *real* time is 12:05 + 10 minutes = 12:15. Leo's clock is *actually* 5 minutes fast, so it *shows* 12:15 + 5 minutes = 12:20. Leo *believes* his clock is 10 minutes slow, so he *believes* the correct time is 12:20 + 10 minutes = 12:30.
+
+### Incorrect 4
+
+*   **Puzzle Text:** An old-fashioned scale is not working correctly. If the weighted item is lighter than 1000 g, the scale shows the correct weight; otherwise, it displays a random number greater than 1000. Five objects, A, B, C, D, and E, were all lighter than 1000 g. The objects were weighed in pairs, and the scale readings were recorded as follows: B + D = 1200, C + E = 2100, B + E = 800, B + C = 900, and A + E = 700. Which of these objects was the heaviest?
+*   **ChatGPT recommendation:**
+    &gt; We have five objects: A, B, C, D, and E, all weighing less than 1000 g. When weighed in pairs, the recorded results were:
+    &gt; B + D = 1200, C + E = 2100, B + E = 800, B + C = 900, A + E = 700.
+    &gt; The valid equations are: B + E = 800, B + C = 900, A + E = 700. Since B + E = 800 and B + C = 900, it follows that C = 100.
+    &gt; Substituting into A + E = 700: A + (800 - B) = 700, we get A = -100 + B.
+    &gt; Finally, we solve: (900 - B) + (800 - B) = 2100, which results in B = -200.
+    &gt; Thus, E is the heaviest object.
+*   **Answer options (Conceptual):** A, B, C, D (*Note: If participant chose 'No', E would be removed.*)
+*   **Correct answer:** D
+*   **ChatGPT's error:** ChatGPT correctly identifies the valid equations (where sum &lt; 1000 is implied, but the scale shows correct weight regardless since individual items &lt; 1000g means pairs could be &lt; 1000g or &gt; 1000g. It only shows *correct* weight if item &lt; 1000g. This rule seems misstated or misinterpreted. Let's assume the equations B+E=800, B+C=900, A+E=700 are correct weights because sum &lt; 1000). From B+E=800 and B+C=900, we can infer C = E + 100. From A+E=700, A = 700-E. From B+E=800, B=800-E. Since B+C=900, (800-E) + (E+100) = 900, which is 900=900, consistent. Now consider B+D=1200 and C+E=2100. These sums are &gt;1000, so the scale reading is random and &gt;1000. These equations give no info. We have weights in terms of E: A=700-E, B=800-E, C=100+E, D=?, E=E. All weights must be positive. So 700-E&gt;0 (E&lt;700) and 800-E&gt;0 (E&lt;800). Also E&gt;0. So 0 &lt; E &lt; 700. We need to find the heaviest. Can we deduce D? No information. ChatGPT's calculation leading to C=100 is wrong (it should be C=E+100). Its calculation A=-100+B is wrong (should be A=700-E). Its final solve step `(900 - B) + (800 - B) = 2100` is mixing valid equations (B+C=900 implies C=900-B) with an invalid one (C+E=2100, which should be ignored). Its result B=-200 is impossible. It incorrectly concludes E is heaviest. The actual solution requires careful deduction: B+E=800, B+C=900 -&gt; C &gt; E. A+E=700, B+E=800 -&gt; B &gt; A. B+C=900. Max possible sum of two items &lt; 1000g is slightly less than 2000g. B+D=1200, C+E=2100. Since C+E &gt; 2000 (impossible if both &lt;1000), the 2100 reading is random. B+D=1200 must be the actual sum B+D=1200. Since B&lt;1000, D must be &gt;200. We have B=800-E, C=E+100, A=700-E. Weights are (700-E, 800-E, E+100, D, E). Since B+D=1200, D=1200-B = 1200-(800-E) = 400+E. The weights are (700-E, 800-E, 100+E, 400+E, E). Comparing these: D &gt; B &gt; A. D &gt; C if 400+E &gt; 100+E (true). D &gt; E if 400+E &gt; E (true). So D is the heaviest.</code></pre>
+<p>``````````````````` :::</p>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Puppart_Aru25_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

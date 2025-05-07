@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Plan Consultation Demo</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Purdue Blue */
+            --secondary-color: #e87722; /* Purdue Orange */
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --error-color: #dc3545;
+            --font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px; /* Slightly narrower */
+            margin: 20px auto;
+            background-color: var(--light-gray);
+            color: #333;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.6em; }
+        h3 { font-size: 1.3em; text-align: left; margin-top: 1.5em; border-bottom: 1px solid var(--medium-gray); padding-bottom: 5px;}
+        h4 { font-size: 1.1em; text-align: left; color: var(--dark-gray); margin-top: 1em; margin-bottom: 0.5em; }
+
+        /* Card Styling for Sections */
+        #setup, #client-brief, #task, #feedback-section, #api-key-section {
+            margin-bottom: 25px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+         #client-brief, #feedback-section {
+             background-color: #eef7ff; /* Light blue for client comms */
+             border-color: var(--info-color);
+         }
+
+        #api-key-section {
+            background-color: #fffef0;
+            border-color: var(--warning-color);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select, input[type="text"] {
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1rem;
+            max-width: 450px;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 180px;
+             text-align: center;
+        }
+        button:disabled {
+             background-color: var(--medium-gray);
+             cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #004175; /* Darker Purdue blue */
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--medium-gray);
+            font-weight: 600;
+            text-align: center;
+        }
+        td:first-child {
+            text-align: left;
+            font-weight: 600;
+             width: 30%; /* Ensure category name has enough space */
+        }
+        td:nth-child(4) { /* Slider column */
+            width: 45%;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: var(--light-gray);
+        }
+        tfoot {
+            font-weight: bold;
+            background-color: var(--medium-gray);
+        }
+        tfoot td {
+             text-align: center;
+        }
+         tfoot td:first-child {
+            text-align: left;
+        }
+
+        /* Slider Styling */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Reduced gap */
+            margin: 5px 0;
+            padding: 3px;
+        }
+
+        .slider {
+            flex-grow: 1;
+            cursor: pointer;
+            appearance: none;
+            height: 8px;
+            background: var(--medium-gray);
+            border-radius: 5px;
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            appearance: none; width: 16px; height: 16px; background: var(--primary-color); border-radius: 50%; cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 16px; height: 16px; background: var(--primary-color); border-radius: 50%; cursor: pointer; border: none;
+        }
+
+        .slider-value {
+            min-width: 55px; /* Slightly smaller */
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.85rem; /* Smaller font */
+            background-color: var(--light-gray);
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info {
+            font-style: italic; color: var(--dark-gray); margin-bottom: 15px; font-size: 0.9rem;
+        }
+        .error {
+            color: var(--error-color); font-weight: bold; margin-top: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px;
+        }
+         .client-message {
+             font-style: italic;
+             padding: 10px;
+             border-radius: 5px;
+             background-color: #ffffff;
+             border: 1px dashed var(--primary-color);
+             margin-top: 10px;
+         }
+         .loading {
+             font-style: italic; color: var(--dark-gray); padding: 10px;
+         }
+
+    </style>
+</head>
+<body>
+
+    <h1>Energy Plan Consultation</h1>
+
+    <div id="api-key-section">
+        <label for="api-key">Purdue GenAI API Key:</label>
+        <input type="text" id="api-key" placeholder="Enter your API Key here" value="sk-4597455063b242e9a43187a32115c04a">
+        <p class="info" style="background-color: transparent; border: none; padding: 0; margin-top: 5px; font-style: normal;">
+            A valid API key is needed. A default key is provided.
+        </p>
+    </div>
+
+    <div id="setup">
+        <h2>Consultation Setup</h2>
+        <label for="family">Select Family Scenario:</label>
+        <select id="family">
+            <option value="">-- Select Family --</option>
+            <option value="davis">Davis Family (Massachusetts)</option>
+            <option value="adams">Adams Family (California)</option>
+             </select>
+        <button id="start-button" onclick="startConsultation()">Start Consultation</button>
+    </div>
+
+     <div id="client-brief" style="display: none;">
+        <h3>Client Introduction</h3>
+        <div id="client-initial-statement" class="client-message loading">Loading client statement...</div>
+     </div>
+
+    <div id="task" style="display: none;">
+        <h3>Develop Your Plan</h3>
+        <p id="task-instructions"></p>
+        <p id="task-note" class="info"></p>
+        <table id="energy-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Last Year (kWh)</th>
+                    <th>State Average (kWh)</th>
+                    <th>Your Proposed Plan (New kWh)</th>
+                </tr>
+            </thead>
+            <tbody id="energy-table-body"></tbody>
+            <tfoot>
+                <tr>
+                    <th>Total kWh</th>
+                    <td id="last-year-total"></td>
+                    <td id="average-total"></td>
+                    <td id="plan-total">0</td>
+                </tr>
+                 <tr>
+                    <td colspan="2">Approx. Target Reduction</td>
+                    <td colspan="2" id="target-goal"></td>
+                 </tr>
+                 <tr>
+                    <td colspan="2">Your Plan's Reduction</td>
+                    <td colspan="2" id="plan-reduction">0 kWh</td>
+                 </tr>
+            </tfoot>
+        </table>
+         <p id="error-message-plan" class="error" style="display: none;"></p>
+        <button id="submit-plan-button" onclick="submitPlanForFeedback(this)">Submit Plan for Feedback</button>
+    </div>
+
+    <div id="feedback-section" style="display: none;">
+         <h3>Client Feedback</h3>
+         <div id="client-feedback-text" class="client-message loading">Waiting for client feedback...</div>
+         <p style="margin-top: 15px;">You can now adjust the sliders above and resubmit the plan based on the client's feedback.</p>
+    </div>
+
+
+    <script>
+        // --- Constants and Data ---
+        const familiesData = {
+            'davis': {
+                name: "Davis", state: "Massachusetts",
+                kwhPerDollar: 46293 / (6944 / 0.15), diffVsAverage: 14086,
+                categories: { 'Cooling': { ly: 419, avg: 322 }, 'Heating': { ly: 26751, avg: 19108 }, 'Water Heating': { ly: 10543, avg: 5070 }, 'Refrigerator': { ly: 1230, avg: 1025 }, 'Other': { ly: 7350, avg: 6682 } },
+                preferences: { comfortWeight: 0.7, savingsWeight: 0.3, categoryImpact: { 'Heating': 0.9, 'Cooling': 0.7, 'Water Heating': 0.5, 'Refrigerator': 0.1, 'Other': 0.2 } }
+            },
+            'adams': {
+                name: "Adams", state: "California",
+                kwhPerDollar: 0.15, diffVsAverage: 3542,
+                categories: { 'Cooling': { ly: 2581, avg: 1289 }, 'Heating': { ly: 6157, avg: 5597 }, 'Water Heating': { ly: 5061, avg: 4601 }, 'Refrigerator': { ly: 1266, avg: 1055 }, 'Other': { ly: 7608, avg: 6916 } },
+                preferences: { comfortWeight: 0.4, savingsWeight: 0.6, categoryImpact: { 'Heating': 0.6, 'Cooling': 0.8, 'Water Heating': 0.5, 'Refrigerator': 0.2, 'Other': 0.1 } }
+            }
+        };
+
+        const config = {
+            apiUrl: "https://genai.rcac.purdue.edu/api/chat/completions",
+            model: "mistral:latest",//"gemma3:27b", //"llama3.1:latest", // Or try "llama3:latest", 
+            maxTokensClient: 200, maxTokensIntro: 150, temperature: 0.3
+        };
+
+        let currentScenario = {};
+        let lastYearTotal = 0;
+        let targetReductionValue = 0;
+
+        // --- LLM API Call ---
+       async function callLLM(systemPrompt, userPrompt, maxTokens, callingButton) {
+            const apiKey = document.getElementById('api-key').value;
+            // Ensure error display exists and clear it initially for general errors
+            const errorElementGeneral = document.getElementById('error-message-plan');
+             if (errorElementGeneral) displayError("", "error-message-plan"); // Clear general errors
+
+            if (!apiKey) {
+                 displayError("API Key not set.", "error-message-plan");
+                 throw new Error("API Key not set");
+            }
+
+            console.log(`Calling LLM (Max Tokens: ${maxTokens}):`, { systemPrompt, userPrompt });
+            if (callingButton) callingButton.disabled = true;
+
+            let response; // Declare response outside try for logging in finally if needed
+            try {
+                response = await fetch(config.apiUrl, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        "model": config.model,
+                        "messages": [ { "role": "system", "content": systemPrompt }, { "role": "user", "content": userPrompt } ],
+                        "max_tokens": maxTokens, "temperature": config.temperature, "stream": false
+                    })
+                });
+
+                console.log(`LLM call status: ${response.status}`);
+
+                // Try to get raw text regardless of status for debugging
+                let responseBodyText = '';
+                try {
+                    responseBodyText = await response.text(); // Get raw text first
+                    console.log("LLM Raw Response Body:", responseBodyText);
+                } catch (textError) {
+                    console.error("Error reading response text:", textError);
+                     // Decide if we should throw here or continue if response.ok might still be true (unlikely)
+                     throw new Error(`Failed to read response text: ${textError.message}`);
+                }
+
+
+                if (!response.ok) {
+                    // Construct error message using the already read text body
+                    const errorMsg = `API Error ${response.status}: ${responseBodyText || response.statusText}`;
+                    // Display error in the general error area
+                    displayError(errorMsg, "error-message-plan");
+                    console.error(errorMsg);
+                    throw new Error(`API Error: ${response.status}`); // Throw simpler error for outer catch
+                }
+
+                // If response was ok, try to parse the text we already read
+                 let data;
+                 try {
+                    data = JSON.parse(responseBodyText);
+                 } catch(parseError){
+                    console.error("Failed to parse JSON response:", parseError);
+                    console.error("Response text that failed parsing:", responseBodyText);
+                    displayError("API returned non-JSON response. Check console.", "error-message-plan");
+                    throw new Error("Failed to parse JSON response.");
+                 }
+
+                 console.log("LLM Parsed Response Data:", data);
+
+                // Check for expected content structure AFTER successful parsing
+                if (!data.choices?.[0]?.message?.content) {
+                    console.error("Invalid API response structure received:", data);
+                    displayError("API response missing expected content. Check console.", "error-message-plan");
+                    throw new Error("Invalid API response structure (missing content)");
+                }
+
+                return data.choices[0].message.content.trim();
+
+            } catch (error) {
+                console.error("LLM Call failed:", error);
+                // Ensure a general error is displayed if not already set by specific checks
+                if (errorElementGeneral && !errorElementGeneral.textContent) {
+                   displayError(`LLM communication failed: ${error.message}. Check console.`, "error-message-plan");
+                }
+                throw error; // Re-throw for the calling function to handle UI specifics
+            } finally {
+                 // Ensure button is always re-enabled
+                 if (callingButton) callingButton.disabled = false;
+                 console.log("LLM call finished.");
+            }
+        }
+
+        function displayError(message, elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = message ? 'block' : 'none';
+            } else {
+                console.error(`Error display element not found: #${elementId}`);
+            }
+        }
+
+        // --- Consultation Flow ---
+        async function startConsultation() {
+             const startButton = document.getElementById('start-button'); // Get button for disabling
+             startButton.disabled = true; // Disable while setting up
+
+            const selectedFamilyKey = document.getElementById('family').value;
+            if (!selectedFamilyKey) {
+                alert("Please select a family scenario.");
+                 startButton.disabled = false;
+                return;
+            }
+
+            currentScenario = {
+                familyKey: selectedFamilyKey,
+                familyData: JSON.parse(JSON.stringify(familiesData[selectedFamilyKey])),
+                plan: {}
+            };
+
+            calculateInitialTotalsAndTarget();
+
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('client-brief').style.display = 'block';
+            document.getElementById('task').style.display = 'none';
+            document.getElementById('feedback-section').style.display = 'none';
+
+             const introElement = document.getElementById('client-initial-statement');
+             introElement.classList.add('loading');
+             introElement.textContent = 'Loading client statement...';
+             displayError("", "error-message-plan"); // Clear any previous errors
+
+             try {
+                 const statement = await getClientInitialStatement(startButton); // Pass button to callLLM
+                 introElement.textContent = statement;
+                 introElement.classList.remove('loading');
+                 document.getElementById('task').style.display = 'block';
+                 setupTaskInterface();
+             } catch (error) {
+                  // Error should be displayed by callLLM via displayError
+                  introElement.textContent = 'Failed to load client statement.';
+                  introElement.classList.remove('loading');
+                  introElement.style.color = 'var(--error-color)';
+                  // Don't proceed to task if intro fails
+             } finally {
+                  // Start button is re-enabled inside callLLM's finally block
+             }
+        }
+
+         function calculateInitialTotalsAndTarget() {
+             lastYearTotal = 0;
+             Object.values(currentScenario.familyData.categories).forEach(data => {
+                 lastYearTotal += data.ly;
+             });
+             targetReductionValue = Math.round(lastYearTotal * 0.10);
+         }
+
+        async function getClientInitialStatement(button) { // Accept button argument
+            const { name, state, preferences } = currentScenario.familyData;
+            const comfortPref = preferences.comfortWeight > preferences.savingsWeight ? "lean towards maintaining comfort" : "are focused more on savings";
+            const savingsGoal = `around ${targetReductionValue.toLocaleString()} kWh`;
+
+            const systemPrompt = `You are ${name}, head of household in ${state}. Introduce yourself VERY briefly (1 sentence). State your goal to reduce energy by ${savingsGoal} next year. Subtly hint at your preference: you ${comfortPref}. Keep it under 30 words total.`;
+            const userPrompt = `Provide your brief introduction and energy saving goal statement.`;
+
+            return await callLLM(systemPrompt, userPrompt, config.maxTokensIntro, button); // Pass button
+        }
+
+
+        function setupTaskInterface() {
+            const { name, state, diffVsAverage, categories } = currentScenario.familyData;
+            document.getElementById('task-instructions').textContent = `Help the ${name} family create a plan. Adjust the sliders for next year's proposed usage.`;
+            document.getElementById('task-note').textContent = `Last year: ${lastYearTotal.toLocaleString()} kWh total (${diffVsAverage.toLocaleString()} kWh vs state average).`;
+            document.getElementById('target-goal').textContent = `${targetReductionValue.toLocaleString()} kWh`;
+
+            const tableBody = document.getElementById('energy-table-body');
+            tableBody.innerHTML = '';
+            let averageTotal = 0;
+            currentScenario.plan = {};
+
+            Object.entries(categories).forEach(([category, data]) => {
+                averageTotal += data.avg;
+                currentScenario.plan[category] = data.ly;
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = category;
+                row.insertCell().textContent = data.ly.toLocaleString();
+                row.insertCell().textContent = data.avg.toLocaleString();
+                const planCell = row.insertCell();
+                createSlider(planCell, category, data.ly);
+            });
+
+            document.getElementById('last-year-total').textContent = lastYearTotal.toLocaleString();
+            document.getElementById('average-total').textContent = averageTotal.toLocaleString();
+            updateTotals();
+        }
+
+        function createSlider(cell, category, initialValue) {
+            const container = document.createElement('div');
+            container.className = 'slider-container';
+            const slider = document.createElement('input');
+            slider.type = 'range'; slider.className = 'slider';
+            slider.min = 0; slider.max = Math.max(initialValue * 1.1, 50);
+            slider.value = initialValue; slider.dataset.category = category;
+            slider.oninput = handleSliderChange;
+            slider.setAttribute('aria-label', `${category} proposed usage`);
+            const valueSpan = document.createElement('span');
+            valueSpan.className = 'slider-value';
+            valueSpan.textContent = initialValue.toLocaleString();
+            valueSpan.id = `plan-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`;
+            container.appendChild(slider); container.appendChild(valueSpan);
+            cell.appendChild(container);
+        }
+
+        function handleSliderChange(event) {
+            const slider = event.target;
+            const category = slider.dataset.category;
+            const value = parseInt(slider.value);
+            const valueSpanId = `plan-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`;
+            const valueSpan = document.getElementById(valueSpanId);
+            if (valueSpan) valueSpan.textContent = value.toLocaleString();
+            if (currentScenario.plan) currentScenario.plan[category] = value;
+            updateTotals();
+            document.getElementById('feedback-section').style.display = 'none';
+            displayError("", "error-message-plan"); // Clear errors on adjustment
+        }
+
+        function updateTotals() {
+             let planTotal = 0;
+             if (!currentScenario.plan) return;
+             Object.values(currentScenario.plan).forEach(val => planTotal += val);
+             document.getElementById('plan-total').textContent = planTotal.toLocaleString();
+             const planReduction = lastYearTotal - planTotal;
+             document.getElementById('plan-reduction').textContent = `${planReduction.toLocaleString()} kWh`;
+             highlightReduction('plan-reduction', planReduction);
+        }
+
+         function highlightReduction(elementId, reduction) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            const targetKwh = targetReductionValue;
+            const lowerBound = targetKwh * 0.8; const upperBound = targetKwh * 1.2;
+            element.style.fontWeight = 'bold';
+            if (reduction >= lowerBound && reduction <= upperBound) element.style.color = 'var(--success-color)';
+            else if (reduction > upperBound) element.style.color = 'var(--info-color)';
+            else if (reduction > 0) element.style.color = 'var(--warning-color)';
+            else element.style.color = 'var(--error-color)';
+        }
+
+         // --- Plan Evaluation and Feedback ---
+         function calculatePlanDistance(userPlan, familyData, lastYearTotal) {
+             const { preferences, categories } = familyData;
+             let totalComfortCost = 0; let totalSavings = 0;
+             Object.entries(userPlan).forEach(([category, newValue]) => {
+                 const reduction = Math.max(0, categories[category].ly - newValue);
+                 totalSavings += reduction;
+                 totalComfortCost += reduction * (preferences.categoryImpact[category] || 0.1);
+             });
+             const savingsError = Math.abs(totalSavings - targetReductionValue);
+             const weightedSavingsError = (savingsError / (targetReductionValue || 1)) * preferences.savingsWeight * 100; // Avoid div by zero
+             let maxComfortCost = 1;
+             Object.entries(categories).forEach(([category, data]) => { maxComfortCost += data.ly * (preferences.categoryImpact[category] || 0.1); });
+             const weightedComfortCost = (totalComfortCost / maxComfortCost) * preferences.comfortWeight * 100;
+             const distanceScore = weightedComfortCost + weightedSavingsError;
+             let feedbackSummary = "";
+             if (distanceScore < 15) feedbackSummary = "This plan seems quite aligned with my priorities.";
+             else if (distanceScore < 35) feedbackSummary = "This plan looks reasonable, a good balance.";
+             else feedbackSummary = "This plan might be difficult, affecting comfort or savings goals significantly.";
+             if (totalSavings < targetReductionValue * 0.8 && distanceScore >= 15) feedbackSummary += " It doesn't quite reach the savings target.";
+             else if (totalSavings > targetReductionValue * 1.2 && distanceScore >= 15) feedbackSummary += " It exceeds the savings target, perhaps unnecessarily.";
+             if (weightedComfortCost > 30 && distanceScore >= 15) feedbackSummary += " It seems to cut deeply into areas important for comfort.";
+             console.log({totalSavings, totalComfortCost, weightedSavingsError, weightedComfortCost, distanceScore, feedbackSummary});
+             return { distanceScore, feedbackSummary };
+         }
+
+        async function submitPlanForFeedback(button) {
+             const feedbackSection = document.getElementById('feedback-section');
+             const feedbackElement = document.getElementById('client-feedback-text');
+
+             feedbackSection.style.display = 'block'; // Show feedback section immediately
+             feedbackElement.classList.add('loading');
+             feedbackElement.textContent = 'Analyzing plan and getting feedback...';
+             feedbackElement.style.color = 'inherit'; // Reset color
+             displayError("", "error-message-plan"); // Clear previous plan errors
+
+             // Ensure button is passed correctly
+             const submitButton = button || document.getElementById('submit-plan-button');
+
+             try {
+                const { familyData, plan } = currentScenario;
+                const { distanceScore, feedbackSummary } = calculatePlanDistance(plan, familyData, lastYearTotal);
+
+                const planText = Object.entries(plan).map(([k, v]) => `- ${k}: ${v.toLocaleString()} kWh`).join('\n');
+                const currentReduction = lastYearTotal - Object.values(plan).reduce((s, v) => s + v, 0);
+
+                const systemPrompt = `You are ${familyData.name}. You want to save ~${targetReductionValue.toLocaleString()} kWh. React VERY TERSLEY (1-2 sentences MAX) to the proposed plan based *primarily* on the provided analysis of how well it matches your preferences (comfort vs savings). Your underlying preference analysis is: "${feedbackSummary}". Do not repeat the analysis details, just give your short reaction.`;
+                const userPrompt = `Here is the proposed plan:\n${planText}\n(Reduction: ${currentReduction.toLocaleString()} kWh).\n\nReact briefly based on the analysis: "${feedbackSummary}".`;
+
+                // *** Make the API call ***
+                const llmResponse = await callLLM(systemPrompt, userPrompt, config.maxTokensClient, submitButton);
+
+                // *** Update UI on SUCCESS ***
+                feedbackElement.textContent = llmResponse;
+
+             } catch (error) {
+                  // *** Update UI on FAILURE ***
+                  // Error should already be displayed by callLLM in #error-message-plan
+                  console.error("Failed to get feedback:", error);
+                  feedbackElement.textContent = `Failed to get feedback. ${error.message || 'Check console.'}`;
+                  feedbackElement.style.color = 'var(--error-color)'; // Make feedback text red
+             } finally {
+                  // *** Ensure loading state is removed ***
+                  feedbackElement.classList.remove('loading');
+                   // Button is re-enabled in callLLM's finally block
+             }
+        }
+
+    </script>
+
+</body>
+</html>

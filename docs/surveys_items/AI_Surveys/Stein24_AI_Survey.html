@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-01">
+
+<title>stein24_ai_survey – Representation Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b15693f568b969af90aa5a4bce33b010.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#survey-instruments-from-stein-et-al.-2024" id="toc-survey-instruments-from-stein-et-al.-2024" class="nav-link active" data-scroll-target="#survey-instruments-from-stein-et-al.-2024">Survey Instruments from Stein et al.&nbsp;(2024)</a>
+  <ul class="collapse">
+  <li><a href="#core-instrument-attitudes-towards-artificial-intelligence-scale-attari-12" id="toc-core-instrument-attitudes-towards-artificial-intelligence-scale-attari-12" class="nav-link" data-scroll-target="#core-instrument-attitudes-towards-artificial-intelligence-scale-attari-12">Core Instrument: Attitudes Towards Artificial Intelligence Scale (ATTARI-12)</a></li>
+  <li><a href="#study-1-scale-validation-measures" id="toc-study-1-scale-validation-measures" class="nav-link" data-scroll-target="#study-1-scale-validation-measures">Study 1: Scale Validation Measures</a>
+  <ul class="collapse">
+  <li><a href="#attari-12" id="toc-attari-12" class="nav-link" data-scroll-target="#attari-12">1. ATTARI-12</a></li>
+  <li><a href="#attitudes-towards-personal-voice-assistants-pva" id="toc-attitudes-towards-personal-voice-assistants-pva" class="nav-link" data-scroll-target="#attitudes-towards-personal-voice-assistants-pva">2. Attitudes Towards Personal Voice Assistants (PVA)</a></li>
+  <li><a href="#attitudes-towards-robots" id="toc-attitudes-towards-robots" class="nav-link" data-scroll-target="#attitudes-towards-robots">3. Attitudes Towards Robots</a></li>
+  <li><a href="#social-desirability-scale-likely-sds-17-16-items-shown" id="toc-social-desirability-scale-likely-sds-17-16-items-shown" class="nav-link" data-scroll-target="#social-desirability-scale-likely-sds-17-16-items-shown">4. Social Desirability Scale (Likely SDS-17, 16 items shown)</a></li>
+  <li><a href="#study-1-attention-checks-related" id="toc-study-1-attention-checks-related" class="nav-link" data-scroll-target="#study-1-attention-checks-related">5. Study 1 Attention Checks &amp; Related</a></li>
+  </ul></li>
+  <li><a href="#study-2-german-version-re-test-measures" id="toc-study-2-german-version-re-test-measures" class="nav-link" data-scroll-target="#study-2-german-version-re-test-measures">Study 2: German Version / Re-test Measures</a>
+  <ul class="collapse">
+  <li><a href="#attari-12-german-version" id="toc-attari-12-german-version" class="nav-link" data-scroll-target="#attari-12-german-version">1. ATTARI-12 (German Version)</a></li>
+  <li><a href="#career-interest-in-ai" id="toc-career-interest-in-ai" class="nav-link" data-scroll-target="#career-interest-in-ai">2. Career Interest in AI</a></li>
+  </ul></li>
+  <li><a href="#study-3-associations-with-personality-measures" id="toc-study-3-associations-with-personality-measures" class="nav-link" data-scroll-target="#study-3-associations-with-personality-measures">Study 3: Associations with Personality Measures</a>
+  <ul class="collapse">
+  <li><a href="#attari-12-1" id="toc-attari-12-1" class="nav-link" data-scroll-target="#attari-12-1">1. ATTARI-12</a></li>
+  <li><a href="#big-five-inventory-bfi-44" id="toc-big-five-inventory-bfi-44" class="nav-link" data-scroll-target="#big-five-inventory-bfi-44">2. Big Five Inventory (BFI-44)</a></li>
+  <li><a href="#conspiracy-mentality-questionnaire-cmq" id="toc-conspiracy-mentality-questionnaire-cmq" class="nav-link" data-scroll-target="#conspiracy-mentality-questionnaire-cmq">3. Conspiracy Mentality Questionnaire (CMQ)</a></li>
+  <li><a href="#short-dark-triad-sd3" id="toc-short-dark-triad-sd3" class="nav-link" data-scroll-target="#short-dark-triad-sd3">4. Short Dark Triad (SD3)</a></li>
+  <li><a href="#study-3-attention-checks-bot-checks" id="toc-study-3-attention-checks-bot-checks" class="nav-link" data-scroll-target="#study-3-attention-checks-bot-checks">5. Study 3 Attention Checks / Bot Checks</a></li>
+  </ul></li>
+  <li><a href="#demographic-questions-examples-from-studies-1-3" id="toc-demographic-questions-examples-from-studies-1-3" class="nav-link" data-scroll-target="#demographic-questions-examples-from-studies-1-3">Demographic Questions (Examples from Studies 1 &amp; 3)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/Representation_Study/blob/main/surveys_items/AI_Surveys/Stein24_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 1, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="survey-instruments-from-stein-et-al.-2024" class="level1">
+<h1>Survey Instruments from Stein et al.&nbsp;(2024)</h1>
+<p>Stein, J.-P., Messingschlager, T., Gnambs, T., Hutmacher, F., &amp; Appel, M. (2024). Attitudes towards AI: Measurement and associations with personality. Scientific Reports, 14(1), 2909. https://doi.org/10.1038/s41598-024-53335-2</p>
+<p>https://osf.io/3j67a/files/osfstorage#</p>
+<hr>
+<section id="core-instrument-attitudes-towards-artificial-intelligence-scale-attari-12" class="level2">
+<h2 class="anchored" data-anchor-id="core-instrument-attitudes-towards-artificial-intelligence-scale-attari-12">Core Instrument: Attitudes Towards Artificial Intelligence Scale (ATTARI-12)</h2>
+<p><strong>(Source: ATTARI-12, English version definition page &amp; Study Questionnaires)</strong></p>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>In the following, we are interested in your attitudes towards artificial intelligence (AI). AI can execute tasks that typically require human intelligence. It enables machines to sense, act, learn, and adapt in an autonomous, human-like way. AI may be part of a computer or online platform—but it can also be encountered in various other hardware devices such as robots.</p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: 5-point Likert scale, 1 = Strongly disagree, 5 = Strongly agree)</p>
+<ol type="1">
+<li>AI will make this world a better place. <em>(Cognitive, Positive)</em></li>
+<li>I have strong negative emotions about AI. <em>(Affective, Negative - reverse-coded)</em></li>
+<li>I want to use technologies that rely on AI. <em>(Behavioral, Positive)</em></li>
+<li>AI has more disadvantages than advantages. <em>(Cognitive, Negative - reverse-coded)</em></li>
+<li>I look forward to future AI developments. <em>(Affective, Positive)</em></li>
+<li>AI offers solutions to many world problems. <em>(Cognitive, Positive)</em></li>
+<li>I prefer technologies that do not feature AI. <em>(Behavioral, Negative - reverse-coded)</em></li>
+<li>I am afraid of AI. <em>(Affective, Negative - reverse-coded)</em></li>
+<li>I would rather choose a technology with AI than one without it. <em>(Behavioral, Positive)</em></li>
+<li>AI creates problems rather than solving them. <em>(Cognitive, Negative - reverse-coded)</em></li>
+<li>When I think about AI, I have mostly positive feelings. <em>(Affective, Positive)</em></li>
+<li>I would rather avoid technologies that are based on AI. <em>(Behavioral, Negative - reverse-coded)</em></li>
+</ol>
+<hr>
+</section>
+<section id="study-1-scale-validation-measures" class="level2">
+<h2 class="anchored" data-anchor-id="study-1-scale-validation-measures">Study 1: Scale Validation Measures</h2>
+<p><strong>(Source: ATTARI-12: Study 1 (Validation) Questionnaire OCR)</strong></p>
+<section id="attari-12" class="level3">
+<h3 class="anchored" data-anchor-id="attari-12">1. ATTARI-12</h3>
+<ul>
+<li>(See Core Instrument section above)</li>
+</ul>
+</section>
+<section id="attitudes-towards-personal-voice-assistants-pva" class="level3">
+<h3 class="anchored" data-anchor-id="attitudes-towards-personal-voice-assistants-pva">2. Attitudes Towards Personal Voice Assistants (PVA)</h3>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>Now we are interested in your opinion regarding <em>personal voice assistants</em> (e.g.&nbsp;Alexa, Echo, Siri or Bixby). Personal voice assistants may be embedded in phones, tablets, smart-speakers, or other small hardware devices. They are responsive to the user’s voice and may react to a large number of vocal commands (such as “Start a call to Sarah” or “Dim the lights to 20%”). Please indicate how you are feeling about personal voice assistants.</p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: 5-point semantic differential)</p>
+<ol type="1">
+<li>hate it (1) — (5) love it</li>
+<li>negative (1) — (5) positive</li>
+<li>repulsive (1) — (5) attractive</li>
+</ol>
+</section>
+<section id="attitudes-towards-robots" class="level3">
+<h3 class="anchored" data-anchor-id="attitudes-towards-robots">3. Attitudes Towards Robots</h3>
+<p><strong>Instruction 1:</strong></p>
+<blockquote class="blockquote">
+<p>Now we are interested in your evaluation of <em>robots</em>. A robot is a machine which can assist humans in everyday tasks without constant guidance or instruction, e.g.&nbsp;as a kind of co-worker helping on the factory floor or as a robot cleaner, or in activities which may be dangerous for humans, like search and rescue in disasters.</p>
+</blockquote>
+<p><strong>Item 1:</strong></p>
+<p>(Response Scale: 4-point scale)</p>
+<ul>
+<li>Generally speaking, do you have a very positive, fairly positive, fairly negative or very negative view of robots?
+<ul>
+<li>0 = very negative</li>
+<li>1 = fairly negative</li>
+<li>2 = fairly positive</li>
+<li>3 = very positive</li>
+</ul></li>
+</ul>
+<p><strong>Instruction 2:</strong></p>
+<blockquote class="blockquote">
+<p>Please indicate below how much you agree with the following statements.</p>
+</blockquote>
+<p><strong>Items 2 &amp; 3:</strong></p>
+<p>(Response Scale: 4-point Likert scale, 0 = totally disagree, 3 = totally agree)</p>
+<ul>
+<li>Robots are a good thing for societies because they help people.</li>
+<li>Robots are necessary as they can do jobs that are too hard or too dangerous for people.</li>
+</ul>
+</section>
+<section id="social-desirability-scale-likely-sds-17-16-items-shown" class="level3">
+<h3 class="anchored" data-anchor-id="social-desirability-scale-likely-sds-17-16-items-shown">4. Social Desirability Scale (Likely SDS-17, 16 items shown)</h3>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>Below you will find a list of statements. Please read each statement carefully and decide if that statement describes you or not. If it describes you, check the word “true”; if not, check the word “false.”</p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: True / False)</p>
+<ol type="1">
+<li>I sometimes litter.</li>
+<li>I always admit my mistakes openly and face the potential negative consequences.</li>
+<li>In traffic I am always polite and considerate of others.</li>
+<li>I always accept others’ opinions, even when they don’t agree with my own.</li>
+<li>I take out my bad moods on others now and then.</li>
+<li>There has been an occasion when I took advantage of someone else.</li>
+<li>In conversations I always listen attentively and let others finish their sentences.</li>
+<li>I never hesitate to help someone in case of emergency.</li>
+<li>When I have made a promise, I keep it - no ifs, ands or buts.</li>
+<li>I occasionally speak badly of others behind their back.</li>
+<li>I would never live off other people.</li>
+<li>I always stay friendly and courteous with other people, even when I am stressed out.</li>
+<li>During arguments I always stay objective and matter-of-fact.</li>
+<li>There has been at least one occasion when I failed to return an item that I borrowed.</li>
+<li>I always eat a healthy diet.</li>
+<li>Sometimes I only help because I expect something in return.</li>
+</ol>
+</section>
+<section id="study-1-attention-checks-related" class="level3">
+<h3 class="anchored" data-anchor-id="study-1-attention-checks-related">5. Study 1 Attention Checks &amp; Related</h3>
+<ul>
+<li><strong>Year of Birth:</strong> Please choose your year of birth. (Dropdown: 2010 … 1921)</li>
+<li><strong>Study Description:</strong> Please describe the study you are currently participating in. Please use full English sentences. Do not use more than 50 words. (Open text)</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="study-2-german-version-re-test-measures" class="level2">
+<h2 class="anchored" data-anchor-id="study-2-german-version-re-test-measures">Study 2: German Version / Re-test Measures</h2>
+<p><strong>(Source: Main Paper Text Description)</strong></p>
+<section id="attari-12-german-version" class="level3">
+<h3 class="anchored" data-anchor-id="attari-12-german-version">1. ATTARI-12 (German Version)</h3>
+<ul>
+<li>The German language version was used. Items not provided in English OCR.</li>
+</ul>
+</section>
+<section id="career-interest-in-ai" class="level3">
+<h3 class="anchored" data-anchor-id="career-interest-in-ai">2. Career Interest in AI</h3>
+<ul>
+<li><strong>Description:</strong> Four items measured interest in a career involving AI technology. Two items were reverse-coded (e.g., “I would prefer a position in which AI plays no role”).</li>
+<li><strong>Scale:</strong> 5-point Likert scale (1 = strongly disagree, 5 = strongly agree).</li>
+<li><em>(Note: Exact items not provided in OCR, referenced as Supplement S5 in paper).</em></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="study-3-associations-with-personality-measures" class="level2">
+<h2 class="anchored" data-anchor-id="study-3-associations-with-personality-measures">Study 3: Associations with Personality Measures</h2>
+<p><strong>(Source: ATTARI-12: Associations with Personality (US) Questionnaire OCR &amp; Main Paper Text)</strong></p>
+<section id="attari-12-1" class="level3">
+<h3 class="anchored" data-anchor-id="attari-12-1">1. ATTARI-12</h3>
+<ul>
+<li>(See Core Instrument section above)</li>
+</ul>
+</section>
+<section id="big-five-inventory-bfi-44" class="level3">
+<h3 class="anchored" data-anchor-id="big-five-inventory-bfi-44">2. Big Five Inventory (BFI-44)</h3>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>Here are a number of characteristics that may or may not apply to you. For example, do you agree that you are someone who <em>likes to spend time with others</em>? Please select a number for each statement to indicate the extent to which you agree or disagree with that statement. <strong>I am someone who…</strong></p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly)</p>
+<ol type="1">
+<li>…is talkative.</li>
+<li>…tends to find fault with others.</li>
+<li>…does a thorough job.</li>
+<li>…is depressed, blue.</li>
+<li>…is original, comes up with new ideas.</li>
+<li>…is reserved.</li>
+<li>…is helpful and unselfish with others.</li>
+<li>…can be somewhat careless.</li>
+<li>…is relaxed, handles stress well.</li>
+<li>…is curious about many different things.</li>
+<li>…is full of energy.</li>
+<li>…starts quarrels with others.</li>
+<li>…is a reliable worker.</li>
+<li>…can be tense.</li>
+<li>…is ingenious, a deep thinker.</li>
+<li>…generates a lot of enthusiasm.</li>
+<li>…has a forgiving nature.</li>
+<li>…tends to be disorganized.</li>
+<li>…worries a lot.</li>
+<li>…has an active imagination.</li>
+<li>…tends to be quiet.</li>
+<li>…is generally trusting.</li>
+<li>…tends to be lazy.</li>
+<li>…is emotionally stable, not easily upset.</li>
+<li>…is inventive.</li>
+<li>…has an assertive personality.</li>
+<li>…can be cold and aloof.</li>
+<li>…perseveres until the task is finished.</li>
+<li>…can be moody.</li>
+<li>…values artistic, aesthetic experiences.</li>
+<li>…is sometimes shy, inhibited.</li>
+<li>…is considerate and kind to almost everyone.</li>
+<li>…does things efficiently.</li>
+<li>…remains calm in tense situations.</li>
+<li>…prefers work that is routine.</li>
+<li>…is outgoing, sociable.</li>
+<li>…is sometimes rude to others.</li>
+<li>…makes plans and follows through with them.</li>
+<li>…gets nervous easily.</li>
+<li>…likes to reflect, play with ideas.</li>
+<li>…has few artistic interests.</li>
+<li>…likes to cooperate with others.</li>
+<li>…is easily distracted.</li>
+<li>…is sophisticated in art, music, or literature.</li>
+</ol>
+</section>
+<section id="conspiracy-mentality-questionnaire-cmq" class="level3">
+<h3 class="anchored" data-anchor-id="conspiracy-mentality-questionnaire-cmq">3. Conspiracy Mentality Questionnaire (CMQ)</h3>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>I think that… <em>(Inferred instruction based on item presentation; the explicit instruction on page 11 seems incorrect for the scale used)</em></p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly)</p>
+<ol type="1">
+<li>…many important things happen in the world, which the public is never informed about.</li>
+<li>…politicians usually do not tell us the true motives for their decisions.</li>
+<li>…government agencies closely monitor all citizens.</li>
+<li>…events which superficially seem to lack a connection are often the result of secret activities.</li>
+<li>…there are secret organizations that greatly influence political decisions.</li>
+</ol>
+</section>
+<section id="short-dark-triad-sd3" class="level3">
+<h3 class="anchored" data-anchor-id="short-dark-triad-sd3">4. Short Dark Triad (SD3)</h3>
+<p><strong>Instruction:</strong></p>
+<blockquote class="blockquote">
+<p>Please indicate how much you agree witch [sic] each of the following statements.</p>
+</blockquote>
+<p><strong>Items:</strong></p>
+<p>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly) <em>(Note: 27 items presented in OCR; paper describes SD3 as 9 Machiavellianism, 6 Psychopathy, 9 Narcissism = 24 items. Item source (M/N/P) inferred from standard SD3 where possible)</em></p>
+<ol type="1">
+<li>It’s not wise to tell your secrets. (M)</li>
+<li>I like to use clever manipulation to get my way. (M)</li>
+<li>Whatever it takes, you must get the important people on your side. (M)</li>
+<li>Avoid direct conflict with others because they may be useful in the future. (M)</li>
+<li>It’s wise to keep track of information that you can use against people later. (M)</li>
+<li>You should wait for the right time to get back at people. (M)</li>
+<li>There are things you should hide from other people to preserve your reputation. (M)</li>
+<li>Make sure your plans benefit yourself, not others. (M)</li>
+<li>Most people can be manipulated. (M)</li>
+<li>People see me as natural leader. (N)</li>
+<li>I hate being the center of attention. (N - Reverse?)</li>
+<li>Many group activities tend to be dull without me. (N)</li>
+<li>I know that I am special because everyone keeps telling me so. (N)</li>
+<li>I like to get acquainted with important people. (N)</li>
+<li>I feel embarrassed if someone compliments me. (N - Reverse?)</li>
+<li>I have been compared to famous people. (N)</li>
+<li>I am an average person. (N - Reverse?)</li>
+<li>I insist on getting the respect I deserve. (N)</li>
+<li>I like to get revenge on authorities. (P)</li>
+<li>I avoid dangerous situations. (P - Reverse?)</li>
+<li>Payback needs to be quick and nasty. (P)</li>
+<li>People often say I’m out of control. (P)</li>
+<li>It’s true that I can be mean to others. (P)</li>
+<li>People who mess with me always regret it. (P)</li>
+<li>I have never gotten into trouble with the law. (P - Reverse?)</li>
+<li>I enjoy having sex with people I hardly know. (P)</li>
+<li>I’ll say anything to get what I want. (P / M overlap)</li>
+</ol>
+</section>
+<section id="study-3-attention-checks-bot-checks" class="level3">
+<h3 class="anchored" data-anchor-id="study-3-attention-checks-bot-checks">5. Study 3 Attention Checks / Bot Checks</h3>
+<ul>
+<li><strong>Eggplant Photo:</strong> Please name the vegetable shown below. Use the box below to provide your answer. If you do not know the vegetable shown below, proceed by clicking on the blue buttton. (Open text, requires image)</li>
+<li><strong>Study Description Recall:</strong> Please select the topic on which you had to answer questions at the beginning of the questionnaire:
+<ul>
+<li>Artificial intelligence</li>
+<li>Organ donation</li>
+<li>Environmental problems</li>
+</ul></li>
+<li><strong>Age/Birth Year Check:</strong>
+<ul>
+<li>Please use the box below to enter your <strong>year</strong> of birth. (Open text)</li>
+<li>How old are you in <strong>years</strong>? (Open text) <em>(Administered on separate pages per paper text)</em></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="demographic-questions-examples-from-studies-1-3" class="level2">
+<h2 class="anchored" data-anchor-id="demographic-questions-examples-from-studies-1-3">Demographic Questions (Examples from Studies 1 &amp; 3)</h2>
+<p><strong>(Source: End sections of Study 1 &amp; 3 Questionnaires)</strong></p>
+<ul>
+<li><strong>Age:</strong> How old are you? (Open text) / How old are you in years? (Open text)</li>
+<li><strong>Year of Birth:</strong> Please choose your year of birth. (Dropdown) / Please use the box below to enter your year of birth. (Open text)</li>
+<li><strong>Gender:</strong> What is your gender?
+<ul>
+<li>Male</li>
+<li>Female</li>
+<li>Other</li>
+<li>I prefer not to answer (Study 1 only)</li>
+</ul></li>
+<li><strong>Education (Highest Level Completed):</strong>
+<ul>
+<li>Some High School (Study 1)</li>
+<li>High School Graduate</li>
+<li>Bachelor’s Degree</li>
+<li>Master’s Degree</li>
+<li>Ph. D. or higher</li>
+<li>Trade School (Study 1)</li>
+<li>none of the above (Study 3 only)</li>
+</ul></li>
+<li><strong>Ethnicity:</strong> Which of the following best describes you? / What is your ethnicity?
+<ul>
+<li>White</li>
+<li>Black or African American</li>
+<li>Hispanic or Latino</li>
+<li>Asian or Asian American</li>
+<li>Native American or Alaskan Native</li>
+<li>Native Hawaiian or Other Pacific Islander</li>
+<li>Other</li>
+</ul></li>
+<li><strong>Location (US State):</strong> Please scroll down the list and select the U.S. state you currently live in. (Dropdown list, including “I am not a resident…”)</li>
+<li><strong>Political Orientation:</strong> Please indicate your political orientation.
+<ul>
+<li>Extremely Left</li>
+<li>Left</li>
+<li>Center</li>
+<li>Right</li>
+<li>Extremely Right</li>
+</ul></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/Representation_Study\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Survey Instruments from Stein et al. (2024)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Stein, J.-P., Messingschlager, T., Gnambs, T., Hutmacher, F., &amp; Appel, M. (2024). Attitudes towards AI: Measurement and associations with personality. Scientific Reports, 14(1), 2909. https://doi.org/10.1038/s41598-024-53335-2</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>https://osf.io/3j67a/files/osfstorage#</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Instrument: Attitudes Towards Artificial Intelligence Scale (ATTARI-12)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>**(Source: ATTARI-12, English version definition page &amp; Study Questionnaires)**</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; In the following, we are interested in your attitudes towards artificial intelligence (AI). AI can execute tasks that typically require human intelligence. It enables machines to sense, act, learn, and adapt in an autonomous, human-like way. AI may be part of a computer or online platform—but it can also be encountered in various other hardware devices such as robots.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>(Response Scale: 5-point Likert scale, 1 = Strongly disagree, 5 = Strongly agree)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>AI will make this world a better place. *(Cognitive, Positive)*</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>I have strong negative emotions about AI. *(Affective, Negative - reverse-coded)*</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>I want to use technologies that rely on AI. *(Behavioral, Positive)*</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>AI has more disadvantages than advantages. *(Cognitive, Negative - reverse-coded)*</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>I look forward to future AI developments. *(Affective, Positive)*</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>AI offers solutions to many world problems. *(Cognitive, Positive)*</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>I prefer technologies that do not feature AI. *(Behavioral, Negative - reverse-coded)*</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>I am afraid of AI. *(Affective, Negative - reverse-coded)*</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>I would rather choose a technology with AI than one without it. *(Behavioral, Positive)*</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>AI creates problems rather than solving them. *(Cognitive, Negative - reverse-coded)*</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>When I think about AI, I have mostly positive feelings. *(Affective, Positive)*</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>I would rather avoid technologies that are based on AI. *(Behavioral, Negative - reverse-coded)*</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Study 1: Scale Validation Measures</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>**(Source: ATTARI-12: Study 1 (Validation) Questionnaire OCR)**</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1. ATTARI-12</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>(See Core Instrument section above)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2. Attitudes Towards Personal Voice Assistants (PVA)</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Now we are interested in your opinion regarding *personal voice assistants* (e.g. Alexa, Echo, Siri or Bixby). Personal voice assistants may be embedded in phones, tablets, smart-speakers, or other small hardware devices. They are responsive to the user's voice and may react to a large number of vocal commands (such as "Start a call to Sarah" or "Dim the lights to 20%"). Please indicate how you are feeling about personal voice assistants.</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>(Response Scale: 5-point semantic differential)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>hate it (1) --- (5) love it</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>negative (1) --- (5) positive</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>repulsive (1) --- (5) attractive</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3. Attitudes Towards Robots</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>**Instruction 1:**</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Now we are interested in your evaluation of *robots*. A robot is a machine which can assist humans in everyday tasks without constant guidance or instruction, e.g. as a kind of co-worker helping on the factory floor or as a robot cleaner, or in activities which may be dangerous for humans, like search and rescue in disasters.</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>**Item 1:**</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>(Response Scale: 4-point scale)</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Generally speaking, do you have a very positive, fairly positive, fairly negative or very negative view of robots?</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>0 = very negative</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>1 = fairly negative</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>2 = fairly positive</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>3 = very positive</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>**Instruction 2:**</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Please indicate below how much you agree with the following statements.</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>**Items 2 &amp; 3:**</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>(Response Scale: 4-point Likert scale, 0 = totally disagree, 3 = totally agree)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Robots are a good thing for societies because they help people.</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Robots are necessary as they can do jobs that are too hard or too dangerous for people.</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4. Social Desirability Scale (Likely SDS-17, 16 items shown)</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Below you will find a list of statements. Please read each statement carefully and decide if that statement describes you or not. If it describes you, check the word “true”; if not, check the word "false."</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>(Response Scale: True / False)</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>I sometimes litter.</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>I always admit my mistakes openly and face the potential negative consequences.</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>In traffic I am always polite and considerate of others.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>I always accept others' opinions, even when they don't agree with my own.</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>I take out my bad moods on others now and then.</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>There has been an occasion when I took advantage of someone else.</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>In conversations I always listen attentively and let others finish their sentences.</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>I never hesitate to help someone in case of emergency.</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>When I have made a promise, I keep it - no ifs, ands or buts.</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>I occasionally speak badly of others behind their back.</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>I would never live off other people.</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>I always stay friendly and courteous with other people, even when I am stressed out.</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>During arguments I always stay objective and matter-of-fact.</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>There has been at least one occasion when I failed to return an item that I borrowed.</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>I always eat a healthy diet.</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>Sometimes I only help because I expect something in return.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5. Study 1 Attention Checks &amp; Related</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Year of Birth:** Please choose your year of birth. (Dropdown: 2010 ... 1921)</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Study Description:** Please describe the study you are currently participating in. Please use full English sentences. Do not use more than 50 words. (Open text)</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Study 2: German Version / Re-test Measures</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>**(Source: Main Paper Text Description)**</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1. ATTARI-12 (German Version)</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The German language version was used. Items not provided in English OCR.</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2. Career Interest in AI</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Description:** Four items measured interest in a career involving AI technology. Two items were reverse-coded (e.g., “I would prefer a position in which AI plays no role”).</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Scale:** 5-point Likert scale (1 = strongly disagree, 5 = strongly agree).</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>*(Note: Exact items not provided in OCR, referenced as Supplement S5 in paper).*</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## Study 3: Associations with Personality Measures</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>**(Source: ATTARI-12: Associations with Personality (US) Questionnaire OCR &amp; Main Paper Text)**</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1. ATTARI-12</span></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>(See Core Instrument section above)</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2. Big Five Inventory (BFI-44)</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Here are a number of characteristics that may or may not apply to you. For example, do you agree that you are someone who *likes to spend time with others*? Please select a number for each statement to indicate the extent to which you agree or disagree with that statement.</span></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **I am someone who...**</span></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly)</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>...is talkative.</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>...tends to find fault with others.</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>...does a thorough job.</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>...is depressed, blue.</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>...is original, comes up with new ideas.</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>...is reserved.</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>...is helpful and unselfish with others.</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>...can be somewhat careless.</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>...is relaxed, handles stress well.</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>...is curious about many different things.</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>...is full of energy.</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>...starts quarrels with others.</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>...is a reliable worker.</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>...can be tense.</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>...is ingenious, a deep thinker.</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>...generates a lot of enthusiasm.</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="ss">17. </span>...has a forgiving nature.</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="ss">18. </span>...tends to be disorganized.</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="ss">19. </span>...worries a lot.</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="ss">20. </span>...has an active imagination.</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="ss">21. </span>...tends to be quiet.</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="ss">22. </span>...is generally trusting.</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="ss">23. </span>...tends to be lazy.</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="ss">24. </span>...is emotionally stable, not easily upset.</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="ss">25. </span>...is inventive.</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a><span class="ss">26. </span>...has an assertive personality.</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="ss">27. </span>...can be cold and aloof.</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="ss">28. </span>...perseveres until the task is finished.</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a><span class="ss">29. </span>...can be moody.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a><span class="ss">30. </span>...values artistic, aesthetic experiences.</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="ss">31. </span>...is sometimes shy, inhibited.</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a><span class="ss">32. </span>...is considerate and kind to almost everyone.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a><span class="ss">33. </span>...does things efficiently.</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="ss">34. </span>...remains calm in tense situations.</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a><span class="ss">35. </span>...prefers work that is routine.</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a><span class="ss">36. </span>...is outgoing, sociable.</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a><span class="ss">37. </span>...is sometimes rude to others.</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a><span class="ss">38. </span>...makes plans and follows through with them.</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a><span class="ss">39. </span>...gets nervous easily.</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a><span class="ss">40. </span>...likes to reflect, play with ideas.</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="ss">41. </span>...has few artistic interests.</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a><span class="ss">42. </span>...likes to cooperate with others.</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="ss">43. </span>...is easily distracted.</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="ss">44. </span>...is sophisticated in art, music, or literature.</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3. Conspiracy Mentality Questionnaire (CMQ)</span></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; I think that... *(Inferred instruction based on item presentation; the explicit instruction on page 11 seems incorrect for the scale used)*</span></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly)</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>...many important things happen in the world, which the public is never informed about.</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>...politicians usually do not tell us the true motives for their decisions.</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>...government agencies closely monitor all citizens.</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>...events which superficially seem to lack a connection are often the result of secret activities.</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>...there are secret organizations that greatly influence political decisions.</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4. Short Dark Triad (SD3)</span></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>**Instruction:**</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Please indicate how much you agree witch </span><span class="co">[</span><span class="ot">sic</span><span class="co">]</span><span class="at"> each of the following statements.</span></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>**Items:**</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>(Response Scale: 5-point Likert scale, 1 = Disagree strongly, 5 = Agree strongly)</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>*(Note: 27 items presented in OCR; paper describes SD3 as 9 Machiavellianism, 6 Psychopathy, 9 Narcissism = 24 items. Item source (M/N/P) inferred from standard SD3 where possible)*</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>It's not wise to tell your secrets. (M)</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>I like to use clever manipulation to get my way. (M)</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Whatever it takes, you must get the important people on your side. (M)</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Avoid direct conflict with others because they may be useful in the future. (M)</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>It's wise to keep track of information that you can use against people later. (M)</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>You should wait for the right time to get back at people. (M)</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>There are things you should hide from other people to preserve your reputation. (M)</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>Make sure your plans benefit yourself, not others. (M)</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>Most people can be manipulated. (M)</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>People see me as natural leader. (N)</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>I hate being the center of attention. (N - Reverse?)</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>Many group activities tend to be dull without me. (N)</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>I know that I am special because everyone keeps telling me so. (N)</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>I like to get acquainted with important people. (N)</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>I feel embarrassed if someone compliments me. (N - Reverse?)</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>I have been compared to famous people. (N)</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a><span class="ss">17. </span>I am an average person. (N - Reverse?)</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="ss">18. </span>I insist on getting the respect I deserve. (N)</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="ss">19. </span>I like to get revenge on authorities. (P)</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a><span class="ss">20. </span>I avoid dangerous situations. (P - Reverse?)</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="ss">21. </span>Payback needs to be quick and nasty. (P)</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="ss">22. </span>People often say I'm out of control. (P)</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="ss">23. </span>It's true that I can be mean to others. (P)</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="ss">24. </span>People who mess with me always regret it. (P)</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="ss">25. </span>I have never gotten into trouble with the law. (P - Reverse?)</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="ss">26. </span>I enjoy having sex with people I hardly know. (P)</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="ss">27. </span>I'll say anything to get what I want. (P / M overlap)</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5. Study 3 Attention Checks / Bot Checks</span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Eggplant Photo:** Please name the vegetable shown below. Use the box below to provide your answer. If you do not know the vegetable shown below, proceed by clicking on the blue buttton. (Open text, requires image)</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Study Description Recall:** Please select the topic on which you had to answer questions at the beginning of the questionnaire:</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Artificial intelligence</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Organ donation</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Environmental problems</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Age/Birth Year Check:**</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Please use the box below to enter your **year** of birth. (Open text)</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>How old are you in **years**? (Open text) *(Administered on separate pages per paper text)*</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a><span class="fu">## Demographic Questions (Examples from Studies 1 &amp; 3)</span></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>**(Source: End sections of Study 1 &amp; 3 Questionnaires)**</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Age:** How old are you? (Open text) / How old are you in years? (Open text)</span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Year of Birth:** Please choose your year of birth. (Dropdown) / Please use the box below to enter your year of birth. (Open text)</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Gender:** What is your gender?</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Male</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Female</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Other</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>I prefer not to answer (Study 1 only)</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Education (Highest Level Completed):**</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Some High School (Study 1)</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>High School Graduate</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Bachelor's Degree</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Master's Degree</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Ph. D. or higher</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Trade School (Study 1)</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>none of the above (Study 3 only)</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Ethnicity:** Which of the following best describes you? / What is your ethnicity?</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>White</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Black or African American</span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Hispanic or Latino</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Asian or Asian American</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Native American or Alaskan Native</span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Native Hawaiian or Other Pacific Islander</span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Other</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Location (US State):** Please scroll down the list and select the U.S. state you currently live in. (Dropdown list, including "I am not a resident...")</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Political Orientation:** Please indicate your political orientation.</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Extremely Left</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Left</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Center</span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Right</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Extremely Right</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/Representation_Study/blob/main/surveys_items/AI_Surveys/Stein24_AI_Survey.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>
