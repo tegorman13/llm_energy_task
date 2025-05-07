@@ -1,0 +1,62 @@
+{
+    "scale_info": {
+      "name": "Perceived Artificial Intelligence Literacy Questionnaire (PAILQ-6)",
+      "source": "Grassini, S. (2024). A Psychometric Validation of the PAILQ-6. Nordic Conference on Human-Computer Interaction.",
+      "instructions": "Please rate each statement based on your beliefs and feelings from 1 (strongly disagree) to 7 (strongly agree). There are no right or wrong answers.",
+      "scoring_notes": "PAILQ-6: Average of all responses. Factor 1 (Awareness Literacy): Avg of 1, 3, 5. Factor 2 (Engagement Literacy): Avg of 2, 4, 6."
+    },
+    "pailq6_1": {
+      "id": "pailq6_1",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I understand the basic concepts of artificial intelligence.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Awareness Literacy"
+    },
+    "pailq6_2": {
+      "id": "pailq6_2",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I believe I can contribute to AI projects.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Engagement Literacy"
+    },
+    "pailq6_3": {
+      "id": "pailq6_3",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I can judge the pros and cons of AI.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Awareness Literacy"
+    },
+    "pailq6_4": {
+      "id": "pailq6_4",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I keep up with the latest AI trends.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Engagement Literacy"
+    },
+    "pailq6_5": {
+      "id": "pailq6_5",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I'm comfortable talking about AI with others.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Awareness Literacy"
+    },
+    "pailq6_6": {
+      "id": "pailq6_6",
+      "section": "PAILQ-6",
+      "type": "likert",
+      "text": "I can think of new ways to use existing AI tools.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "factor": "Engagement Literacy"
+    }
+  }

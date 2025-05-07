@@ -1,0 +1,243 @@
+{
+    "scale_info": {
+      "name": "AI Use Scale Items",
+      "source": "Salah et al. (2024), Table A1",
+      "rating_scale_info": "5-point Likert scale (1 = Strongly Disagree, 5 = Strongly Agree), except where noted."
+    },
+    "kap1": {
+      "id": "kap1",
+      "section": "Salah-KnowledgeApplication",
+      "type": "likert",
+      "text": "ChatGPT provides me with instant access to various types of knowledge.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Al-Sharafi et al. (2022)"
+    },
+    "kap2": {
+      "id": "kap2",
+      "section": "Salah-KnowledgeApplication",
+      "type": "likert",
+      "text": "ChatGPT allows me to integrate different types of knowledge.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Al-Sharafi et al. (2022)"
+    },
+    "kap3": {
+      "id": "kap3",
+      "section": "Salah-KnowledgeApplication",
+      "type": "likert",
+      "text": "ChatGPT helps me better master the knowledge I learn in university.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Al-Sharafi et al. (2022)"
+    },
+    "pie1": {
+      "id": "pie1",
+      "section": "Salah-PerceivedIntelligence",
+      "type": "likert",
+      "text": "I feel that ChatGPT is competent.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022)"
+    },
+    "pie2": {
+      "id": "pie2",
+      "section": "Salah-PerceivedIntelligence",
+      "type": "likert",
+      "text": "I feel that ChatGPT is knowledgeable.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022)"
+    },
+    "pie3": {
+      "id": "pie3",
+      "section": "Salah-PerceivedIntelligence",
+      "type": "likert",
+      "text": "I feel that ChatGPT is intelligent.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022)"
+    },
+    "usb1": {
+      "id": "usb1",
+      "section": "Salah-Usability",
+      "type": "likert",
+      "text": "The provided contents on ChatGPT are easily accessible.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022); Borsci et al. (2022); Almaiah and Man (2016)"
+    },
+    "usb2": {
+      "id": "usb2",
+      "section": "Salah-Usability",
+      "type": "likert",
+      "text": "The provided contents on ChatGPT are easily downloadable.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022); Borsci et al. (2022); Almaiah and Man (2016)"
+    },
+    "usb3": {
+      "id": "usb3",
+      "section": "Salah-Usability",
+      "type": "likert",
+      "text": "The provided contents on ChatGPT are easily retrievable.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Rafiq et al. (2022); Borsci et al. (2022); Almaiah and Man (2016)"
+    },
+    "att1": {
+      "id": "att1",
+      "section": "Salah-Attitude",
+      "type": "likert",
+      "text": "ChatGPT is useful.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "att2": {
+      "id": "att2",
+      "section": "Salah-Attitude",
+      "type": "likert",
+      "text": "ChatGPT is valuable.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "att3": {
+      "id": "att3",
+      "section": "Salah-Attitude",
+      "type": "likert",
+      "text": "ChatGPT is beneficial.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "sno1": {
+      "id": "sno1",
+      "section": "Salah-SubjectiveNorms",
+      "type": "likert",
+      "text": "Most people who are important to me think it is okay for me to use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "sno2": {
+      "id": "sno2",
+      "section": "Salah-SubjectiveNorms",
+      "type": "likert",
+      "text": "Most people who are important to me support that I use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "sno3": {
+      "id": "sno3",
+      "section": "Salah-SubjectiveNorms",
+      "type": "likert",
+      "text": "Most people who are important to me understand that I use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "pbc1": {
+      "id": "pbc1",
+      "section": "Salah-PerceivedBehavioralControl",
+      "type": "likert",
+      "text": "I am capable of using ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "pbc2": {
+      "id": "pbc2",
+      "section": "Salah-PerceivedBehavioralControl",
+      "type": "likert",
+      "text": "I am confident that if I want to, I can use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "pbc3": {
+      "id": "pbc3",
+      "section": "Salah-PerceivedBehavioralControl",
+      "type": "likert",
+      "text": "I have enough resources, time, and opportunities to use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "tru1": {
+      "id": "tru1",
+      "section": "Salah-Trust",
+      "type": "likert",
+      "text": "When using ChatGPT, I trust that my personal information will not be used for any other purpose.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Nguyen et al. (2019)",
+      "notes": "Likely contributes to 'Trust in ChatGPT (TCGPT)' construct."
+    },
+    "tru2": {
+      "id": "tru2",
+      "section": "Salah-Trust",
+      "type": "likert",
+      "text": "When using ChatGPT, I believe that my personal information is protected.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Nguyen et al. (2019)"
+    },
+    "tru3": {
+      "id": "tru3",
+      "section": "Salah-Trust",
+      "type": "likert",
+      "text": "When using ChatGPT, I'm confident that my personal information is secure.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Nguyen et al. (2019)"
+    },
+    "bit1": {
+      "id": "bit1",
+      "section": "Salah-BehavioralIntention",
+      "type": "likert",
+      "text": "I'd like to continue to use ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "bit2": {
+      "id": "bit2",
+      "section": "Salah-BehavioralIntention",
+      "type": "likert",
+      "text": "I'll continue to use the shared ChatGPT a lot in the future.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "bit3": {
+      "id": "bit3",
+      "section": "Salah-BehavioralIntention",
+      "type": "likert",
+      "text": "I plan to use ChatGPT in the future.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Ajzen (1991)"
+    },
+    "acu1": {
+      "id": "acu1",
+      "section": "Salah-ActualUse",
+      "type": "likert", 
+      "text": "How frequently do you use ChatGPT?",
+      "points": 5,
+      "scale": ["Very Infrequently", "Very Frequently"],
+      "source_item": "Aparicio et al. (2017); McLean and Osei-Frimpong (2019)",
+      "notes": "Original scale for frequency might be different, using a generic 5-point frequency scale here."
+    },
+    "acu2": {
+      "id": "acu2",
+      "section": "Salah-ActualUse",
+      "type": "likert",
+      "text": "At present, I consider myself to be a frequent user of ChatGPT.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "source_item": "Aparicio et al. (2017); McLean and Osei-Frimpong (2019)"
+    }
+  }

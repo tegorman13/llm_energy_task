@@ -1,0 +1,5 @@
+{
+    "trust": { "baseId": "trust", "type": "likert", "points": 7, "text": "“I trust the AI’s response (estimate and explanation) in this scenario.”", "scale": ["Strongly Disagree", "Strongly Agree"] },
+    "confidence": { "baseId": "confidence", "type": "slider", "text": "How confident are you in your <strong>own estimate</strong> of the energy savings/cost for this item?", "min": 0, "max": 100, "step": 10, "unit": "%" },
+    "reliance": { "baseId": "reliance", "type": "slider", "text": "If making a decision based on this information, how much would you rely on the <strong>AI's estimate</strong> vs. your <strong>own estimate</strong>?", "min": 0, "max": 100, "step": 10, "unit": "%", "scale": ["Rely entirely on MY estimate", "Rely entirely on AI estimate"] }
+}

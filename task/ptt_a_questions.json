@@ -1,0 +1,133 @@
+{
+    "scale_info": {
+      "name": "Propensity to Trust in Automated Technology (PTT-A) Scale",
+      "source": "Scholz et al.",
+      "instructions": "Now we are interested in your opinions about automated technology – i.e., technology that can perform certain functions automatically without any input from you. Automated technology is taking on more and more tasks in various areas of life. For example, robots are becoming more widely used in industry and in private households. Many means of transport (airplanes, trains, or cars) are also now increasingly automated. The term automated technology includes (among other things): Automated means of transport (e.g. autonomous cars, trains, streetcars, airplanes), Industrial robots (e.g. assembly robots, automated logistics robots), Service and assistance robots (e.g. robot vacuum cleaners, robot lawn mowers, healthcare robots), Other programs and systems based on artificial intelligence (e.g. language assistants, image recognition). There are a number of statements on the next pages about automated technology in general that may apply to you more or less. Please respond to each of these statements by indicating the extent to which you agree or disagree with the statement, i.e. how much it applies to you. There are five options available, ranging from \"strongly disagree” to “strongly agree\".",
+      "scoring_notes": "Items should be presented in a randomized order. Some items are negatively poled (indicated by (R) - reversed item). A five-point Likert-type scale ranging from 1 (“strongly disagree”) to 5 (“strongly agree\") was used. Items included in the 6-items short scales are printed in bold in the original publication."
+    },
+    "ptt_a_ts1": {
+      "id": "ptt_a_ts1",
+      "section": "PTT-A Trusting Stance",
+      "type": "likert",
+      "text": "Even though I may sometimes suffer the consequences of trusting automated technological systems, I still prefer to trust than not to trust them.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "short_scale_item": true
+    },
+    "ptt_a_ts2": {
+      "id": "ptt_a_ts2",
+      "section": "PTT-A Trusting Stance",
+      "type": "likert",
+      "text": "I feel good about trusting automated technological systems.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "ptt_a_ts3": {
+      "id": "ptt_a_ts3",
+      "section": "PTT-A Trusting Stance",
+      "type": "likert",
+      "text": "I believe that I am generally better off when I do not trust automated technological systems than when I trust them.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    },
+    "ptt_a_ts4": {
+      "id": "ptt_a_ts4",
+      "section": "PTT-A Trusting Stance",
+      "type": "likert",
+      "text": "I rarely trust automated technological systems because I can't handle the uncertainty.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true,
+      "short_scale_item": true
+    },
+    "ptt_a_cpt1": {
+      "id": "ptt_a_cpt1",
+      "section": "PTT-A Competence",
+      "type": "likert",
+      "text": "Automated technological systems are competent.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "short_scale_item": true
+    },
+    "ptt_a_cpt2": {
+      "id": "ptt_a_cpt2",
+      "section": "PTT-A Competence",
+      "type": "likert",
+      "text": "Automated technological systems have sound knowledge about problems for which they are intended.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "ptt_a_cpt3": {
+      "id": "ptt_a_cpt3",
+      "section": "PTT-A Competence",
+      "type": "likert",
+      "text": "I am wary about the capabilities of automated technological systems.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    },
+    "ptt_a_cpt4": {
+      "id": "ptt_a_cpt4",
+      "section": "PTT-A Competence",
+      "type": "likert",
+      "text": "Automated technological systems do not have the capabilities that could help me reach my goals.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    },
+    "ptt_a_bnv1": {
+      "id": "ptt_a_bnv1",
+      "section": "PTT-A Benevolence",
+      "type": "likert",
+      "text": "I believe that automated technological systems have good intentions.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "short_scale_item": true
+    },
+    "ptt_a_bnv2": {
+      "id": "ptt_a_bnv2",
+      "section": "PTT-A Benevolence",
+      "type": "likert",
+      "text": "I feel that automated technological systems are out to get as much as they can for themselves.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    },
+    "ptt_a_bnv3": {
+      "id": "ptt_a_bnv3",
+      "section": "PTT-A Benevolence",
+      "type": "likert",
+      "text": "I don't expect that automated technological systems are willing to assist and support people.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    },
+    "ptt_a_int1": {
+      "id": "ptt_a_int1",
+      "section": "PTT-A Integrity",
+      "type": "likert",
+      "text": "Most automated technological systems are honest.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "short_scale_item": true
+    },
+    "ptt_a_int2": {
+      "id": "ptt_a_int2",
+      "section": "PTT-A Integrity",
+      "type": "likert",
+      "text": "I feel that automated technological systems can be relied upon to do what they say they will do.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "short_scale_item": true
+    },
+    "ptt_a_int3": {
+      "id": "ptt_a_int3",
+      "section": "PTT-A Integrity",
+      "type": "likert",
+      "text": "One cannot expect to be treated fairly by automated technological systems.",
+      "points": 5,
+      "scale": ["Strongly Disagree", "Strongly Agree"],
+      "reversed": true
+    }
+  }

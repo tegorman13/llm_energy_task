@@ -1,0 +1,70 @@
+{
+    "scale_info": {
+      "name": "Beliefs about LLM Capabilities for Energy Tasks (Custom)",
+      "instructions": "Please indicate the extent to which you agree or disagree with the following statements about Large Language Models (LLMs) like ChatGPT, specifically regarding energy-related topics. Use the scale from 1 (Strongly Disagree) to 7 (Strongly Agree)."
+    },
+    "llm_acc_1": {
+      "id": "llm_acc_1",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs generally provide factually accurate information about how much energy different home appliances use.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_2": {
+      "id": "llm_acc_2",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs can reliably explain complex energy concepts (e.g., how electricity grids work).",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_3": {
+      "id": "llm_acc_3",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs are good at generating useful and effective personalized energy-saving plans.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_4": {
+      "id": "llm_acc_4",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs are likely to repeat common myths or misconceptions about energy saving.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_5": {
+      "id": "llm_acc_5",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs understand the difference between effective energy-saving actions (e.g., insulation) and less effective ones (e.g., unplugging chargers).",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_6": {
+      "id": "llm_acc_6",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "I would trust an LLM to accurately calculate the potential cost savings from installing solar panels.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_7": {
+      "id": "llm_acc_7",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs have clear limitations in their knowledge about specific local energy prices or utility programs.",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    },
+    "llm_acc_8": {
+      "id": "llm_acc_8",
+      "section": "LLM Energy Accuracy Beliefs",
+      "type": "likert",
+      "text": "LLMs can provide unbiased comparisons between different energy technologies (e.g., heat pumps vs. furnaces).",
+      "points": 7,
+      "scale": ["Strongly Disagree", "Strongly Agree"]
+    }
+  }

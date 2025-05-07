@@ -1,0 +1,105 @@
+{
+    "scale_info": {
+      "name": "Trust Perception Scale - AI (TPA)",
+      "source": "Jian, Bisantz, & Drury (2000); Scharowski et al. (2025)",
+      "instructions": "Please mark each statement with the number that best describes your feelings or your impression of trust with the AI you just saw.",
+      "scale_details": "Scale: 1 (Not at all) to 7 (Extremely), with 4 as Neutral/Moderate. Intermediate points are unlabeled."
+    },
+    "tpa_1": {
+      "id": "tpa_1",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI is deceptive",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"],
+      "notes": "Points 2,3,5,6 are intermediate between labeled points."
+    },
+    "tpa_2": {
+      "id": "tpa_2",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI behaves in an underhanded manner",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_3": {
+      "id": "tpa_3",
+      "section": "TPA",
+      "type": "likert",
+      "text": "I am suspicious of the AI's intent, action, or outputs",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_4": {
+      "id": "tpa_4",
+      "section": "TPA",
+      "type": "likert",
+      "text": "I am wary of the AI",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_5": {
+      "id": "tpa_5",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI's actions will have a harmful or injurious outcome",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_6": {
+      "id": "tpa_6",
+      "section": "TPA",
+      "type": "likert",
+      "text": "I am confident in the AI",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_7": {
+      "id": "tpa_7",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI provides security",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_8": {
+      "id": "tpa_8",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI has integrity",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_9": {
+      "id": "tpa_9",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI is dependable",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_10": {
+      "id": "tpa_10",
+      "section": "TPA",
+      "type": "likert",
+      "text": "The AI is reliable",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_11": {
+      "id": "tpa_11",
+      "section": "TPA",
+      "type": "likert",
+      "text": "I can trust the AI",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    },
+    "tpa_12": {
+      "id": "tpa_12",
+      "section": "TPA",
+      "type": "likert",
+      "text": "I am familiar with the AI",
+      "points": 7,
+      "scale": ["Not at all", "Neutral / Moderate", "Extremely"]
+    }
+  }

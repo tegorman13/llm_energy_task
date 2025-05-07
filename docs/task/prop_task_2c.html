@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>AI Energy Advisor (Short Purdue Version)</title>
+  <style>
+    :root {
+      /* Purdue-inspired palette */
+      --gold: #CFB991;
+      --black: #000;
+      --brownish: #8E6F3E;
+      --bright-gold: #DAAA00;
+      --med-gold: #DDB945;
+      --light-gold: #EBD99F;
+      --dark-gray: #555960;
+      --med-gray: #6F727B;
+      --rail-gray: #9D9795;
+      --steam-gray: #C4BFC0;
+      --bg-offwhite: #F8F8F8;
+
+      --primary: var(--gold);
+      --primary-hover: var(--bright-gold);
+      --secondary: var(--black);
+      --secondary-light: var(--dark-gray);
+      --text-color: var(--black);
+      --text-muted: var(--med-gray);
+      --bg-color: var(--bg-offwhite);
+      --container-bg: #FFF;
+      --section-bg: #FFF;
+      --btn-bg: var(--dark-gray);
+      --btn-text: var(--gold);
+      --btn-hover-bg: var(--black);
+      --header-bg: var(--black);
+      --header-text: var(--gold);
+      --progress-bg: var(--steam-gray);
+      --progress-fill: var(--gold);
+      --focus-border: var(--bright-gold);
+      --focus-ring: rgba(218,170,0,0.35);
+      --ai-bg: var(--light-gold);
+      --ai-border: var(--gold);
+      --scen-bg: #FAFAFA;
+      --scen-border: var(--rail-gray);
+      --border: var(--rail-gray);
+      --admin-bg: rgba(10,10,10,0.97);
+      --admin-text: var(--light-gold);
+      --admin-strong: var(--gold);
+      --admin-jump-bg: var(--gold);
+      --admin-jump-text: var(--black);
+      --admin-jump-hover: var(--bright-gold);
+      --skip-btn-bg: var(--bright-gold);
+      --skip-btn-text: var(--black);
+      --success-green: #28a745;
+      --danger-red: #dc3545;
+    }
+    *,*::before,*::after {box-sizing:border-box;margin:0;padding:0}
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.6;background-color:var(--bg-color);color:var(--text-color);
+      padding-bottom:70px;font-size:16px
+    }
+    .header-bar {background:var(--header-bg);color:var(--header-text);padding:15px 20px;text-align:center;font-size:1.5em;font-weight:600;margin-bottom:10px}
+    #progress-bar-container {width:80%;max-width:850px;margin:15px auto 10px;height:18px;background:var(--progress-bg);border-radius:9px;overflow:hidden}
+    #progress-bar {height:100%;width:0;background:var(--progress-fill);border-radius:9px 0 0 9px;transition:width .4s}
+    #progress-text {text-align:center;font-size:.9em;color:var(--text-muted);margin-bottom:25px}
+    #experiment-container {max-width:850px;margin:20px auto;padding:30px;background:var(--container-bg);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
+    .section {display:none;border:1px solid var(--border);padding:30px;margin-bottom:30px;border-radius:6px;position:relative;background:var(--section-bg)}
+    .section.active {display:block}
+    h2 {border-bottom:2px solid var(--secondary);padding-bottom:10px;margin-top:0;margin-bottom:.75em;font-size:1.6em;color:var(--secondary)}
+    .navigation-buttons {margin-top:30px;text-align:right;border-top:1px solid var(--border);padding-top:20px}
+    button {
+      background:var(--btn-bg);color:var(--btn-text);border:none;padding:12px 24px;border-radius:5px;cursor:pointer;
+      font-size:1.05em;font-weight:500;margin-top:15px;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.1);margin-right:10px
+    }
+    button:hover {background:var(--btn-hover-bg);box-shadow:0 4px 8px rgba(0,0,0,.15)}
+    button:disabled {background:var(--rail-gray);color:var(--med-gray);cursor:not-allowed;box-shadow:none}
+    label {display:block;margin-bottom:12px;font-weight:600;font-size:1.1em}
+    input[type="text"],input[type="number"],textarea,select {
+      padding:12px;margin-bottom:15px;border:1px solid var(--border);border-radius:4px;width:100%;
+      font-size:1em;transition:border-color .2s,box-shadow .2s
+    }
+    input:focus,textarea:focus,select:focus {outline:none;border-color:var(--focus-border);box-shadow:0 0 0 .2rem var(--focus-ring)}
+    .question-block {margin-bottom:30px;padding:25px;border:1px solid #f1f3f5;border-radius:5px;background:#FFF}
+    ul {list-style:none;padding:0;margin:10px 0 0 5px}
+    ul li {margin-bottom:12px;padding:6px 0}
+    .option-label {font-weight:normal;margin-left:10px;vertical-align:middle;cursor:pointer;font-size:1em}
+    input[type="radio"],input[type="checkbox"] {margin-right:5px;vertical-align:middle;cursor:pointer;transform:scale(1.2);accent-color:var(--primary-hover)}
+    .scale-endpoints {display:flex;justify-content:space-between;font-size:.9em;color:var(--text-muted);margin-top:-5px;margin-bottom:10px;padding:0 5px}
+    .slider-container {margin:10px 0 5px;display:flex;align-items:center;gap:15px}
+    .slider-container input[type="range"] {
+      flex-grow:1;cursor:pointer;-webkit-appearance:none;height:10px;background:linear-gradient(to right,var(--primary-hover),var(--primary-hover) 50%,var(--progress-bg) 50%,var(--progress-bg));
+      border-radius:5px;outline:none;transition:.2s
+    }
+    .slider-container input[type="range"]::-webkit-slider-thumb,
+    .slider-container input[type="range"]::-moz-range-thumb {
+      -webkit-appearance:none;width:22px;height:22px;background:var(--dark-gray);border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)
+    }
+    .slider-value-display {font-weight:bold;color:var(--dark-gray);font-size:1.1em;min-width:50px;text-align:right}
+    .scenario-box {border:1px solid var(--scen-border);background:var(--scen-bg);padding:25px;margin-bottom:0;border-radius:6px}
+    .ai-response-container {
+      margin-top:20px;background:var(--ai-bg);border:1px solid var(--ai-border);
+      padding:20px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,.05);font-family:Consolas,Monaco,monospace
+    }
+    .ai-prefix {font-weight:700;display:block;margin-bottom:10px;color:var(--brownish);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:1.1em}
+    .ai-response-estimate {font-weight:bold;font-size:1.2em;color:var(--secondary);display:block;margin-bottom:10px}
+    .ai-response-explanation {white-space:pre-wrap;line-height:1.7;font-size:1em}
+    .estimation-table-wrapper {overflow-x:auto;margin-top:15px;border:1px solid var(--border);border-radius:5px}
+    .estimation-table {width:100%;min-width:550px;border-collapse:collapse}
+    .estimation-table th,.estimation-table td {border-bottom:1px solid var(--border);padding:12px 15px;text-align:left}
+    .estimation-table th {background:var(--light-gold);color:var(--black);font-weight:600;border-bottom-color:var(--gold);border-bottom-width:2px}
+    #admin-bar {
+      position:fixed;bottom:0;left:0;width:100%;background:var(--admin-bg);color:var(--admin-text);padding:8px 10px;text-align:center;
+      font-size:.9em;z-index:1000;box-shadow:0 -2px 8px rgba(0,0,0,.3);display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:5px 10px
+    }
+    .admin-jump-button {background:var(--admin-jump-bg);color:var(--admin-jump-text);padding:5px 12px;font-size:.85em;margin:2px 3px;border:1px solid var(--brownish);border-radius:4px}
+    .admin-jump-button:hover {background:var(--admin-jump-hover)}
+    .skip-section-button {position:absolute;top:18px;right:18px;background:var(--skip-btn-bg);color:var(--skip-btn-text);padding:6px 12px;font-size:.85em;border:1px solid var(--brownish);border-radius:4px}
+    @media (max-width:768px){body{padding-bottom:90px;font-size:15px}#experiment-container{padding:20px}.section{padding:20px}h2{font-size:1.4em}button{padding:10px 20px}}
+    @media (max-width:480px){
+      .header-bar{font-size:1.2em}button{width:100%;margin-top:10px}
+      .slider-container{flex-direction:column;align-items:stretch}.slider-value-display{text-align:center;margin-top:5px}
+      .navigation-buttons{display:block;text-align:left}
+      #admin-bar{font-size:.8em;justify-content:flex-start;padding:8px 15px}
+      #admin-bar button{font-size:.8em;padding:4px 8px}
+    }
+  </style>
+</head>
+<body>
+<div class="header-bar">AI Energy Advisor Task</div>
+<div id="progress-bar-container"><div id="progress-bar"></div></div>
+<div id="progress-text"></div>
+<div id="experiment-container">
+  <!-- Instructions -->
+  <div id="section-instructions" class="section active">
+    <button class="skip-section-button" data-skip-target="numeracy">Skip to Numeracy</button>
+    <h2>Instructions</h2>
+    <p>Welcome! You will answer some numeracy questions, estimate appliance energy use, then see AI estimates and decide which are more accurate.</p>
+    <div class="navigation-buttons">
+      <button id="start-button">Continue</button>
+    </div>
+  </div>
+  <!-- Numeracy -->
+  <div id="section-numeracy" class="section">
+    <button class="skip-section-button" data-skip-target="energy-knowledge">Skip to Estimation</button>
+    <h2>Numeracy</h2>
+    <div class="navigation-buttons">
+      <button class="next-section-button" data-next-target="energy-knowledge">Next</button>
+    </div>
+  </div>
+  <!-- Energy Estimation -->
+  <div id="section-energy-knowledge" class="section">
+    <button class="skip-section-button" data-skip-target="scenario-task">Skip to AI</button>
+    <h2>Appliance Energy Estimation</h2>
+    <p>Estimate energy usage (relative to a 100-watt bulb = 100 units/hour).</p>
+    <div class="navigation-buttons">
+      <button class="next-section-button" data-next-target="scenario-task">Next</button>
+    </div>
+  </div>
+  <!-- AI Scenarios -->
+  <div id="section-scenario-task" class="section">
+    <button class="skip-section-button" data-skip-target="debriefing">Skip Scenarios</button>
+    <h2>AI Interaction</h2>
+    <div id="scenario-content"></div>
+    <hr style="margin:20px 0;border:none;border-top:1px solid var(--border)">
+    <div id="scenario-questions"></div>
+    <div class="navigation-buttons">
+      <button id="scenario-next-button">Next</button>
+    </div>
+  </div>
+  <!-- Debriefing -->
+  <div id="section-debriefing" class="section">
+    <h2>Debriefing</h2>
+    <p>Thank you for participating.</p>
+    <p><strong>Item Ground Truths:</strong></p>
+    <ul id="debrief-clarifications"></ul>
+    <p><strong>All Responses (Admin):</strong></p>
+    <textarea id="final-results" readonly rows="12"></textarea>
+    <div class="navigation-buttons">
+      <button id="restart-button">Restart</button>
+    </div>
+  </div>
+</div>
+<div id="admin-bar">
+  <span>ADMIN | Current: <strong id="admin-current-section">...</strong></span> | <span>Jump:</span>
+  <button class="admin-jump-button" data-section-index="0">Instr</button>
+  <button class="admin-jump-button" data-section-index="1">Num</button>
+  <button class="admin-jump-button" data-section-index="2">Est</button>
+  <button class="admin-jump-button" data-section-index="3">AI</button>
+  <button class="admin-jump-button" data-section-index="4">Debrief</button>
+</div>
+
+<script>
+const NUM_SCENARIOS = 4, LLM_ESTIMATES_URL='llm_estimates1.json';
+const questions = {
+  q19_numeracy_percentage: {
+    id:'q19_numeracy_percentage',section:'numeracy',type:'multiple-choice',
+    text:'A certain event has a 10% chance. Out of 1000 people, how many experience it?',
+    options:[{value:'a',text:'1'},{value:'b',text:'10'},{value:'c',text:'100'},{value:'d',text:'500'}],
+    correctAnswer:'c'
+  },
+  q20_numeracy_probability_compare: {
+    id:'q20_numeracy_probability_compare',section:'numeracy',type:'multiple-choice',
+    text:'Which is larger?',options:[{value:'a',text:'5%'},{value:'b',text:'1/20'},{value:'c',text:'Same'}],
+    correctAnswer:'c'
+  },
+  q18_energy_estimation: {
+    id:'q18_energy_estimation',section:'energy-knowledge',type:'estimation-table',
+    text:'Enter estimates (100W bulb=100units/hour):',
+    items:[
+      {name:'Compact Fluorescent Bulb',key:'est_cfl'},
+      {name:'Desktop Computer',key:'est_desktop'},
+      {name:'Laptop Computer',key:'est_laptop'},
+      {name:'Stereo',key:'est_stereo'},
+      {name:'Electric Clothes Dryer',key:'est_electric_clothes_dryer'},
+      {name:'Portable Heater',key:'est_portable_heater'},
+      {name:'Room Air-Conditioner',key:'est_room_air_conditioner'},
+      {name:'Central Air Conditioner',key:'est_central_air_conditioner'},
+      {name:'Dish Washer',key:'est_dish_washer'},
+      {name:'Replace incandescent with CFL',key:'est_replace_incandescent_with_cfl'},
+      {name:'Lower wattage bulb',key:'est_lower_wattage_bulb'},
+      {name:'Line-dry clothes',key:'est_line_dry_clothes'},
+      {name:'Summer Thermostat Adjustment',key:'est_summer_thermostat'},
+      {name:'Winter Thermostat Adjustment',key:'est_winter_thermostat'},
+      {name:'Washer Temperature Change',key:'est_washer_setting'}
+    ]
+  }
+};
+
+const experiment = {
+  st:{
+    isAdmin:true,
+    sectionIndex:0,
+    scenarioIndex:-1,
+    subStage:'ai_response',
+    curItemData:null,
+    sections:['instructions','numeracy','energy-knowledge','scenario-task','debriefing'],
+    currentQs:[],
+    responses:{},
+    llmData:null,
+    chosenItems:[]
+  },
+
+  async init(){
+    await this.loadLLM();
+    this.attachEvents();
+    this.showSection(this.st.sections[0]);
+    this.updateAdminBar();
+    this.updProgress();
+  },
+
+  attachEvents(){
+    // Next section from Instructions
+    document.getElementById('start-button').onclick=()=>this.nextSection();
+    // Next section from Numeracy, Energy-knowledge, etc.
+    document.querySelectorAll('.next-section-button').forEach(b=>{
+      b.onclick=e=>{
+        if(e.target.dataset.nextTarget==='scenario-task' && !this.st.chosenItems.length){
+          this.selectItems();
+        }
+        this.nextSection();
+      };
+    });
+    // Skip buttons
+    document.querySelectorAll('.skip-section-button').forEach(b=>{
+      b.onclick=e=>this.skipSection(e.target.dataset.skipTarget);
+    });
+    // Scenario interaction next
+    document.getElementById('scenario-next-button').onclick=()=>this.advanceScenario();
+    // Restart
+    document.getElementById('restart-button').onclick=()=>location.reload();
+    // Admin jump
+    document.querySelectorAll('.admin-jump-button').forEach(b=>{
+      b.onclick=e=>{
+        let i = +e.target.dataset.sectionIndex;
+        if(!isNaN(i)){
+          if(this.st.sections[i]==='scenario-task' && !this.st.chosenItems.length){
+            this.selectItems();
+          }
+          this.goTo(i);
+        }
+      };
+    });
+  },
+
+  async loadLLM(){
+    let resp=await fetch(LLM_ESTIMATES_URL);
+    let loadedJson=await resp.json();
+    // If the loaded JSON has "data" as the real array, store that in st.llmData
+    if(loadedJson && Array.isArray(loadedJson.data)){
+      this.st.llmData=loadedJson.data;
+    } else if(Array.isArray(loadedJson)){
+      // Fallback if the file is directly an array
+      this.st.llmData=loadedJson;
+    } else {
+      throw new Error("Loaded JSON does not contain a valid 'data' array.");
+    }
+  },
+
+  showSection(id){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    let sec=document.getElementById('section-'+id);
+    if(!sec) return;
+    sec.classList.add('active');
+
+    if(['numeracy','energy-knowledge'].includes(id)){
+      this.renderQs(id);
+    }
+    if(id==='scenario-task'){
+      if(!this.st.chosenItems.length) this.selectItems();
+      if(this.st.scenarioIndex<0) this.st.scenarioIndex=0;
+      this.loadScenario(this.st.scenarioIndex);
+    }
+    if(id==='debriefing'){
+      this.fillDebrief();
+      this.showResults();
+    }
+
+    window.scrollTo(0,0);
+    this.updateAdminBar();
+    this.updProgress();
+  },
+
+  selectItems(){
+    let validKeys=new Set(questions.q18_energy_estimation.items.map(i=>i.key));
+    // Filter from this.st.llmData, which should be an array
+    let pool=this.st.llmData.filter(i=>typeof i.estimation_task_key==='string' && validKeys.has(i.estimation_task_key));
+    pool.sort(()=>Math.random()-0.5);
+    this.st.chosenItems=pool.slice(0,NUM_SCENARIOS).map(x=>({item_name:x.item_name}));
+  },
+
+  renderQs(sectionId){
+    let c=document.getElementById('section-'+sectionId),
+        nav=c.querySelector('.navigation-buttons');
+    c.querySelectorAll('.question-block').forEach(b=>b.remove());
+    this.st.currentQs=Object.values(questions).filter(q=>q.section===sectionId);
+
+    this.st.currentQs.forEach(q=>{
+      let htmlText=q.text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+      let blockHTML=this.makeQ({...q,text:htmlText});
+      nav.insertAdjacentHTML('beforebegin',blockHTML);
+      if(q.type==='slider') this.sliderInit(c,q.id);
+    });
+  },
+
+  makeQ(q){
+    if(q.type==='multiple-choice' || q.type==='true-false'){
+      let items='';
+      q.options.forEach(o=>{
+        items+=`<li><input type="radio" id="${q.id}-${o.value}" name="${q.id}" value="${o.value}">
+                <label for="${q.id}-${o.value}" class="option-label">${o.text}</label></li>`;
+      });
+      return `<div class="question-block"><label>${q.text}</label><ul>${items}</ul></div>`;
+    }
+    if(q.type==='estimation-table'){
+      let rows='';
+      q.items.forEach(i=>{
+        rows+=`<tr><td>${i.name}</td><td><input type="number" id="${i.key}" name="${i.key}"></td></tr>`;
+      });
+      return `<div class="question-block"><label>${q.text}</label>
+                <div class="estimation-table-wrapper">
+                  <table class="estimation-table">
+                    <thead><tr><th>Device</th><th>Estimate</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                  </table>
+                </div>
+              </div>`;
+    }
+    if(q.type==='slider'){
+      let defVal = q.id.includes('confidence')?50 : ( (q.min||0)+( (q.max||100)-(q.min||0))/2 );
+      let val = Math.round(defVal) || 50;
+      return `<div class="question-block" id="block-${q.id}">
+                <label>${q.text}</label>
+                <div class="scale-endpoints"><span>${q.min||0}</span><span>${q.max||100}</span></div>
+                <div class="slider-container">
+                  <input type="range" id="${q.id}" min="${q.min||0}" max="${q.max||100}" step="${q.step||1}" value="${val}">
+                  <span class="${q.id}-value-display slider-value-display">${val}</span>
+                </div>
+              </div>`;
+    }
+    if(q.type==='forced-choice-estimates'){
+      return `<div class="question-block" id="block-${q.id}">
+                <label>${q.text}</label>
+                <ul>
+                  <li>
+                    <input type="radio" id="${q.id}-user" name="${q.id}" value="user_estimate">
+                    <label for="${q.id}-user" class="option-label">
+                      Your estimate: <strong>${q.userEstimate} units</strong>
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" id="${q.id}-ai" name="${q.id}" value="ai_estimate">
+                    <label for="${q.id}-ai" class="option-label">
+                      AI's estimate: <strong>${q.aiEstimate} units</strong>
+                    </label>
+                  </li>
+                </ul>
+              </div>`;
+    }
+    return `<div class="question-block" style="color:red">Unknown question type</div>`;
+  },
+
+  sliderInit(container,sliderId){
+    let slider=container.querySelector('#'+sliderId),
+        display=container.querySelector('.'+sliderId+'-value-display');
+    if(slider && display){
+      slider.addEventListener('input',()=>{
+        let pct=(slider.value-slider.min)/(slider.max-slider.min)*100;
+        display.textContent=slider.value;
+        slider.style.background=`linear-gradient(to right,var(--primary-hover),var(--primary-hover) ${pct}%,var(--progress-bg) ${pct}%,var(--progress-bg))`;
+      });
+    }
+  },
+
+  loadScenario(idx){
+    if(idx>=this.st.chosenItems.length){
+      this.goTo(this.st.sections.indexOf('debriefing'));
+      return;
+    }
+    let info=this.st.chosenItems[idx];
+    let d=this.st.llmData.find(x=>x.item_name===info.item_name);
+    this.st.curItemData=d;
+    this.st.subStage='ai_response';
+    this.st.responses[`trial_${idx+1}_item_name`]=d.item_name;
+    this.renderScenario();
+  },
+
+  renderScenario(){
+    let i=this.st.scenarioIndex,
+        stg=this.st.subStage,
+        d=this.st.curItemData,
+        sc=document.getElementById('scenario-content'),
+        sq=document.getElementById('scenario-questions'),
+        nb=document.getElementById('scenario-next-button');
+
+    if(!d) return;
+    // Stage-specific display
+    if(stg==='ai_response'){
+      sc.innerHTML=`
+        <h3>Item ${i+1} of ${this.st.chosenItems.length}: ${d.item_label||d.item_name}</h3>
+        <div class="scenario-box">
+          <div style="margin-bottom:15px;white-space:pre-wrap">${d.prompt}</div>
+          <div class="ai-response-container">
+            <span class="ai-prefix">EnergyAI says:</span>
+            <span class="ai-response-estimate">${d.llm_estimate} units</span>
+            <div class="ai-response-explanation">${d.llm_explanation}</div>
+          </div>
+        </div>`;
+      sq.innerHTML='';
+      nb.textContent='Rate AI Confidence';
+      return;
+    }
+    if(stg==='confidence_rating'){
+      sc.innerHTML=''; // We keep the last stage's content or clear it. Optional.
+      sq.innerHTML='';
+      let qid=`trial_${i+1}_confidence_in_ai`;
+      let q=this.makeQ({id:qid,type:'slider',text:'How confident are you in the AI estimate?',min:0,max:100,step:10});
+      sc.innerHTML=`
+        <h3>Item ${i+1} of ${this.st.chosenItems.length}: ${d.item_label||d.item_name}</h3>
+        <div class="ai-response-container" style="margin-top:15px">
+          <span class="ai-prefix">Previously Shown AI Estimate:</span>
+          <span class="ai-response-estimate">${d.llm_estimate} units</span>
+          <div class="ai-response-explanation">${d.llm_explanation}</div>
+        </div>`;
+      sq.innerHTML=q;
+      this.sliderInit(sq,qid);
+      nb.textContent='Choose Estimate';
+      return;
+    }
+    if(stg==='forced_choice'){
+      sc.innerHTML='';
+      sq.innerHTML='';
+      let k=d.estimation_task_key, userEst=this.st.responses[k] || 'N/A',
+          qid=`trial_${i+1}_forced_choice_q`,
+          block=this.makeQ({
+            type:'forced-choice-estimates', id:qid,
+            text:'Pick which estimate seems more accurate:',
+            userEstimate:userEst, aiEstimate:d.llm_estimate
+          });
+      sc.innerHTML=`
+        <h3>Item ${i+1} of ${this.st.chosenItems.length}: ${d.item_label||d.item_name}</h3>
+        <div class="ai-response-container" style="margin-top:15px">
+          <span class="ai-prefix">Previously Shown AI Estimate:</span>
+          <span class="ai-response-estimate">${d.llm_estimate} units</span>
+        </div>`;
+      sq.innerHTML=block;
+      nb.textContent=(i===this.st.chosenItems.length-1)?'Finish':'Next Item';
+    }
+  },
+
+  advanceScenario(){
+    let i=this.st.scenarioIndex,
+        stg=this.st.subStage,
+        d=this.st.curItemData,
+        prefix=`trial_${i+1}`;
+    if(!d) return;
+
+    // Save data from each sub-stage
+    if(stg==='confidence_rating'){
+      let c=document.getElementById(`${prefix}_confidence_in_ai`);
+      if(c) this.st.responses[`${prefix}_confidence_in_ai`]=c.value;
+    }
+    else if(stg==='forced_choice'){
+      let r=document.querySelector(`input[name="${prefix}_forced_choice_q"]:checked`);
+      if(r) this.st.responses[`${prefix}_forced_choice_selection`]=r.value;
+    }
+
+    // Advance sub-stages
+    if(stg==='ai_response'){
+      this.st.subStage='confidence_rating';
+      this.renderScenario();
+    }
+    else if(stg==='confidence_rating'){
+      this.st.subStage='forced_choice';
+      this.renderScenario();
+    }
+    else if(stg==='forced_choice'){
+      this.st.scenarioIndex++;
+      this.loadScenario(this.st.scenarioIndex);
+    }
+  },
+
+  validateSection(){ return true; },
+
+  saveSection(){
+    let sId=this.st.sections[this.st.sectionIndex];
+    if(['instructions','scenario-task','debriefing'].includes(sId)) return;
+    let container=document.getElementById('section-'+sId);
+    if(!container) return;
+    let inps=container.querySelectorAll('input,textarea');
+    inps.forEach(inp=>{
+      let id=inp.name||inp.id;
+      if(!id) return;
+      if(inp.type==='radio'){
+        if(inp.checked) this.st.responses[id]=inp.value;
+      }
+      else if(inp.type==='checkbox'){
+        this.st.responses[id]=inp.checked;
+      }
+      else {
+        this.st.responses[id]=(inp.value.trim()==='')?null:inp.value.trim();
+      }
+    });
+  },
+
+  nextSection(){
+    this.saveSection();
+    if(this.st.sectionIndex<this.st.sections.length-1){
+      this.st.sectionIndex++;
+      this.showSection(this.st.sections[this.st.sectionIndex]);
+    }
+  },
+
+  skipSection(targetId){
+    this.saveSection();
+    let i=this.st.sections.indexOf(targetId);
+    if(i!==-1) this.goTo(i); else this.nextSection();
+  },
+
+  goTo(idx){
+    if(idx>=0 && idx<this.st.sections.length){
+      this.saveSection();
+      this.st.sectionIndex=idx;
+      this.showSection(this.st.sections[idx]);
+    }
+  },
+
+  fillDebrief(){
+    let list=document.getElementById('debrief-clarifications');
+    list.innerHTML='';
+    this.st.chosenItems.forEach((cItem,idx)=>{
+      let d=this.st.llmData.find(x=>x.item_name===cItem.item_name);
+      if(!d) return;
+      list.innerHTML+=`<li><strong>Item ${idx+1}: ${d.item_name}</strong>
+                        <ul>
+                          <li>Actual: ${d.actual_value}</li>
+                          <li>AI: ${d.llm_estimate}</li>
+                        </ul></li>`;
+    });
+  },
+
+  showResults(){
+    let t=document.getElementById('final-results');
+    let out={
+      version:'ShortPurdue',
+      timestamp:new Date().toISOString(),
+      responses:this.st.responses
+    };
+    t.value=JSON.stringify(out,null,2);
+  },
+
+  updateAdminBar(){
+    let label=document.getElementById('admin-current-section'),
+        idx=this.st.sectionIndex,
+        secName=this.st.sections[idx];
+    let suffix='';
+    if(secName==='scenario-task' && this.st.scenarioIndex>=0){
+      suffix=` (Item ${this.st.scenarioIndex+1} of ${this.st.chosenItems.length}, Stage: ${this.st.subStage})`;
+    }
+    label.textContent=secName.replace('-',' ')+suffix;
+  },
+
+  updProgress(){
+    let bar=document.getElementById('progress-bar'),
+        txt=document.getElementById('progress-text');
+    if(!bar||!txt) return;
+
+    let i=this.st.sectionIndex,
+        total=this.st.sections.length,
+        sectionName=this.st.sections[i];
+
+    // Base progress by main sections
+    let percent=(i/(total-1))*100;
+
+    // If in scenario-task, refine progress
+    if(sectionName==='scenario-task' && this.st.chosenItems.length){
+      let scIndex=this.st.sections.indexOf('scenario-task'),
+          base=(scIndex/(total-1))*100,
+          span=(1/(total-1))*100,
+          subFrac=0;
+      if(this.st.subStage==='confidence_rating') subFrac=1/3;
+      else if(this.st.subStage==='forced_choice') subFrac=2/3;
+
+      let itemProgress=(this.st.scenarioIndex+subFrac)/this.st.chosenItems.length;
+      percent=base+(itemProgress*span);
+    }
+
+    let boundedPct=Math.min(100,Math.max(0,percent));
+    bar.style.width=boundedPct+'%';
+
+    if(i===total-1) txt.textContent='Complete';
+    else txt.textContent=`Section ${i+1} of ${total}`;
+  }
+};
+
+document.addEventListener('DOMContentLoaded',()=>{experiment.init();});
+</script>
+</body>
+</html>
