@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Energy Reduction Task Demo</title>
+  <!-- Optionally include Bootstrap (via CDN) for quick styling -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <style>
+    .tab-content {
+      margin-top: 20px;
+    }
+    .survey-question {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    .mock-llm-response {
+      padding: 10px;
+      background-color: #eef;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+    .action-table {
+      margin-top: 20px;
+    }
+    .action-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .action-table th, .action-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body class="p-3">
+
+  <h1>Interactive Multi-Tab Dashboard Demo</h1>
+  <p class="text-muted">Prototype for Energy Reduction Planning Tasks</p>
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="intro-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#intro"
+        type="button"
+        role="tab"
+        aria-controls="intro"
+        aria-selected="true"
+      >
+        Introduction
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="task1-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#task1"
+        type="button"
+        role="tab"
+        aria-controls="task1"
+        aria-selected="false"
+      >
+        Task 1: Estimate-then-Plan
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="task2-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#task2"
+        type="button"
+        role="tab"
+        aria-controls="task2"
+        aria-selected="false"
+      >
+        Task 2: Plan Editing from AI Seed
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="task3-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#task3"
+        type="button"
+        role="tab"
+        aria-controls="task3"
+        aria-selected="false"
+      >
+        Task 3: Info Lookup with Mock LLM
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="bginfo-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#bginfo"
+        type="button"
+        role="tab"
+        aria-controls="bginfo"
+        aria-selected="false"
+      >
+        Study Background & Hypotheses
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Panes -->
+  <div class="tab-content" id="mainTabsContent">
+    <!-- INTRO TAB -->
+    <div
+      class="tab-pane fade show active"
+      id="intro"
+      role="tabpanel"
+      aria-labelledby="intro-tab"
+    >
+      <h3>Welcome</h3>
+      <p>
+        This dashboard demonstrates how we might prototype interactive energy 
+        reduction planning tasks. Each tab represents a different
+        experimental approach, showing how participants could be guided to
+        generate (and refine) appliance-specific plans to meet a given energy
+        reduction goal (Attari et al., 2010; Marghetis et al., 2019).
+      </p>
+      <p>
+        Explore each task to see sample instructions, simulated LLM responses,
+        and parameters such as target kWh savings.
+      </p>
+    </div>
+    
+    <!-- TASK 1: ESTIMATE-THEN-PLAN -->
+    <div
+      class="tab-pane fade"
+      id="task1"
+      role="tabpanel"
+      aria-labelledby="task1-tab"
+    >
+      <h3>Task 1: Estimate-then-Plan</h3>
+      <p>
+        <strong>Goal:</strong> Please provide your best estimates of annual 
+        kWh savings for each action, then build a plan to reach the target of 
+        <em>10% reduction</em> for the selected household profile.
+      </p>
+
+      <!-- Household selection (example) -->
+      <div class="mb-3">
+        <label for="householdSelect1" class="form-label">
+          Choose a Household Profile:
+        </label>
+        <select id="householdSelect1" class="form-select">
+          <option value="A" selected>Profile A (10,000 kWh annual)</option>
+          <option value="B">Profile B (15,000 kWh annual)</option>
+          <option value="C">Profile C (18,000 kWh annual)</option>
+        </select>
+      </div>
+
+      <!-- Step 1: Ask participant to estimate kWh for each potential action -->
+      <div class="action-table">
+        <p><strong>Step 1:</strong> Estimate Annual kWh Savings (your best guess):</p>
+        <table id="estimateTable">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Your Estimate (kWh)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Step 2: Provide feedback button (mock). In real study, may be immediate or triggered. -->
+      <div class="mt-3">
+        <button class="btn btn-primary" id="showFeedbackBtn1">Show Feedback on Estimates</button>
+      </div>
+      <div id="feedbackSection1" style="display:none; margin-top:10px;">
+        <p>Here are the correct approximate savings for each action:</p>
+        <div id="correctEstimates1" class="mock-llm-response"></div>
+      </div>
+
+      <!-- Step 3: Participant tries to plan to meet 10% reduction -->
+      <div class="mt-4">
+        <p><strong>Step 2:</strong> Construct your plan to meet <span id="planGoal1"></span> kWh saved (10% of chosen profile’s usage).</p>
+        <p>Enter how many kWh you plan to save with each action (use your updated knowledge!).</p>
+
+        <table id="planTable1">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Planned Savings (kWh)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS, same actions as estimate table but separate field for "planned" savings -->
+          </tbody>
+        </table>
+
+        <div class="mt-3">
+          <button class="btn btn-success" id="submitPlanBtn1">Submit Plan</button>
+        </div>
+        <div id="planResult1" class="mt-2"></div>
+      </div>
+    </div>
+
+    <!-- TASK 2: PLAN EDITING FROM AI SEED -->
+    <div
+      class="tab-pane fade"
+      id="task2"
+      role="tabpanel"
+      aria-labelledby="task2-tab"
+    >
+      <h3>Task 2: Plan Editing from AI Seed</h3>
+      <p>
+        Below is a <em>mock LLM-generated draft plan</em> to reduce 10% of a 
+        household’s energy usage. Please edit it to reach the exact goal of 
+        1,000 kWh savings (for Profile A). 
+      </p>
+
+      <div class="mock-llm-response">
+        <strong>AI Seed Plan Example:</strong><br />
+        - Switch incandescent bulbs to LEDs: 200 kWh <br/>
+        - Lower water heater thermostat by 10°F: 400 kWh <br/>
+        - Unplug idle electronics: 50 kWh <br/>
+        <em>Total: 650 kWh saved</em>
+      </div>
+
+      <div class="mt-3">
+        <p>Adjust the plan below. Enter revised kWh values. You must sum exactly 1,000 kWh.</p>
+        
+        <table id="aiSeedPlanTable">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>LLM's Proposed kWh</th>
+              <th>Your Revised kWh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Switch to LEDs</td>
+              <td>200</td>
+              <td><input type="number" min="0" value="200" /></td>
+            </tr>
+            <tr>
+              <td>Lower water heater</td>
+              <td>400</td>
+              <td><input type="number" min="0" value="400" /></td>
+            </tr>
+            <tr>
+              <td>Unplug idle electronics</td>
+              <td>50</td>
+              <td><input type="number" min="0" value="50" /></td>
+            </tr>
+            <tr>
+              <td><em>(Add Another Action?)</em></td>
+              <td>N/A</td>
+              <td><input type="number" min="0" value="0" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-primary mt-3" id="checkPlan2">Check Total</button>
+        <div id="planResult2" class="mt-2"></div>
+      </div>
+
+      <!-- Survey question (Attari et al., 2010) example -->
+      <div class="survey-question">
+        <label><strong>How confident are you in your revised plan?</strong></label>
+        <select id="confidence2" class="form-select" style="width:auto;">
+          <option value="1">Not at all confident</option>
+          <option value="2">Slightly confident</option>
+          <option value="3">Moderately confident</option>
+          <option value="4">Very confident</option>
+          <option value="5">Extremely confident</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TASK 3: INFO LOOKUP WITH MOCK LLM -->
+    <div
+      class="tab-pane fade"
+      id="task3"
+      role="tabpanel"
+      aria-labelledby="task3-tab"
+    >
+      <h3>Task 3: Action Selection with Information Lookup</h3>
+      <p>
+        In this task, you can “ask” a mock LLM for info about the kWh savings 
+        of various actions. Then, add them to your plan to reach <em>2,000 
+        kWh saved</em> for Profile C. 
+      </p>
+
+      <!-- Example input area to ask the mock LLM -->
+      <div class="mb-3">
+        <label for="llmQuery3" class="form-label">Enter your query about energy savings:</label>
+        <input type="text" class="form-control" id="llmQuery3" placeholder="e.g., How much do I save by air drying clothes?">
+      </div>
+      <button class="btn btn-secondary" id="askLLMBtn3">Ask Mock LLM</button>
+      <div id="llmResponse3" class="mock-llm-response" style="display:none;"></div>
+
+      <hr/>
+
+      <!-- Plan construction -->
+      <p><strong>Construct your plan here:</strong></p>
+      <div class="mb-3">
+        <label for="actionName3" class="form-label">Action Name:</label>
+        <input type="text" class="form-control" id="actionName3" placeholder="e.g., Air dry laundry"/>
+      </div>
+      <div class="mb-3">
+        <label for="actionSavings3" class="form-label">Estimated kWh Saved:</label>
+        <input type="number" class="form-control" id="actionSavings3" value="0"/>
+      </div>
+      <button class="btn btn-primary" id="addActionBtn3">Add Action to Plan</button>
+
+      <div class="action-table">
+        <table id="planTable3">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>kWh Saved</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-2">
+        <button class="btn btn-success" id="submitPlanBtn3">Submit Final Plan</button>
+        <div id="planResult3" class="mt-2"></div>
+      </div>
+    </div>
+
+    <!-- STUDY BACKGROUND & HYPOTHESES -->
+    <div
+      class="tab-pane fade"
+      id="bginfo"
+      role="tabpanel"
+      aria-labelledby="bginfo-tab"
+    >
+      <h3>Study Background & Hypotheses</h3>
+      <p>
+        This study draws on findings that individuals often underestimate high-impact 
+        appliances (e.g., heating and cooling) while overestimating smaller but more 
+        salient actions (Attari et al., 2010). By providing accurate, context-specific 
+        data (or enabling access to an LLM for real-time queries), we hypothesize that 
+        participants will generate more accurate and feasible energy reduction plans. 
+        Furthermore, we examine whether scaffolding (e.g., initial AI “seed” plans, 
+        or explicit “estimate-then-plan” paradigms) can correct misperceptions reported 
+        in prior literature (Marghetis et al., 2019).
+      </p>
+      <p>
+        <strong>Key Hypotheses:</strong><br/>
+        1. Participants with on-demand information support will create plans that more 
+        accurately reach target savings compared to those without support.<br/>
+        2. AI “seed” plans will anchor participants’ final solutions, though we expect 
+        a net improvement in plan accuracy with strategic editing.<br/>
+        3. Corrective feedback on initial estimates will reduce known biases and 
+        misperceptions, leading to improved final plans.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (for tabs) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // -----------------------------
+    // Mock Data
+    // -----------------------------
+
+    // Approximate actual savings for reference/feedback (same order as table):
+    const actionsData = [
+      { action: "Switch to LED bulbs", correctSavings: 300 },
+      { action: "Lower water heater thermostat", correctSavings: 350 },
+      { action: "Air dry laundry", correctSavings: 500 },
+      { action: "Upgrade fridge to ENERGY STAR", correctSavings: 200 },
+      { action: "Adjust thermostat ±2°F", correctSavings: 600 },
+      { action: "Seal/insulate ducts", correctSavings: 500 },
+      { action: "Wash clothes in cold water", correctSavings: 120 },
+      { action: "Use programmable thermostat", correctSavings: 800 },
+      { action: "Unplug idle electronics", correctSavings: 100 },
+    ];
+
+    // Mock responses keyed by certain query strings (to simulate an LLM):
+    const mockLLMDatabase = {
+      "air dry clothes": "Air drying clothes can save around 400–600 kWh per year, depending on how often you use the dryer.",
+      "led bulbs": "Switching 10 incandescent bulbs to LED can save around 300 kWh per year, though this depends on daily usage.",
+      "lower water heater": "Lowering your water heater's thermostat by about 10°F can save between 300 and 400 kWh annually.",
+      "unplug electronics": "Reducing standby power by unplugging idle devices can save about 50–150 kWh per year."
+      // ... etc. Add more for demonstration.
+    };
+
+    // -----------------------------
+    // TASK 1: ESTIMATE-THEN-PLAN
+    // -----------------------------
+    const estimateTableBody = document.querySelector("#estimateTable tbody");
+    const feedbackSection1 = document.getElementById("feedbackSection1");
+    const correctEstimates1 = document.getElementById("correctEstimates1");
+    const showFeedbackBtn1 = document.getElementById("showFeedbackBtn1");
+
+    const planTableBody1 = document.querySelector("#planTable1 tbody");
+    const submitPlanBtn1 = document.getElementById("submitPlanBtn1");
+    const planGoal1 = document.getElementById("planGoal1");
+    const planResult1 = document.getElementById("planResult1");
+    const householdSelect1 = document.getElementById("householdSelect1");
+
+    // Populate table rows for Task 1
+    function populateTask1Tables() {
+      estimateTableBody.innerHTML = "";
+      planTableBody1.innerHTML = "";
+
+      actionsData.forEach((item, idx) => {
+        // Row for user estimates
+        const trEstimate = document.createElement("tr");
+        const tdAction1 = document.createElement("td");
+        tdAction1.textContent = item.action;
+
+        const tdEstimate = document.createElement("td");
+        const inputEstimate = document.createElement("input");
+        inputEstimate.type = "number";
+        inputEstimate.min = "0";
+        inputEstimate.value = "0";
+        inputEstimate.id = `estimateInput_${idx}`;
+        tdEstimate.appendChild(inputEstimate);
+
+        trEstimate.appendChild(tdAction1);
+        trEstimate.appendChild(tdEstimate);
+        estimateTableBody.appendChild(trEstimate);
+
+        // Row for plan
+        const trPlan = document.createElement("tr");
+        const tdAction2 = document.createElement("td");
+        tdAction2.textContent = item.action;
+
+        const tdPlan = document.createElement("td");
+        const inputPlan = document.createElement("input");
+        inputPlan.type = "number";
+        inputPlan.min = "0";
+        inputPlan.value = "0";
+        inputPlan.id = `planInput_${idx}`;
+        tdPlan.appendChild(inputPlan);
+
+        trPlan.appendChild(tdAction2);
+        trPlan.appendChild(tdPlan);
+        planTableBody1.appendChild(trPlan);
+      });
+    }
+
+    function updatePlanGoal1() {
+      const profile = householdSelect1.value;
+      let annualUse = 10000; // default Profile A
+      if (profile === "B") annualUse = 15000;
+      else if (profile === "C") annualUse = 18000;
+
+      const goal = 0.1 * annualUse;
+      planGoal1.textContent = `${goal} kWh`;
+    }
+
+    // Show feedback: display the correct savings
+    showFeedbackBtn1.addEventListener("click", () => {
+      let feedbackHTML = "<ul>";
+      actionsData.forEach((item) => {
+        feedbackHTML += `<li><strong>${item.action}:</strong> ~${item.correctSavings} kWh</li>`;
+      });
+      feedbackHTML += "</ul>";
+      correctEstimates1.innerHTML = feedbackHTML;
+      feedbackSection1.style.display = "block";
+    });
+
+    // Submit plan
+    submitPlanBtn1.addEventListener("click", () => {
+      const profile = householdSelect1.value;
+      let annualUse = 10000;
+      if (profile === "B") annualUse = 15000;
+      else if (profile === "C") annualUse = 18000;
+
+      const target = 0.1 * annualUse;
+      let totalSaved = 0;
+      actionsData.forEach((item, idx) => {
+        const val = parseFloat(document.getElementById(`planInput_${idx}`).value) || 0;
+        totalSaved += val;
+      });
+      if (totalSaved >= target) {
+        planResult1.innerHTML = `<span class="text-success">Success! You planned to save ${totalSaved} kWh, meeting or exceeding the goal of ${target} kWh.</span>`;
+      } else {
+        planResult1.innerHTML = `<span class="text-danger">You planned to save ${totalSaved} kWh, which is below the goal of ${target} kWh. Consider revising.</span>`;
+      }
+    });
+
+    householdSelect1.addEventListener("change", updatePlanGoal1);
+
+    // -----------------------------
+    // TASK 2: PLAN EDITING FROM AI SEED
+    // -----------------------------
+    const checkPlan2Btn = document.getElementById("checkPlan2");
+    const planResult2 = document.getElementById("planResult2");
+
+    checkPlan2Btn.addEventListener("click", () => {
+      // Grab revised values from table
+      const table = document.getElementById("aiSeedPlanTable");
+      let total = 0;
+      // skip header row
+      for (let i = 1; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        const revisedInput = row.cells[2].querySelector("input");
+        const val = parseFloat(revisedInput.value) || 0;
+        total += val;
+      }
+      if (total === 1000) {
+        planResult2.innerHTML = `<span class="text-success">Perfect! Your total savings is exactly ${total} kWh.</span>`;
+      } else if (total > 1000) {
+        planResult2.innerHTML = `<span class="text-warning">Your total savings is ${total} kWh, which overshoots the 1,000 kWh goal. You may want to adjust.</span>`;
+      } else {
+        planResult2.innerHTML = `<span class="text-danger">Your total savings is ${total} kWh, which is less than the 1,000 kWh goal.</span>`;
+      }
+    });
+
+    // -----------------------------
+    // TASK 3: MOCK LLM INFO LOOKUP
+    // -----------------------------
+    const llmQuery3 = document.getElementById("llmQuery3");
+    const askLLMBtn3 = document.getElementById("askLLMBtn3");
+    const llmResponse3 = document.getElementById("llmResponse3");
+
+    const actionName3 = document.getElementById("actionName3");
+    const actionSavings3 = document.getElementById("actionSavings3");
+    const addActionBtn3 = document.getElementById("addActionBtn3");
+    const planTableBody3 = document.querySelector("#planTable3 tbody");
+    const submitPlanBtn3 = document.getElementById("submitPlanBtn3");
+    const planResult3 = document.getElementById("planResult3");
+
+    askLLMBtn3.addEventListener("click", () => {
+      const query = llmQuery3.value.toLowerCase();
+      let responseText = "I'm not sure about that specific action.";
+      // Check for a key in the database
+      for (let key in mockLLMDatabase) {
+        if (query.includes(key)) {
+          responseText = mockLLMDatabase[key];
+          break;
+        }
+      }
+      llmResponse3.style.display = "block";
+      llmResponse3.textContent = responseText;
+    });
+
+    // Add row to plan table
+    addActionBtn3.addEventListener("click", () => {
+      const nameVal = actionName3.value.trim();
+      const kwhVal = parseFloat(actionSavings3.value) || 0;
+
+      if (!nameVal) return;
+      
+      const tr = document.createElement("tr");
+      const tdName = document.createElement("td");
+      tdName.textContent = nameVal;
+      const tdKwh = document.createElement("td");
+      tdKwh.textContent = kwhVal.toString();
+
+      tr.appendChild(tdName);
+      tr.appendChild(tdKwh);
+      planTableBody3.appendChild(tr);
+
+      // reset inputs
+      actionName3.value = "";
+      actionSavings3.value = "0";
+    });
+
+    // Submit final plan
+    submitPlanBtn3.addEventListener("click", () => {
+      // We want 2,000 kWh total for Profile C
+      const table = document.getElementById("planTable3");
+      let total = 0;
+      for (let i = 1; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        total += parseFloat(row.cells[1].textContent) || 0;
+      }
+      if (total >= 2000) {
+        planResult3.innerHTML = `<span class="text-success">You reached ${total} kWh, meeting or exceeding the 2,000 kWh goal!</span>`;
+      } else {
+        planResult3.innerHTML = `<span class="text-danger">You only reached ${total} kWh, which is less than 2,000.</span>`;
+      }
+    });
+
+    // -----------------------------
+    // INITIALIZATION ON PAGE LOAD
+    // -----------------------------
+    populateTask1Tables();
+    updatePlanGoal1();
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with an AI Energy Advisor (Admin Mode - Improved)</title>
+    <style>
+        :root {
+            --uci-blue: #003366;
+            --uci-blue-light: #0064a4;
+            --uci-gold: #ffc72c; /* For admin buttons maybe? */
+            --text-color: #333;
+            --bg-color: #f8f9fa; /* Slightly softer background */
+            --container-bg: #ffffff;
+            --section-bg: #fdfdfd;
+            --ai-response-bg: #e9f5e9;
+            --ai-response-border: #b2d8b2;
+            --scenario-box-bg: #f0f8ff;
+            --scenario-box-border: #add8e6;
+            --border-color: #dee2e6;
+            --hover-bg: #e9ecef;
+            --progress-bar-bg: #e9ecef;
+            --progress-bar-fill: var(--uci-blue-light);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cleaner font stack */
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 60px; /* Space for admin bar */
+        }
+        .header-bar {
+            background-color: var(--uci-blue);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+         #progress-bar-container {
+            width: 80%;
+            max-width: 850px;
+            margin: 10px auto 15px auto;
+            height: 15px;
+            background-color: var(--progress-bar-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%; /* Starts at 0 */
+            background-color: var(--progress-bar-fill);
+            border-radius: 8px 0 0 8px;
+            transition: width 0.3s ease-in-out;
+        }
+        #progress-text {
+             text-align: center;
+             font-size: 0.9em;
+             color: #555;
+             margin-top: -10px; /* Adjust based on progress bar height */
+             margin-bottom: 20px;
+        }
+        #experiment-container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+        .section {
+            display: none;
+            border: 1px solid var(--border-color);
+            padding: 25px; /* Increased padding */
+            margin-bottom: 25px;
+            border-radius: 6px;
+            background-color: var(--section-bg);
+            position: relative;
+        }
+        .section.active {
+            display: block;
+        }
+        h1, h2, h3 {
+            color: var(--uci-blue);
+        }
+        h2 {
+             border-bottom: 2px solid var(--uci-blue);
+             padding-bottom: 8px;
+             margin-top: 0;
+             margin-bottom: 20px;
+        }
+         h3 { margin-bottom: 15px; }
+
+        button {
+            background-color: var(--uci-blue-light);
+            color: white;
+            border: none;
+            padding: 12px 22px; /* Slightly larger */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.05em; /* Slightly larger */
+            margin-top: 15px;
+            margin-right: 8px;
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background-color: var(--uci-blue);
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .navigation-buttons {
+            margin-top: 25px;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px; /* Increased spacing */
+            font-weight: bold;
+            color: #495057; /* Slightly softer black */
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            padding: 10px; /* Increased padding */
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%; /* Default full width */
+            font-size: 1em;
+        }
+        input[type="number"]{
+            width: 120px; /* More space for numbers */
+        }
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px; /* Add padding inside block */
+            border: 1px solid #f1f3f5; /* Subtle border */
+            border-radius: 5px;
+            background-color: #fff; /* White background for contrast */
+        }
+         .question-block:last-of-type { /* Remove bottom margin on last block */
+              margin-bottom: 0;
+              border-bottom: 1px solid #f1f3f5; /* Ensure border */
+         }
+        .likert-scale ul, .multiple-choice ul, .true-false ul {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0; /* Top margin */
+        }
+        .likert-scale li, .multiple-choice li, .true-false li {
+            margin-bottom: 10px; /* Increased spacing */
+            padding: 5px 0; /* Add slight vertical padding */
+        }
+        .likert-scale label, .multiple-choice label, .true-false label {
+             font-weight: normal;
+             display: inline;
+             margin-left: 8px; /* More space */
+             vertical-align: middle;
+             cursor: pointer; /* Make label clickable */
+         }
+         input[type="radio"], input[type="checkbox"]{
+             margin-right: 5px;
+             vertical-align: middle;
+             cursor: pointer;
+             transform: scale(1.1); /* Slightly larger radios */
+         }
+        .slider-container {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .slider-container input[type="range"] {
+            flex-grow: 1;
+            cursor: pointer;
+             /* Basic styling */
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: var(--progress-bar-bg);
+            border-radius: 5px;
+            outline: none;
+        }
+         .slider-container input[type="range"]::-webkit-slider-thumb {
+             -webkit-appearance: none;
+             appearance: none;
+             width: 18px;
+             height: 18px;
+             background: var(--uci-blue-light);
+             border-radius: 50%;
+             cursor: pointer;
+         }
+         .slider-container input[type="range"]::-moz-range-thumb {
+             width: 18px;
+             height: 18px;
+             background: var(--uci-blue-light);
+             border-radius: 50%;
+             cursor: pointer;
+             border: none;
+         }
+        .slider-container span {
+            font-weight: bold;
+            min-width: 45px; /* More space for 100% */
+            text-align: right;
+            color: #555;
+        }
+        .scenario-box {
+            border: 1px solid var(--scenario-box-border);
+            background-color: var(--scenario-box-bg);
+            padding: 20px; /* Increased padding */
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+        .scenario-question {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        .ai-response {
+            background-color: var(--ai-response-bg);
+            border: 1px solid var(--ai-response-border);
+            padding: 18px; /* Increased padding */
+            margin-top: 15px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace; /* Monospace */
+            white-space: pre-wrap;
+            line-height: 1.7; /* Improved readability */
+            font-size: 0.95em;
+        }
+        .ai-response::before {
+            content: "EnergyAI says: ";
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #006400;
+        }
+        #final-results {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            background-color: #eee;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+        }
+        /* Estimation Task Table */
+        .estimation-table-wrapper {
+             overflow-x: auto; /* Enable horizontal scroll on small screens */
+             margin-top: 15px;
+        }
+        .estimation-table {
+            width: 100%;
+            min-width: 500px; /* Prevent excessive squishing */
+            border-collapse: collapse;
+        }
+        .estimation-table th, .estimation-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px; /* Increased padding */
+            text-align: left;
+            vertical-align: middle;
+        }
+        .estimation-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+        .estimation-table input[type="number"] {
+            width: 120px;
+            display: block; /* Ensure it takes block space if needed */
+            margin: 0 auto; /* Center if needed, or keep left */
+        }
+
+        /* Admin Mode Styles */
+        #admin-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: rgba(50, 50, 50, 0.95); color: white;
+            padding: 6px 10px; text-align: center; font-size: 0.9em;
+            z-index: 1000; box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+            display: flex; /* Use flexbox for better alignment */
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        #admin-bar span { margin: 0 10px; }
+        #admin-bar button {
+            background-color: var(--uci-gold); color: var(--text-color);
+            padding: 4px 10px; font-size: 0.85em; margin: 2px 5px;
+            border: 1px solid #d6a100; /* Add subtle border */
+        }
+         #admin-bar button:hover { background-color: #e0a800; }
+        .skip-section-button {
+            position: absolute; top: 15px; right: 15px;
+            background-color: var(--uci-gold); color: var(--text-color);
+            padding: 5px 10px; font-size: 0.85em;
+            border: 1px solid #d6a100;
+        }
+        #condition-selector {
+             border: 2px solid var(--uci-blue); padding: 20px;
+             margin-bottom: 20px; background-color: var(--scenario-box-bg);
+             border-radius: 6px;
+         }
+         #condition-selector h3 { margin-top: 0; }
+         #condition-selector label { font-weight: normal; display: inline-block; margin-right: 10px; margin-bottom: 0;}
+         #condition-selector select { padding: 8px; margin-left: 5px; border-radius: 4px; border: 1px solid var(--border-color);}
+         #condition-selector div { margin-bottom: 15px; }
+
+        /* Basic Responsiveness */
+        @media (max-width: 768px) {
+            body { padding-bottom: 80px; /* More space for wrapped admin bar */ }
+            #experiment-container { padding: 15px; }
+            .section { padding: 15px; }
+            h2 { font-size: 1.6em; }
+             button { padding: 10px 18px; font-size: 1em; }
+             #admin-bar { font-size: 0.8em; }
+             #admin-bar button { font-size: 0.8em; padding: 3px 8px;}
+        }
+         @media (max-width: 480px) {
+             .header-bar { font-size: 1.3em; padding: 10px 15px;}
+             input[type="number"] { width: 100px; } /* Further reduce if needed */
+             .estimation-table input[type="number"] { width: 100px; }
+             .slider-container { flex-direction: column; gap: 10px; align-items: stretch;}
+             .slider-container span { text-align: center; min-width: 0;}
+         }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        Working with an AI Energy Advisor (Admin Mode - Improved)
+    </div>
+
+     <!-- Progress Bar -->
+     <div id="progress-bar-container">
+         <div id="progress-bar"></div>
+     </div>
+     <div id="progress-text">Section 1 of 8</div>
+
+
+    <div id="experiment-container">
+
+        <!-- Instructions Section -->
+        <div id="section-instructions" class="section active">
+            <button class="skip-section-button" onclick="experiment.skipSection()">Skip Section</button>
+            <h2>Instructions</h2>
+            <p>Welcome to this study on interacting with an AI energy advisor.</p>
+            <p><strong>You are in ADMIN MODE.</strong> You can skip sections using the buttons provided at the top-right of each section or via the admin bar at the bottom.</p>
+             <p>The study involves several sections assessing your energy knowledge, numeracy, and AI familiarity, followed by interaction with AI advice in different scenarios, and concluding with questions about your overall perceptions.</p>
+             <p>Please proceed through the sections using the "Next" buttons.</p>
+            <div class="navigation-buttons">
+                <button onclick="experiment.nextSection()">Start</button>
+            </div>
+        </div>
+
+        <!-- Section 1: Energy Knowledge -->
+        <div id="section-energy-knowledge" class="section">
+             <button class="skip-section-button" onclick="experiment.skipSection()">Skip Section</button>
+             <h2>Section 1: Energy Knowledge and Perception</h2>
+             <p>This section asks about your knowledge and perception of home energy use. Please answer to the best of your ability. For estimates, your best guess is fine.</p>
+             <!-- Questions dynamically inserted -->
+             <div class="navigation-buttons"> <button onclick="experiment.nextSection()">Next</button> </div>
+        </div>
+
+        <!-- Section 2: Numeracy -->
+        <div id="section-numeracy" class="section">
+            <button class="skip-section-button" onclick="experiment.skipSection()">Skip Section</button>
+            <h2>Section 2: Numeracy Questions</h2>
+            <p>Next, a couple of questions about working with numbers and probabilities.</p>
+             <!-- Questions dynamically inserted -->
+             <div class="navigation-buttons"> <button onclick="experiment.nextSection()">Next</button> </div>
+        </div>
+
+        <!-- Section 3: AI Familiarity -->
+        <div id="section-ai-familiarity" class="section">
+            <button class="skip-section-button" onclick="experiment.skipSection()">Skip Section</button>
+            <h2>Section 3: AI Familiarity and Trust Propensity</h2>
+            <p>Now questions about experience with AI and general feelings about relying on technology.</p>
+             <!-- Questions dynamically inserted -->
+             <div class="navigation-buttons"> <button onclick="experiment.nextSection()">Next</button> </div>
+        </div>
+
+        <!-- Condition Selector (Shown before Scenario Task) -->
+        <div id="section-condition-selector" class="section">
+             <button class="skip-section-button" onclick="experiment.skipToScenarios()">Skip to Scenarios</button> <!-- Specific skip action -->
+             <h2>Admin: Select Scenario Conditions</h2>
+             <p>Please choose the AI response type for each scenario before proceeding.</p>
+             <div id="condition-selector-form">
+                <!-- Form generated by JS -->
+             </div>
+             <div class="navigation-buttons">
+                 <button onclick="experiment.confirmConditions()">Confirm Conditions and Start Scenarios</button>
+             </div>
+         </div>
+
+
+        <!-- Section 4: Scenario Task -->
+        <div id="section-scenario-task" class="section">
+            <button class="skip-section-button" onclick="experiment.skipSection()">Skip Scenarios</button>
+            <h2>Section 4: AI Advisor Scenarios</h2>
+            <p>Below are the scenarios with the AI assistant's advice based on your selections. Please read each carefully and answer the questions that follow.</p>
+            <div id="scenario-content"> <!-- Scenario text/AI response --> </div>
+            <div id="scenario-questions"> <!-- Confidence, Reliance, Trust questions --> </div>
+            <div class="navigation-buttons">
+                <button id="scenario-next-button" onclick="experiment.nextScenario()">Next Scenario</button>
+            </div>
+        </div>
+
+        <!-- Section 5: Post-Task -->
+        <div id="section-post-task" class="section">
+             <button class="skip-section-button" onclick="experiment.skipSection()">Skip Section</button>
+            <h2>Section 5: Post-Scenario Trust and Perception</h2>
+            <p>Final questions about your overall impressions of the AI advisor you interacted with.</p>
+             <!-- Questions dynamically inserted -->
+              <div class="navigation-buttons"> <button onclick="experiment.nextSection()">Next</button> </div>
+        </div>
+
+        <!-- Debriefing Section -->
+        <div id="section-debriefing" class="section">
+            <!-- No skip button needed here -->
+            <h2>Debriefing</h2>
+            <p>Thank you for participating!</p>
+            <p><strong>Study Purpose:</strong> To understand how AI uncertainty expression affects user trust, reliance, and calibration, considering factors like energy knowledge and AI literacy.</p>
+            <p><strong>Manipulations:</strong> AI answers varied in accuracy and tone (confident/hedged). Conditions shown were based on admin selection.</p>
+             <p><strong>Clarifications on Scenario Ground Truths:</strong></p>
+             <ul id="debrief-clarifications"> <!-- Populated by JS --> </ul>
+            <p><strong>Collected Responses (Admin Mode):</strong></p>
+            <textarea id="final-results" readonly rows="12"></textarea>
+            <div class="navigation-buttons">
+                <button onclick="window.location.reload()">Restart Experiment</button>
+            </div>
+        </div>
+
+    </div> <!-- End experiment-container -->
+
+    <!-- Admin Bar -->
+    <div id="admin-bar">
+        <span>ADMIN MODE | Current: <strong id="admin-current-section">Instructions</strong></span> |
+        <span>Jump to:</span>
+        <button onclick="experiment.goToSection(0)">Instr</button>
+        <button onclick="experiment.goToSection(1)">Energy</button>
+        <button onclick="experiment.goToSection(2)">Num</button>
+        <button onclick="experiment.goToSection(3)">AI</button>
+        <button onclick="experiment.goToSection(4)">Select</button>
+        <button onclick="experiment.goToSection(5)">Scenario</button>
+        <button onclick="experiment.goToSection(6)">Post</button>
+        <button onclick="experiment.goToSection(7)">Debrief</button>
+    </div>
+
+
+    <script>
+    // --- Data Definitions (questions, scenarios) ---
+    // (Keep the extensive 'questions' and 'scenarios' objects from the previous version)
+    const questions = { /* ... PASTE FULL questions OBJECT HERE ... */
+        // Section 1: Energy Knowledge (Questions 1-18 + Estimation)
+        q1_energy_largest_use: { id: 'q1_energy_largest_use', section: 'energy-knowledge', type: 'multiple-choice', text: 'In a typical US household, which of the following accounts for the largest portion of annual energy consumption?', options: [ { value: 'a', text: 'Lighting' }, { value: 'b', text: 'Electronics (TVs, computers, etc.)' }, { value: 'c', text: 'Heating and Cooling' }, { value: 'd', text: 'Refrigeration' }, { value: 'e', text: "Don't Know" } ], correctAnswer: 'c'},
+        q2_energy_phantom_load: { id: 'q2_energy_phantom_load', section: 'energy-knowledge', type: 'true-false', text: 'True or False: Leaving a phone charger plugged into the wall uses a significant amount of electricity, even when no phone is connected.', options: [ { value: 'true', text: 'True' }, { value: 'false', text: 'False' } ], correctAnswer: 'false' },
+        q3_energy_led_vs_thermostat: { id: 'q3_energy_led_vs_thermostat', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which of these actions generally saves more energy over a year in a typical US home?', options: [ { value: 'a', text: 'Replacing 5 incandescent light bulbs with LEDs' }, { value: 'b', text: 'Lowering the thermostat by 2 degrees Fahrenheit during the winter months (8 hours/day)' }, { value: 'c', text: 'Both save about the same amount' }, { value: 'd', text: "Don't Know" } ], correctAnswer: 'b' },
+        q4_energy_heuristic1: { id: 'q4_energy_heuristic1', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which statement is generally MORE accurate?', options: [ { value: 'a', text: 'Appliances that primarily heat or cool things use much more energy than most other appliances.' }, { value: 'b', text: 'The physical size of an appliance is the best indicator of how much energy it uses.' } ], correctAnswer: 'a' },
+        q5_energy_heuristic2: { id: 'q5_energy_heuristic2', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which statement is generally MORE accurate for saving energy?', options: [ { value: 'a', text: 'The most effective way to save energy is to focus on frequently turning off or unplugging small devices.' }, { value: 'b', text: 'The most effective way to save energy often involves improving the efficiency of major systems like heating, cooling, or insulation.' } ], correctAnswer: 'b' },
+        q6_energy_heuristic3: { id: 'q6_energy_heuristic3', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which statement is generally MORE accurate?', options: [ { value: 'a', text: 'Devices that run for long periods, even at low power (like a refrigerator), can use a significant amount of energy over time.' }, { value: 'b', text: 'Devices that feel hot to the touch are always the biggest energy consumers in the home.' } ], correctAnswer: 'a' },
+        q7_energy_choice1: { id: 'q7_energy_choice1', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses less energy?', options: [ { value: 'a', text: 'A window air conditioning unit' }, { value: 'b', text: 'An electric oven' } ] /* Correct: A */ },
+        q8_energy_choice2: { id: 'q8_energy_choice2', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Running an electric water heater' }, { value: 'b', text: 'Running a vacuum cleaner' }, { value: 'c', text: 'Running a refrigerator' } ] /* Correct: C */ },
+        q9_energy_choice3: { id: 'q9_energy_choice3', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Electric blanket' }, { value: 'b', text: 'Electric space heater' }, { value: 'c', text: 'Electric treadmill' } ] /* Correct: A */ },
+        q10_energy_choice4: { id: 'q10_energy_choice4', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Steam iron' }, { value: 'b', text: 'Blender' }, { value: 'c', text: 'Humidifier' } ] /* Correct: C */ },
+        q11_energy_choice5: { id: 'q11_energy_choice5', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Video game console (like Wii, Xbox, Playstation)' }, { value: 'b', text: 'Cable box' }, { value: 'c', text: 'Smart speaker (like Echo, Google Home)' } ] /* Correct: C */ },
+        q12_energy_choice6: { id: 'q12_energy_choice6', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Clothes dryer' }, { value: 'b', text: 'Washing machine' }, { value: 'c', text: 'Dishwasher' } ] /* Correct: B */ },
+        q13_energy_choice7: { id: 'q13_energy_choice7', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses the least energy?', options: [ { value: 'a', text: 'Microwave' }, { value: 'b', text: 'Toaster oven' }, { value: 'c', text: 'Electric kettle' } ] /* Correct: A */ },
+        q14_energy_choice8: { id: 'q14_energy_choice8', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses less energy?', options: [ { value: 'a', text: 'Watching a movie on a 40" flat screen TV' }, { value: 'b', text: 'Watching a movie with a digital projector' } ] /* Correct: A */ },
+        q15_energy_choice9: { id: 'q15_energy_choice9', section: 'energy-knowledge', type: 'multiple-choice', text: 'Which uses less energy?', options: [ { value: 'a', text: 'A ceiling fan' }, { value: 'b', text: 'A tube fluorescent light' } ] /* Correct: B */ },
+        q16_subjective_knowledge: { id: 'q16_subjective_knowledge', section: 'energy-knowledge', type: 'likert', points: 7, text: 'How knowledgeable do you feel about ways to save energy in your home?', scale: ['Not at all knowledgeable', 'Extremely knowledgeable'] },
+        q17_subjective_efficacy: { id: 'q17_subjective_efficacy', section: 'energy-knowledge', type: 'likert', points: 7, text: "How confident are you in your ability to significantly reduce your household's energy consumption?", scale: ['Not at all confident', 'Extremely confident'] },
+        q18_energy_estimation: { id: 'q18_energy_estimation', section: 'energy-knowledge', type: 'estimation-table', text: 'Estimate energy use relative to a 100W (100 unit) bulb per hour:', items: [
+            { name: 'Compact Fluorescent Bulb (CFL)', key: 'est_cfl' }, { name: 'Desktop Computer', key: 'est_desktop' },
+            { name: 'Laptop Computer', key: 'est_laptop' }, { name: 'Stereo', key: 'est_stereo' },
+            { name: 'Electric Clothes Dryer', key: 'est_dryer' }, { name: 'Portable Heater', key: 'est_heater' },
+            { name: 'Room Air-Conditioner', key: 'est_room_ac' }, { name: 'Central Air Conditioner', key: 'est_central_ac' },
+            { name: 'Dish Washer', key: 'est_dishwasher' }
+        ]},
+        q19_numeracy_percentage: { id: 'q19_numeracy_percentage', section: 'numeracy', type: 'multiple-choice', text: 'Imagine a certain event has a 10% chance of happening. If **1000 people** experience this situation, about how many would you expect to see the event happen to?', options: [ { value: 'a', text: '1 person' }, { value: 'b', text: '10 people' }, { value: 'c', text: '100 people' }, { value: 'd', text: '500 people' } ], correctAnswer: 'c' },
+        q20_numeracy_probability_compare: { id: 'q20_numeracy_probability_compare', section: 'numeracy', type: 'multiple-choice', text: 'Which of the following represents the larger probability?', options: [ { value: 'a', text: '5%' }, { value: 'b', text: '1 out of 20' }, { value: 'c', text: 'They are the same' } ], correctAnswer: 'c' },
+        q21_ai_familiarity: { id: 'q21_ai_familiarity', section: 'ai-familiarity', type: 'multiple-choice', text: 'How often do you use AI-based assistants or chatbots (such as Siri, Alexa, Google Assistant, ChatGPT)?', options: [ { value: 'never', text: 'Never' }, { value: 'rarely', text: 'Rarely (a few times a year)' }, { value: 'sometimes', text: 'Sometimes (a few times a month)' }, { value: 'often', text: 'Often (weekly)' }, { value: 'very_frequently', text: 'Very Frequently (daily or almost daily)' } ] },
+        q22_ai_self_efficacy: { id: 'q22_ai_self_efficacy', section: 'ai-familiarity', type: 'likert', points: 5, text: '“I consider myself knowledgeable about how AI like ChatGPT works.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q23_ai_knowledge_hallucination: { id: 'q23_ai_knowledge_hallucination', section: 'ai-familiarity', type: 'true-false', text: 'Large Language Model AIs (like ChatGPT) **can sometimes produce incorrect or made-up information** that looks convincing.', options: [ { value: 'true', text: 'True' }, { value: 'false', text: 'False' } ], correctAnswer: 'true' },
+        q24_ai_knowledge_realtime: { id: 'q24_ai_knowledge_realtime', section: 'ai-familiarity', type: 'true-false', text: 'Chatbot assistants like ChatGPT have **access to real-time, up-to-date information on the internet**.', options: [ { value: 'true', text: 'True' }, { value: 'false', text: 'False' } ], correctAnswer: 'false' },
+        q25_propensity_trust_default: { id: 'q25_propensity_trust_default', section: 'ai-familiarity', type: 'likert', points: 5, text: '“I tend to trust technology or automation **by default**, until I see evidence that something is wrong.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q26_propensity_trust_skeptical: { id: 'q26_propensity_trust_skeptical', section: 'ai-familiarity', type: 'likert', points: 5, text: '“When it comes to new automated systems, I am generally **skeptical** of them at first.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q39_tpa_dependable: { id: 'q39_tpa_dependable', section: 'post-task', type: 'likert', points: 7, text: 'The AI system was dependable during the task.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q40_tpa_reliable: { id: 'q40_tpa_reliable', section: 'post-task', type: 'likert', points: 7, text: "The AI system's responses were reliable during the task.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q41_tpa_trust_info: { id: 'q41_tpa_trust_info', section: 'post-task', type: 'likert', points: 7, text: 'I could trust the information provided by the AI system during the task.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q42_tpa_confident_abilities: { id: 'q42_tpa_confident_abilities', section: 'post-task', type: 'likert', points: 7, text: "I was confident in the AI system's abilities for the task.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q43_tpa_consistent: { id: 'q43_tpa_consistent', section: 'post-task', type: 'likert', points: 7, text: 'The AI system behaved consistently during the task.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q44_tpa_suspicious: { id: 'q44_tpa_suspicious', section: 'post-task', type: 'likert', points: 7, text: "I was suspicious of the AI system's outputs during the task.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q45_tpa_wary: { id: 'q45_tpa_wary', section: 'post-task', type: 'likert', points: 7, text: 'I was wary of the AI system during the task.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q46_tpa_questionable: { id: 'q46_tpa_questionable', section: 'post-task', type: 'likert', points: 7, text: "The AI system's actions or responses felt questionable during the task.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q47_tpa_uncertain_caps: { id: 'q47_tpa_uncertain_caps', section: 'post-task', type: 'likert', points: 7, text: "I was uncertain about the AI system's capabilities during the task.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q48_tpa_deceptive: { id: 'q48_tpa_deceptive', section: 'post-task', type: 'likert', points: 7, text: 'The AI system seemed potentially deceptive or misleading during the task.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q49_llm_realtime_db: { id: 'q49_llm_realtime_db', section: 'post-task', type: 'likert', points: 7, text: 'LLMs access and retrieve information from a constantly updated, real-time database like a search engine.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q50_llm_patterns: { id: 'q50_llm_patterns', section: 'post-task', type: 'likert', points: 7, text: 'LLMs primarily generate responses by identifying patterns in the massive amounts of text data they were trained on.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q51_llm_intentions: { id: 'q51_llm_intentions', section: 'post-task', type: 'likert', points: 7, text: 'LLMs have internal goals or intentions similar to humans.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q52_llm_reasoning_accuracy: { id: 'q52_llm_reasoning_accuracy', section: 'post-task', type: 'likert', points: 7, text: 'When an LLM provides an explanation, it accurately reflects the internal "reasoning" process it used to arrive at the answer.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q53_llm_avoids_errors: { id: 'q53_llm_avoids_errors', section: 'post-task', type: 'likert', points: 7, text: 'LLMs are designed to detect and avoid providing factually incorrect information (hallucinations).', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q54_llm_understands_meaning: { id: 'q54_llm_understands_meaning', section: 'post-task', type: 'likert', points: 7, text: 'LLMs understand the meaning of the text they generate in the same way a human does.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q55_llm_confidence_accuracy: { id: 'q55_llm_confidence_accuracy', section: 'post-task', type: 'likert', points: 7, text: "An LLM's confidence in its answer (if expressed) generally reflects its actual likelihood of being correct.", scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q56_llm_math_reliable: { id: 'q56_llm_math_reliable', section: 'post-task', type: 'likert', points: 7, text: 'LLMs can perform complex mathematical calculations reliably without errors.', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q57_over_trust_concern: { id: 'q57_over_trust_concern', section: 'post-task', type: 'likert', points: 5, text: '“I might be trusting this AI more than I should for important decisions.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q58_under_trust_concern: { id: 'q58_under_trust_concern', section: 'post-task', type: 'likert', points: 5, text: '“I was too skeptical of the AI, even when its answers were likely correct.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q59_perceived_accuracy: { id: 'q59_perceived_accuracy', section: 'post-task', type: 'slider', text: 'Approximately what **percentage of the AI’s answers** do you believe were **correct**?', min: 0, max: 100, step: 5, unit: '%' },
+        q60_future_use: { id: 'q60_future_use', section: 'post-task', type: 'likert', points: 5, text: '“If this AI advisor were available to me, I would use it regularly for managing my home’s energy use.”', scale: ['Very Unlikely', 'Very Likely'] },
+        q61_reliance_intention: { id: 'q61_reliance_intention', section: 'post-task', type: 'likert', points: 5, text: '“For decisions like buying a new appliance or making home improvements, I would base my decision primarily on the AI’s advice.”', scale: ['Strongly Disagree', 'Strongly Agree'] },
+        q62_mental_model_source: { id: 'q62_mental_model_source', section: 'post-task', type: 'multiple-choice', text: 'Where do you think this AI’s answers are coming from (what is the AI relying on)?', options: [ { value: 'db', text: 'A database of factual energy information (like an encyclopedia).' }, { value: 'llm', text: 'General knowledge learned from lots of text it was trained on (it “strings together” information it learned).' }, { value: 'realtime', text: 'Real-time data from the internet and up-to-date sources.' }, { value: 'human', text: 'Input from human energy experts behind the scenes.' }, { value: 'unsure', text: 'Not sure.' } ] },
+        q63_mental_model_limitations: { id: 'q63_mental_model_limitations', section: 'post-task', type: 'open-ended', text: 'In your own words, **what do you think are the limitations of this AI advisor?** (For example, are there things it likely doesn’t know or situations it might not handle well?)' },
+        q64_additional_comments: { id: 'q64_additional_comments', section: 'post-task', type: 'open-ended', text: '(Optional) Do you have any **other thoughts or feedback** about using this AI energy advisor?' }
+
+    };
+    const scenarios = [ /* ... PASTE FULL scenarios OBJECT HERE ... */
+        {
+            id: 'A', name: 'Refrigerator Replacement', scenarioText: 'You have an older refrigerator (about 15 years old) and you’re considering buying a new energy-efficient fridge to replace it.', question: 'You ask the AI: “Is it worth getting a new fridge to save on electricity?”',
+            responses: {
+                correct_confident: { text: "Yes, replacing a 15-year-old refrigerator with a new ENERGY STAR model typically saves around \$80-\$120 per year in electricity costs. Given the potential lifespan of a new fridge, this is often a worthwhile investment for reducing energy consumption.", isCorrect: true, tone: 'confident' },
+                incorrect_confident: { text: "Absolutely! You'll definitely save at least \$400 per year by replacing your old fridge. New models are incredibly efficient and the payback period is usually less than 2 years.", isCorrect: false, tone: 'confident' },
+                incorrect_hedged: { text: "Well, I'm not completely certain as it depends on the specific models, but it seems possible you could save perhaps around \$400 per year. It might be worth considering, though savings estimates can vary quite a bit.", isCorrect: false, tone: 'hedged' }
+            },
+            correctInfo: "Replacing a very old (15+ years) fridge with an ENERGY STAR model typically saves \$80-\$120/year. A \$400/year saving is highly unlikely."
+        },
+        {
+            id: 'B', name: 'Winter Heating Costs', scenarioText: 'It’s mid-winter, and your heating bills seem high. You live in a moderately cold climate in a typical single-family home.', question: 'You ask the AI: “What’s the most effective way to reduce my heating costs?”',
+            responses: {
+                correct_confident: { text: "The most impactful single step for significant long-term savings is usually improving home insulation, particularly in the attic, and sealing air leaks around windows and doors. Lowering your thermostat, especially at night or when away, also provides substantial savings.", isCorrect: true, tone: 'confident' },
+                incorrect_confident: { text: "The best way is definitely switching to using electric space heaters in the rooms you use most often instead of your central heating system. This will cut your overall heating costs by about 50% for sure.", isCorrect: false, tone: 'confident' },
+                incorrect_hedged: { text: "I'm not entirely sure as it depends on your home, but one strategy might be to use electric space heaters in occupied rooms instead of the main system. It's possible this could potentially cut heating costs significantly, maybe even by 50%, though it's hard to say for sure.", isCorrect: false, tone: 'hedged' }
+            },
+            correctInfo: "Improving insulation/air sealing and lowering the thermostat are typically most effective. Relying solely on electric space heaters is often *more* expensive."
+        },
+        {
+            id: 'C', name: 'Solar Panel Savings', scenarioText: 'You are considering installing solar panels on your roof. You live in an area with decent sunlight.', question: 'You ask the AI: “How much money would solar panels save me per year?”',
+            responses: {
+                correct_confident: { text: "Annual savings from solar panels vary greatly depending on your location, system size, electricity usage, and local utility rates/incentives. For a typical home system, savings might range from \$500 to \$1500 per year, but a personalized quote considering these factors is essential for an accurate estimate.", isCorrect: true, tone: 'confident' },
+                incorrect_confident: { text: "Solar panels are guaranteed to save you exactly \$2,500 per year on your electricity bills, regardless of where you live or how much electricity you use. It's a fixed saving amount for any standard installation.", isCorrect: false, tone: 'confident' },
+                incorrect_hedged: { text: "It's hard to give an exact number, but based on general estimates, solar panels might save you somewhere around \$2,500 per year. I think that's a reasonable figure to expect, though of course, individual results can differ.", isCorrect: false, tone: 'hedged' }
+            },
+            correctInfo: "Solar panel savings depend heavily on location, system size, costs, usage, and incentives. Savings often range \$500-\$1500/year. A fixed \$2500 guarantee is unrealistic."
+        },
+        {
+            id: 'D', name: 'Time-of-Use Electricity Plan', scenarioText: 'You’re looking at a new "Time-of-Use" (TOU) electricity plan offered by your utility company. This plan charges lower rates during off-peak hours and higher rates during peak hours.', question: 'You ask the AI: “Can you explain how a time-of-use plan could save me money?”',
+             responses: {
+                correct_confident: { text: "A Time-of-Use plan can save you money IF you are able to shift a significant portion of your electricity consumption (like running dishwashers, laundry, charging EVs) to the cheaper off-peak hours. If most of your usage remains during peak times, your bill could actually increase. Savings depend entirely on your ability to change usage patterns.", isCorrect: true, tone: 'confident' },
+                incorrect_confident: { text: "Absolutely. With a time-of-use plan, everyone automatically saves about 30% on their electricity bill just by being on the plan. You don't need to change any habits; the savings happen because the average rate works out lower.", isCorrect: false, tone: 'confident' },
+                incorrect_hedged: { text: "It seems likely that a time-of-use plan could help you save money, possibly around 30% on your bill. My understanding is that these plans generally result in lower costs for most people, even without major changes to when you use electricity, but I'm not an expert on specific utility rates.", isCorrect: false, tone: 'hedged' }
+            },
+            correctInfo: "Time-of-Use (TOU) plans only save money if significant usage is shifted from peak to off-peak hours. Bills can increase if habits don't change. No automatic savings."
+        }
+    ];
+
+
+    // --- Experiment Logic (Improved) ---
+
+    const experiment = {
+        currentState: {
+            isAdmin: true,
+            sectionIndex: 0,
+            scenarioIndex: -1,
+            sections: [
+                'instructions', 'energy-knowledge', 'numeracy', 'ai-familiarity',
+                'condition-selector', 'scenario-task', 'post-task', 'debriefing'
+            ],
+            totalSections: 8, // Keep track for progress bar
+            currentSectionQuestions: [],
+            shuffledScenarios: [],
+            scenarioResponses: {},
+            participantResponses: {},
+            assignedConditions: []
+        },
+
+        init() {
+             try {
+                 this.currentState.shuffledScenarios = [...scenarios]; // Keep original order
+                 this.showSection(this.currentState.sections[0]);
+                 this.updateAdminBar();
+                 this.updateProgressBar();
+                 console.log("Experiment initialized in Admin Mode.");
+             } catch (error) {
+                 console.error("Initialization failed:", error);
+                 alert("An error occurred during initialization. Please check the console.");
+             }
+        },
+
+        // shuffleArray function remains the same
+
+        showSection(sectionId) {
+            console.log(`Showing section: ${sectionId} (Index: ${this.currentState.sectionIndex})`);
+             try {
+                 document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+                 const sectionElement = document.getElementById(`section-${sectionId}`);
+                 if (!sectionElement) {
+                     console.error(`Section element not found for ID: section-${sectionId}`);
+                     throw new Error(`Section element '#section-${sectionId}' not found.`); // Throw error to be caught
+                 }
+                 sectionElement.classList.add('active');
+
+                 // Reset visibility of navigation buttons
+                 const genericNav = document.getElementById('generic-navigation');
+                 const scenarioNavButton = document.getElementById('scenario-next-button');
+                 const conditionSelectorNav = document.querySelector('#section-condition-selector .navigation-buttons');
+                 const instructionNav = document.querySelector('#section-instructions .navigation-buttons'); // Specific instruction button container
+
+                 if(genericNav) genericNav.style.display = 'none';
+                 if(scenarioNavButton) scenarioNavButton.style.display = 'none';
+                 if(conditionSelectorNav) conditionSelectorNav.style.display = 'none';
+                 if(instructionNav) instructionNav.style.display = 'none';
+
+
+                 // Show appropriate navigation and render content
+                 if (['energy-knowledge', 'numeracy', 'ai-familiarity', 'post-task'].includes(sectionId)) {
+                     if(genericNav) genericNav.style.display = 'block';
+                     this.renderQuestionsForSection(sectionId);
+                 } else if (sectionId === 'condition-selector') {
+                     if(conditionSelectorNav) conditionSelectorNav.style.display = 'block';
+                     this.renderConditionSelector();
+                 } else if (sectionId === 'scenario-task') {
+                      if (this.currentState.assignedConditions.length !== this.currentState.shuffledScenarios.length) {
+                          console.warn("Conditions not fully selected! Redirecting to selector.");
+                          // alert("Conditions not selected! Please go back to 'Select Scenario Conditions'.");
+                           this.goToSection(this.currentState.sections.indexOf('condition-selector'));
+                           return; // Stop further processing of this section
+                      }
+                      if (this.currentState.scenarioIndex < 0) this.currentState.scenarioIndex = 0;
+                      this.loadScenario(this.currentState.scenarioIndex);
+                      if(scenarioNavButton) scenarioNavButton.style.display = 'inline-block';
+                 } else if (sectionId === 'debriefing') {
+                     this.populateDebriefing();
+                     this.displayResults();
+                      // No "Next" button here, only Restart
+                 } else if (sectionId === 'instructions') {
+                    if(instructionNav) instructionNav.style.display = 'block'; // Show the specific start button
+                 }
+
+                 this.updateAdminBar();
+                 this.updateProgressBar();
+                 window.scrollTo(0, 0); // Scroll to top on section change
+
+             } catch (error) {
+                 console.error(`Error showing section ${sectionId}:`, error);
+                 alert(`An error occurred displaying section '${sectionId}'. Please check the console.`);
+                 // Potentially try to recover or stop experiment
+             }
+        },
+
+        renderQuestionsForSection(sectionId) {
+             const container = document.getElementById(`section-${sectionId}`);
+             if (!container) {
+                 console.error(`Container not found for rendering questions in section: ${sectionId}`);
+                 return;
+             }
+             // Clear previous questions
+             container.querySelectorAll('.question-block').forEach(block => block.remove());
+
+             this.currentState.currentSectionQuestions = Object.values(questions).filter(q => q.section === sectionId);
+             this.currentState.currentSectionQuestions.forEach(q => {
+                  try {
+                      const questionHtml = this.createQuestionHtml(q);
+                      container.insertAdjacentHTML('beforeend', questionHtml); // Add before navigation buttons if they exist
+                      // Add event listener for slider value display
+                      if (q.type === 'slider') {
+                          const slider = container.querySelector(`#${q.id}`);
+                          const valueDisplay = container.querySelector(`#${q.id}-value`);
+                          if (slider && valueDisplay) {
+                               const updateSliderDisplay = () => valueDisplay.textContent = slider.value + (q.unit || '');
+                               slider.addEventListener('input', updateSliderDisplay);
+                               updateSliderDisplay(); // Initial display
+                          } else {
+                               console.warn(`Slider or value display not found for ${q.id}`);
+                          }
+                      }
+                 } catch (error) {
+                     console.error(`Error creating HTML for question ${q.id}:`, error);
+                     // Optionally insert an error message into the container
+                     container.insertAdjacentHTML('beforeend', `<p style="color:red;">Error loading question: ${q.id}</p>`);
+                 }
+             });
+
+             // Ensure navigation buttons are at the very end
+             const navButtons = container.querySelector('.navigation-buttons');
+             if (navButtons) {
+                 container.appendChild(navButtons);
+             }
+         },
+
+        createQuestionHtml(q) {
+            let optionsHtml = '';
+            // Consolidated Likert logic
+            if (q.type === 'likert') {
+                const points = q.points || 5; // Default to 5 points if not specified
+                optionsHtml = `<ul class="likert-scale">`;
+                for (let i = 1; i <= points; i++) {
+                    let label = `${i}`;
+                    if (q.scale) { // Add text labels if provided
+                        if (i === 1) label += ` - ${q.scale[0]}`;
+                        if (i === points) label += ` - ${q.scale[1]}`;
+                    }
+                    optionsHtml += `<li><input type="radio" id="${q.id}-${i}" name="${q.id}" value="${i}"><label for="${q.id}-${i}">${label}</label></li>`;
+                }
+                optionsHtml += `</ul>`;
+            }
+            // Other types
+            else if (q.type === 'multiple-choice' || q.type === 'true-false') {
+                optionsHtml = `<ul class="${q.type}">`;
+                q.options.forEach(opt => {
+                    optionsHtml += `<li><input type="radio" id="${q.id}-${opt.value}" name="${q.id}" value="${opt.value}"><label for="${q.id}-${opt.value}">${opt.text}</label></li>`;
+                });
+                optionsHtml += `</ul>`;
+            }
+            else if (q.type === 'slider') {
+                const min = q.min !== undefined ? q.min : 0;
+                const max = q.max !== undefined ? q.max : 100;
+                const step = q.step !== undefined ? q.step : (q.id.includes('confidence') ? 10 : 1);
+                const initialValue = q.id.includes('confidence') ? 50 : (min + (max - min) / 2); // Default confidence to 50
+                optionsHtml = `<div class="slider-container">
+                                    <span>${min}${q.unit || ''}</span>
+                                    <input type="range" id="${q.id}" name="${q.id}" min="${min}" max="${max}" step="${step}" value="${initialValue}">
+                                    <span id="${q.id}-value">${initialValue}${q.unit || ''}</span>
+                                  </div>`;
+            }
+            else if (q.type === 'estimation-table') {
+                 optionsHtml = `<p>${q.text || ''} Reference: 100W incandescent bulb = 100 units/hour. Best guess is fine.</p>
+                                <div class="estimation-table-wrapper">
+                                <table class="estimation-table">
+                                    <thead><tr><th>Device</th><th>Your estimate of Units of Energy per Hour</th></tr></thead>
+                                    <tbody>`;
+                 q.items.forEach(item => {
+                     optionsHtml += `<tr>
+                                         <td>${item.name}</td>
+                                         <td><input type="number" id="${item.key}" name="${item.key}" min="0" pattern="[0-9]*"></td>
+                                     </tr>`; // Added pattern for numeric input keyboards
+                 });
+                 optionsHtml += `</tbody></table></div>`;
+            }
+            else if (q.type === 'open-ended') {
+                 optionsHtml = `<textarea id="${q.id}" name="${q.id}" rows="4"></textarea>`;
+            }
+            else {
+                console.warn("Unknown question type:", q.type, "for question:", q.id);
+                optionsHtml = `<p><em>Error: Question type ${q.type} not implemented.</em></p>`;
+            }
+
+            return `<div class="question-block" id="block-${q.id}">
+                        <label for="${q.id}">${q.text}</label>
+                        ${optionsHtml}
+                    </div>`;
+        },
+
+        renderConditionSelector() {
+            const container = document.getElementById('condition-selector-form');
+            if (!container) return;
+            container.innerHTML = '';
+            this.currentState.shuffledScenarios.forEach(scenario => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label for="condition-${scenario.id}">Scenario ${scenario.id} (${scenario.name}):</label>
+                    <select id="condition-${scenario.id}" name="condition-${scenario.id}">
+                        <option value="correct_confident" ${this.isSelected(scenario.id, 'correct_confident')}>Correct - Confident</option>
+                        <option value="incorrect_confident" ${this.isSelected(scenario.id, 'incorrect_confident')}>Incorrect - Confident</option>
+                        <option value="incorrect_hedged" ${this.isSelected(scenario.id, 'incorrect_hedged')}>Incorrect - Hedged</option>
+                    </select>
+                `;
+                container.appendChild(div);
+            });
+        },
+
+        // Helper to remember selections if returning to condition selector
+        isSelected(scenarioId, responseType) {
+             const existing = this.currentState.assignedConditions.find(a => a.scenarioId === scenarioId);
+             return (existing && existing.responseType === responseType) ? 'selected' : '';
+        },
+
+        confirmConditions() {
+            this.currentState.assignedConditions = []; // Clear previous assignments
+            this.currentState.shuffledScenarios.forEach(scenario => {
+                const selectElement = document.getElementById(`condition-${scenario.id}`);
+                 if (!selectElement) {
+                      console.error("Could not find condition selector element for scenario:", scenario.id);
+                      return; // Skip this scenario if element missing
+                 }
+                 this.currentState.assignedConditions.push({
+                     scenarioId: scenario.id,
+                     responseType: selectElement.value
+                 });
+            });
+            if (this.currentState.assignedConditions.length !== this.currentState.shuffledScenarios.length) {
+                 alert("Error: Could not assign conditions for all scenarios. Please check console.");
+                 return;
+            }
+            console.log("Admin selected conditions:", this.currentState.assignedConditions);
+             this.currentState.scenarioIndex = -1; // Reset scenario index before starting
+             this.nextSection();
+        },
+
+         skipToScenarios() { // Special skip from condition selector
+            // Assign default conditions if none selected (or just proceed if some are selected)
+            if (this.currentState.assignedConditions.length !== this.currentState.shuffledScenarios.length) {
+                console.log("Conditions not fully selected, assigning defaults for skip.");
+                this.currentState.assignedConditions = this.currentState.shuffledScenarios.map(s => ({
+                    scenarioId: s.id, responseType: 'correct_confident' // Default to first option
+                }));
+            }
+            this.currentState.scenarioIndex = -1; // Reset index
+            this.goToSection(this.currentState.sections.indexOf('scenario-task'));
+         },
+
+        loadScenario(index) {
+             if (index >= this.currentState.shuffledScenarios.length || index < 0) {
+                 console.log("Attempted to load scenario index out of bounds:", index);
+                 // Finished scenarios, move to post-task
+                 if (index >= this.currentState.shuffledScenarios.length) {
+                    this.goToSection(this.currentState.sections.indexOf('post-task'));
+                 }
+                 return;
+             }
+
+            try {
+                const scenario = this.currentState.shuffledScenarios[index];
+                const assignment = this.currentState.assignedConditions.find(a => a.scenarioId === scenario.id);
+
+                 if (!assignment) throw new Error(`Assignment missing for scenario ${scenario.id}`);
+                 const response = scenario.responses[assignment.responseType];
+                 if (!response) throw new Error(`Response type ${assignment.responseType} invalid for scenario ${scenario.id}`);
+
+                // Store condition info
+                this.currentState.participantResponses[`scenario_${scenario.id}_condition`] = {
+                    responseType: assignment.responseType,
+                    accuracy: response.isCorrect ? 'correct' : 'incorrect',
+                    tone: response.tone
+                };
+
+                const scenarioContentContainer = document.getElementById('scenario-content');
+                const scenarioQuestionsContainer = document.getElementById('scenario-questions');
+                 if (!scenarioContentContainer || !scenarioQuestionsContainer) throw new Error("Scenario content/question containers not found");
+
+                scenarioContentContainer.innerHTML = `
+                    <h3>Scenario ${index + 1} of ${this.currentState.shuffledScenarios.length}: ${scenario.name}</h3>
+                    <div class="scenario-box">
+                        <p>${scenario.scenarioText}</p>
+                        <p class="scenario-question">${scenario.question}</p>
+                        <div class="ai-response">${response.text}</div>
+                    </div>
+                `;
+
+                const confidenceQId = `scenario_${scenario.id}_confidence`;
+                const relianceQId = `scenario_${scenario.id}_reliance`;
+                const trustQId = `scenario_${scenario.id}_trust`;
+
+                scenarioQuestionsContainer.innerHTML = `
+                    ${this.createQuestionHtml({id: confidenceQId, type: 'slider', text:'How confident are you that the AI’s answer is correct for this scenario?', min:0, max:100, step:10, unit:'%'})}
+                    ${this.createQuestionHtml({id: relianceQId, type: 'multiple-choice', text:`Based on the AI’s advice about the ${scenario.name.toLowerCase()}, what would you likely do?`, options: [{value: 'accept', text: 'Accept and follow the AI’s recommendation.'}, {value: 'verify', text: 'Seek further information or second opinion before deciding.'}, {value: 'reject', text: 'Do not follow the AI’s advice; do something else.'}] })}
+                    ${this.createQuestionHtml({id: trustQId, type: 'likert', points: 7, text: `“I trust that the AI’s recommendation in this scenario is sound.”`, scale: ['Strongly Disagree', 'Strongly Agree'] })}
+                `;
+
+                // Re-attach slider listener
+                const slider = scenarioQuestionsContainer.querySelector(`#${confidenceQId}`);
+                const valueDisplay = scenarioQuestionsContainer.querySelector(`#${confidenceQId}-value`);
+                if (slider && valueDisplay) {
+                    const updateSliderDisplay = () => valueDisplay.textContent = slider.value + '%';
+                    slider.addEventListener('input', updateSliderDisplay);
+                    updateSliderDisplay();
+                } else { console.warn(`Slider elements not found after rendering scenario ${scenario.id}`) }
+
+
+                const nextButton = document.getElementById('scenario-next-button');
+                 if (!nextButton) throw new Error("Scenario next button not found");
+                 nextButton.textContent = (index === this.currentState.shuffledScenarios.length - 1) ? "Finish Scenarios" : "Next Scenario";
+
+            } catch (error) {
+                 console.error(`Error loading scenario ${index}:`, error);
+                 alert(`An error occurred loading scenario ${index + 1}. Please check the console.`);
+                 // Maybe try to skip to next or stop
+            }
+        },
+
+        validateCurrentSection() {
+            if (this.currentState.isAdmin) return true;
+            // Validation logic would go here for participant mode
+            return true;
+        },
+
+        saveCurrentSectionResponses() {
+            const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+            console.log(`Attempting to save responses for section: ${currentSectionId}`);
+            const container = document.getElementById(`section-${currentSectionId}`);
+            if (!container) {
+                console.warn(`Container not found for saving responses: ${currentSectionId}`);
+                return; // Can't save if container doesn't exist
+            }
+
+            try {
+                const inputs = container.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    let id = input.name || input.id;
+                    if (!id) return; // Skip inputs without id/name
+
+                    if (input.type === 'radio') {
+                        if (input.checked) {
+                            this.currentState.participantResponses[id] = input.value;
+                        }
+                    } else if (input.type === 'checkbox') {
+                        // Handle checkboxes if needed
+                    } else { // Catches text, number, range, textarea, select
+                         // Only save if value is not empty for non-optional fields (optional: q64)
+                         // In admin mode, we might want to save everything regardless
+                         this.currentState.participantResponses[id] = input.value.trim();
+                    }
+                });
+                console.log(`Responses saved successfully for: ${currentSectionId}`);
+            } catch (error) {
+                 console.error(`Error saving responses for section ${currentSectionId}:`, error);
+                 alert(`An error occurred saving responses for section '${currentSectionId}'. Data may be incomplete.`);
+            }
+         },
+
+        nextSection(forceSkipValidation = false) {
+            const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+
+            if (!forceSkipValidation && !this.validateCurrentSection()) {
+                 alert("Validation failed (Enable validation logic for participant mode).");
+                 return;
+             }
+
+             // Save responses EXCEPT for instructions and condition selector
+             if (currentSectionId !== 'instructions' && currentSectionId !== 'condition-selector') {
+                this.saveCurrentSectionResponses();
+             }
+
+             if (this.currentState.sectionIndex < this.currentState.sections.length - 1) {
+                 this.currentState.sectionIndex++;
+                 this.showSection(this.currentState.sections[this.currentState.sectionIndex]);
+             } else {
+                 console.log("End of experiment reached.");
+                 // Should already be showing debriefing
+             }
+         },
+
+         skipSection() {
+             console.log(`Admin skipping section: ${this.currentState.sections[this.currentState.sectionIndex]}`);
+             this.nextSection(true); // Force skip validation
+         },
+
+         goToSection(index) {
+            if (index >= 0 && index < this.currentState.sections.length) {
+                // Save current data before jumping (important!)
+                 const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+                 if (currentSectionId !== 'instructions' && currentSectionId !== 'condition-selector' && currentSectionId !== 'debriefing') {
+                    this.saveCurrentSectionResponses();
+                 }
+
+                this.currentState.sectionIndex = index;
+                this.showSection(this.currentState.sections[index]);
+                console.log(`Admin jumped to section: ${this.currentState.sections[index]}`);
+            } else {
+                console.warn("Invalid section index for jump:", index);
+            }
+         },
+
+        nextScenario() {
+            try {
+                // Save responses for the current scenario first
+                this.saveCurrentSectionResponses();
+
+                this.currentState.scenarioIndex++;
+                if (this.currentState.scenarioIndex < this.currentState.shuffledScenarios.length) {
+                    this.loadScenario(this.currentState.scenarioIndex);
+                } else {
+                    // Finished all scenarios, move to the next main section (post-task)
+                     this.goToSection(this.currentState.sections.indexOf('post-task'));
+                }
+             } catch (error) {
+                 console.error("Error during nextScenario transition:", error);
+                 alert("An error occurred moving to the next scenario. Please check console.");
+             }
+         },
+
+         populateDebriefing() {
+             const list = document.getElementById('debrief-clarifications');
+             if (!list) return;
+             list.innerHTML = '';
+             this.currentState.shuffledScenarios.forEach(scenario => {
+                 const li = document.createElement('li');
+                 const assignment = this.currentState.assignedConditions.find(a => a.scenarioId === scenario.id);
+                 const conditionText = assignment ? `(Shown: ${assignment.responseType.replace(/_/g,' ')})` : '(Condition assignment missing!)';
+                 li.innerHTML = `<strong>${scenario.name} ${conditionText}:</strong> ${scenario.correctInfo}`;
+                 list.appendChild(li);
+             });
+         },
+
+         displayResults() {
+            const resultsArea = document.getElementById('final-results');
+            if (!resultsArea) return;
+            try {
+                resultsArea.value = JSON.stringify(this.currentState.participantResponses, null, 2);
+                console.log("--- FINAL RESPONSES DUMP ---");
+                console.log(JSON.stringify(this.currentState.participantResponses, null, 2));
+                console.log("-----------------------------");
+            } catch (error) {
+                 console.error("Error displaying final results:", error);
+                 resultsArea.value = "Error stringifying results. Check console.";
+            }
+         },
+
+         updateAdminBar() {
+             const adminSectionSpan = document.getElementById('admin-current-section');
+             if (adminSectionSpan) {
+                 const sectionName = this.currentState.sections[this.currentState.sectionIndex].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                 adminSectionSpan.textContent = sectionName;
+             }
+         },
+
+         updateProgressBar() {
+             const progressBar = document.getElementById('progress-bar');
+             const progressText = document.getElementById('progress-text');
+             if (progressBar && progressText) {
+                 // Calculate progress based on section index (adjust if needed for more granularity)
+                 // Section 0 (Instructions) is step 1 out of totalSections
+                 const currentStep = this.currentState.sectionIndex + 1;
+                 const totalSteps = this.currentState.totalSections;
+                 const percentage = Math.max(0, Math.min(100, (currentStep / totalSteps) * 100));
+
+                 progressBar.style.width = `${percentage}%`;
+                 progressText.textContent = `Section ${currentStep} of ${totalSteps}`;
+
+                 // Special case for debriefing (show as 100% complete)
+                 if (this.currentState.sectionIndex === this.currentState.sections.indexOf('debriefing')) {
+                      progressBar.style.width = '100%';
+                      progressText.textContent = `Complete`;
+                 }
+             }
+         }
+
+    };
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        experiment.init();
+    });
+
+    </script>
+
+</body>
+</html>

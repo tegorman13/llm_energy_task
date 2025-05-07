@@ -1,0 +1,585 @@
+---
+title: "Energy & AI Literacy Research Instruments"
+subtitle: "Interactive preview of survey instruments for studying knowledge, attitudes, perceptions, and behaviors related to energy and artificial intelligence."
+format:
+    html:
+        page-layout: full # Use full width for dashboard layout
+---
+
+
+<script>
+
+$(document).on("click", 'a[href^="#sec-"]', function(event){
+    event.preventDefault();
+    var tabId = $(this).attr('href'); // e.g., "#sec-ai-literacy"
+    // Find the tab button with matching href and trigger click
+    var tabBtn = $('.nav[role="tablist"] a[href="' + tabId + '"]');
+    if(tabBtn.length){
+        tabBtn[0].click();
+        // Optionally scroll to the tab content
+        var tabContent = $(tabId);
+        if(tabContent.length){
+            $("html, body").animate({ scrollTop: tabContent.offset().top }, 700);
+        }
+    }
+});
+
+</script>
+
+
+
+
+
+::: {.panel-tabset}
+
+## AI Literacy {#sec-ai-literacy}
+
+*Focus: Measuring knowledge, skills, self-perceptions, and competencies regarding AI*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Network 🕸️ Multi-faceted AI Literacy & Meta-Competencies
+:::
+::: {.card-body}
+<h5 class="card-title">[MAILS (Carolus et al., 2023)](surveys_items/AI_Surveys/Carolus23_MAILS.md)</h5>
+* **Description:** 34 self-report items assessing perceived abilities across cognitive, technical, ethical, and self-regulatory domains.
+* **Format:** 11-point scale (0-10) for "I can..." statements.
+* **Subscales:** Use & Apply, Know & Understand, Detect AI, AI Ethics, Create AI, AI Problem-Solving, Learning, Persuasion Literacy, Emotion Regulation.
+* **Example (Know & Understand):** "I can assess what the limitations and opportunities of using an AI are." (0-10)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Network (Short) ⛓️ Brief Multi-faceted AI Literacy Assessment
+:::
+::: {.card-body}
+<h5 class="card-title">[MAILS – Short Version (Koch et al., 2024)](surveys_items/AI_Surveys/Koch24_MAILS_Short.md)</h5>
+* **Description:** 10-item short form covering key competencies.
+* **Format:** 11-point scale (0-10) for "I can..." statements.
+* **Subscales:** AI Literacy (Detect, Apply, Understand, Ethics), Create AI, AI Self-Efficacy, AI Self-Competency.
+* **Example (Detect AI):** "I can tell if I am dealing with an application based on artificial intelligence." (0-10)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Checkmark ✅ Assesses Factual AI Knowledge
+:::
+::: {.card-body}
+<h5 class="card-title">[Objective AI Literacy Test (Weber et al., 2023)](surveys_items/AI_Surveys/Weber23_AI_Survey.md)</h5>
+* **Description:** 16 multiple-choice questions testing objective knowledge (socio-technical user/creator dimensions).
+* **Format:** Multiple-choice (one correct answer).
+* **Subscales:** Socio-User, Socio-Creator/Evaluator, Technical-User, Technical-Creator/Evaluator.
+* **Example (Socio-User):** "AI was first mentioned in..." (*1950s*)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Brain 🧠 Objective Knowledge of AI Concepts & Algorithms
+:::
+::: {.card-body}
+<h5 class="card-title">[AI Literacy Test (Tully et al., 2023)](surveys_items/AI_Surveys/Tully25_AI_Survey.md)</h5>
+* **Description:** 17 or 25-item multiple-choice test (concepts, applications, data, algorithms, ethics).
+* **Format:** Multiple-choice (one correct answer).
+* **Subscales:** Single score; potential factors (interaction, capability, limitation).
+* **Example:** "Which technology is the primary enabler of Artificial Intelligence?" (*Machine Learning*)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+User Profile👤 Measures Self-Assessed AI Skills & Knowledge (LLM Context)
+:::
+::: {.card-body}
+<h5 class="card-title">[AI Literacy Self-Perception (Rheu & Cho, 2025)](surveys_items/AI_Surveys/Rheu25_AI_Survey.md)</h5>
+* **Description:** Scales for self-efficacy, cognitive learning, AI tech/steps knowledge (student LLM context).
+* **Format:** 7-point Likert scale (1-7 Agree/Disagree).
+* **Subscales:** Self-Efficacy, Cognitive Learning, AI Technology Knowledge, AI-Steps Knowledge.
+* **Example (Self-Efficacy):** "I am confident I will perform well on LLM-related tasks." (1-7)
+:::
+:::
+:::
+
+:::
+## AI Attitudes & Trust {#sec-ai-attitudes-trust}
+
+*Focus: Measuring general feelings, specific attitudes, trust dimensions, and beliefs towards AI*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Thumbs Up 👍 Assesses Overall Positive Attitude Toward AI
+:::
+::: {.card-body}
+<h5 class="card-title">[General AI Attitude (AIAS-4) (Grassini, 2023)](surveys_items/AI_Surveys/Grassini23_AI_Scale.md)</h5>
+* **Description:** Brief 4-item scale measuring optimistic beliefs about AI's impact.
+* **Format:** 10-point Likert scale (1-10 Agree/Disagree).
+* **Example:** "I believe that AI will improve my life." (1-10)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Balance Scale ⚖️ Measures Acceptance vs. Fear of AI
+:::
+::: {.card-body}
+<h5 class="card-title">[Attitude Toward AI (ATAI) (Sindermann et al., 2021)](surveys_items/AI_Surveys/Sindermann21_AI.md)</h5>
+* **Description:** 5-item scale capturing acceptance and fear/distrust dimensions.
+* **Format:** 11-point Likert scale (0-10 Agree/Disagree).
+* **Subscales:** Acceptance (Trust/Benefit), Fear (Threat/Job Loss).
+* **Example (Acceptance):** "I trust artificial intelligence." (0-10)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Speech Bubble💬 Assesses Cognitive, Affective, Behavioral AI Attitudes
+:::
+::: {.card-body}
+<h5 class="card-title">[Attitudes Towards AI (ATTARI-12) (Stein et al., 2024)](surveys_items/AI_Surveys/Stein24_AI_Survey.md)</h5>
+* **Description:** 12-item scale (thoughts, feelings, intentions).
+* **Format:** 5-point Likert scale (1-5 Agree/Disagree). Mixed positive/negative.
+* **Subscales:** Cognitive, Affective, Behavioral.
+* **Example (Cognitive):** "AI offers solutions to many world problems." (1-5)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Shield 🛡️ Measures Dimensions of Trust and Distrust in AI
+:::
+::: {.card-body}
+<h5 class="card-title">[Trust Perception Scale - AI (TPA) (Jian et al., 2000; Scharowski et al., 2025)](surveys_items/AI_Surveys/TPA.md)</h5>
+* **Description:** 12-item scale (deception, suspicion, confidence, reliability).
+* **Format:** 7-point scale (1=Not at all, 7=Extremely).
+* **Subscales:** Trust vs. Distrust factors. Includes familiarity.
+* **Example (Distrust):** "I am suspicious of the AI's intent, action, or outputs." (1-7)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Heart & Brain ❤️🧠 Differentiates Emotional vs. Rational Trust
+:::
+::: {.card-body}
+<h5 class="card-title">[Affective & Cognitive Trust Scale (Shang et al., 2025)](surveys_items/AI_Surveys/Shang25_AI_Trust_Scale.md)</h5>
+* **Description:** 27-item semantic differential scale (cognitive: competence, reliability, honesty; affective: empathy, care, patience).
+* **Format:** 5 or 7-point semantic differential (-2/+2 or -3/+3).
+* **Subscales:** Cognitive Trust, Affective Trust.
+* **Example (Cognitive):** Unreliable `---(-3)--(-2)--(-1)--(0)--(1)--(2)--(3)---` Reliable
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Video Camera 📹 Scenario-Based Trust Evaluation
+:::
+::: {.card-body}
+<h5 class="card-title">[Scharowski Trust Survey (Scharowski et al., 2025)](surveys_items/AI_Surveys/Scharowski_AI_Survey.md)</h5>
+* **Description:** Uses video vignettes (SDV, Chatbot) in high/low trust scenarios. Measures trust (TPA, single items, STS-AD/Chatbot), affect (PANAS), risk.
+* **Format:** Likert (1-7), sliders (0-100), PANAS (1-5).
+* **Example (Single Item):** "I would **trust** the AI in the scenario." (1-7 Agree/Disagree)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Briefcase 💼 / Stethoscope 🩺 / Cap 🎓 Domain-Specific Attitudes & Experiences
+:::
+::: {.card-body}
+<h5 class="card-title">[AI Experience & Attitude Survey (AIEASM) (Gnambs et al., 2025)](surveys_items/AI_Surveys/Gnabs_AI_Survey.md)</h5>
+* **Description:** Attitudes (cognitive, affective, behavioral) in Work, Healthcare, Education. Assesses awareness, positivity, experience, intention for specific AI scenarios.
+* **Format:** Likert (0-4 agreement, 0-10 positivity), frequency/experience (0-4).
+* **Example (Work Attitude):** "Artificial intelligence offers good solutions for many job tasks." (0-4 Agree/Disagree)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+EU Flag 🇪🇺 European Public AI Awareness, Attitude & Trust
+:::
+::: {.card-body}
+<h5 class="card-title">[Perceptions on AI by Citizens of Europe (PAICE) (Scantamburlo et al., 2025)](surveys_items/AI_Surveys/Scantamburlo_AI_Survey.md)</h5>
+* **Description:** Broad survey: self-rated competency, attitude, impact, awareness, comfort, trust importance, trust in entities.
+* **Format:** Likert (1-5), Y/N, MC (select/rank).
+* **Example (Attitude):** "How would you describe your attitude towards Artificial Intelligence (AI)...?" (1-5 Disapprove/Approve)
+:::
+:::
+:::
+
+:::
+## LLM Perceptions {#sec-llm-perceptions}
+
+*Focus: Specific perceptions, beliefs, and evaluations related to Large Language Models*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Thought Bubble 💭 Assesses Attributed Mental States to LLMs
+:::
+::: {.card-body}
+<h5 class="card-title">[Mental Capacity Attribution (Chen et al., 2025)](surveys_items/AI_Surveys/Chen25_Survey.md)</h5>
+* **Description:** Measures attribution of human-like mental capacities (body, heart, mind) to LLMs.
+* **Format:** 7-point capability scale (1=Not capable, 7=Highly capable).
+* **Example (Heart):** "...understanding how others are feeling?" (1-7)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Crystal Ball 🔮 Measures Belief in AI vs. Other Predictions
+:::
+::: {.card-body}
+<h5 class="card-title">[Prediction Believability & AI Superstition (Lee et al., 2024)](surveys_items/AI_Surveys/Lee24_AI_Surveys.md)</h5>
+* **Description:** Compares believability (validity, personalization, reliability, usefulness) of predictions (AI, Astrology, Personality tests). Includes psych factors (CRT, NCS, AIAS, Gullibility, Paranormal).
+* **Format:** 7-point Likert (1-7 Agree/Disagree) for predictions; various scales for factors.
+* **Example (Validity):** "I find the [AI] prediction convincing." (1-7)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Heart Hands🫶 Evaluates Perceived Empathy of LLM Responses
+:::
+::: {.card-body}
+<h5 class="card-title">[Perceived LLM Compassion/Responsiveness (Ovsyannikova et al., 2025)](surveys_items/AI_Surveys/Ovsyannikova_Survey.md)</h5>
+* **Description:** Compares perceived compassion/responsiveness of LLM vs. human responses to emotional prompts.
+* **Format:** 5-point Likert (compassion/responsiveness facets); Binary choice (preference).
+* **Example (Compassion):** Rate response on how much it... "was compassionate" (1-5 Disagree/Agree)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Robot 🤖 Measures Perceptions of LLMs as Expert/Objective/Accurate
+:::
+::: {.card-body}
+<h5 class="card-title">[Machine Heuristics for LLMs (Rheu & Cho, 2025)](surveys_items/AI_Surveys/Rheu25_AI_Survey.md)</h5>
+* **Description:** Assesses perception of LLMs as knowledgeable, unbiased, precise.
+* **Format:** 7-point Likert scale (1-7 Agree/Disagree).
+* **Subscales:** Expert, Objective, Accurate.
+* **Example (Objective):** "LLMs applications are... Impartial" (1-7)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Mind Reading 🧘 Infers User Goals & Needs from Text (LLM Application)
+:::
+::: {.card-body}
+<h5 class="card-title">[Empathic Mental Inference from User Text (Zhu et al., 2024)](surveys_items/AI_Surveys/Zhu2024_AI_Survey.md)</h5>
+* **Description:** Task inferring user goals (task, sub-action, overarching) from text and attributing to fundamental needs.
+* **Format:** Open-ended goal inference; 5-point Likert for need attribution (13 needs).
+* **Example (Need Attribution):** Attribute inferred goals to "Security" (1=Not attributed, 5=Highly attributed)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Group Chat 🧑‍🤝‍🧑 Assesses Social Influence of Multi-Agent LLMs
+:::
+::: {.card-body}
+<h5 class="card-title">[Social Influence & Agent Impressions (Song et al., 2024)](surveys_items/AI_Surveys/Song24_AI_Survey.md)</h5>
+* **Description:** Measures opinion change after interacting with single/multiple AI agents. Assesses informational/normative influence, agent impressions.
+* **Format:** Likert scales (6/7-point) for opinion, influence, impressions; Open-ended questions.
+* **Subscales:** Opinion, Info Influence, Norm Influence, Agent Impressions.
+* **Example (Info Influence):** "My decision was influenced by the opinion of the agent(s)." (1-7)
+:::
+:::
+:::
+
+:::
+## Energy Literacy {#tab-energy-literacy}
+
+*Focus: Measuring knowledge, perceptions, attitudes, and context related to energy use*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Lightbulb 💡 Measures Knowledge & Perception of Energy Consumption/Savings
+:::
+::: {.card-body}
+<h5 class="card-title">[Energy Literacy Assessment (Attari et al., 2010)](surveys_items/Energy_Surveys/Attari2010_Survey.md)</h5>
+* **Description:** Assesses perceived savings effectiveness, household breakdown (%), relative device use (vs. 100W bulb), relative savings, attitudes (NEP), behaviors.
+* **Format:** Open-ended, %, numeric estimation, Likert (NEP).
+* **Example (Estimation):** "Energy Consumed by Average Household - Transportation (%)" (Numeric Input)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Textbook 📚 Comprehensive Assessment of Knowledge, Affect, Behavior
+:::
+::: {.card-body}
+<h5 class="card-title">[Energy Literacy Questionnaire (DeWaters et al., 2013)](surveys_items/Energy_Surveys/DeWaters2013_Energy.md)</h5>
+* **Description:** Measures factual knowledge (cognitive), attitudes/values/efficacy (affective), conservation actions (behavioral) for secondary students.
+* **Format:** MC (cognitive), 5-point Likert (affective/behavioral).
+* **Subscales:** Cognitive, Affective, Behavioral.
+* **Example (Cognitive):** "The amount of ELECTRICAL ENERGY... is measured in..." (MC Options)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Brain with Gears ⚙️ Investigates & Corrects Energy Estimation Biases
+:::
+::: {.card-body}
+<h5 class="card-title">[Energy Use Misperceptions & Interventions (Marghetis et al., 2019)](surveys_items/Energy_Surveys/marghetis2019_materials.md)</h5>
+* **Description:** Uses estimation (36 appliances vs. 100W bulb), choice tasks, numeracy/CRT, attitudes (NEP) to assess misperceptions and intervention impact.
+* **Format:** Numeric estimation, binary choice, MC, Likert.
+* **Example (Estimation):** Estimate Wh for "Clothes dryer" (Numeric Input)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Scientist 🧑‍🔬 Explores How Experts Judge Energy Use
+:::
+::: {.card-body}
+<h5 class="card-title">[Expert Energy Heuristics (Kantenbacher & Attari, 2021)](surveys_items/Energy_Surveys/Katenbacher_Attari_2021_sup.md)</h5>
+* **Description:** Uses talk-aloud during choice/estimation to identify expert heuristics. Includes rating accuracy of predefined rules.
+* **Format:** Talk-aloud, choice/estimation tasks, Likert (1-4 Accuracy).
+* **Example (Heuristic Rating):** "Devices with heating elements use a lot of energy." (1-4 Accuracy)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Bar Chart 📊 Evaluates Understanding & Preference for Energy Reports
+:::
+::: {.card-body}
+<h5 class="card-title">[Electricity-Use Communications Perceptions (Canfield et al., 2017)](surveys_items/Energy_Surveys/Canfield2017_Supp.md)</h5>
+* **Description:** Measures understanding (T/F) of report formats (history, neighbor, appliance). Assesses preferences (clarity, usefulness, trust), intentions (Likert). Includes energy literacy subscale.
+* **Format:** T/F, 7-point Likert.
+* **Example (Understanding):** "True / False: The Smith's home used more electricity in Feb 2011 than Feb 2012."
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Globe 🌍 Measures Attitudes towards Energy Issues
+:::
+::: {.card-body}
+<h5 class="card-title">Energy-Issue Attitude Questionnaire (Mei-Shiu et al., 2018)</h5> * **Description:** Assesses attitudes towards energy problems, solutions, policies. Developed to relate attitudes to knowledge, affect, behavior. *(Note: Specific .md file not identified in provided list)*.
+* **Format:** Likert scale (assumed).
+* *(Items available in source PDF)*
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+EV Car 🚗 / Heat Pump ♨️ Assesses Knowledge & Attitudes towards EVs & Heat Pumps
+:::
+::: {.card-body}
+<h5 class="card-title">[Low Carbon Technology Narratives (Attari et al., 2025)](surveys_items/Energy_Surveys/Attari_2025_TechSurvey.md)</h5>
+* **Description:** Measures familiarity, ownership, barriers, motivations, knowledge (T/F) for EVs/heat pumps. Includes climate attitudes.
+* **Format:** Likert, Y/N, T/F, Open-ended.
+* **Example (Knowledge):** "Heat pumps can both heat and cool my home." (T/F)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Scales ⚖️ / Leaf 🍃 Measures Climate Beliefs & Related Psych Traits
+:::
+::: {.card-body}
+<h5 class="card-title">[Environmental Decision-Making Context (He et al., 2024)](surveys_items/Energy_Surveys/He_Blasch24_energy_survey.md)</h5>
+* **Description:** Measures climate beliefs/concerns, competitiveness, risk/time preferences, loss aversion, experience with energy social comparisons.
+* **Format:** Likert (1-7), 0-10 scales, Y/N.
+* **Example (Climate Concern):** "...how concerned are you about climate change?" (1-7 Not to Strongly concerned)
+:::
+:::
+:::
+
+:::
+## Numeracy {#tab-numeracy}
+
+*Focus: Measuring numerical literacy and cognitive reflection*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .h-100}
+::: {.card-header}
+Calculator 🧮 Assesses Understanding of Probability/Percentages
+:::
+::: {.card-body}
+<h5 class="card-title">Statistical Numeracy (Attari et al. 2010 / Berlin Numeracy Test)</h5>
+* **Links:** [Berlin Numeracy Test Items](surveys_items/Berlin_Numeracy.md), [Numeracy in Attari 2010](surveys_items/Energy_Surveys/Attari2010_Survey.md)
+* **Description:** Uses probability problems (coin flips, lottery, disease risk) to assess statistical numeracy and risk literacy.
+* **Format:** Open numeric entry or multiple-choice.
+* **Example (BNT):** "Imagine we are tossing a fair coin 1,000 times... heads...?" (Numeric Input)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .h-100}
+::: {.card-header}
+Question Mark❓ Measures Tendency to Override Intuition
+:::
+::: {.card-body}
+<h5 class="card-title">Cognitive Reflection Test (CRT) (Various Studies)</h5>
+* **Links:** [Used in Lee et al. 2024](surveys_items/AI_Surveys/Lee24_AI_Surveys.md), [Used in Marghetis et al. 2019](surveys_items/Energy_Surveys/marghetis2019_materials.md)
+* **Description:** Assesses propensity for reflective thinking over intuitive responses using brain teaser problems.
+* **Format:** Open numeric entry or forced choice.
+* **Example (CRT):** "A bat and a ball cost $1.10... The bat costs $1.00 more... How much does the ball cost?" (Numeric Input: Correct=5 cents)
+:::
+:::
+:::
+
+:::
+## Behavioral Measures {#tab-behavioral-measures}
+
+*Focus: Assessing self-reported behaviors, intentions, and related psychological constructs*
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Recycle ♻️ Measures Frequency of Energy-Saving Actions
+:::
+::: {.card-body}
+<h5 class="card-title">[Energy Conservation Behaviors (DeWaters & Powers, 2011)](surveys_items/Energy_Surveys/DeWaters_Powers2011_Supp.md)</h5>
+* **Description:** Assesses how often individuals perform common energy conservation actions.
+* **Format:** 5-point Likert frequency scale (1=Never to 5=Almost Always).
+* **Item Example:** "When I leave a room, I turn off the lights." (1-5 Frequency)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Weightlifter 💪 Assesses Perceived Ease/Difficulty of Adopting Behaviors
+:::
+::: {.card-body}
+<h5 class="card-title">[Perceived Difficulty of Energy Behaviors (Attari et al., 2010)](surveys_items/Energy_Surveys/Attari2010_Survey.md)</h5>
+* **Description:** Measures perceived difficulty of making specific energy-saving changes.
+* **Format:** Categorical scale ("Do it already", "Extremely easy" to "Extremely hard", "N/A").
+* **Item Example:** "Carpooling with one other person to work" (Categorical Response)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Magnifying Glass 🔎 Measures Information Verification & Critical Evaluation with AI
+:::
+::: {.card-body}
+<h5 class="card-title">AI Fact-Checking / Critical Thinking</h5>
+* **Links:** [Rheu & Cho, 2025](surveys_items/AI_Surveys/Rheu25_AI_Survey.md), [Gerlich, 2025](surveys_items/AI_Surveys/Gerlich25_Survey.md)
+* **Description:** Assesses frequency of verifying AI/LLM info or engaging in critical thinking.
+* **Format:** Likert frequency scales (e.g., 1-7 Always/Never or 1-6 Agree/Disagree).
+* **Example (Rheu):** "Use other search engines to further research..." (1-7 Frequency)
+* **Example (Gerlich):** "I often cross-check information provided by AI tools..." (1-6 Agree/Disagree)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Warning Sign ⚠️ Assesses Potential Overreliance & Negative Use Patterns
+:::
+::: {.card-body}
+<h5 class="card-title">Problematic AI/Chatbot Use & Dependence</h5>
+* **Links:** [Fang et al., 2025](surveys_items/AI_Surveys/Fang25_AI_Survey.md), [Gerlich, 2025](surveys_items/AI_Surveys/Gerlich25_Survey.md)
+* **Description:** Measures preoccupation, withdrawal, loss of control, neglect, emotional reliance on AI/chatbots.
+* **Format:** 5-point Likert agreement scale (1=Disagree, 5=Agree).
+* **Example (Fang - PCUS):** "I experience anxiety... when unable to access the chatbot." (1-5)
+* **Example (Gerlich - Reliance):** "I find myself relying heavily on AI tools..." (1-6)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Cloud Upload ☁️⬆️ Measures Tendency to Delegate Cognitive Tasks to Tech
+:::
+::: {.card-body}
+<h5 class="card-title">[Cognitive Offloading (Gerlich, 2025)](surveys_items/AI_Surveys/Gerlich25_Survey.md)</h5>
+* **Description:** Assesses frequency of using digital tools (search, devices) instead of internal memory/effort.
+* **Format:** 6-point Likert frequency/agreement scale.
+* **Item Example:** "How often do you use search engines... to retrieve information you have looked up before?" (1-6 Frequency)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-header}
+Person Puzzle 🧩 Measures Individual Differences Correlated with Behavior
+:::
+::: {.card-body}
+<h5 class="card-title">Personality, Beliefs & Other Traits (Various Studies)</h5>
+* **Links:** See studies like [Lee et al. 2024](surveys_items/AI_Surveys/Lee24_AI_Surveys.md), [Stein et al. 2024](surveys_items/AI_Surveys/Stein24_AI_Survey.md), [Gnambs et al. 2025](surveys_items/AI_Surveys/Gnabs_AI_Survey.md), [He et al. 2024](surveys_items/Energy_Surveys/He_Blasch24_energy_survey.md)
+* **Description:** Includes scales like Big Five (BFI/TIPI), Dark Triad (SD3), Need for Cognition (NCS-6), Paranormal Beliefs (R-PBS), Gullibility, Competitiveness, Loss Aversion, Compliance, Conformity, etc.
+* **Format:** Various Likert scales (typically 5 or 7 points).
+* *(Note: Summarizes scale types, not exhaustive list)*
+:::
+:::
+:::
+
+:::
+:::

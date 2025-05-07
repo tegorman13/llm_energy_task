@@ -1,0 +1,921 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Forcing Functions Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <h1 class="text-3xl font-bold text-center mb-2">AI Decision Support Study</h1>
+        <p class="text-center mb-6">Buçinca et al. (2021) - "To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI"</p>
+        
+        <!-- Introduction -->
+        <div id="intro-section" class="mb-8 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-3">Welcome to the Study</h2>
+            <p class="mb-4">In this demo, you'll experience different AI assistance designs for a nutrition decision task. The original study investigated whether certain interaction designs can reduce human overreliance on AI.</p>
+            <p class="mb-4"><strong>Your task:</strong> For each meal shown, you need to replace the ingredient highest in carbohydrates with a low-carb alternative that maintains similar flavor.</p>
+            <p class="mb-4"><strong>Conditions:</strong> You'll try different AI assistance designs:</p>
+            <ul class="list-disc ml-6 mb-4">
+                <li><strong>No AI:</strong> Make decisions without AI assistance</li>
+                <li><strong>Simple Explanation:</strong> AI suggests replacements with explanations</li>
+                <li><strong>Uncertainty:</strong> AI shows confidence level with its suggestion</li>
+                <li><strong>On Demand:</strong> You must click to see AI suggestions</li>
+                <li><strong>Update:</strong> Make your own decision first, then see AI suggestion</li>
+                <li><strong>Wait:</strong> Wait 10 seconds before seeing AI suggestion</li>
+            </ul>
+            <p class="mb-4"><strong>Important:</strong> The simulated AI is 75% accurate, meaning it sometimes makes incorrect suggestions.</p>
+            <div class="text-center">
+                <button id="start-btn" class="mt-4 bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-lg font-medium">Start the Study</button>
+            </div>
+        </div>
+
+        <!-- Study UI -->
+        <div id="study-ui" class="hidden">
+            <!-- Condition selector -->
+            <div class="mb-6 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow">
+                <h2 class="text-lg font-bold mb-2">Select Interface Design</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="no-ai">No AI</button>
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="explanation">Simple Explanation</button>
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="uncertainty">Uncertainty</button>
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="on-demand">On Demand</button>
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="update">Update</button>
+                    <button class="condition-btn px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary rounded-lg text-sm md:text-base" data-condition="wait">Wait</button>
+                </div>
+                <div class="mt-3 p-2 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 rounded text-sm">
+                    <p id="condition-description" class="italic">Select an interface design above to begin</p>
+                </div>
+            </div>
+
+            <!-- Task container -->
+            <div id="task-container" class="mb-6">
+                <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Left side: Meal image and question -->
+                        <div class="md:w-1/2">
+                            <div class="aspect-square bg-gray-300 dark:bg-gray-700 rounded-lg mb-4 overflow-hidden relative">
+                                <div id="meal-container" class="w-full h-full flex items-center justify-center">
+                                    <img id="meal-image" class="max-w-full max-h-full object-contain" src="" alt="Meal">
+                                </div>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2">Task:</h3>
+                            <p class="mb-4">Turn this plate of food into a low carb meal.</p>
+                            <p class="mb-2">By replacing one of the ingredients, your goal is to make this meal a low carb meal while keeping its original flavor (as much as possible).</p>
+                            <div class="mt-4">
+                                <p class="font-medium">The main ingredients on this plate are:</p>
+                                <p id="ingredients-list" class="mt-1"></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Right side: User selection and AI suggestion -->
+                        <div class="md:w-1/2">
+                            <!-- User selections -->
+                            <div class="mb-6">
+                                <label class="block mb-2 font-medium">I would replace:</label>
+                                <select id="ingredient-select" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-base">
+                                    <option value="">Select ingredient to replace</option>
+                                </select>
+                                
+                                <div id="replacement-container" class="mt-4 hidden">
+                                    <label class="block mb-2 font-medium">With:</label>
+                                    <select id="replacement-select" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-base">
+                                        <option value="">Select replacement</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- AI suggestion container -->
+                            <div id="ai-container" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-semibold mb-3">AI suggestion</h3>
+                                
+                                <!-- Different AI views based on condition -->
+                                <div id="explanation-view" class="hidden">
+                                    <p class="mb-3">The AI suggested replacing <span id="ai-replace" class="font-medium"></span> with the following top 4 options by optimizing for flavor and nutrition goal:</p>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left pb-2"></th>
+                                                    <th class="text-center pb-2">carb reduction</th>
+                                                    <th class="text-center pb-2">flavor similarity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="explanation-table">
+                                                <!-- Filled dynamically -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div id="uncertainty-view" class="hidden">
+                                    <p class="mb-2 text-sm font-medium">The AI is <span id="ai-confidence"></span>% confident in its suggestion</p>
+                                    <div id="uncertainty-explanation"></div>
+                                </div>
+                                
+                                <div id="on-demand-view" class="flex justify-center">
+                                    <button id="on-demand-btn" class="bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded font-medium">See AI's suggestion</button>
+                                </div>
+                                
+                                <div id="wait-view" class="text-center py-4">
+                                    <p>AI is processing the image</p>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 mt-3 rounded-full overflow-hidden">
+                                        <div id="wait-progress" class="bg-primary h-full w-0 transition-all duration-300"></div>
+                                    </div>
+                                    <p id="wait-time" class="text-sm mt-2">10 seconds remaining</p>
+                                </div>
+                                
+                                <div id="update-view" class="hidden">
+                                    <p class="mb-3">You initially selected to replace <span id="initial-replace" class="font-medium"></span> with <span id="initial-replacement" class="font-medium"></span>.</p>
+                                    <p class="mb-3">The AI suggests replacing <span id="update-ai-replace" class="font-medium"></span> instead. Would you like to update your decision?</p>
+                                    <div id="update-explanation"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action buttons -->
+                            <div class="flex justify-between mt-4">
+                                <button id="next-btn" class="bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-lg font-medium">Next Question</button>
+                                <button id="submit-btn" class="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium hidden">Submit Decision</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results container -->
+            <div id="results-section" class="mb-6 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow hidden">
+                <h2 class="text-xl font-bold mb-4">Your Decision Results</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Your Choice</h3>
+                        <p>You replaced <span id="result-user-ingredient" class="font-medium"></span> with <span id="result-user-replacement" class="font-medium"></span>.</p>
+                        <div class="mt-3">
+                            <p>Carb reduction: <span id="result-user-carbs" class="font-medium"></span>%</p>
+                            <p>Flavor similarity: <span id="result-user-flavor" class="font-medium"></span>%</p>
+                        </div>
+                    </div>
+                    
+                    <div id="result-ai-section">
+                        <h3 class="text-lg font-semibold mb-2">AI Suggestion</h3>
+                        <p>AI suggested replacing <span id="result-ai-ingredient" class="font-medium"></span> with <span id="result-ai-replacement" class="font-medium"></span>.</p>
+                        <div class="mt-3">
+                            <p>Carb reduction: <span id="result-ai-carbs" class="font-medium"></span>%</p>
+                            <p>Flavor similarity: <span id="result-ai-flavor" class="font-medium"></span>%</p>
+                        </div>
+                        <div id="ai-correctness" class="mt-4 px-3 py-2 rounded"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Best Possible Choice</h3>
+                        <p>The optimal choice was to replace <span id="result-optimal-ingredient" class="font-medium"></span> with <span id="result-optimal-replacement" class="font-medium"></span>.</p>
+                        <div class="mt-3">
+                            <p>Carb reduction: <span id="result-optimal-carbs" class="font-medium"></span>%</p>
+                            <p>Flavor similarity: <span id="result-optimal-flavor" class="font-medium"></span>%</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Analysis</h3>
+                        <div id="result-analysis" class="bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 p-3 rounded">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-6">
+                    <button id="try-again-btn" class="bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-lg font-medium">Try Another Question</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary -->
+        <div id="summary-section" class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow hidden">
+            <h2 class="text-xl font-bold mb-3">Study Findings</h2>
+            <p class="mb-4">The original study by Buçinca et al. found that:</p>
+            <ul class="list-disc ml-6 mb-4">
+                <li class="mb-2">Cognitive Forcing Functions (Update, On Demand, Wait) significantly reduced overreliance on AI compared to Simple Explainable AI approaches.</li>
+                <li class="mb-2">However, participants preferred and trusted the simple AI interfaces more, creating a trade-off between usability and performance.</li>
+                <li class="mb-2">Individual differences in cognitive motivation affected the effectiveness of these interfaces - people with high Need for Cognition (enjoyment of thinking) benefited more from the cognitive forcing designs.</li>
+            </ul>
+            <p class="mb-4">These findings suggest that simply showing AI explanations is not enough - we need interface designs that encourage people to think critically about AI suggestions.</p>
+            <div class="text-center">
+                <button id="restart-btn" class="mt-4 bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-lg font-medium">Try the Demo Again</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Enable dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Define the meal data (simplified for the demo)
+        const mealData = [
+            {
+                id: 1,
+                image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e",
+                name: "Pasta with vegetables",
+                ingredients: ["pasta", "cherry tomatoes", "spinach", "olive oil"],
+                highestCarb: "pasta",
+                secondHighestCarb: "cherry tomatoes",
+                allIngredients: ["pasta", "cherry tomatoes", "spinach", "olive oil", "mushrooms", "broccoli", "cauliflower", "chicken", "beef", "tofu"],
+                replacements: {
+                    "pasta": [
+                        { name: "zucchini noodles", carbReduction: 85, flavorSimilarity: 68 },
+                        { name: "spaghetti squash", carbReduction: 82, flavorSimilarity: 65 },
+                        { name: "shirataki noodles", carbReduction: 95, flavorSimilarity: 55 },
+                        { name: "cabbage noodles", carbReduction: 80, flavorSimilarity: 45 }
+                    ],
+                    "cherry tomatoes": [
+                        { name: "bell peppers", carbReduction: 20, flavorSimilarity: 75 },
+                        { name: "radishes", carbReduction: 35, flavorSimilarity: 60 },
+                        { name: "cucumber", carbReduction: 30, flavorSimilarity: 65 },
+                        { name: "zucchini", carbReduction: 25, flavorSimilarity: 55 }
+                    ]
+                }
+            },
+            {
+                id: 2,
+                image: "https://images.unsplash.com/photo-1512058564366-18510be2db19",
+                name: "Rice bowl with chicken",
+                ingredients: ["rice", "chicken", "avocado", "broccoli"],
+                highestCarb: "rice",
+                secondHighestCarb: "broccoli",
+                allIngredients: ["rice", "chicken", "avocado", "broccoli", "quinoa", "cauliflower rice", "corn", "beans", "carrots", "peas"],
+                replacements: {
+                    "rice": [
+                        { name: "cauliflower rice", carbReduction: 90, flavorSimilarity: 70 },
+                        { name: "broccoli rice", carbReduction: 85, flavorSimilarity: 65 },
+                        { name: "cabbage rice", carbReduction: 88, flavorSimilarity: 60 },
+                        { name: "konjac rice", carbReduction: 95, flavorSimilarity: 50 }
+                    ],
+                    "broccoli": [
+                        { name: "kale", carbReduction: 10, flavorSimilarity: 70 },
+                        { name: "spinach", carbReduction: 15, flavorSimilarity: 65 },
+                        { name: "asparagus", carbReduction: 5, flavorSimilarity: 75 },
+                        { name: "brussels sprouts", carbReduction: 8, flavorSimilarity: 68 }
+                    ]
+                }
+            },
+            {
+                id: 3,
+                image: "https://images.unsplash.com/photo-1529042410759-befb1204b468",
+                name: "Burger with fries",
+                ingredients: ["burger bun", "beef patty", "french fries", "lettuce"],
+                highestCarb: "french fries",
+                secondHighestCarb: "burger bun",
+                allIngredients: ["burger bun", "beef patty", "french fries", "lettuce", "tomato", "onion", "cheese", "zucchini", "jicama", "radish"],
+                replacements: {
+                    "french fries": [
+                        { name: "zucchini fries", carbReduction: 85, flavorSimilarity: 65 },
+                        { name: "jicama fries", carbReduction: 75, flavorSimilarity: 60 },
+                        { name: "turnip fries", carbReduction: 80, flavorSimilarity: 55 },
+                        { name: "radish fries", carbReduction: 82, flavorSimilarity: 50 }
+                    ],
+                    "burger bun": [
+                        { name: "lettuce wrap", carbReduction: 95, flavorSimilarity: 45 },
+                        { name: "portobello bun", carbReduction: 80, flavorSimilarity: 70 },
+                        { name: "eggplant bun", carbReduction: 85, flavorSimilarity: 60 },
+                        { name: "cauliflower flatbread", carbReduction: 75, flavorSimilarity: 55 }
+                    ]
+                }
+            }
+        ];
+        
+        // Global variables
+        let currentCondition = null;
+        let currentMeal = null;
+        let aiAccuracy = 0.75; // AI is 75% accurate
+        let aiIsCorrect = true;
+        let userIngredient = null;
+        let userReplacement = null;
+        let aiIngredient = null;
+        let aiReplacement = null;
+        let waitTimer = null;
+        let initialIngredient = null;
+        let initialReplacement = null;
+        
+        // DOM elements
+        const startBtn = document.getElementById('start-btn');
+        const studyUI = document.getElementById('study-ui');
+        const introSection = document.getElementById('intro-section');
+        const conditionBtns = document.querySelectorAll('.condition-btn');
+        const conditionDescription = document.getElementById('condition-description');
+        const mealImage = document.getElementById('meal-image');
+        const ingredientsList = document.getElementById('ingredients-list');
+        const ingredientSelect = document.getElementById('ingredient-select');
+        const replacementContainer = document.getElementById('replacement-container');
+        const replacementSelect = document.getElementById('replacement-select');
+        const aiContainer = document.getElementById('ai-container');
+        const explanationView = document.getElementById('explanation-view');
+        const uncertaintyView = document.getElementById('uncertainty-view');
+        const onDemandView = document.getElementById('on-demand-view');
+        const waitView = document.getElementById('wait-view');
+        const updateView = document.getElementById('update-view');
+        const onDemandBtn = document.getElementById('on-demand-btn');
+        const waitProgress = document.getElementById('wait-progress');
+        const waitTime = document.getElementById('wait-time');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultsSection = document.getElementById('results-section');
+        const taskContainer = document.getElementById('task-container');
+        const tryAgainBtn = document.getElementById('try-again-btn');
+        const summarySection = document.getElementById('summary-section');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // Start the study
+        startBtn.addEventListener('click', () => {
+            introSection.classList.add('hidden');
+            studyUI.classList.remove('hidden');
+        });
+        
+        // Condition selection
+        conditionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                conditionBtns.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+                
+                // Add active class to clicked button
+                btn.classList.add('bg-primary', 'text-white');
+                
+                // Set current condition
+                currentCondition = btn.dataset.condition;
+                
+                // Update condition description
+                updateConditionDescription();
+                
+                // Load a random meal
+                loadRandomMeal();
+            });
+        });
+        
+        // Update condition description based on selected condition
+        function updateConditionDescription() {
+            let description = '';
+            
+            switch(currentCondition) {
+                case 'no-ai':
+                    description = 'Baseline condition with no AI assistance. You must make decisions based solely on your own knowledge.';
+                    break;
+                case 'explanation':
+                    description = 'The AI shows its suggestion with explanations about carb reduction and flavor similarity.';
+                    break;
+                case 'uncertainty':
+                    description = 'The AI shows its confidence level along with its suggestion and explanations.';
+                    break;
+                case 'on-demand':
+                    description = 'The AI suggestion is only shown if you explicitly click to request it.';
+                    break;
+                case 'update':
+                    description = 'You must make your initial decision first, then you can see the AI suggestion and choose whether to update your decision.';
+                    break;
+                case 'wait':
+                    description = 'You must wait 10 seconds before seeing the AI suggestion.';
+                    break;
+                default:
+                    description = 'Select an interface design above to begin';
+            }
+            
+            conditionDescription.textContent = description;
+        }
+        
+        // Load a random meal
+        function loadRandomMeal() {
+            // Reset UI state
+            resetUI();
+            
+            // Pick a random meal
+            currentMeal = mealData[Math.floor(Math.random() * mealData.length)];
+            
+            // Decide if AI will be correct (75% chance)
+            aiIsCorrect = Math.random() < aiAccuracy;
+            
+            // Set meal image and ingredients
+            mealImage.src = currentMeal.image;
+            ingredientsList.textContent = currentMeal.ingredients.join(', ');
+            
+            // Determine AI suggestion
+            if (aiIsCorrect) {
+                aiIngredient = currentMeal.highestCarb;
+            } else {
+                aiIngredient = currentMeal.secondHighestCarb;
+            }
+            
+            // Choose top AI replacement
+            aiReplacement = currentMeal.replacements[aiIngredient][0].name;
+            
+            // Populate ingredients dropdown
+            populateIngredientDropdown();
+            
+            // Setup AI container based on condition
+            setupAIContainer();
+        }
+        
+        // Reset UI state
+        function resetUI() {
+            // Reset selections
+            userIngredient = null;
+            userReplacement = null;
+            initialIngredient = null;
+            initialReplacement = null;
+            
+            // Clear dropdowns
+            ingredientSelect.innerHTML = '<option value="">Select ingredient to replace</option>';
+            replacementSelect.innerHTML = '<option value="">Select replacement</option>';
+            replacementContainer.classList.add('hidden');
+            
+            // Reset AI container
+            explanationView.classList.add('hidden');
+            uncertaintyView.classList.add('hidden');
+            onDemandView.classList.add('hidden');
+            waitView.classList.add('hidden');
+            updateView.classList.add('hidden');
+            
+            // Reset wait timer
+            if (waitTimer) {
+                clearInterval(waitTimer);
+                waitTimer = null;
+            }
+            waitProgress.style.width = '0%';
+            waitTime.textContent = '10 seconds remaining';
+            
+            // Show task container, hide results
+            taskContainer.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+            
+            // Reset buttons
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
+        }
+        
+        // Populate ingredient dropdown
+        function populateIngredientDropdown() {
+            currentMeal.allIngredients.sort().forEach(ingredient => {
+                const option = document.createElement('option');
+                option.value = ingredient;
+                option.textContent = ingredient;
+                ingredientSelect.appendChild(option);
+            });
+        }
+        
+        // Setup AI container based on condition
+        function setupAIContainer() {
+            switch(currentCondition) {
+                case 'no-ai':
+                    aiContainer.classList.add('hidden');
+                    break;
+                    
+                case 'explanation':
+                    aiContainer.classList.remove('hidden');
+                    explanationView.classList.remove('hidden');
+                    setupExplanationView();
+                    break;
+                    
+                case 'uncertainty':
+                    aiContainer.classList.remove('hidden');
+                    uncertaintyView.classList.remove('hidden');
+                    setupUncertaintyView();
+                    break;
+                    
+                case 'on-demand':
+                    aiContainer.classList.remove('hidden');
+                    onDemandView.classList.remove('hidden');
+                    break;
+                    
+                case 'update':
+                    aiContainer.classList.add('hidden');
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                    break;
+                    
+                case 'wait':
+                    aiContainer.classList.remove('hidden');
+                    waitView.classList.remove('hidden');
+                    startWaitTimer();
+                    break;
+            }
+        }
+        
+        // Setup explanation view
+        function setupExplanationView() {
+            document.getElementById('ai-replace').textContent = aiIngredient;
+            
+            const table = document.getElementById('explanation-table');
+            table.innerHTML = '';
+            
+            currentMeal.replacements[aiIngredient].forEach(replacement => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.className = 'py-1 pr-2 font-medium';
+                nameCell.textContent = replacement.name;
+                
+                const carbCell = document.createElement('td');
+                carbCell.className = 'py-1 text-center';
+                carbCell.textContent = `${replacement.carbReduction}%`;
+                
+                const flavorCell = document.createElement('td');
+                flavorCell.className = 'py-1 text-center';
+                flavorCell.textContent = `${replacement.flavorSimilarity}%`;
+                
+                row.appendChild(nameCell);
+                row.appendChild(carbCell);
+                row.appendChild(flavorCell);
+                
+                // Highlight the top recommendation
+                if (replacement.name === aiReplacement) {
+                    row.classList.add('bg-blue-50', 'dark:bg-blue-900', 'dark:bg-opacity-20');
+                }
+                
+                table.appendChild(row);
+            });
+        }
+        
+        // Setup uncertainty view
+        function setupUncertaintyView() {
+            // Only show uncertainty when AI is incorrect
+            const confidence = aiIsCorrect ? 95 : 60;
+            document.getElementById('ai-confidence').textContent = confidence;
+            
+            const uncertaintyExplanation = document.getElementById('uncertainty-explanation');
+            uncertaintyExplanation.innerHTML = '';
+            
+            // Create a simplified explanation for the uncertainty view
+            const p = document.createElement('p');
+            p.className = 'mb-3';
+            p.innerHTML = `The AI suggested replacing <span class="font-medium">${aiIngredient}</span> with the following top options by optimizing for flavor and nutrition goal:`;
+            uncertaintyExplanation.appendChild(p);
+            
+            const table = document.createElement('table');
+            table.className = 'w-full text-sm';
+            
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            const emptyHeader = document.createElement('th');
+            emptyHeader.className = 'text-left pb-2';
+            
+            const carbHeader = document.createElement('th');
+            carbHeader.className = 'text-center pb-2';
+            carbHeader.textContent = 'carb reduction';
+            
+            const flavorHeader = document.createElement('th');
+            flavorHeader.className = 'text-center pb-2';
+            flavorHeader.textContent = 'flavor similarity';
+            
+            headerRow.appendChild(emptyHeader);
+            headerRow.appendChild(carbHeader);
+            headerRow.appendChild(flavorHeader);
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            const tbody = document.createElement('tbody');
+            
+            currentMeal.replacements[aiIngredient].forEach(replacement => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.className = 'py-1 pr-2 font-medium';
+                nameCell.textContent = replacement.name;
+                
+                const carbCell = document.createElement('td');
+                carbCell.className = 'py-1 text-center';
+                carbCell.textContent = `${replacement.carbReduction}%`;
+                
+                const flavorCell = document.createElement('td');
+                flavorCell.className = 'py-1 text-center';
+                flavorCell.textContent = `${replacement.flavorSimilarity}%`;
+                
+                row.appendChild(nameCell);
+                row.appendChild(carbCell);
+                row.appendChild(flavorCell);
+                
+                // Highlight the top recommendation
+                if (replacement.name === aiReplacement) {
+                    row.classList.add('bg-blue-50', 'dark:bg-blue-900', 'dark:bg-opacity-20');
+                }
+                
+                tbody.appendChild(row);
+            });
+            
+            table.appendChild(tbody);
+            uncertaintyExplanation.appendChild(table);
+        }
+        
+        // Start wait timer
+        function startWaitTimer() {
+            let timeLeft = 10;
+            waitTime.textContent = `${timeLeft} seconds remaining`;
+            
+            waitTimer = setInterval(() => {
+                timeLeft--;
+                const progress = 100 - (timeLeft * 10);
+                waitProgress.style.width = `${progress}%`;
+                waitTime.textContent = `${timeLeft} seconds remaining`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(waitTimer);
+                    waitTimer = null;
+                    waitView.classList.add('hidden');
+                    explanationView.classList.remove('hidden');
+                    setupExplanationView();
+                }
+            }, 1000);
+        }
+        
+        // Handle on-demand button click
+        onDemandBtn.addEventListener('click', () => {
+            onDemandView.classList.add('hidden');
+            explanationView.classList.remove('hidden');
+            
+            // Update the AI ingredient element first
+            document.getElementById('ai-replace').textContent = aiIngredient;
+            
+            // Then set up the explanation view
+            setupExplanationView();
+        });
+        
+        // Handle ingredient selection
+        ingredientSelect.addEventListener('change', () => {
+            userIngredient = ingredientSelect.value;
+            
+            if (userIngredient) {
+                // Show replacement container and populate dropdown
+                replacementContainer.classList.remove('hidden');
+                populateReplacementDropdown();
+            } else {
+                // Hide replacement container
+                replacementContainer.classList.add('hidden');
+            }
+        });
+        
+        // Populate replacement dropdown
+        function populateReplacementDropdown() {
+            replacementSelect.innerHTML = '<option value="">Select replacement</option>';
+            
+            // If the ingredient has replacements in our data, use those
+            if (currentMeal.replacements[userIngredient]) {
+                currentMeal.replacements[userIngredient].forEach(replacement => {
+                    const option = document.createElement('option');
+                    option.value = replacement.name;
+                    option.textContent = replacement.name;
+                    replacementSelect.appendChild(option);
+                });
+            } else {
+                // Otherwise, add some generic replacements
+                const genericReplacements = [
+                    "cauliflower", "broccoli", "zucchini", "spinach", 
+                    "mushrooms", "bell peppers", "cabbage", "eggplant"
+                ];
+                
+                genericReplacements.forEach(replacement => {
+                    const option = document.createElement('option');
+                    option.value = replacement;
+                    option.textContent = replacement;
+                    replacementSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Handle replacement selection
+        replacementSelect.addEventListener('change', () => {
+            userReplacement = replacementSelect.value;
+        });
+        
+        // Handle submit button click (for update condition)
+        submitBtn.addEventListener('click', () => {
+            if (!userIngredient || !userReplacement) {
+                alert("Please select both an ingredient to replace and a replacement ingredient.");
+                return;
+            }
+            
+            // Save initial choices
+            initialIngredient = userIngredient;
+            initialReplacement = userReplacement;
+            
+            // Show AI suggestion
+            aiContainer.classList.remove('hidden');
+            updateView.classList.remove('hidden');
+            
+            // Update the text
+            document.getElementById('initial-replace').textContent = initialIngredient;
+            document.getElementById('initial-replacement').textContent = initialReplacement;
+            document.getElementById('update-ai-replace').textContent = aiIngredient;
+            
+            // Create explanation
+            const updateExplanation = document.getElementById('update-explanation');
+            updateExplanation.innerHTML = '';
+            
+            // Make sure ai-replace element is set before setting up the explanation
+            document.getElementById('ai-replace').textContent = aiIngredient;
+            
+            // Create a simplified explanation for the update view
+            const table = document.createElement('table');
+            table.className = 'w-full text-sm mt-3';
+            
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            const emptyHeader = document.createElement('th');
+            emptyHeader.className = 'text-left pb-2';
+            
+            const carbHeader = document.createElement('th');
+            carbHeader.className = 'text-center pb-2';
+            carbHeader.textContent = 'carb reduction';
+            
+            const flavorHeader = document.createElement('th');
+            flavorHeader.className = 'text-center pb-2';
+            flavorHeader.textContent = 'flavor similarity';
+            
+            headerRow.appendChild(emptyHeader);
+            headerRow.appendChild(carbHeader);
+            headerRow.appendChild(flavorHeader);
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            const tbody = document.createElement('tbody');
+            
+            // Add the top replacement
+            const topReplacement = currentMeal.replacements[aiIngredient][0];
+            const row = document.createElement('tr');
+            row.className = 'bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20';
+            
+            const nameCell = document.createElement('td');
+            nameCell.className = 'py-1 pr-2 font-medium';
+            nameCell.textContent = topReplacement.name;
+            
+            const carbCell = document.createElement('td');
+            carbCell.className = 'py-1 text-center';
+            carbCell.textContent = `${topReplacement.carbReduction}%`;
+            
+            const flavorCell = document.createElement('td');
+            flavorCell.className = 'py-1 text-center';
+            flavorCell.textContent = `${topReplacement.flavorSimilarity}%`;
+            
+            row.appendChild(nameCell);
+            row.appendChild(carbCell);
+            row.appendChild(flavorCell);
+            tbody.appendChild(row);
+            table.appendChild(tbody);
+            
+            updateExplanation.appendChild(table);
+            
+            // Switch buttons
+            submitBtn.classList.add('hidden');
+            nextBtn.classList.remove('hidden');
+        });
+        
+        // Handle next button click
+        nextBtn.addEventListener('click', () => {
+            if (!userIngredient || !userReplacement) {
+                alert("Please select both an ingredient to replace and a replacement ingredient.");
+                return;
+            }
+            
+            // Show results
+            showResults();
+        });
+        
+        // Show results
+        function showResults() {
+            // Hide task container, show results
+            taskContainer.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            
+            // User result
+            document.getElementById('result-user-ingredient').textContent = userIngredient;
+            document.getElementById('result-user-replacement').textContent = userReplacement;
+            
+            // Calculate user metrics
+            let userCarbReduction = 0;
+            let userFlavorSimilarity = 0;
+            
+            if (currentMeal.replacements[userIngredient]) {
+                const userReplacementData = currentMeal.replacements[userIngredient].find(r => r.name === userReplacement);
+                if (userReplacementData) {
+                    userCarbReduction = userReplacementData.carbReduction;
+                    userFlavorSimilarity = userReplacementData.flavorSimilarity;
+                } else {
+                    // Use random values if not found
+                    userCarbReduction = Math.floor(Math.random() * 50) + 10;
+                    userFlavorSimilarity = Math.floor(Math.random() * 50) + 10;
+                }
+            } else {
+                // Use random values if not found
+                userCarbReduction = Math.floor(Math.random() * 50) + 10;
+                userFlavorSimilarity = Math.floor(Math.random() * 50) + 10;
+            }
+            
+            document.getElementById('result-user-carbs').textContent = userCarbReduction;
+            document.getElementById('result-user-flavor').textContent = userFlavorSimilarity;
+            
+            // AI result
+            const resultAiSection = document.getElementById('result-ai-section');
+            
+            if (currentCondition === 'no-ai') {
+                resultAiSection.classList.add('hidden');
+            } else {
+                resultAiSection.classList.remove('hidden');
+                document.getElementById('result-ai-ingredient').textContent = aiIngredient;
+                document.getElementById('result-ai-replacement').textContent = aiReplacement;
+                
+                // Get AI metrics
+                const aiReplacementData = currentMeal.replacements[aiIngredient][0];
+                document.getElementById('result-ai-carbs').textContent = aiReplacementData.carbReduction;
+                document.getElementById('result-ai-flavor').textContent = aiReplacementData.flavorSimilarity;
+                
+                // Set AI correctness indicator
+                const aiCorrectnessElement = document.getElementById('ai-correctness');
+                
+                if (aiIsCorrect) {
+                    aiCorrectnessElement.textContent = "The AI correctly identified the highest-carb ingredient";
+                    aiCorrectnessElement.classList.add('bg-green-100', 'dark:bg-green-900', 'dark:bg-opacity-30', 'text-green-800', 'dark:text-green-200');
+                    aiCorrectnessElement.classList.remove('bg-red-100', 'dark:bg-red-900', 'text-red-800', 'dark:text-red-200');
+                } else {
+                    aiCorrectnessElement.textContent = "The AI incorrectly identified the highest-carb ingredient";
+                    aiCorrectnessElement.classList.add('bg-red-100', 'dark:bg-red-900', 'dark:bg-opacity-30', 'text-red-800', 'dark:text-red-200');
+                    aiCorrectnessElement.classList.remove('bg-green-100', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-200');
+                }
+            }
+            
+            // Optimal result
+            document.getElementById('result-optimal-ingredient').textContent = currentMeal.highestCarb;
+            document.getElementById('result-optimal-replacement').textContent = currentMeal.replacements[currentMeal.highestCarb][0].name;
+            document.getElementById('result-optimal-carbs').textContent = currentMeal.replacements[currentMeal.highestCarb][0].carbReduction;
+            document.getElementById('result-optimal-flavor').textContent = currentMeal.replacements[currentMeal.highestCarb][0].flavorSimilarity;
+            
+            // Analysis
+            const analysisElement = document.getElementById('result-analysis');
+            let analysisText = '';
+            
+            if (currentCondition === 'no-ai') {
+                if (userIngredient === currentMeal.highestCarb) {
+                    analysisText = "You correctly identified the highest-carb ingredient without AI assistance! This demonstrates strong nutritional knowledge.";
+                } else {
+                    analysisText = "You did not identify the highest-carb ingredient without AI assistance. This is a challenging task without nutritional data.";
+                }
+            } else {
+                if (!aiIsCorrect && userIngredient === aiIngredient) {
+                    analysisText = "You followed the AI's incorrect suggestion. This demonstrates <strong>overreliance</strong> on the AI, which was a key finding in the study.";
+                } else if (!aiIsCorrect && userIngredient === currentMeal.highestCarb) {
+                    analysisText = "You correctly identified the highest-carb ingredient despite the AI's incorrect suggestion. This shows you critically evaluated the AI's recommendation!";
+                } else if (aiIsCorrect && userIngredient === aiIngredient) {
+                    analysisText = "You followed the AI's correct suggestion. The AI helped you make the right decision.";
+                } else {
+                    analysisText = "You made a different choice than the AI suggested, but neither identified the highest-carb ingredient correctly.";
+                }
+            }
+            
+            analysisElement.innerHTML = analysisText;
+        }
+        
+        // Try another question
+        tryAgainBtn.addEventListener('click', () => {
+            const showedFiveQuestions = Math.random() < 0.2; // 20% chance to show summary after a question
+            
+            if (showedFiveQuestions) {
+                // Show summary section
+                taskContainer.classList.add('hidden');
+                resultsSection.classList.add('hidden');
+                summarySection.classList.remove('hidden');
+            } else {
+                // Load another meal with same condition
+                loadRandomMeal();
+            }
+        });
+        
+        // Restart button
+        restartBtn.addEventListener('click', () => {
+            summarySection.classList.add('hidden');
+            studyUI.classList.remove('hidden');
+            
+            // Reset condition
+            conditionBtns.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            currentCondition = null;
+            conditionDescription.textContent = "Select an interface design above to begin";
+        });
+    </script>
+
+
+</body></html>

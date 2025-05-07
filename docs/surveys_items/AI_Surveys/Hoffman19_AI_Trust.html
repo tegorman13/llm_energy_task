@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.28">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-05-07">
+
+<title>hoffman19_ai_trust – Energy AI Study</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b719d3d4935f2b08311a76135e2bf442.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-dd3c8dc041147f57ee52a32de3378d30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Energy AI Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../survey_dash.html"> 
+<span class="menu-text">Dash</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dash_js" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Dash_js</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dash_js">    
+        <li>
+    <a class="dropdown-item" href="../../task.html">
+ <span class="dropdown-text">Task</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash5.html">
+ <span class="dropdown-text">Dash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../demos/dash/dash3.html">
+ <span class="dropdown-text">Dash_js</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../dash.html">
+ <span class="dropdown-text">Demo Dashboard</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instruments-from-hoffman-et-al.-2019" id="toc-instruments-from-hoffman-et-al.-2019" class="nav-link active" data-scroll-target="#instruments-from-hoffman-et-al.-2019">Instruments from Hoffman et al.&nbsp;(2019)</a>
+  <ul class="collapse">
+  <li><a href="#table-3.-the-cvr-version-of-the-explanation-satisfaction-scale-p.-6" id="toc-table-3.-the-cvr-version-of-the-explanation-satisfaction-scale-p.-6" class="nav-link" data-scroll-target="#table-3.-the-cvr-version-of-the-explanation-satisfaction-scale-p.-6">Table 3. The CVR version of the Explanation Satisfaction scale (p.&nbsp;6)</a></li>
+  <li><a href="#table-6.-example-prompts-from-shadowbox-lite-task-p.-15" id="toc-table-6.-example-prompts-from-shadowbox-lite-task-p.-15" class="nav-link" data-scroll-target="#table-6.-example-prompts-from-shadowbox-lite-task-p.-15">Table 6. Example Prompts from ShadowBox Lite Task (p.&nbsp;15)</a></li>
+  <li><a href="#table-7.-a-curiosity-checklist-p.-18" id="toc-table-7.-a-curiosity-checklist-p.-18" class="nav-link" data-scroll-target="#table-7.-a-curiosity-checklist-p.-18">Table 7. A Curiosity Checklist (p.&nbsp;18)</a></li>
+  <li><a href="#appendix-a-explanation-goodness-checklist-p.-35" id="toc-appendix-a-explanation-goodness-checklist-p.-35" class="nav-link" data-scroll-target="#appendix-a-explanation-goodness-checklist-p.-35">Appendix A: Explanation Goodness Checklist (p.&nbsp;35)</a></li>
+  <li><a href="#appendix-b-materials-used-in-the-evaluation-of-the-discriminant-validity-of-the-explanation-satisfaction-scale-pp.-36-38" id="toc-appendix-b-materials-used-in-the-evaluation-of-the-discriminant-validity-of-the-explanation-satisfaction-scale-pp.-36-38" class="nav-link" data-scroll-target="#appendix-b-materials-used-in-the-evaluation-of-the-discriminant-validity-of-the-explanation-satisfaction-scale-pp.-36-38">Appendix B: Materials used in the Evaluation of the Discriminant Validity of the Explanation Satisfaction Scale (pp.&nbsp;36-38)</a></li>
+  <li><a href="#appendix-c-explanation-satisfaction-scale-pp.-39-40" id="toc-appendix-c-explanation-satisfaction-scale-pp.-39-40" class="nav-link" data-scroll-target="#appendix-c-explanation-satisfaction-scale-pp.-39-40">Appendix C: Explanation Satisfaction Scale (pp.&nbsp;39-40)</a></li>
+  <li><a href="#appendix-d-synopsis-of-representative-trust-scales-pp.-41-48" id="toc-appendix-d-synopsis-of-representative-trust-scales-pp.-41-48" class="nav-link" data-scroll-target="#appendix-d-synopsis-of-representative-trust-scales-pp.-41-48">Appendix D: Synopsis of Representative Trust Scales (pp.&nbsp;41-48)</a></li>
+  <li><a href="#appendix-e-trust-scale-recommended-for-xai-pp.-49-50" id="toc-appendix-e-trust-scale-recommended-for-xai-pp.-49-50" class="nav-link" data-scroll-target="#appendix-e-trust-scale-recommended-for-xai-pp.-49-50">Appendix E: Trust Scale Recommended for XAI (pp.&nbsp;49-50)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Hoffman19_AI_Trust.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 7, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="instruments-from-hoffman-et-al.-2019" class="level1">
+<h1>Instruments from Hoffman et al.&nbsp;(2019)</h1>
+<p>Hoffman, R. R., Mueller, S. T., Klein, G., &amp; Litman, J. (2019). Metrics for Explainable AI: Challenges and Prospects (No.&nbsp;arXiv:1812.04608). arXiv. https://doi.org/10.48550/arXiv.1812.04608</p>
+<section id="table-3.-the-cvr-version-of-the-explanation-satisfaction-scale-p.-6" class="level3">
+<h3 class="anchored" data-anchor-id="table-3.-the-cvr-version-of-the-explanation-satisfaction-scale-p.-6">Table 3. The CVR version of the Explanation Satisfaction scale (p.&nbsp;6)</h3>
+<blockquote class="blockquote">
+<p>For each item listed below, please indicate whether you believe that the item is: * Essential for measuring Explanation Satisfaction, * Useful but not Essential, or * Not Necessary for measuring Explanation Satisfaction.</p>
+<p>Indicate your response by circling the appropriate number.</p>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 65%">
+<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Item</th>
+<th style="text-align: center;">Essential</th>
+<th style="text-align: center;">Useful but not essential</th>
+<th style="text-align: center;">Not Necessary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1. I understand this explanation of how the [software, algorithm, tool] works.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2. This explanation of how the [software, algorithm, tool] works is satisfying.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3. This explanation of how the [software, algorithm, tool] works has sufficient detail.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4. This explanation of how the [software, algorithm, tool] works contains irrelevant details.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5. This explanation of how the [software, algorithm, tool] works seems complete.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6. This explanation of how the [software, algorithm, tool] works tells me how to use it.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7. This explanation of how the [software, algorithm, tool] works is useful to my goals.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8. This explanation of says how accurate the [software, algorithm, tool] is.</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9. This explanation lets me judge when I should trust and not trust the [software, algorithm, tool]</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="table-6.-example-prompts-from-shadowbox-lite-task-p.-15" class="level3">
+<h3 class="anchored" data-anchor-id="table-6.-example-prompts-from-shadowbox-lite-task-p.-15">Table 6. Example Prompts from ShadowBox Lite Task (p.&nbsp;15)</h3>
+<blockquote class="blockquote">
+<p>(These prompts are used after presenting an expert explanation, e.g., for cruise control: “The control unit detects the rotation of the drive shaft from a magnet mounted on the drive shaft, and from that can calculate how fast the car is going. The control unit controls an electric motor that is connected to the accelerator linkage. The cruise control adjusts the engine speed until it is disengaged.”)</p>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 72%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Prompt</th>
+<th style="text-align: left;">Response Area</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">What is right and helpful about this explanation?</td>
+<td style="text-align: left;">(User response area)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">What is problematic or wrong about this explanation?</td>
+<td style="text-align: left;">(User response area)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="table-7.-a-curiosity-checklist-p.-18" class="level3">
+<h3 class="anchored" data-anchor-id="table-7.-a-curiosity-checklist-p.-18">Table 7. A Curiosity Checklist (p.&nbsp;18)</h3>
+<blockquote class="blockquote">
+<p>Why have you asked for an explanation? Check all that apply.</p>
+</blockquote>
+<ul class="task-list">
+<li><label><input type="checkbox">I want to know what the AI just did.</label></li>
+<li><label><input type="checkbox">I want to know that I understand this AI system correctly.</label></li>
+<li><label><input type="checkbox">I want to understand what the AI will do next.</label></li>
+<li><label><input type="checkbox">I want to know why the AI did not make some other decision.</label></li>
+<li><label><input type="checkbox">I want to know what the AI would have done if something had been different.</label></li>
+<li><label><input type="checkbox">I was surprised by the AI’s actions and want to know what I missed.</label></li>
+</ul>
+<hr>
+</section>
+<section id="appendix-a-explanation-goodness-checklist-p.-35" class="level3">
+<h3 class="anchored" data-anchor-id="appendix-a-explanation-goodness-checklist-p.-35">Appendix A: Explanation Goodness Checklist (p.&nbsp;35)</h3>
+<blockquote class="blockquote">
+<p>This checklist is a list of the features that make explanations good, according to the research literature. The reference is to the properties of explanations.</p>
+<p>The intended use context is for researchers or domain experts to provide an independent, a priori evaluation of the goodness of explanations that are generated by other researchers or by XAI systems.</p>
+</blockquote>
+<ul>
+<li>The explanation helps me <strong>understand</strong> how the [software, algorithm, tool] works. [ ] YES [ ] NO</li>
+<li>The explanation of how the [software, algorithm, tool] works is <strong>satisfying</strong>. [ ] YES [ ] NO</li>
+<li>The explanation of the [software, algorithm, tool] sufficiently <strong>detailed</strong>. [ ] YES [ ] NO</li>
+<li>The explanation of how the [software, algorithm, tool] works is sufficiently <strong>complete</strong>. [ ] YES [ ] NO</li>
+<li>The explanation is <strong>actionable</strong>, that is, it helps me know how to use the [software, algorithm, tool] [ ] YES [ ] NO</li>
+<li>The explanation lets me know how <strong>accurate or reliable</strong> the [software, algorithm] is. [ ] YES [ ] NO</li>
+<li>The explanation lets me know how <strong>trustworthy</strong> the [software, algorithm, tool] is. [ ] YES [ ] NO</li>
+</ul>
+<hr>
+</section>
+<section id="appendix-b-materials-used-in-the-evaluation-of-the-discriminant-validity-of-the-explanation-satisfaction-scale-pp.-36-38" class="level3">
+<h3 class="anchored" data-anchor-id="appendix-b-materials-used-in-the-evaluation-of-the-discriminant-validity-of-the-explanation-satisfaction-scale-pp.-36-38">Appendix B: Materials used in the Evaluation of the Discriminant Validity of the Explanation Satisfaction Scale (pp.&nbsp;36-38)</h3>
+<section id="how-do-cell-phones-provide-directions" class="level4">
+<h4 class="anchored" data-anchor-id="how-do-cell-phones-provide-directions">How do cell phones provide directions?</h4>
+<p><strong>Explanation Judged a priori to be Relatively “Good”</strong></p>
+<blockquote class="blockquote">
+<p>Cell phones use the Global Positioning System of satellites to determine the exact location of the phone. A web-based service (such as Google Maps, Apple Maps, etc.) identifies the phone’s coordinates along with the desired destination entered by the phone user. This information is transmitted to a computer, where The Map Service calculates the best route based on shortest path, but also traffic and other variables. The instructions are then sent back to the phone. The Map Service monitors the phone’s location in real-time, and each step is given to the user based on the phone’s proximity to the next step (or checkpoint).</p>
+</blockquote>
+<p><strong>Explanation Judged a priori to be Relatively “Bad”</strong></p>
+<blockquote class="blockquote">
+<p>Cell phones can provide good directions because they have really accurate maps on them. The phone downloads the maps from the internet. The phone knows where it is and it calculates the shortest route. It tries to give step-by-step directions.</p>
+</blockquote>
+</section>
+<section id="how-does-automobile-cruise-control-work" class="level4">
+<h4 class="anchored" data-anchor-id="how-does-automobile-cruise-control-work">How does automobile cruise control work?</h4>
+<p><strong>Explanation Judged a priori to be Relatively “Good”</strong></p>
+<blockquote class="blockquote">
+<p>The speed of the car at the moment you turn on the cruise control is stored in a memory circuit. The cruise control device reads the car’s speed by a speed sensor that is on the car’s drive shaft. The cruise control is linked to the engine accelerator, and accelerates the car when it falls below the speed you set, such as when you start to go uphill, for example. It can stop accelerating the car when the car is going downhill, but does not apply the brakes to decelerate the car. The cruise control also senses when the brake pedal has been depressed, and disengages from the accelerator.</p>
+</blockquote>
+<p><strong>Explanation Judged a priori to be Relatively “Bad”</strong></p>
+<blockquote class="blockquote">
+<p>The vacuum control unit reads the pulse frequency from a magnet mounted on the drive shaft to figure out how fast the car is going. A bidirectional screw-drive electric motor that is connected to the accelerator linkage receives the control signal and transmits it to the throttle. When you set the cruise control, the engine detects the engine RPM at that point and tries to maintain that engine speed until it is disengaged. The cruise control detects the car gear, which it adjusts to allow the engine to maintain a constant RPM.</p>
+</blockquote>
+</section>
+<section id="how-do-computers-predict-hurricanes" class="level4">
+<h4 class="anchored" data-anchor-id="how-do-computers-predict-hurricanes">How do computers predict hurricanes?</h4>
+<p><strong>Explanation Judged a priori to be Relatively “Good”</strong></p>
+<blockquote class="blockquote">
+<p>Computers have a mathematical model of the atmosphere that divides the world into many small regions, each just a few square kilometers. Each region is defined in terms of its air pressure, temperature, winds, and moisture. The computer calculates what will happen at the boundaries of each region. For example, strong winds in one region will move air into an adjacent region. These calculations must be performed for every boundary between all the regions. This allows the prediction of the path a hurricane will take.</p>
+</blockquote>
+<p><strong>Explanation Judged a priori to be Relatively “Bad”</strong></p>
+<blockquote class="blockquote">
+<p>The computers have a database of all previous hurricanes and the paths that they followed. Once a hurricane is located, using a satellite image, the computer accesses the database and determines the path that was most frequently taken by hurricanes having that initial location. This process is repeated once every hour, tracking the hurricane as it moves. The computers can also tell when the winds and rain will impact the land, and that is when the hurricane warnings are issued.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="appendix-c-explanation-satisfaction-scale-pp.-39-40" class="level3">
+<h3 class="anchored" data-anchor-id="appendix-c-explanation-satisfaction-scale-pp.-39-40">Appendix C: Explanation Satisfaction Scale (pp.&nbsp;39-40)</h3>
+<ol type="1">
+<li><p>From the explanation, I <strong>understand</strong> how the [software, algorithm, tool] works. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of how the [software, algorithm, tool] works is <strong>satisfying</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of how the [software, algorithm, tool] works has <strong>sufficient detail</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of how the [software, algorithm, tool] works seems <strong>complete</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of how the [software, algorithm, tool] works <strong>tells me how to use it</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of how the [software, algorithm, tool] works is <strong>useful to my goals</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation of the [software, algorithm, tool] shows me how <strong>accurate</strong> the [software, algorithm, tool] is. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>This explanation lets me judge when I should <strong>trust and not trust</strong> the [software, algorithm, tool]. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+</ol>
+<hr>
+</section>
+<section id="appendix-d-synopsis-of-representative-trust-scales-pp.-41-48" class="level3">
+<h3 class="anchored" data-anchor-id="appendix-d-synopsis-of-representative-trust-scales-pp.-41-48">Appendix D: Synopsis of Representative Trust Scales (pp.&nbsp;41-48)</h3>
+<section id="cahour-forzy-2009-scale-adams-et-al.-2003-scale" class="level4">
+<h4 class="anchored" data-anchor-id="cahour-forzy-2009-scale-adams-et-al.-2003-scale">Cahour-Forzy (2009) Scale; Adams, et al.&nbsp;(2003) Scale</h4>
+<blockquote class="blockquote">
+<p>Defined trust (and distrust) as a sentiment resulting from knowledge, beliefs, emotions and other aspects of experience, generating positive or negative expectations concerning the reactions of a system and the interaction with it. Developed for learning to use a cruise control system. Factors: reliability, predictability, efficiency. Assumes considerable experience. Original scale was bipolar “I agree completely” to “I do not agree at all.” Items below modified to fit a 7-point Likert form.</p>
+</blockquote>
+<ol type="1">
+<li><p>What is your <strong>confidence</strong> in the [tool]? Do you have a feeling of <strong>trust</strong> in it? | 1 I do not trust it at all | 2 | 3 | 4 | 5 | 6 | 7 I trust it completely | | :———————– | :-: | :-: | :-: | :-: | :-: | :———————: | | | | | | | | |</p></li>
+<li><p>Are the actions of the [tool] <strong>predictable</strong>? | 1 It is not at all predictable | 2 | 3 | 4 | 5 | 6 | 7 It is completely predictable | | :—————————– | :-: | :-: | :-: | :-: | :-: | :————————— | | | | | | | | |</p></li>
+<li><p>Is the [tool] <strong>reliable</strong>? Do you think it is <strong>safe</strong>? | 1 It is not at all safe | 2 | 3 | 4 | 5 | 6 | 7 It is completely safe | | :———————- | :-: | :-: | :-: | :-: | :-: | :———————- | | | | | | | | |</p></li>
+<li><p>Is the [tool] <strong>efficient</strong> at what it does? | 1 It is not at all efficient | 2 | 3 | 4 | 5 | 6 | 7 It is completely efficient | | :————————— | :-: | :-: | :-: | :-: | :-: | :————————- | | | | | | | | |</p></li>
+</ol>
+</section>
+<section id="adams-et-al.-generic-automation-scale-items" class="level4">
+<h4 class="anchored" data-anchor-id="adams-et-al.-generic-automation-scale-items">Adams, et al.&nbsp;(generic automation scale items)</h4>
+<blockquote class="blockquote">
+<p>Used a bipolar rating scale (-5 to +5) and asked participants to rank the importance of the factors.</p>
+</blockquote>
+<ul>
+<li>Is the automation tool useful?</li>
+<li>How reliable is it?</li>
+<li>How accurately does it work?</li>
+<li>Can you understand how it works?</li>
+<li>Do you like using it?</li>
+<li>How easy is it to use?</li>
+</ul>
+</section>
+<section id="jian-et-al.-scale-2000" class="level4">
+<h4 class="anchored" data-anchor-id="jian-et-al.-scale-2000">Jian, et al.&nbsp;Scale (2000)</h4>
+<blockquote class="blockquote">
+<p>Regards trust as a trait. Factors: Fidelity, loyalty, reliability, security, integrity, familiarity. Widely used. (Note: Item 4 is noted as particularly interesting; ‘integrity’ item is considered problematic; ‘familiarity’ may not be relevant if user experience is known).</p>
+</blockquote>
+<ol type="1">
+<li>The system is deceptive.</li>
+<li>The system behaves in an underhanded manner.</li>
+<li>I am suspicious of the system’s intent, action, or outputs.</li>
+<li>I am wary of the system.</li>
+<li>The system’s actions will have a harmful or injurious outcome.</li>
+<li>I am confident in the system.</li>
+<li>The system provides security.</li>
+<li>The system has integrity.</li>
+<li>The system is dependable.</li>
+<li>I can trust the system.</li>
+<li>I am familiar with the system.</li>
+</ol>
+</section>
+<section id="madsen-gregor-scale-2000" class="level4">
+<h4 class="anchored" data-anchor-id="madsen-gregor-scale-2000">Madsen-Gregor Scale (2000)</h4>
+<blockquote class="blockquote">
+<p>Defines trust as both affective and cognitive. Factors: reliability, technical competence, understandability, faith, personal attachment. Focused on intelligent decision aids. (Note: Original response format not specified, possibly Likert. High reliability reported. ‘Understandability’ and ‘competence’ factors relate to mental models. ‘Faith’ factor relates to reliance/uncertainty. ‘Personal attachment’ factor relates to liking.)</p>
+</blockquote>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Factor</th>
+<th style="text-align: left;">Item</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Perceived Reliability</strong></td>
+<td style="text-align: left;">The system always provides the advice I require to make my decision.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system performs reliably.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system responds the same way under the same conditions at different times.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I can rely on the system to function properly.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Perceived Technical Competence</strong></td>
+<td style="text-align: left;">The system analyzes problems consistently.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system uses appropriate methods to reach decisions.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system has sound knowledge about this type of problem built into it.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The advice the system produces is as good as that which a highly competent person could produce.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system correctly uses the information I enter.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The system makes use of all the knowledge and information available to it to produce its solution to the problem.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Perceived Understandability</strong></td>
+<td style="text-align: left;">I know what will happen the next time I use the system because I understand how it behaves.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I understand how the system will assist me with decisions I have to make.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Although I may not know exactly how the system works, I know how to use it to make decisions about the problem.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">It is easy to follow what the system does.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I recognize what I should do to get the advice I need from the system the next time I use it.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Faith</strong></td>
+<td style="text-align: left;">I believe advice from the system even when I don’t know for certain that it is correct.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">When I am uncertain about a decision I believe the system rather than myself.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">If I am not sure about a decision, I have faith that the system will provide the best solution.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">When the system gives unusual advice I am confident that the advice is correct.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Even if I have no reason to expect the system will be able to solve a difficult problem, I still feel certain that it will.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Personal Attachment</strong></td>
+<td style="text-align: left;">I would feel a sense of loss if the system was unavailable and I could not longer use it.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I feel a sense of attachment to using the system.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I find the system suitable to my style of decision making.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I like using the system for decision making.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">I have a personal preference for making decisions with the system.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="merritt-scale-2011" class="level4">
+<h4 class="anchored" data-anchor-id="merritt-scale-2011">Merritt Scale (2011)</h4>
+<blockquote class="blockquote">
+<p>Regards trust as an emotional, attitudinal judgement. Factors: belief, confidence, dependability, propensity to trust, liking. Evaluated in a baggage screening task. Items are similar to Cahour-Fourzy.</p>
+</blockquote>
+<ol type="1">
+<li>I believe the system is a competent performer.</li>
+<li>I trust the system.</li>
+<li>I have confidence in the advice given by the system.</li>
+<li>I can depend on the system.</li>
+<li>I can rely on the system to behave in consistent ways.</li>
+<li>I can rely on the system to do its best every time I take its advice.</li>
+</ol>
+</section>
+<section id="schaefer-scale-2013" class="level4">
+<h4 class="anchored" data-anchor-id="schaefer-scale-2013">Schaefer Scale (2013)</h4>
+<blockquote class="blockquote">
+<p>Developed for human-robot collaboration. Factors: ability, performance. Unique format: estimate the percentage of time the machine would show each behavior. Many items anthropomorphize and may be inappropriate for XAI.</p>
+</blockquote>
+<p><em>Prompt: What percentage of the time will this machine (robot)…</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Appropriate Items (potentially adaptable for XAI)</th>
+<th style="text-align: left;">Inappropriate/Anthropomorphic Items</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Act consistently</td>
+<td style="text-align: left;">Protect people</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Function successfully</td>
+<td style="text-align: left;">Act as part of the team</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Have errors</td>
+<td style="text-align: left;">Malfunction</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perform a task better than a novice human user</td>
+<td style="text-align: left;">Clearly communicate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Possess adequate decision-making capability</td>
+<td style="text-align: left;">Require frequent maintenance</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perform exactly as instructed</td>
+<td style="text-align: left;">Openly communicate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Make sensible decisions</td>
+<td style="text-align: left;">Know the difference between friend and foe</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tell the truth</td>
+<td style="text-align: left;">Provide feedback</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Perform many functions at one time</td>
+<td style="text-align: left;">Warn people of potential risks in the environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Follow directions</td>
+<td style="text-align: left;">Meet the needs of the mission</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Incompetent</td>
+<td style="text-align: left;">Provide appropriate information</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dependable</td>
+<td style="text-align: left;">Communicate with people</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Reliable</td>
+<td style="text-align: left;">Work best with a team</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Predictable</td>
+<td style="text-align: left;">Keep classified information secure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Work in close proximity with people</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Considered part of the team</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Friendly</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Pleasant</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unresponsive</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Autonomous</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Conscious</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Lifelike</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">A good teammate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Led astray by unexpected changes in the environment</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="singh-et-al.-scale-1993" class="level4">
+<h4 class="anchored" data-anchor-id="singh-et-al.-scale-1993">Singh, et al.&nbsp;Scale (1993)</h4>
+<blockquote class="blockquote">
+<p>Presupposes prior experience (e.g., ATMs). Defines trust as an attitude reflecting potential for complacency. Factors: confidence, reliance, trust, safety, complacency. Merges trust and reliance. Considered not appropriate for initial XAI use. Items overlap with factors in Cahour-Fourzy. (Specific items not fully listed in Appendix D, focuses on factors and context).</p>
+<p><em>Factor examples:</em> * Factor 1: Confidence (e.g., medical device reliability) * Factor 2: Reliance (e.g., ATM safeguards, automation making work easier) * Factor 3: Trust (e.g., reliability of library searches, safety of bank transactions) * Factor 4: Safety (e.g., safety of depositing at ATM vs teller)</p>
+</blockquote>
+</section>
+<section id="wang-et-al.-scale-2009" class="level4">
+<h4 class="anchored" data-anchor-id="wang-et-al.-scale-2009">Wang, et al.&nbsp;Scale (2009)</h4>
+<blockquote class="blockquote">
+<p>Used to evaluate trust in a hypothetical “combat identification system”. Items adapted from Jian, et al.&nbsp;Scale. Response format not specified (possibly Likert). Some items context-specific. Noteworthy for explicitly referencing deception and mistrust.</p>
+</blockquote>
+<ul>
+<li>The aid is deceptive.</li>
+<li>The aid behaves in an underhanded (concealed) manner.</li>
+<li>I am suspicious of the aid’s outputs.</li>
+<li>I am wary of the aid.</li>
+<li>The aid’s action will have a harmful or injurious outcome.</li>
+<li>I am confident in the aid.</li>
+<li>The aid provides security.</li>
+<li>The aid is dependable.</li>
+<li>The aid is reliable.</li>
+<li>I can trust the aid.</li>
+<li>I am familiar with the aid.</li>
+<li>I can trust that <em>blue</em> lights indicate soldiers. (Context-specific example)</li>
+<li>I can trust that <em>red</em> lights indicate terrorists. (Context-specific example)</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="appendix-e-trust-scale-recommended-for-xai-pp.-49-50" class="level3">
+<h3 class="anchored" data-anchor-id="appendix-e-trust-scale-recommended-for-xai-pp.-49-50">Appendix E: Trust Scale Recommended for XAI (pp.&nbsp;49-50)</h3>
+<blockquote class="blockquote">
+<p>Asks users directly whether they are confident in the XAI system, whether the XAI system is predictable, reliable, efficient, and believable. Assumes considerable experience using the XAI system. Items adapted primarily from Cahour-Fourzy Scale (2009), with item 6 from Jian et al.&nbsp;(2000), item 7 from Schaefer (2013), and item 8 from Madsen-Gregor (2000). Uses a 5-point Likert scale.</p>
+</blockquote>
+<ol type="1">
+<li><p>I am <strong>confident</strong> in the [tool]. I feel that it works well. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>The outputs of the [tool] are very <strong>predictable</strong>. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>The tool is very <strong>reliable</strong>. I can count on it to be correct all the time. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>I feel <strong>safe</strong> that when I rely on the [tool] I will get the right answers. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>The [tool] is <strong>efficient</strong> in that it works very quickly. | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>I am <strong>wary</strong> of the [tool]. (adopted from the Jian, et al.&nbsp;Scale and the Wang, et al.&nbsp;Scale) | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | | <em>(Note: This item would likely be reverse-scored)</em></p></li>
+<li><p>The [tool] can perform the task <strong>better than a novice human user</strong>. (adopted from the Schaefer Scale) | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+<li><p>I <strong>like using</strong> the system for decision making. (adapted from the Madsen-Gregor Scale) | 5 I agree strongly | 4 I agree somewhat | 3 I’m neutral about it | 2 I disagree somewhat | 1 I disagree strongly | | :—————-: | :—————-: | :——————–: | :——————-: | :——————-: | | | | | | |</p></li>
+</ol>
+<hr>
+<hr>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/llm_energy_task\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Instruments from Hoffman et al. (2019)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Hoffman, R. R., Mueller, S. T., Klein, G., &amp; Litman, J. (2019). Metrics for Explainable AI: Challenges and Prospects (No. arXiv:1812.04608). arXiv. https://doi.org/10.48550/arXiv.1812.04608</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">### Table 3. The CVR version of the Explanation Satisfaction scale (p. 6)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; For each item listed below, please indicate whether you believe that the item is:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Essential for measuring Explanation Satisfaction,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Useful but not Essential, or</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Not Necessary for measuring Explanation Satisfaction.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Indicate your response by circling the appropriate number.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Item                                                                                     <span class="pp">|</span> Essential <span class="pp">|</span> Useful but not essential <span class="pp">|</span> Not Necessary <span class="pp">|</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---------------------------------------------------------------------------------------</span> <span class="pp">| :-------:</span> <span class="pp">| :----------------------:</span> <span class="pp">| :-----------:</span> <span class="pp">|</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1. I understand this explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works.           <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is satisfying.          <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works has sufficient detail.  <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works contains irrelevant details. <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works seems complete.         <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works tells me how to use it. <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 7. This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is useful to my goals.  <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8. This explanation of says how accurate the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> is.           <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9. This explanation lets me judge when I should trust and not trust the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> <span class="pp">|</span>     1     <span class="pp">|</span>            2             <span class="pp">|</span>       3       <span class="pp">|</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### Table 6. Example Prompts from ShadowBox Lite Task (p. 15)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; (These prompts are used after presenting an expert explanation, e.g., for cruise control: "The control unit detects the rotation of the drive shaft from a magnet mounted on the drive shaft, and from that can calculate how fast the car is going. The control unit controls an electric motor that is connected to the accelerator linkage. The cruise control adjusts the engine speed until it is disengaged.")</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Prompt                                               <span class="pp">|</span> Response Area        <span class="pp">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---------------------------------------------------</span> <span class="pp">| :-------------------</span> <span class="pp">|</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> What is right and helpful about this explanation?    <span class="pp">|</span> (User response area) <span class="pp">|</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> What is problematic or wrong about this explanation? <span class="pp">|</span> (User response area) <span class="pp">|</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### Table 7. A Curiosity Checklist (p. 18)</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Why have you asked for an explanation? Check all that apply.</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I want to know what the AI just did.</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I want to know that I understand this AI system correctly.</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I want to understand what the AI will do next.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I want to know why the AI did not make some other decision.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I want to know what the AI would have done if something had been different.</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span><span class="va">[ ]</span> I was surprised by the AI's actions and want to know what I missed.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appendix A: Explanation Goodness Checklist (p. 35)</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; This checklist is a list of the features that make explanations good, according to the research literature. The reference is to the properties of explanations.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="at">&gt;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The intended use context is for researchers or domain experts to provide an independent, a priori evaluation of the goodness of explanations that are generated by other researchers or by XAI systems.</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation helps me **understand** how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works.</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is **satisfying**.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation of the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> sufficiently **detailed**.</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is sufficiently **complete**.</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation is **actionable**, that is, it helps me know how to use the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation lets me know how **accurate or reliable** the <span class="co">[</span><span class="ot">software, algorithm</span><span class="co">]</span> is.</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The explanation lets me know how **trustworthy** the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> is.</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="co">[ ]</span> YES <span class="co">[ ]</span> NO</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appendix B: Materials used in the Evaluation of the Discriminant Validity of the Explanation Satisfaction Scale (pp. 36-38)</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="fu">#### How do cell phones provide directions?</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Good"**</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Cell phones use the Global Positioning System of satellites to determine the exact location of the phone.</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; A web-based service (such as Google Maps, Apple Maps, etc.) identifies the phone's coordinates along with the desired destination entered by the phone user.</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; This information is transmitted to a computer, where The Map Service calculates the best route based on shortest path, but also traffic and other variables.</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The instructions are then sent back to the phone.</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The Map Service monitors the phone's location in real-time, and each step is given to the user based on the phone's proximity to the next step (or checkpoint).</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Bad"**</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Cell phones can provide good directions because they have really accurate maps on them.</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The phone downloads the maps from the internet.</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The phone knows where it is and it calculates the shortest route.</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; It tries to give step-by-step directions.</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="fu">#### How does automobile cruise control work?</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Good"**</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The speed of the car at the moment you turn on the cruise control is stored in a memory circuit.</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The cruise control device reads the car's speed by a speed sensor that is on the car's drive shaft.</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The cruise control is linked to the engine accelerator, and accelerates the car when it falls below the speed you set, such as when you start to go uphill, for example.</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; It can stop accelerating the car when the car is going downhill, but does not apply the brakes to decelerate the car.</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The cruise control also senses when the brake pedal has been depressed, and disengages from the accelerator.</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Bad"**</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The vacuum control unit reads the pulse frequency from a magnet mounted on the drive shaft to figure out how fast the car is going.</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; A bidirectional screw-drive electric motor that is connected to the accelerator linkage receives the control signal and transmits it to the throttle.</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; When you set the cruise control, the engine detects the engine RPM at that point and tries to maintain that engine speed until it is disengaged.</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The cruise control detects the car gear, which it adjusts to allow the engine to maintain a constant RPM.</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="fu">#### How do computers predict hurricanes?</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Good"**</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Computers have a mathematical model of the atmosphere that divides the world into many small regions, each just a few square kilometers.</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Each region is defined in terms of its air pressure, temperature, winds, and moisture.</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The computer calculates what will happen at the boundaries of each region. For example, strong winds in one region will move air into an adjacent region.</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; These calculations must be performed for every boundary between all the regions. This allows the prediction of the path a hurricane will take.</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>**Explanation Judged a priori to be Relatively "Bad"**</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The computers have a database of all previous hurricanes and the paths that they followed.</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Once a hurricane is located, using a satellite image, the computer accesses the database and determines the path that was most frequently taken by hurricanes having that initial location.</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; This process is repeated once every hour, tracking the hurricane as it moves.</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The computers can also tell when the winds and rain will impact the land, and that is when the hurricane warnings are issued.</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appendix C: Explanation Satisfaction Scale (pp. 39-40)</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>From the explanation, I **understand** how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works.</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is **satisfying**.</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works has **sufficient detail**.</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works seems **complete**.</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works **tells me how to use it**.</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>This explanation of how the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> works is **useful to my goals**.</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>This explanation of the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> shows me how **accurate** the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span> is.</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>This explanation lets me judge when I should **trust and not trust** the <span class="co">[</span><span class="ot">software, algorithm, tool</span><span class="co">]</span>.</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appendix D: Synopsis of Representative Trust Scales (pp. 41-48)</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Cahour-Forzy (2009) Scale; Adams, et al. (2003) Scale</span></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Defined trust (and distrust) as a sentiment resulting from knowledge, beliefs, emotions and other aspects of experience, generating positive or negative expectations concerning the reactions of a system and the interaction with it. Developed for learning to use a cruise control system. Factors: reliability, predictability, efficiency. Assumes considerable experience. Original scale was bipolar "I agree completely" to "I do not agree at all." Items below modified to fit a 7-point Likert form.</span></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>What is your **confidence** in the [tool]? Do you have a feeling of **trust** in it?</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>    | 1 I do not trust it at all | 2 | 3 | 4 | 5 | 6 | 7 I trust it completely |</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>    | :----------------------- | :-: | :-: | :-: | :-: | :-: | :---------------------: |</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>    |                          |     |     |     |     |     |                         |</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Are the actions of the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> **predictable**?</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>    | 1 It is not at all predictable | 2 | 3 | 4 | 5 | 6 | 7 It is completely predictable |</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>    | :----------------------------- | :-: | :-: | :-: | :-: | :-: | :--------------------------- |</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>    |                                |     |     |     |     |     |                              |</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Is the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> **reliable**? Do you think it is **safe**?</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>    | 1 It is not at all safe | 2 | 3 | 4 | 5 | 6 | 7 It is completely safe |</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>    | :---------------------- | :-: | :-: | :-: | :-: | :-: | :---------------------- |</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>    |                         |     |     |     |     |     |                         |</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Is the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> **efficient** at what it does?</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>    | 1 It is not at all efficient | 2 | 3 | 4 | 5 | 6 | 7 It is completely efficient |</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>    | :--------------------------- | :-: | :-: | :-: | :-: | :-: | :------------------------- |</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>    |                              |     |     |     |     |     |                            |</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Adams, et al. (generic automation scale items)</span></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Used a bipolar rating scale (-5 to +5) and asked participants to rank the importance of the factors.</span></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Is the automation tool useful?</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>How reliable is it?</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>How accurately does it work?</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Can you understand how it works?</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>Do you like using it?</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>How easy is it to use?</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Jian, et al. Scale (2000)</span></span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Regards trust as a trait. Factors: Fidelity, loyalty, reliability, security, integrity, familiarity. Widely used. (Note: Item 4 is noted as particularly interesting; 'integrity' item is considered problematic; 'familiarity' may not be relevant if user experience is known).</span></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The system is deceptive.</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The system behaves in an underhanded manner.</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>I am suspicious of the system's intent, action, or outputs.</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>I am wary of the system.</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The system's actions will have a harmful or injurious outcome.</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>I am confident in the system.</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>The system provides security.</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>The system has integrity.</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>The system is dependable.</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>I can trust the system.</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>I am familiar with the system.</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Madsen-Gregor Scale (2000)</span></span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Defines trust as both affective and cognitive. Factors: reliability, technical competence, understandability, faith, personal attachment. Focused on intelligent decision aids. (Note: Original response format not specified, possibly Likert. High reliability reported. 'Understandability' and 'competence' factors relate to mental models. 'Faith' factor relates to reliance/uncertainty. 'Personal attachment' factor relates to liking.)</span></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Factor                     <span class="pp">|</span> Item                                                                                                         <span class="pp">|</span></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a><span class="pp">| :-------------------------</span> <span class="pp">| :-----------------------------------------------------------------------------------------------------------</span> <span class="pp">|</span></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Perceived Reliability**  <span class="pp">|</span> The system always provides the advice I require to make my decision.                                           <span class="pp">|</span></span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system performs reliably.                                                                                  <span class="pp">|</span></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system responds the same way under the same conditions at different times.                               <span class="pp">|</span></span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I can rely on the system to function properly.                                                               <span class="pp">|</span></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Perceived Technical Competence** <span class="pp">|</span> The system analyzes problems consistently.                                                                 <span class="pp">|</span></span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system uses appropriate methods to reach decisions.                                                        <span class="pp">|</span></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system has sound knowledge about this type of problem built into it.                                     <span class="pp">|</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The advice the system produces is as good as that which a highly competent person could produce.             <span class="pp">|</span></span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system correctly uses the information I enter.                                                             <span class="pp">|</span></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> The system makes use of all the knowledge and information available to it to produce its solution to the problem. <span class="pp">|</span></span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Perceived Understandability** <span class="pp">|</span> I know what will happen the next time I use the system because I understand how it behaves.                <span class="pp">|</span></span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I understand how the system will assist me with decisions I have to make.                                    <span class="pp">|</span></span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> Although I may not know exactly how the system works, I know how to use it to make decisions about the problem. <span class="pp">|</span></span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> It is easy to follow what the system does.                                                                     <span class="pp">|</span></span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I recognize what I should do to get the advice I need from the system the next time I use it.                  <span class="pp">|</span></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Faith**                  <span class="pp">|</span> I believe advice from the system even when I don't know for certain that it is correct.                        <span class="pp">|</span></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> When I am uncertain about a decision I believe the system rather than myself.                                  <span class="pp">|</span></span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> If I am not sure about a decision, I have faith that the system will provide the best solution.              <span class="pp">|</span></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> When the system gives unusual advice I am confident that the advice is correct.                                <span class="pp">|</span></span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> Even if I have no reason to expect the system will be able to solve a difficult problem, I still feel certain that it will. <span class="pp">|</span></span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Personal Attachment**    <span class="pp">|</span> I would feel a sense of loss if the system was unavailable and I could not longer use it.                      <span class="pp">|</span></span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I feel a sense of attachment to using the system.                                                              <span class="pp">|</span></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I find the system suitable to my style of decision making.                                                     <span class="pp">|</span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I like using the system for decision making.                                                                   <span class="pp">|</span></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                            <span class="pp">|</span> I have a personal preference for making decisions with the system.                                             <span class="pp">|</span></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Merritt Scale (2011)</span></span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Regards trust as an emotional, attitudinal judgement. Factors: belief, confidence, dependability, propensity to trust, liking. Evaluated in a baggage screening task. Items are similar to Cahour-Fourzy.</span></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>I believe the system is a competent performer.</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>I trust the system.</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>I have confidence in the advice given by the system.</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>I can depend on the system.</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>I can rely on the system to behave in consistent ways.</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>I can rely on the system to do its best every time I take its advice.</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Schaefer Scale (2013)</span></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Developed for human-robot collaboration. Factors: ability, performance. Unique format: estimate the percentage of time the machine would show each behavior. Many items anthropomorphize and may be inappropriate for XAI.</span></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>*Prompt: What percentage of the time will this machine (robot)...*</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Appropriate Items (potentially adaptable for XAI) <span class="pp">|</span> Inappropriate/Anthropomorphic Items                                <span class="pp">|</span></span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a><span class="pp">| :------------------------------------------------</span> <span class="pp">| :-----------------------------------------------------------------</span> <span class="pp">|</span></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Act consistently                                  <span class="pp">|</span> Protect people                                                     <span class="pp">|</span></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Function successfully                             <span class="pp">|</span> Act as part of the team                                            <span class="pp">|</span></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Have errors                                       <span class="pp">|</span> Malfunction                                                        <span class="pp">|</span></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Perform a task better than a novice human user    <span class="pp">|</span> Clearly communicate                                                <span class="pp">|</span></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Possess adequate decision-making capability       <span class="pp">|</span> Require frequent maintenance                                       <span class="pp">|</span></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Perform exactly as instructed                     <span class="pp">|</span> Openly communicate                                                 <span class="pp">|</span></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Make sensible decisions                           <span class="pp">|</span> Know the difference between friend and foe                         <span class="pp">|</span></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tell the truth                                    <span class="pp">|</span> Provide feedback                                                   <span class="pp">|</span></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Perform many functions at one time                <span class="pp">|</span> Warn people of potential risks in the environment                  <span class="pp">|</span></span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Follow directions                                 <span class="pp">|</span> Meet the needs of the mission                                      <span class="pp">|</span></span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Incompetent                                       <span class="pp">|</span> Provide appropriate information                                    <span class="pp">|</span></span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dependable                                        <span class="pp">|</span> Communicate with people                                            <span class="pp">|</span></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Reliable                                          <span class="pp">|</span> Work best with a team                                              <span class="pp">|</span></span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Predictable                                       <span class="pp">|</span> Keep classified information secure                                 <span class="pp">|</span></span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Work in close proximity with people                                <span class="pp">|</span></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Considered part of the team                                        <span class="pp">|</span></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Friendly                                                           <span class="pp">|</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Pleasant                                                           <span class="pp">|</span></span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Unresponsive                                                       <span class="pp">|</span></span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Autonomous                                                         <span class="pp">|</span></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Conscious                                                          <span class="pp">|</span></span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Lifelike                                                           <span class="pp">|</span></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> A good teammate                                                    <span class="pp">|</span></span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>                                                   <span class="pp">|</span> Led astray by unexpected changes in the environment                <span class="pp">|</span></span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Singh, et al. Scale (1993)</span></span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Presupposes prior experience (e.g., ATMs). Defines trust as an attitude reflecting potential for complacency. Factors: confidence, reliance, trust, safety, complacency. Merges trust and reliance. Considered not appropriate for initial XAI use. Items overlap with factors in Cahour-Fourzy. (Specific items not fully listed in Appendix D, focuses on factors and context).</span></span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a><span class="at">&gt;</span></span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *Factor examples:*</span></span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Factor 1: Confidence (e.g., medical device reliability)</span></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Factor 2: Reliance (e.g., ATM safeguards, automation making work easier)</span></span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Factor 3: Trust (e.g., reliability of library searches, safety of bank transactions)</span></span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *   Factor 4: Safety (e.g., safety of depositing at ATM vs teller)</span></span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Wang, et al. Scale (2009)</span></span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Used to evaluate trust in a hypothetical "combat identification system". Items adapted from Jian, et al. Scale. Response format not specified (possibly Likert). Some items context-specific. Noteworthy for explicitly referencing deception and mistrust.</span></span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid is deceptive.</span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid behaves in an underhanded (concealed) manner.</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I am suspicious of the aid's outputs.</span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I am wary of the aid.</span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid's action will have a harmful or injurious outcome.</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I am confident in the aid.</span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid provides security.</span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid is dependable.</span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>The aid is reliable.</span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I can trust the aid.</span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I am familiar with the aid.</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I can trust that *blue* lights indicate soldiers. (Context-specific example)</span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>I can trust that *red* lights indicate terrorists. (Context-specific example)</span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appendix E: Trust Scale Recommended for XAI (pp. 49-50)</span></span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Asks users directly whether they are confident in the XAI system, whether the XAI system is predictable, reliable, efficient, and believable. Assumes considerable experience using the XAI system. Items adapted primarily from Cahour-Fourzy Scale (2009), with item 6 from Jian et al. (2000), item 7 from Schaefer (2013), and item 8 from Madsen-Gregor (2000). Uses a 5-point Likert scale.</span></span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>I am **confident** in the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span>. I feel that it works well.</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The outputs of the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> are very **predictable**.</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>The tool is very **reliable**. I can count on it to be correct all the time.</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>I feel **safe** that when I rely on the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> I will get the right answers.</span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> is **efficient** in that it works very quickly.</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>I am **wary** of the <span class="co">[</span><span class="ot">tool</span><span class="co">]</span>. (adopted from the Jian, et al. Scale and the Wang, et al. Scale)</span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    *(Note: This item would likely be reverse-scored)*</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>The <span class="co">[</span><span class="ot">tool</span><span class="co">]</span> can perform the task **better than a novice human user**. (adopted from the Schaefer Scale)</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>I **like using** the system for decision making. (adapted from the Madsen-Gregor Scale)</span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>    | 5 I agree strongly | 4 I agree somewhat | 3 I'm neutral about it | 2 I disagree somewhat | 1 I disagree strongly |</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>    | :----------------: | :----------------: | :--------------------: | :-------------------: | :-------------------: |</span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>    |                    |                    |                        |                       |                       |</span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>***</span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>----</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tegorman13/llm_energy_task/blob/main/surveys_items/AI_Surveys/Hoffman19_AI_Trust.md" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>

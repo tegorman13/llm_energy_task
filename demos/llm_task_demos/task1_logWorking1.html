@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Psychology Experiment Demo</title>
+    <style>
+        :root {
+            --primary-color: #005a9c; /* Purdue Blue */
+            --secondary-color: #e87722; /* Purdue Orange */
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --error-color: #dc3545;
+            --font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 950px;
+            margin: 20px auto;
+            background-color: var(--light-gray);
+            color: #333;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; text-align: left; margin-top: 1.5em;}
+        h4 { font-size: 1.1em; text-align: left; color: var(--dark-gray); margin-top: 1em; margin-bottom: 0.5em; }
+
+        /* Card Styling for Sections */
+        #setup, #task, #llm-interaction, #results, #api-key-section {
+            margin-bottom: 25px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        #api-key-section {
+            background-color: #fffef0; /* Light yellow */
+            border-color: var(--warning-color);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select, input[type="text"], textarea {
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            width: 100%; /* Full width within container */
+            box-sizing: border-box; /* Include padding and border in width */
+            font-size: 1rem;
+        }
+        select {
+             max-width: 450px; /* Limit width for selects */
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            display: block; /* Make buttons block level */
+            margin-left: auto;
+            margin-right: auto; /* Center buttons */
+            min-width: 180px;
+             text-align: center;
+        }
+
+        button:hover {
+            background-color: #004175; /* Darker Purdue blue */
+        }
+        #llm-interaction button {
+             margin-left: 0; /* Align left in LLM section */
+             margin-right: 0;
+             display: inline-block; /* Allow side-by-side if needed */
+             margin-right: 10px;
+        }
+
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--medium-gray);
+            font-weight: 600;
+            text-align: center;
+        }
+        td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: var(--light-gray);
+        }
+        tfoot {
+            font-weight: bold;
+            background-color: var(--medium-gray);
+        }
+        tfoot td {
+             text-align: center;
+        }
+         tfoot td:first-child {
+            text-align: left;
+        }
+
+        /* Slider Styling */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 8px 0;
+            padding: 5px; /* Add padding for visual space */
+        }
+
+        .slider {
+            flex-grow: 1;
+            cursor: pointer;
+            appearance: none; /* Override default look */
+            height: 8px;
+            background: var(--medium-gray);
+            border-radius: 5px;
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb { /* Chrome, Opera, Safari, Edge */
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb { /* Firefox */
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background-color: var(--light-gray);
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info {
+            font-style: italic;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            background-color: #eef;
+            padding: 8px;
+            border-left: 3px solid var(--info-color);
+            border-radius: 4px;
+        }
+
+        .error {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-top: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .llm-output {
+            background-color: #eef7ff; /* Light blue */
+            padding: 15px;
+            border: 1px solid #b8dfff; /* Softer blue border */
+            margin-top: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap; /* Keep formatting */
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        #llm-interaction h3 {
+             margin-bottom: 15px;
+        }
+         #llm-interaction p {
+             margin-bottom: 15px;
+         }
+    </style>
+</head>
+<body>
+
+    <h1>Cognitive Psychology Experiment: Energy Reduction Planning</h1>
+
+    <div id="api-key-section">
+        <label for="api-key">Purdue GenAI API Key:</label>
+        <input type="text" id="api-key" placeholder="Enter your API Key here" value="sk-4597455063b242e9a43187a32115c04a">
+        <p class="info" style="background-color: transparent; border: none; padding: 0; margin-top: 5px; font-style: normal;">
+            You need a valid API key from Purdue GenAI Studio to interact with the LLM. ([cite: 1],[cite: 2],[cite: 3], [cite: 4]) <br> A default key is provided for convenience.
+        </p>
+    </div>
+
+    <div id="setup">
+        <h2>Experiment Setup</h2>
+        <label for="condition">Select Experiment Condition:</label>
+        <select id="condition">
+            <option value="">-- Select Condition --</option>
+            <option value="advisor-client">Participant as Advisor, AI as Client</option>
+            <option value="ai-planner">AI as Planner (Compare/Advise)</option>
+        </select>
+
+        <label for="family">Select Family Scenario:</label>
+        <select id="family">
+            <option value="">-- Select Family --</option>
+            <option value="davis">Davis Family (Massachusetts)</option>
+            <option value="adams">Adams Family (California)</option>
+             </select>
+
+        <label for="reference-unit">Select Target Reduction Unit:</label>
+        <select id="reference-unit">
+            <option value="">-- Select Unit --</option>
+            <option value="kwh">kWh</option>
+            <option value="percent">%</option>
+            <option value="usd">$</option>
+        </select>
+
+         <label for="target-percentage">Select Target Reduction Percentage:</label>
+        <select id="target-percentage">
+            <option value="15">15%</option>
+            <option value="10">10%</option>
+        </select>
+
+        <button onclick="startExperiment()">Start Experiment</button>
+    </div>
+
+    <div id="task" style="display: none;">
+        <h2 id="task-title">Energy Reduction Task</h2>
+        <p id="task-instructions"></p>
+        <p id="task-note" class="info"></p>
+        <table id="energy-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Electricity Used Last Year (kWh)</th>
+                    <th>State Average Usage (kWh)</th>
+                    <th>Action Plan 1 (New kWh)</th>
+                    <th>Action Plan 2 (New kWh)</th>
+                </tr>
+            </thead>
+            <tbody id="energy-table-body">
+                </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total kWh</th>
+                    <td id="last-year-total"></td>
+                    <td id="average-total"></td>
+                    <td id="plan1-total">0</td>
+                    <td id="plan2-total">0</td>
+                </tr>
+                 <tr>
+                    <td colspan="3">Target Reduction Goal</td>
+                    <td colspan="2" id="target-goal"></td>
+                 </tr>
+                 <tr>
+                    <td colspan="3">Plan 1 Actual Reduction</td>
+                    <td id="plan1-reduction">0 kWh</td>
+                    <td></td>
+                 </tr>
+                 <tr>
+                    <td colspan="3">Plan 2 Actual Reduction</td>
+                    <td></td>
+                    <td id="plan2-reduction">0 kWh</td>
+                 </tr>
+            </tfoot>
+        </table>
+        <button onclick="submitPlans()">Submit Plans</button>
+    </div>
+
+    <div id="llm-interaction" style="display: none;">
+        <h2>LLM Interaction</h2>
+        <p id="interaction-error" class="error" style="display: none;"></p> <div id="advisor-client-interface" style="display: none;">
+            <h3>Advisor (You) - Client (AI)</h3>
+            <p>The LLM is acting as the client (e.g., the head of the selected family). Review the plans you created. Now, formulate advice or a persuasive message to convince the client to adopt one of your plans, focusing on the benefits and feasibility.</p>
+            <textarea id="advisor-message" placeholder="Enter your advice/message to the LLM client here..."></textarea>
+            <button onclick="sendAdviceToLLM()">Send Advice to LLM Client</button>
+            <div id="llm-client-response" class="llm-output" style="display: none;">
+                <h4>LLM Client Response:</h4>
+                <p id="llm-client-response-text"></p>
+            </div>
+        </div>
+
+        <div id="ai-planner-interface" style="display: none;">
+            <h3>AI Planner Comparison/Advice</h3>
+            <p>Below is an energy reduction plan generated by an LLM planner for the same scenario. You can compare it to your plans, choose which plan to implement (yours or the AI's), integrate aspects, or ask the AI planner for further advice.</p>
+            <button onclick="getAIPlan()">Generate AI Planner's Plan</button>
+            <div id="llm-planner-output" class="llm-output" style="display: none;">
+                <h4>LLM Planner's Suggested Plan:</h4>
+                <pre id="llm-planner-plan"></pre> <hr style="margin: 20px 0;">
+                <h4>Ask the AI Planner</h4>
+                 <p>You can ask the AI planner a follow-up question about its plan or energy saving strategies.</p>
+                <textarea id="query-ai-planner" placeholder="Ask the AI Planner a question or for clarification (optional)..."></textarea>
+                <button onclick="askAIPlanner()">Ask AI Planner</button>
+                 <div id="llm-planner-advice-response" class="llm-output" style="display: none; margin-top: 10px;">
+                    <h4>LLM Planner Response:</h4>
+                    <p id="llm-planner-advice-text"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="results" style="display: none;">
+        <h2>Experiment Complete</h2>
+        <p>Thank you for participating!</p>
+        <button onclick="window.location.reload()">Restart Experiment</button>
+    </div>
+
+    <script>
+        // --- Constants and Data ---
+        const familiesData = {
+            'davis': {
+                name: "Davis Family",
+                state: "Massachusetts",
+                kwhPerDollar: 46293 / (6944 / 0.15), // Approx based on 15% target
+                diffVsAverage: 14086,
+                categories: {
+                    'Cooling (Central A/C)': { lastYear: 419, average: 322 },
+                    'Heating the Home': { lastYear: 26751, average: 19108 },
+                    'Water Heating': { lastYear: 10543, average: 5070 },
+                    'Refrigerator': { lastYear: 1230, average: 1025 },
+                    'Other (TV, Lights, etc.)': { lastYear: 7350, average: 6682 } // Renamed slightly
+                },
+                targets: { // Rounded values used for simplicity, adjust if exact needed
+                    '15': { kwh: 6900, usd: 1035, percent: '15%' },
+                    '10': { kwh: 4600, usd: 690, percent: '10%' }
+                }
+            },
+            'adams': {
+                name: "Adams Family",
+                state: "California",
+                kwhPerDollar: 0.15, // Given
+                diffVsAverage: 3542, // 22673 - 19458 (Exact)
+                categories: {
+                    'Cooling': { lastYear: 2581, average: 1289 }, // Using exact for demo
+                    'Heating': { lastYear: 6157, average: 5597 },
+                    'Water Heating': { lastYear: 5061, average: 4601 },
+                    'Refrigerator': { lastYear: 1266, average: 1055 },
+                    'Other': { lastYear: 7608, average: 6916 }
+                },
+                 targets: { // Rounded values used for simplicity
+                    '15': { kwh: 3450, usd: 518, percent: '15%' },
+                    '10': { kwh: 2300, usd: 345, percent: '10%' }
+                }
+            }
+            // Add Smith, Wells data here
+        };
+
+        // API config - Key is fetched from input just before call
+        const config = {
+            apiUrl: "https://genai.rcac.purdue.edu/api/chat/completions", // [cite: 7]
+            model: "llama3.1:latest", // Or another suitable model
+            maxTokens: 400, // Increased slightly for potentially more detailed plans/advice
+            temperature: 0.5 // Allow for some variability
+        };
+
+        let currentScenario = {};
+        let lastYearTotal = 0;
+        let targetReductionValue = 0; // Target in kWh
+        let targetReductionUnit = '';
+
+        // --- LLM API Call ---
+       async function callLLM(systemPrompt, userPrompt, callingButton) {
+            const apiKey = document.getElementById('api-key').value;
+            if (!apiKey) {
+                 displayError("API Key not set. Please enter your Purdue GenAI API key.", "interaction-error");
+                 throw new Error("API Key not set");
+            }
+            displayError("", "interaction-error"); // Clear previous errors
+
+            console.log("Calling LLM with:", { systemPrompt, userPrompt });
+            if (callingButton) callingButton.disabled = true; // Disable button during call
+
+            try {
+                const response = await fetch(config.apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${apiKey}`, // Use the entered key [cite: 4]
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": config.model,
+                        "messages": [
+                            { "role": "system", "content": systemPrompt },
+                            { "role": "user", "content": userPrompt }
+                        ],
+                        "max_tokens": config.maxTokens,
+                        "temperature": config.temperature,
+                        "stream": false // Ensure streaming is off for single response [cite: 8]
+                    })
+                });
+
+                if (!response.ok) {
+                    let errorBody = ''; try { errorBody = await response.text(); } catch(e) {}
+                    const errorMsg = `API Error: ${response.status} ${response.statusText}. Body may contain details: ${errorBody}`;
+                    displayError(errorMsg, "interaction-error");
+                    console.error(errorMsg);
+                    throw new Error(`API Error: ${response.status}`); // Throw simpler error for catch block
+                }
+
+                const data = await response.json();
+                 console.log("LLM Response Data:", data);
+
+                if (!data.choices || data.choices.length === 0 || !data.choices[0].message || !data.choices[0].message.content) {
+                    const errorMsg = "Invalid API response structure (missing content)";
+                     displayError(errorMsg, "interaction-error");
+                    console.error("Invalid API response structure received:", data);
+                    throw new Error(errorMsg);
+                }
+                return data.choices[0].message.content.trim();
+            } catch (error) {
+                console.error("Error calling LLM API:", error);
+                 // Display a generic message if specific one wasn't set
+                 if (!document.getElementById('interaction-error').textContent) {
+                    displayError(`Network or API call failed: ${error.message}`, "interaction-error");
+                 }
+                throw error; // Re-throw
+            } finally {
+                 if (callingButton) callingButton.disabled = false; // Re-enable button
+            }
+        }
+
+        function displayError(message, elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = message ? 'block' : 'none'; // Show/hide element
+            }
+        }
+
+
+        // --- Experiment Flow ---
+        function startExperiment() {
+            const selectedCondition = document.getElementById('condition').value;
+            const selectedFamily = document.getElementById('family').value;
+            const selectedUnit = document.getElementById('reference-unit').value;
+             const selectedPercentage = document.getElementById('target-percentage').value;
+
+            if (!selectedCondition || !selectedFamily || !selectedUnit || !selectedPercentage) {
+                alert("Please select all setup options.");
+                return;
+            }
+
+            currentScenario = {
+                condition: selectedCondition,
+                familyData: familiesData[selectedFamily],
+                referenceUnit: selectedUnit,
+                targetPercentage: selectedPercentage,
+                plans: { plan1: {}, plan2: {} } // To store slider values
+            };
+
+             if (!currentScenario.familyData) {
+                alert("Selected family data not found.");
+                return;
+            }
+
+             const targetInfo = currentScenario.familyData.targets[selectedPercentage];
+             if (!targetInfo) {
+                 alert(`Target data for ${selectedPercentage}% not found for this family.`);
+                 return;
+             }
+
+             targetReductionValue = targetInfo.kwh; // Store the target kWh reduction
+             targetReductionUnit = selectedUnit; // Store the display unit
+
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('task').style.display = 'block';
+            document.getElementById('llm-interaction').style.display = 'none'; // Hide LLM part initially
+            document.getElementById('results').style.display = 'none';
+
+            setupTaskInterface();
+        }
+
+        function setupTaskInterface() {
+            const { familyData, referenceUnit, targetPercentage } = currentScenario;
+            const targetInfo = familyData.targets[targetPercentage];
+
+
+            document.getElementById('task-title').textContent = `Energy Reduction Task - ${familyData.name} (${familyData.state})`;
+
+            let targetGoalDisplay = "";
+            switch(referenceUnit) {
+                case 'kwh':
+                    targetGoalDisplay = `${targetInfo.kwh.toLocaleString()} kWh`;
+                    break;
+                case 'percent':
+                     targetGoalDisplay = `${targetInfo.percent}`;
+                     break;
+                case 'usd':
+                    targetGoalDisplay = `$${targetInfo.usd.toLocaleString()}`;
+                    break;
+            }
+
+            document.getElementById('task-instructions').textContent = `The ${familyData.name} wants to reduce its household energy usage next year. The target reduction goal is ${targetGoalDisplay}. Please create two possible action plans using the sliders below to indicate the target kWh usage for next year for each appliance category. Try to achieve the target reduction.`;
+            document.getElementById('task-note').textContent = `Note: The ${familyData.name} used ${familyData.diffVsAverage.toLocaleString()} more kWh than the average household in ${familyData.state} last year.`;
+             document.getElementById('target-goal').textContent = `Target: ${targetGoalDisplay} reduction (~${targetInfo.kwh.toLocaleString()} kWh)`;
+
+
+            const tableBody = document.getElementById('energy-table-body');
+            tableBody.innerHTML = ''; // Clear previous
+            lastYearTotal = 0;
+            let averageTotal = 0;
+
+            Object.entries(familyData.categories).forEach(([category, data]) => {
+                lastYearTotal += data.lastYear;
+                averageTotal += data.average;
+
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = category;
+                row.insertCell().textContent = data.lastYear.toLocaleString();
+                row.insertCell().textContent = data.average.toLocaleString();
+
+                // Plan 1 Slider
+                const plan1Cell = row.insertCell();
+                createSlider(plan1Cell, category, 'plan1', data.lastYear);
+
+                // Plan 2 Slider
+                const plan2Cell = row.insertCell();
+                createSlider(plan2Cell, category, 'plan2', data.lastYear);
+
+                 // Initialize plan storage
+                currentScenario.plans.plan1[category] = data.lastYear;
+                currentScenario.plans.plan2[category] = data.lastYear;
+            });
+
+            document.getElementById('last-year-total').textContent = lastYearTotal.toLocaleString();
+            document.getElementById('average-total').textContent = averageTotal.toLocaleString();
+            updateTotals(); // Initial calculation
+        }
+
+        function createSlider(cell, category, planId, initialValue) {
+            const container = document.createElement('div');
+            container.className = 'slider-container';
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.className = 'slider';
+            slider.min = 0;
+            // Set max to 120% of last year, but ensure it's not ridiculously small if initial value is low
+            slider.max = Math.max(initialValue * 1.2, 100);
+            slider.value = initialValue;
+            slider.dataset.category = category;
+            slider.dataset.plan = planId;
+            slider.oninput = handleSliderChange;
+            // Add accessible label
+            slider.setAttribute('aria-label', `${category} ${planId.replace('plan','Plan ')} new usage`);
+
+
+            const valueSpan = document.createElement('span');
+            valueSpan.className = 'slider-value';
+            valueSpan.textContent = initialValue.toLocaleString();
+            valueSpan.id = `${planId}-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`; // Sanitize ID
+
+
+            container.appendChild(slider);
+            container.appendChild(valueSpan);
+            cell.appendChild(container);
+        }
+
+        function handleSliderChange(event) {
+            const slider = event.target;
+            const category = slider.dataset.category;
+            const planId = slider.dataset.plan;
+            const value = parseInt(slider.value);
+
+            // Sanitize ID before lookup
+            const valueSpanId = `${planId}-${category.replace(/[^a-zA-Z0-9]/g, '-')}-value`;
+            const valueSpan = document.getElementById(valueSpanId);
+            if (valueSpan) {
+                valueSpan.textContent = value.toLocaleString();
+            } else {
+                console.error("Could not find value span with ID:", valueSpanId);
+            }
+
+             // Store the value
+             if (currentScenario.plans[planId]) {
+                 currentScenario.plans[planId][category] = value;
+             }
+
+            updateTotals();
+        }
+
+
+        function updateTotals() {
+             let plan1Total = 0;
+            let plan2Total = 0;
+
+             if (!currentScenario.plans || !currentScenario.plans.plan1 || !currentScenario.plans.plan2) {
+                 console.error("Plan data is missing in currentScenario");
+                 return;
+             }
+
+            Object.values(currentScenario.plans.plan1).forEach(val => plan1Total += val);
+            Object.values(currentScenario.plans.plan2).forEach(val => plan2Total += val);
+
+
+            document.getElementById('plan1-total').textContent = plan1Total.toLocaleString();
+            document.getElementById('plan2-total').textContent = plan2Total.toLocaleString();
+
+
+            const plan1Reduction = lastYearTotal - plan1Total;
+            const plan2Reduction = lastYearTotal - plan2Total;
+
+
+            document.getElementById('plan1-reduction').textContent = `${plan1Reduction.toLocaleString()} kWh`;
+            document.getElementById('plan2-reduction').textContent = `${plan2Reduction.toLocaleString()} kWh`;
+
+
+            // Visual feedback if target is met/close
+             highlightIfTargetMet('plan1-reduction', plan1Reduction);
+             highlightIfTargetMet('plan2-reduction', plan2Reduction);
+        }
+
+
+         function highlightIfTargetMet(elementId, reduction) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            const targetKwh = targetReductionValue;
+            // Tolerance: closer to target is better. Let's use +/- 10%
+            const lowerBound = targetKwh * 0.9;
+            const upperBound = targetKwh * 1.1;
+
+            element.style.fontWeight = 'bold'; // Make reduction always bold
+
+            if (reduction >= lowerBound && reduction <= upperBound) {
+                element.style.color = 'var(--success-color)'; // Green
+            } else if (reduction > upperBound) {
+                 element.style.color = 'var(--info-color)'; // Blueish (exceeded target)
+            } else if (reduction > 0) {
+                 element.style.color = 'var(--warning-color)'; // Orange (below target but positive)
+            }
+            else {
+                element.style.color = 'var(--error-color)'; // Red (increase or zero reduction)
+            }
+        }
+
+        function submitPlans() {
+            console.log("Submitted Plans:", currentScenario.plans);
+            document.getElementById('task').style.display = 'none';
+
+            const condition = currentScenario.condition;
+            document.getElementById('llm-interaction').style.display = 'block';
+            document.getElementById('advisor-client-interface').style.display = (condition === 'advisor-client') ? 'block' : 'none';
+            document.getElementById('ai-planner-interface').style.display = (condition === 'ai-planner') ? 'block' : 'none';
+             // Ensure error message is hidden initially
+             displayError("", "interaction-error");
+
+             // Focus first element in the interaction section for accessibility
+             if (condition === 'advisor-client') {
+                 document.getElementById('advisor-message').focus();
+             } else if (condition === 'ai-planner') {
+                  // Focus the button to generate the plan first
+                 document.querySelector('#ai-planner-interface button').focus();
+             }
+        }
+
+        // --- LLM Interaction Functions ---
+
+        async function sendAdviceToLLM(button) {
+            const advice = document.getElementById('advisor-message').value;
+            if (!advice.trim()) {
+                alert("Please enter your advice for the LLM client.");
+                return;
+            }
+
+            const { familyData, plans } = currentScenario;
+            const plan1Text = Object.entries(plans.plan1).map(([k, v]) => `${k}: ${v.toLocaleString()} kWh`).join('\n');
+            const plan2Text = Object.entries(plans.plan2).map(([k, v]) => `${k}: ${v.toLocaleString()} kWh`).join('\n');
+
+
+            const systemPrompt = `You are acting as ${familyData.name}, head of the household in ${familyData.state}. Your household used ${lastYearTotal.toLocaleString()} kWh last year. You want to reduce energy usage by about ${targetReductionValue.toLocaleString()} kWh. You have just received advice and two potential plans from an energy advisor. Respond briefly and naturally (1-3 sentences) to the advisor's message, considering the feasibility and implications of the plans presented.`;
+
+            const userPrompt = `Advisor's Message:
+"${advice}"
+
+Proposed Plan 1 (Target kWh per category for next year):
+${plan1Text}
+(Calculated Total: ${document.getElementById('plan1-total').textContent} kWh, Reduction: ${document.getElementById('plan1-reduction').textContent})
+
+Proposed Plan 2 (Target kWh per category for next year):
+${plan2Text}
+(Calculated Total: ${document.getElementById('plan2-total').textContent} kWh, Reduction: ${document.getElementById('plan2-reduction').textContent})
+
+Your Task: Respond to the advisor based on their message and the proposed plans.`;
+
+            const responseElement = document.getElementById('llm-client-response');
+            const responseTextElement = document.getElementById('llm-client-response-text');
+            responseTextElement.textContent = "Getting response from LLM client...";
+            responseElement.style.display = 'block';
+
+            try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt, button);
+                responseTextElement.textContent = llmResponse;
+                 // Move to results after successful interaction
+                 // setTimeout(() => { document.getElementById('llm-interaction').style.display = 'none'; document.getElementById('results').style.display = 'block'; }, 500);
+            } catch (error) {
+                responseTextElement.textContent = `Error getting response. Check console or error message above.`; // Error displayed by callLLM
+            }
+        }
+
+        async function getAIPlan(button) {
+             const { familyData } = currentScenario;
+             const targetKwh = targetReductionValue;
+
+             // Create a detailed breakdown of last year's usage for the prompt
+             const lastYearUsageDetails = Object.entries(familyData.categories)
+                 .map(([category, data]) => `- ${category}: ${data.lastYear.toLocaleString()} kWh`)
+                 .join('\n');
+
+             const systemPrompt = `You are an expert AI energy planner. Create a single, realistic energy reduction plan for the ${familyData.name} in ${familyData.state}.
+Their total usage last year was ${lastYearTotal.toLocaleString()} kWh.
+Their goal is to reduce usage by approximately ${targetKwh.toLocaleString()} kWh.
+Provide the plan as a clear list showing the suggested NEW kWh usage for next year for each category. Briefly (1 sentence per category max) justify the major changes. Ensure the total reduction is close to the target.
+
+Previous Year's Usage per Category:
+${lastYearUsageDetails}
+
+Target Reduction: ~${targetKwh.toLocaleString()} kWh.`;
+
+             const userPrompt = `Generate a practical energy reduction plan (target kWh for next year per category) for the ${familyData.name}, aiming for a reduction near ${targetKwh.toLocaleString()} kWh. Present the plan clearly with brief justifications. Format the output cleanly using markdown if possible.`;
+
+            const outputElement = document.getElementById('llm-planner-output');
+            const planElement = document.getElementById('llm-planner-plan');
+             planElement.textContent = "Generating AI plan...";
+             outputElement.style.display = 'block';
+             // Hide advice section until plan is generated
+             document.getElementById('llm-planner-advice-response').style.display = 'none';
+
+             try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt, button);
+                planElement.textContent = llmResponse; // Display formatted response
+            } catch (error) {
+                planElement.textContent = `Error generating AI plan. Check console or error message above.`; // Error displayed by callLLM
+            }
+        }
+
+         async function askAIPlanner(button) {
+            const question = document.getElementById('query-ai-planner').value;
+             const aiPlan = document.getElementById('llm-planner-plan').textContent;
+
+            if (!question.trim()) {
+                alert("Please enter a question for the AI Planner.");
+                return;
+            }
+             if (!aiPlan || aiPlan === "Generating AI plan..." || aiPlan.startsWith("Error")) {
+                 alert("Please generate the AI Planner's plan first before asking questions.");
+                 return;
+             }
+
+            const { familyData } = currentScenario;
+            const plan1Total = document.getElementById('plan1-total').textContent;
+            const plan2Total = document.getElementById('plan2-total').textContent;
+
+
+            const systemPrompt = `You are an expert AI energy planner. You previously generated an energy reduction plan for the ${familyData.name}. A user is now asking a follow-up question. Answer the user's question concisely and helpfully, referring to the context of the family, their target reduction (~${targetReductionValue.toLocaleString()} kWh), and the plan you generated if necessary.
+
+Context Reminder:
+- Family: ${familyData.name}, ${familyData.state}
+- Last Year Total kWh: ${lastYearTotal.toLocaleString()}
+- Your Previously Generated Plan:\n${aiPlan}
+- User's Submitted Plans (Totals): Plan 1: ${plan1Total} kWh, Plan 2: ${plan2Total} kWh
+
+Your Task: Answer the user's follow-up question clearly and concisely.`;
+
+            const userPrompt = `My question is: "${question}"`;
+
+            const responseElement = document.getElementById('llm-planner-advice-response');
+            const responseTextElement = document.getElementById('llm-planner-advice-text');
+            responseTextElement.textContent = "Getting response from AI planner...";
+            responseElement.style.display = 'block';
+
+             try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt, button);
+                responseTextElement.textContent = llmResponse;
+                 // Move to results after successful interaction
+                 // setTimeout(() => { document.getElementById('llm-interaction').style.display = 'none'; document.getElementById('results').style.display = 'block'; }, 500);
+            } catch (error) {
+                 responseTextElement.textContent = `Error getting response. Check console or error message above.`; // Error displayed by callLLM
+            }
+         }
+
+    </script>
+
+</body>
+</html>

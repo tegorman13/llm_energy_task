@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Energy Planning Tasks with LLM</title>
+  <!-- Bootstrap 5 -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+  />
+  <style>
+    body {
+      background-color: #f7f9fb;
+    }
+    .hero {
+      background: #fff;
+      border-radius: 8px;
+      margin: 20px 0;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .ai-response-box {
+      background: #eef6ff;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      white-space: pre-line;
+    }
+    .d-none { display: none !important; }
+    .tabs-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container my-4">
+  <h1 class="mb-3">
+    <i class="bi bi-lightning-charge-fill text-warning"></i>
+    Energy Planning Tasks Demo (Live LLM)
+  </h1>
+
+  <!-- API Key input --> 
+  <div class="alert alert-secondary">
+    <div class="mb-2">
+      <label class="form-label">
+        Enter your OpenAI (or Gemini) API key:
+      </label>
+      <input type="password" id="apiKeyInput" class="form-control" 
+             placeholder="sk-..." />
+    </div>
+    <div class="small text-muted">
+      <strong>Note:</strong> This is a client-side demo. Your key 
+      will be used in requests directly from the browser, 
+      which is not secure for production.  
+      For Gemini or other providers, adapt the endpoint in JS code below.
+    </div>
+  </div>
+
+  <!-- House profile for context (like previous examples) -->
+  <div class="hero">
+    <h4>Household Energy Profile</h4>
+    <p><strong>Type:</strong> Single-family, 3 bedrooms</p>
+    <p><strong>Location:</strong> Midwest, US</p>
+    <p><strong>Usage:</strong> 10,500 kWh/year</p>
+    <p><strong>Goal:</strong> Reduce ~10% (1,050 kWh)</p>
+  </div>
+
+  <!-- Simple nav tabs for tasks -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" data-bs-toggle="tab"
+              data-bs-target="#taskAIChat" type="button">
+        Ask LLM
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab"
+              data-bs-target="#taskMetaTutor" type="button">
+        Metacog Tutor
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3">
+    <!-- 1) LLM direct chat -->
+    <div class="tab-pane fade show active tabs-card" id="taskAIChat">
+      <h4>LLM Q&A / Chat</h4>
+      <p>
+        Ask about energy usage, get plan suggestions, etc. 
+        The query is sent to OpenAI's Chat Completion endpoint.  
+        Costs tokens if your key is valid.
+      </p>
+      <div class="mb-2">
+        <textarea id="userQuestion" class="form-control" rows="3"
+                  placeholder="Ask the LLM something about your energy plan..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="askLLMChat()">
+        Send to LLM
+      </button>
+      <div id="llmResponseBox" class="ai-response-box d-none"></div>
+    </div><!-- end tab 1 -->
+
+    <!-- 2) Metacognitive tutoring approach -->
+    <div class="tab-pane fade tabs-card" id="taskMetaTutor">
+      <h4>Metacognitive Tutoring with LLM</h4>
+      <p>
+        Describe your current approach to choosing energy-saving actions. 
+        The LLM will respond with a "tutor" style.
+      </p>
+      <div class="mb-2">
+        <textarea id="metaUserPlan" class="form-control" rows="3"
+                  placeholder="Explain your planning strategy..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="askMetaTutor()">
+        Get Tutor Feedback
+      </button>
+      <div id="metaTutorResp" class="ai-response-box d-none"></div>
+    </div><!-- end tab 2 -->
+  </div>
+</div>
+
+<!-- bootstrap js -->
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+/**
+ * Generic function to call the OpenAI ChatCompletion endpoint
+ * with the provided user messages, returning the assistant's reply.
+ * (Adapt for Gemini or other providers as needed.)
+ * 
+ * @param {string} systemPrompt - initial system instructions
+ * @param {string} userContent - user query or content
+ * @returns {Promise<string>} - The assistant's text 
+ */
+async function callOpenAIChat(systemPrompt, userContent) {
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (!apiKey) {
+    alert("Please enter your API key first.");
+    throw new Error("No API key");
+  }
+  const endpoint = "https://api.openai.com/v1/chat/completions";
+  const reqBody = {
+    model: "gpt-4.1", // or "gpt-4" if you have access
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userContent }
+    ],
+    temperature: 0.7
+  };
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(reqBody)
+  });
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`OpenAI API error: ${errText}`);
+  }
+  const data = await response.json();
+  console.log("OpenAI raw response:", data);
+  const assistantMsg = data.choices?.[0]?.message?.content 
+                      || "[No content returned]";
+  return assistantMsg.trim();
+}
+
+/** 
+ * Handler for the "LLM Q&A / Chat" tab 
+ */
+async function askLLMChat() {
+  const question = document.getElementById('userQuestion').value.trim();
+  if (!question) {
+    alert("Enter a question for the LLM first.");
+    return;
+  }
+  const respBox = document.getElementById('llmResponseBox');
+  respBox.textContent = "Loading response...";
+  respBox.classList.remove("d-none");
+
+  const systemMsg = "You are a helpful energy-saving assistant. Provide accurate, concise answers about household energy usage, suggestions, etc.";
+  try {
+    const answer = await callOpenAIChat(systemMsg, question);
+    respBox.textContent = answer;
+  } catch (err) {
+    console.error(err);
+    respBox.textContent = "Error: " + err.message;
+  }
+}
+
+/**
+ * Handler for the "Metacognitive Tutoring" tab.
+ * We'll pass a system message telling the LLM to act as a tutor
+ * that specifically addresses the user's reasoning approach.
+ */
+async function askMetaTutor() {
+  const userPlan = document.getElementById('metaUserPlan').value.trim();
+  if (!userPlan) {
+    alert("Explain your approach first.");
+    return;
+  }
+  const tutorResp = document.getElementById('metaTutorResp');
+  tutorResp.textContent = "Loading tutoring response...";
+  tutorResp.classList.remove("d-none");
+
+  const systemMsg = 
+    "You are an expert in cognitive psychology and energy usage. The user will describe their approach to picking energy-saving actions. Provide a constructive, educational critique or reflection on their approach, referencing heuristics and biases if relevant. Encourage deeper thinking.";
+  try {
+    const answer = await callOpenAIChat(systemMsg, userPlan);
+    tutorResp.textContent = answer;
+  } catch (err) {
+    console.error(err);
+    tutorResp.textContent = "Error: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>

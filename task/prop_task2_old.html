@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Energy Advisor Task (Purdue Study - Short Version v1.1)</title>
+    <style>
+        :root {
+            /* Purdue Official & Supporting Colors */
+            --purdue-boilermaker-gold: #CFB991;
+            --purdue-black: #000000;
+            --purdue-aged: #8E6F3E; /* Darker, earthy gold/brown */
+            --purdue-rush: #DAAA00; /* Brighter, more saturated Gold for accents/hovers */
+            --purdue-field: #DDB945; /* Medium Gold */
+            --purdue-dust: #EBD99F; /* Very Light Gold/Beige */
+            --purdue-steel: #555960; /* Dark Gray */
+            --purdue-cool-gray: #6F727B; /* Medium Gray */
+            --purdue-railway-gray: #9D9795; /* Lighter Gray */
+            --purdue-steam: #C4BFC0; /* Very Light Gray */
+
+            /* Semantic Mapping for the UI */
+            --theme-primary: var(--purdue-boilermaker-gold); /* Main gold accent */
+            --theme-primary-hover: var(--purdue-rush);      /* Brighter gold for hover/focus */
+            --theme-secondary: var(--purdue-black);         /* Main dark color for text, headers */
+            --theme-secondary-light: var(--purdue-steel);   /* Dark gray, e.g., for button backgrounds */
+
+            --text-color: var(--purdue-black);
+            --text-muted: var(--purdue-cool-gray);
+            --bg-color: #F8F8F8; /* Very light off-white/gray page background */
+            --container-bg: #FFFFFF;
+            --section-bg: #FFFFFF;
+
+            --button-bg: var(--purdue-steel); /* Dark Gray buttons */
+            --button-text: var(--purdue-boilermaker-gold); /* Gold text on dark buttons */
+            --button-hover-bg: var(--purdue-black); /* Black for hover on dark gray buttons */
+
+            --header-bar-bg: var(--purdue-black);
+            --header-bar-text: var(--purdue-boilermaker-gold);
+
+            --progress-bar-bg: var(--purdue-steam); /* Light neutral gray */
+            --progress-bar-fill: var(--purdue-boilermaker-gold);
+
+            --input-border-focus: var(--purdue-rush); /* Bright gold for focus */
+            --input-focus-ring-color: rgba(218, 170, 0, 0.35); /* Semi-transparent Rush gold */
+
+            --ai-response-bg: var(--purdue-dust); /* Lightest gold/beige for AI box */
+            --ai-response-border: var(--purdue-boilermaker-gold); /* Darker gold border */
+            --scenario-box-bg: #FAFAFA; /* Slightly off-white for scenario container */
+            --scenario-box-border: var(--purdue-railway-gray);
+
+            --border-color: var(--purdue-railway-gray); /* Standard light gray border */
+
+            --admin-bar-bg: rgba(10, 10, 10, 0.97); /* Very dark admin bar */
+            --admin-bar-text: var(--purdue-dust); /* Light gold text */
+            --admin-bar-strong-text: var(--purdue-boilermaker-gold); /* Main gold for section name */
+            --admin-jump-button-bg: var(--purdue-boilermaker-gold);
+            --admin-jump-button-text: var(--purdue-black);
+            --admin-jump-button-hover-bg: var(--purdue-rush);
+            --skip-section-button-bg: var(--purdue-rush); /* Brighter gold for skip */
+            --skip-section-button-text: var(--purdue-black);
+
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+        }
+
+        /* Apply a basic reset and box-sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 70px; /* More space for admin bar */
+            font-size: 16px;
+        }
+        .header-bar {
+            background-color: var(--header-bar-bg);
+            color: var(--header-bar-text);
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.75em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #progress-bar-container {
+            width: 80%;
+            max-width: 850px;
+            margin: 15px auto 10px auto;
+            height: 18px;
+            background-color: var(--progress-bar-bg);
+            border-radius: 9px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--progress-bar-fill);
+            border-radius: 9px 0 0 9px;
+            transition: width 0.4s ease-in-out;
+        }
+        #progress-text {
+             text-align: center;
+             font-size: 0.9em;
+             color: var(--text-muted);
+             margin-bottom: 25px;
+        }
+        #experiment-container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        }
+        .section {
+            display: none;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            background-color: var(--section-bg);
+            position: relative;
+        }
+        .section.active {
+            display: block;
+        }
+        h1, h2, h3 {
+            color: var(--theme-secondary);
+            margin-bottom: 0.75em;
+        }
+        h2 {
+             border-bottom: 2px solid var(--theme-secondary);
+             padding-bottom: 10px;
+             margin-top: 0;
+             font-size: 1.8em;
+        }
+         h3 { font-size: 1.4em; margin-bottom: 1em; }
+
+        button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 500;
+            margin-top: 15px;
+            margin-right: 8px;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background-color: var(--button-hover-bg);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        button:disabled {
+            background-color: var(--purdue-railway-gray);
+            color: var(--purdue-cool-gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .navigation-buttons {
+            margin-top: 30px;
+            text-align: right;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+         .input-group-label {
+             margin-bottom: 15px;
+         }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%;
+            font-size: 1em;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--input-border-focus);
+            box-shadow: 0 0 0 0.2rem var(--input-focus-ring-color);
+        }
+
+        input[type="number"]{ width: 150px; }
+        textarea { min-height: 100px; }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid #f1f3f5; /* Lighter border for question block internal */
+            border-radius: 5px;
+            background-color: #fff; /* Keep question blocks white for contrast */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+         .question-block:last-of-type { margin-bottom: 0; }
+
+        .likert-scale ul, .multiple-choice ul, .true-false ul, .forced-choice-estimates ul {
+            list-style: none; padding: 0; margin: 10px 0 0 5px;
+        }
+        .likert-scale li, .multiple-choice li, .true-false li, .forced-choice-estimates li {
+            margin-bottom: 12px; padding: 6px 0;
+        }
+        .option-label {
+             font-weight: normal; display: inline; margin-left: 10px;
+             vertical-align: middle; cursor: pointer; font-size: 1em;
+             color: var(--text-color);
+         }
+         input[type="radio"], input[type="checkbox"]{
+             margin-right: 5px; vertical-align: middle; cursor: pointer;
+             transform: scale(1.2);
+             accent-color: var(--theme-primary-hover); /* Use brighter gold for radio check */
+         }
+        input[type="radio"]:focus-visible + .option-label,
+        input[type="checkbox"]:focus-visible + .option-label {
+             outline: 2px solid var(--input-border-focus);
+             outline-offset: 2px;
+             border-radius: 2px;
+        }
+        .scale-endpoints {
+             display: flex;
+             justify-content: space-between;
+             font-size: 0.9em;
+             color: var(--text-muted);
+             margin-top: -5px;
+             margin-bottom: 10px;
+             padding: 0 5px;
+        }
+
+        /* --- Slider Styles --- */
+        .slider-container {
+            margin-top: 10px; margin-bottom: 5px;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .slider-container input[type="range"] {
+            flex-grow: 1; cursor: pointer; -webkit-appearance: none; appearance: none;
+            height: 10px; background: linear-gradient(to right, var(--theme-primary-hover), var(--theme-primary-hover) 50%, var(--progress-bar-bg) 50%, var(--progress-bar-bg));
+            border-radius: 5px; outline: none; transition: background 0.2s ease;
+        }
+         .slider-container input[type="range"]::-webkit-slider-thumb {
+             -webkit-appearance: none; appearance: none; width: 22px; height: 22px;
+             background: var(--purdue-steel); border-radius: 50%; cursor: pointer;
+             border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+         }
+         .slider-container input[type="range"]::-moz-range-thumb {
+             width: 22px; height: 22px; background: var(--purdue-steel); border-radius: 50%;
+             cursor: pointer; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+         }
+         .slider-value-display {
+            font-weight: bold;
+            color: var(--purdue-steel);
+            font-size: 1.1em;
+            min-width: 50px;
+            text-align: right;
+         }
+
+        /* --- Scenario & AI Styles --- */
+        .scenario-box {
+            border: 1px solid var(--scenario-box-border); background-color: var(--scenario-box-bg);
+            padding: 25px; margin-bottom: 0; border-radius: 6px;
+        }
+        .scenario-prompt {
+             margin-bottom: 15px; color: var(--text-color); white-space: pre-wrap;
+             font-style: normal; font-weight: 500; border-bottom: 1px dashed var(--scenario-box-border); padding-bottom: 15px;
+        }
+        .ai-response-container {
+            margin-top: 20px; background-color: var(--ai-response-bg); border: 1px solid var(--ai-response-border);
+            padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .ai-response-container .ai-prefix {
+             font-weight: 700; display: block; margin-bottom: 10px; color: var(--purdue-aged); /* Darker gold/brown for prefix */
+             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 1.1em;
+        }
+        .ai-response-estimate {
+             font-weight: bold; font-size: 1.2em; color: var(--theme-secondary);
+             display: block; margin-bottom: 10px;
+        }
+        .ai-response-explanation { white-space: pre-wrap; line-height: 1.7; font-size: 1em; }
+        .ai-confidence-display {
+            margin-top: 15px; font-size: 0.9em; font-style: italic; color: var(--text-muted);
+            border-top: 1px dashed var(--ai-response-border); padding-top: 10px;
+        }
+
+        /* --- Estimation Table --- */
+        .estimation-table-wrapper { overflow-x: auto; margin-top: 15px; border: 1px solid var(--border-color); border-radius: 5px;}
+        .estimation-table { width: 100%; min-width: 550px; border-collapse: collapse; }
+        .estimation-table th, .estimation-table td { border: none; border-bottom: 1px solid var(--border-color); padding: 12px 15px; text-align: left; vertical-align: middle; }
+        .estimation-table th { background-color: var(--purdue-dust); font-weight: 600; color: var(--purdue-black); border-bottom-width: 2px; border-bottom-color: var(--purdue-boilermaker-gold); }
+        .estimation-table tr:last-child td { border-bottom: none; }
+        .estimation-table tr:hover td { background-color: #fffcf2; } /* Very light gold hover */
+        .estimation-table input[type="number"] { width: 140px; text-align: right; }
+
+        /* --- Admin Styles --- */
+        #admin-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: var(--admin-bar-bg); color: var(--admin-bar-text);
+            padding: 8px 10px; text-align: center; font-size: 0.9em;
+            z-index: 1000; box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px 10px;
+        }
+        #admin-bar span { margin: 0 5px; font-weight: 500; }
+        #admin-bar strong { color: var(--admin-bar-strong-text); }
+        .admin-jump-button {
+            background-color: var(--admin-jump-button-bg); color: var(--admin-jump-button-text);
+            padding: 5px 12px; font-size: 0.85em; margin: 2px 3px;
+            border: 1px solid var(--purdue-aged); border-radius: 4px; font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+         .admin-jump-button:hover { background-color: var(--admin-jump-button-hover-bg); }
+
+        .skip-section-button {
+            position: absolute; top: 18px; right: 18px;
+            background-color: var(--skip-section-button-bg); color: var(--skip-section-button-text);
+            padding: 6px 12px; font-size: 0.85em; border: 1px solid var(--purdue-aged);
+            border-radius: 4px; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+             body { padding-bottom: 90px; font-size: 15px; }
+             #experiment-container { padding: 20px; }
+             .section { padding: 20px; }
+             h2 { font-size: 1.6em; }
+             button { padding: 10px 20px; }
+             #admin-bar { justify-content: flex-start; padding: 8px 15px;}
+        }
+         @media (max-width: 480px) {
+             .header-bar { font-size: 1.4em; }
+             h2 { font-size: 1.5em; }
+             input[type="number"] { width: 120px; }
+             .estimation-table input[type="number"] { width: 110px; }
+             .slider-container { flex-direction: column; gap: 8px; align-items: stretch;}
+             .slider-value-display { text-align: center; margin-top: 5px;}
+             .scale-endpoints { font-size: 0.85em;}
+             .likert-scale li, .multiple-choice li, .true-false li { margin-bottom: 8px; }
+             .option-label { margin-left: 6px; }
+             input[type="radio"], input[type="checkbox"] { transform: scale(1.1); }
+             .navigation-buttons button { width: 100%; margin-top: 10px;}
+             #admin-bar { font-size: 0.8em; }
+             #admin-bar button { font-size: 0.8em; padding: 4px 8px;}
+         }
+         .error-message { color: var(--danger-red); font-weight: 500; font-size: 0.9em; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        AI Energy Advisor Task (Purdue Study - Short Version)
+    </div>
+
+     <div id="progress-bar-container"><div id="progress-bar"></div></div>
+     <div id="progress-text">Section: Instructions (1 of 5)</div>
+
+    <div id="experiment-container">
+
+        <!-- Instructions Section -->
+        <div id="section-instructions" class="section active">
+            <button class="skip-section-button" data-skip-target="numeracy">Skip to Numeracy</button>
+            <h2>Instructions</h2>
+            <p>Welcome to this study on interacting with an AI energy advisor.</p>
+            <p><strong>ADMIN MODE:</strong> Skip sections via buttons or admin bar. Scenario items will be selected randomly.</p>
+            <p>Flow: Numeracy Questionnaire -> Appliance Energy Estimation -> AI Scenario Interaction (Multi-Stage) -> Debriefing.</p>
+            <p><strong>Scenario Interaction Details:</strong> For each of the 4 randomly selected scenario items, the interaction will proceed in three steps:</p>
+            <ol>
+                <li>The AI's energy advice (estimate and explanation) for an item will be shown.</li>
+                <li>You will be asked to rate your confidence in the AI's estimate using a slider.</li>
+                <li>Finally, you will be shown your own estimate for that item (which you provided earlier in the "Appliance Energy Estimation" section) alongside the AI's estimate. You will then choose which of the two estimates you find more accurate.</li>
+            </ol>
+             <p style="color: var(--danger-red); font-weight: bold; margin-top: 15px;">
+                IMPORTANT NOTE for Study Admin: Ensure the <code>llm_estimates1.json</code> file has <code>estimation_task_key</code> values as STRINGS (e.g., <code>"est_cfl"</code>, <code>"est_desktop"</code>) that match the <code>key</code> attributes in the "Appliance Energy Estimation" task definition in this HTML file. Numeric keys in the JSON will cause errors.
+            </p>
+            <div class="navigation-buttons">
+                <button id="start-button">Start with Numeracy</button>
+            </div>
+        </div>
+
+        <!-- Section 1 (was 2): Numeracy -->
+        <div id="section-numeracy" class="section">
+            <button class="skip-section-button" data-skip-target="energy-knowledge">Skip to Energy Estimation</button>
+            <h2>Section 1: Numeracy Questions</h2>
+            <p>Questions on numbers and probabilities.</p>
+            <!-- Questions dynamically inserted -->
+            <div class="navigation-buttons">
+                <button class="next-section-button" data-next-target="energy-knowledge">Next</button>
+            </div>
+        </div>
+
+        <!-- Section 2 (was 1, modified): Energy Knowledge (Estimation Only) -->
+        <div id="section-energy-knowledge" class="section">
+            <button class="skip-section-button" data-skip-target="scenario-task">Skip to AI Interaction</button>
+            <h2>Section 2: Appliance Energy Estimation</h2>
+            <p>Please provide your best guess for the energy consumption of various household items relative to a 100-watt incandescent light bulb (defined as 100 units of energy per hour). Your estimates here will be used later in the study when you interact with the AI advisor.</p>
+            <!-- q18_energy_estimation dynamically inserted -->
+            <div class="navigation-buttons">
+                <button class="next-section-button" data-next-target="scenario-task">Next</button>
+            </div>
+        </div>
+
+        <!-- Scenario Task (JSON-driven, Random Items) -->
+        <div id="section-scenario-task" class="section">
+            <button class="skip-section-button" data-skip-target="debriefing">Skip Scenarios</button>
+            <h2>Section 3: AI Advisor Interaction (4 Random Items)</h2>
+            <div id="scenario-content"></div>
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
+            <div id="scenario-questions"></div>
+            <div class="navigation-buttons">
+                <button id="scenario-next-button">Proceed</button>
+            </div>
+        </div>
+
+        <!-- Debriefing Section (was Section 7, now Section 4 effectively for user) -->
+        <div id="section-debriefing" class="section">
+            <h2>Section 4: Debriefing</h2>
+            <p>Thank you for participating!</p>
+            <p><strong>Study Purpose:</strong> This study aimed to understand how people interact with AI-based energy advisors, particularly how they perceive AI-generated estimates and explanations, and how their confidence in the AI changes when presented with different information, including a comparison to their own prior estimates.</p>
+            <p><strong>Items Shown:</strong> The 4 items you interacted with in the AI Advisor section were selected randomly. For each item, you first saw the AI's advice, then rated your confidence, and finally chose between your earlier estimate and the AI's estimate.</p>
+             <p><strong>Item Ground Truths (Actual Values for Scenario Items):</strong></p>
+             <ul id="debrief-clarifications"></ul>
+            <p><strong>Collected Responses (Admin Mode):</strong></p>
+            <textarea id="final-results" readonly rows="12"></textarea>
+            <div class="navigation-buttons">
+                <button id="restart-button">Restart</button>
+            </div>
+        </div>
+
+    </div> <!-- End experiment-container -->
+
+    <!-- Admin Bar -->
+    <div id="admin-bar">
+        <span>ADMIN | Current: <strong id="admin-current-section">...</strong></span>|<span>Jump:</span>
+        <button class="admin-jump-button" data-section-index="0">Instr</button>
+        <button class="admin-jump-button" data-section-index="1">Numeracy</button>
+        <button class="admin-jump-button" data-section-index="2">EnergyEst</button>
+        <button class="admin-jump-button" data-section-index="3">Interact</button>
+        <button class="admin-jump-button" data-section-index="4">Debrief</button>
+    </div>
+
+
+    <script>
+    // --- Constants ---
+    const NUM_SCENARIOS_TO_SELECT = 4;
+    const LLM_ESTIMATES_URL = 'llm_estimates1.json';
+
+    // --- Data Definitions ---
+    const questions = {
+        q19_numeracy_percentage: { id: 'q19_numeracy_percentage', section: 'numeracy', type: 'multiple-choice', text: 'Imagine a certain event has a 10% chance of happening. If **1000 people** experience this situation, about how many would you expect to see the event happen to?', options: [ { value: 'a', text: '1 person' }, { value: 'b', text: '10 people' }, { value: 'c', text: '100 people' }, { value: 'd', text: '500 people' } ], correctAnswer: 'c' },
+        q20_numeracy_probability_compare: { id: 'q20_numeracy_probability_compare', section: 'numeracy', type: 'multiple-choice', text: 'Which of the following represents the larger probability?', options: [ { value: 'a', text: '5%' }, { value: 'b', text: '1 out of 20' }, { value: 'c', text: 'They are the same' } ], correctAnswer: 'c' },
+        q18_energy_estimation: { id: 'q18_energy_estimation', section: 'energy-knowledge', type: 'estimation-table', text: 'Estimate energy use relative to a 100W (100 unit) bulb per hour:', items: [
+            // Energy Used items (corresponding to define_energy_use_items in R)
+            { name: 'Compact Fluorescent Bulb (CFL)', key: 'est_cfl' },
+            { name: 'Desktop Computer', key: 'est_desktop' },
+            { name: 'Laptop Computer', key: 'est_laptop' },
+            { name: 'Stereo', key: 'est_stereo' },
+            { name: 'Electric Clothes Dryer', key: 'est_electric_clothes_dryer' }, // Updated key
+            { name: 'Portable Heater', key: 'est_portable_heater' },               // Updated key
+            { name: 'Room Air-Conditioner', key: 'est_room_air_conditioner' },     // Updated key
+            { name: 'Central Air Conditioner', key: 'est_central_air_conditioner' },// Updated key
+            { name: 'Dish Washer', key: 'est_dish_washer' },                     // Updated key
+
+            // Energy Saved items (corresponding to define_energy_saving_items in R)
+            { name: 'Replace incandescent with CFL', key: 'est_replace_incandescent_with_cfl' }, // Added item
+            { name: 'Lower wattage bulb', key: 'est_lower_wattage_bulb' },                      // Added item
+            { name: 'Line-dry clothes', key: 'est_line_dry_clothes' },                        // Added item
+            { name: 'Summer Thermostat Adjustment (Cooling)', key: 'est_summer_thermostat' },  // Added item (Label slightly adjusted for clarity)
+            { name: 'Winter Thermostat Adjustment (Heating)', key: 'est_winter_thermostat' },  // Added item (Label slightly adjusted for clarity)
+            { name: 'Washer Temperature Setting Change', key: 'est_washer_setting' }          // Added item (Label slightly adjusted for clarity)
+
+            // IMPORTANT: The 'key' values here (e.g., 'est_cfl') MUST exactly match the
+            // string values used for 'estimation_task_key' in your llm_estimates1.json
+        ]},
+     };
+
+    const experiment = {
+        currentState: {
+            isAdmin: true,
+            sectionIndex: 0,
+            scenarioIndex: -1,
+            scenarioSubStage: 'ai_response',
+            currentScenarioItemData: null,
+            sections: ['instructions', 'numeracy', 'energy-knowledge', 'scenario-task', 'debriefing'],
+            get totalSections() { return this.sections.length; },
+            currentSectionQuestions: [],
+            participantResponses: {},
+            llmEstimatesData: null,
+            selectedItems: [],
+        },
+
+        async init() {
+            console.log("Experiment (Purdue Short Version v1.1) Initializing...");
+             try {
+                 await this.loadLLMEstimates();
+                 this.attachEventListeners();
+                 this.showSection(this.currentState.sections[0]);
+                 this.updateAdminBar();
+                 this.updateProgressBar();
+                 console.log("Experiment (Purdue Short Version v1.1) Initialized successfully.");
+             } catch (error) {
+                 console.error("FATAL: Initialization failed:", error);
+                 alert(`A critical error occurred during initialization: ${error.message}. Cannot continue. Please check the console (F12) for details, ensure 'llm_estimates1.json' is accessible, and that items within it have STRING 'estimation_task_key' values that match keys in the 'Appliance Energy Estimation' table (e.g., "est_cfl").`);
+                 const container = document.getElementById('experiment-container');
+                 if (container) container.innerHTML = `<h2 style="color:var(--danger-red);">Initialization Error</h2><p>A critical error occurred: ${error.message}. Please check the browser console (F12) for more details. This may be due to issues loading '${LLM_ESTIMATES_URL}' or problems with 'estimation_task_key' fields in the data (they MUST be strings matching estimation table keys).</p><pre>${error.stack}</pre>`;
+             }
+        },
+
+        attachEventListeners() {
+             console.log("Attaching event listeners...");
+             document.getElementById('start-button')?.addEventListener('click', () => this.nextSection());
+             document.querySelectorAll('.next-section-button').forEach(button => {
+                 button.addEventListener('click', (event) => {
+                     const targetSectionId = event.target.dataset.nextTarget;
+                     if (targetSectionId === 'scenario-task' && this.currentState.selectedItems.length === 0) {
+                         this.selectRandomScenarioItems();
+                         if (this.currentState.selectedItems.length < NUM_SCENARIOS_TO_SELECT) {
+                            alert("Could not select enough valid scenario items. Please check 'llm_estimates1.json': ensure enough items have a valid STRING 'estimation_task_key' (e.g., \"est_cfl\") that matches an item 'key' in the 'Appliance Energy Estimation' table. The study cannot proceed with AI interaction without these items.");
+                            return;
+                         }
+                     }
+                     this.nextSection();
+                 });
+             });
+             document.querySelectorAll('.skip-section-button').forEach(button => {
+                 button.addEventListener('click', (event) => {
+                     const targetSectionId = event.target.dataset.skipTarget;
+                     this.skipSection(targetSectionId);
+                 });
+             });
+             document.getElementById('scenario-next-button')?.addEventListener('click', () => this.advanceScenarioStage());
+             document.getElementById('restart-button')?.addEventListener('click', () => window.location.reload());
+             document.querySelectorAll('.admin-jump-button').forEach(button => {
+                 button.addEventListener('click', (event) => {
+                     const sectionIndex = parseInt(event.target.dataset.sectionIndex, 10);
+                     if (!isNaN(sectionIndex)) {
+                        const targetSectionId = this.currentState.sections[sectionIndex];
+                        if (targetSectionId === 'scenario-task' && this.currentState.selectedItems.length === 0) {
+                            this.selectRandomScenarioItems();
+                            if (this.currentState.selectedItems.length < NUM_SCENARIOS_TO_SELECT) {
+                                alert("Admin Jump Failed: Could not select enough valid scenario items. Check 'llm_estimates1.json' for STRING 'estimation_task_key' values (e.g., \"est_desktop\") and ensure they match estimation table keys. Jumping to Instructions instead.");
+                                this.goToSection(0);
+                                return;
+                            }
+                        }
+                        this.goToSection(sectionIndex);
+                     }
+                 });
+             });
+             console.log("Event listeners attached.");
+         },
+
+         async loadLLMEstimates() {
+            console.log(`Attempting to load LLM estimates from: ${LLM_ESTIMATES_URL}`);
+            try {
+                const response = await fetch(LLM_ESTIMATES_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${LLM_ESTIMATES_URL}`);
+                const jsonData = await response.json(); // Parse the whole JSON object
+
+                // Assign the 'data' array to llmEstimatesData
+                this.currentState.llmEstimatesData = jsonData.data;
+
+                // Now, check if jsonData.data is a valid array
+                if (!Array.isArray(this.currentState.llmEstimatesData) || this.currentState.llmEstimatesData.length === 0) {
+                     throw new Error("The 'data' field in llm_estimates1.json is not a valid non-empty array."); // More specific error
+                }
+                // Initial check for presence of the key, type check happens in selectRandomScenarioItems
+                const itemsWithKeyField = this.currentState.llmEstimatesData.filter(item => typeof item.estimation_task_key !== 'undefined').length;
+                console.log(`LLM estimates loaded: ${this.currentState.llmEstimatesData.length} total items from 'data' field. ${itemsWithKeyField} items have an 'estimation_task_key' field of some type present.`);
+                if (itemsWithKeyField < NUM_SCENARIOS_TO_SELECT) {
+                    console.warn(`WARNING: Fewer than ${NUM_SCENARIOS_TO_SELECT} items in the 'data' field of '${LLM_ESTIMATES_URL}' have the 'estimation_task_key' field defined at all. This may lead to issues selecting enough scenario items. Ensure this key is present AND a STRING matching estimation table keys.`);
+                }
+            } catch (error) {
+                console.error(`Error loading LLM estimates:`, error);
+                // Check if the error is because jsonData.data was undefined (e.g. 'data' key missing)
+                if (error.message.includes("jsonData is undefined") || (typeof jsonData !== 'undefined' && typeof jsonData.data === 'undefined')) {
+                     throw new Error(`Failed to load or parse '${LLM_ESTIMATES_URL}'. The expected 'data' array was not found within the JSON structure. ${error.message}`);
+                }
+                throw new Error(`Failed to load or parse '${LLM_ESTIMATES_URL}'. ${error.message}`);
+            }
+        },
+
+        showSection(sectionId) {
+            console.log(`Showing section: ${sectionId} (Index: ${this.currentState.sectionIndex})`);
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            const sectionElement = document.getElementById(`section-${sectionId}`);
+            if (!sectionElement) {
+                console.error(`Section element '#section-${sectionId}' not found.`);
+                return;
+            }
+            sectionElement.classList.add('active');
+            const navButtonContainer = sectionElement.querySelector('.navigation-buttons');
+             if (navButtonContainer) navButtonContainer.style.display = 'none';
+
+            if (['numeracy', 'energy-knowledge'].includes(sectionId)) {
+                this.renderQuestionsForSection(sectionId);
+                if (navButtonContainer) navButtonContainer.style.display = 'block';
+            } else if (sectionId === 'scenario-task') {
+                if (this.currentState.selectedItems.length < NUM_SCENARIOS_TO_SELECT) {
+                    this.selectRandomScenarioItems();
+                    if (this.currentState.selectedItems.length < NUM_SCENARIOS_TO_SELECT) {
+                        alert("Error: Could not automatically select enough valid scenario items for the AI Interaction task. Please check the 'llm_estimates1.json' file: ensure enough items have a valid STRING 'estimation_task_key' (e.g., \"est_cfl\") that matches an item key in the 'Appliance Energy Estimation' table. Returning to Instructions.");
+                        this.goToSection(0);
+                        return;
+                    }
+                }
+                if (this.currentState.scenarioIndex < 0) this.currentState.scenarioIndex = 0;
+                this.loadScenario(this.currentState.scenarioIndex);
+                if (navButtonContainer) navButtonContainer.style.display = 'block';
+
+            } else if (sectionId === 'debriefing') {
+                this.populateDebriefing();
+                this.displayResults();
+                if (navButtonContainer) navButtonContainer.style.display = 'block';
+            } else if (sectionId === 'instructions') {
+               if (navButtonContainer) navButtonContainer.style.display = 'block';
+            }
+            this.updateAdminBar();
+            this.updateProgressBar();
+            window.scrollTo(0, 0);
+        },
+
+        selectRandomScenarioItems() {
+            console.log("Attempting to select random scenario items...");
+            this.currentState.selectedItems = [];
+
+            if (!this.currentState.llmEstimatesData || this.currentState.llmEstimatesData.length === 0) {
+                console.error("LLM Estimates data (llmEstimatesData) is not loaded or empty. Cannot select random items.");
+                return;
+            }
+
+            const estimationQuestion = questions.q18_energy_estimation;
+            if (!estimationQuestion || !estimationQuestion.items || !Array.isArray(estimationQuestion.items)) {
+                console.error("q18_energy_estimation definition is missing or invalid in 'questions' object. Cannot validate estimation_task_key.");
+                return;
+            }
+            const validEstimationKeys = new Set(estimationQuestion.items.map(item => item.key));
+            if (validEstimationKeys.size === 0) {
+                console.error("No valid keys found in q18_energy_estimation.items. Cannot select linkable scenario items.");
+                return;
+            }
+            console.log("Valid estimation keys from q18_energy_estimation table definition:", Array.from(validEstimationKeys));
+
+            const potentialItems = this.currentState.llmEstimatesData.filter(item => {
+                if (typeof item.estimation_task_key === 'undefined') {
+                    // console.log(`Item '${item.item_name || item._row}' skipped: 'estimation_task_key' is undefined.`);
+                    return false;
+                }
+                if (typeof item.estimation_task_key !== 'string' || item.estimation_task_key.trim() === "") {
+                    console.warn(`Item '${item.item_name || item._row}' has 'estimation_task_key': ${JSON.stringify(item.estimation_task_key)}, which is NOT A VALID STRING or is empty. It will be excluded. Keys MUST be strings like "est_cfl".`);
+                    return false;
+                }
+                const isKeyValidAndMatching = validEstimationKeys.has(item.estimation_task_key);
+                if (!isKeyValidAndMatching) {
+                    console.warn(`Item '${item.item_name || item._row}' has STRING 'estimation_task_key': '${item.estimation_task_key}', but this key is NOT FOUND in the q18_energy_estimation table. This item will be excluded.`);
+                }
+                return isKeyValidAndMatching;
+            });
+
+            console.log(`Found ${potentialItems.length} items in llm_estimates1.json that have a valid, non-empty STRING 'estimation_task_key' which also matches a 'key' in the q18_energy_estimation table.`);
+
+            if (potentialItems.length < NUM_SCENARIOS_TO_SELECT) {
+                console.warn(`Cannot select ${NUM_SCENARIOS_TO_SELECT} random scenarios. Only ${potentialItems.length} linkable items are available. Ensure 'llm_estimates1.json' has enough items with 'estimation_task_key' as a STRING (e.g., "est_cfl") that matches a key in the 'q18_energy_estimation' table definition.`);
+                return;
+            }
+
+            const shuffled = [...potentialItems].sort(() => 0.5 - Math.random());
+            const selectedFullData = shuffled.slice(0, NUM_SCENARIOS_TO_SELECT);
+
+            this.currentState.selectedItems = selectedFullData.map(itemData => ({
+                item_name: itemData.item_name,
+                effective_correctness: this.determineCorrectness(itemData),
+                effective_tone: this.determineTone(itemData.confidence_level)
+            }));
+            console.log("Randomly selected items for scenarios (names):", this.currentState.selectedItems.map(s => s.item_name));
+        },
+        renderQuestionsForSection(sectionId) {
+             const container = document.getElementById(`section-${sectionId}`);
+             if (!container) { console.error(`Container not found for section: ${sectionId}`); return; }
+             const navButtons = container.querySelector('.navigation-buttons');
+             container.querySelectorAll('.question-block').forEach(block => block.remove());
+             this.currentState.currentSectionQuestions = Object.values(questions).filter(q => q.section === sectionId);
+
+             this.currentState.currentSectionQuestions.forEach(qDef => {
+                  try {
+                      const questionTextHtml = qDef.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                      const questionHtml = this.createQuestionHtml({...qDef, text: questionTextHtml });
+                      if (navButtons) navButtons.insertAdjacentHTML('beforebegin', questionHtml);
+                      else container.insertAdjacentHTML('beforeend', questionHtml);
+                      if (qDef.type === 'slider') this.attachSliderListener(container, qDef.id);
+                 } catch (error) {
+                     console.error(`Error creating HTML for question ${qDef.id}:`, error);
+                     const errorHtml = `<div class="question-block" style="border-color:var(--danger-red);"><p style="color:var(--danger-red);">Error loading question: ${qDef.id}</p></div>`;
+                      if (navButtons) navButtons.insertAdjacentHTML('beforebegin', errorHtml);
+                      else container.insertAdjacentHTML('beforeend', errorHtml);
+                 }
+             });
+        },
+        createQuestionHtml(qDef) { /* ... (Same as previous, no changes needed here for this fix) ... */
+             if (qDef.type === 'likert') {
+                 const points = qDef.points || 5;
+                 let listItems = '';
+                 for (let i = 1; i <= points; i++) {
+                     listItems += `<li><input type="radio" id="${qDef.id}-${i}" name="${qDef.id}" value="${i}"><label for="${qDef.id}-${i}" class="option-label">${i}</label></li>`;
+                 }
+                 let endpoints = '';
+                 if (qDef.scale && qDef.scale.length === 2) {
+                     endpoints = `<div class="scale-endpoints"><span>1 - ${qDef.scale[0]}</span><span>${points} - ${qDef.scale[1]}</span></div>`;
+                 }
+                 return `<div class="question-block" id="block-${qDef.id}">
+                             <label class="input-group-label" for="${qDef.id}">${qDef.text}</label>
+                             <ul class="likert-scale">${listItems}</ul>
+                             ${endpoints}
+                         </div>`;
+             }
+              else if (qDef.type === 'slider') {
+                 const min = qDef.min !== undefined ? qDef.min : 0;
+                 const max = qDef.max !== undefined ? qDef.max : 100;
+                 const step = qDef.step !== undefined ? qDef.step : (qDef.id.includes('confidence') ? 10 : 1);
+                 const initialValue = qDef.id.includes('confidence') ? 50 : Math.round(min + (max - min) / 2);
+                 const unit = qDef.unit || (qDef.id.includes('confidence') ? '%' : '');
+                 return `<div class="question-block" id="block-${qDef.id}">
+                             <label for="${qDef.id}">${qDef.text}</label>
+                              <div class="scale-endpoints"><span>${min}${unit}</span><span>${max}${unit}</span></div>
+                             <div class="slider-container">
+                                 <input type="range" id="${qDef.id}" name="${qDef.id}" min="${min}" max="${max}" step="${step}" value="${initialValue}" data-unit="${unit}">
+                                 <span class="${qDef.id}-value-display slider-value-display">${initialValue}${unit}</span>
+                               </div>
+                          </div>`;
+             }
+             else if (qDef.type === 'multiple-choice' || qDef.type === 'true-false') {
+                 let listItems = '';
+                 qDef.options.forEach(opt => {
+                     listItems += `<li><input type="radio" id="${qDef.id}-${opt.value}" name="${qDef.id}" value="${opt.value}"><label for="${qDef.id}-${opt.value}" class="option-label">${opt.text}</label></li>`;
+                 });
+                  return `<div class="question-block" id="block-${qDef.id}">
+                             <label class="input-group-label" for="${qDef.id}">${qDef.text}</label>
+                             <ul class="${qDef.type}">${listItems}</ul>
+                          </div>`;
+             }
+             else if (qDef.type === 'estimation-table') {
+                  let tableRows = '';
+                  qDef.items.forEach(item => {
+                      tableRows += `<tr>
+                                         <td>${item.name}</td>
+                                         <td><input type="number" id="${item.key}" name="${item.key}" min="0" step="any" pattern="[0-9]*(\.[0-9]+)?"></td>
+                                      </tr>`;
+                  });
+                  return `<div class="question-block" id="block-${qDef.id}">
+                              <label class="input-group-label">${qDef.text || 'Energy Estimation'}</label>
+                              <p>Reference: 100W incandescent bulb = 100 units/hour. Please provide your best guess. You can use whole numbers or decimals.</p>
+                              <div class="estimation-table-wrapper">
+                                  <table class="estimation-table">
+                                      <thead><tr><th>Device</th><th>Your estimate (Units/Hour)</th></tr></thead>
+                                      <tbody>${tableRows}</tbody>
+                                  </table>
+                              </div>
+                          </div>`;
+             }
+             else if (qDef.type === 'forced-choice-estimates') { // For scenario task
+                 return `<div class="question-block" id="block-${qDef.id}">
+                             <label class="input-group-label">${qDef.text}</label>
+                             <p>For the <strong>${qDef.itemLabel}</strong>, please choose the estimate you find more accurate:</p>
+                             <ul class="forced-choice-estimates">
+                                 <li>
+                                     <input type="radio" id="${qDef.id}-user" name="${qDef.id}" value="${qDef.userChoiceValue || 'user_estimate'}">
+                                     <label for="${qDef.id}-user" class="option-label">Your earlier estimate: <strong>${qDef.userEstimate} units</strong></label>
+                                 </li>
+                                 <li>
+                                     <input type="radio" id="${qDef.id}-ai" name="${qDef.id}" value="${qDef.aiChoiceValue || 'ai_estimate'}">
+                                     <label for="${qDef.id}-ai" class="option-label">AI's estimate: <strong>${qDef.aiEstimate} units</strong></label>
+                                 </li>
+                             </ul>
+                         </div>`;
+            }
+             else {
+                 console.warn("Unknown or unhandled question type in createQuestionHtml:", qDef.type, "for question:", qDef.id);
+                  return `<div class="question-block" id="block-${qDef.id}" style="border-color:var(--danger-red);"><p style="color:var(--danger-red);">...Error loading question type ${qDef.type} for ${qDef.id}...</div>`;
+             }
+        },
+        getItemDataByName(itemName) { /* ... (Same) ... */
+             if (!this.currentState.llmEstimatesData) {
+                console.error("getItemDataByName called but llmEstimatesData is not loaded.");
+                return null;
+             }
+             return this.currentState.llmEstimatesData.find(item =>
+                item.item_name === itemName || item._row === itemName || item.item_label === itemName);
+        },
+        determineCorrectness(itemData) { /* ... (Same) ... */
+            if (!itemData) return 'unknown';
+            const estimate = parseFloat(itemData.llm_estimate);
+            const actual = parseFloat(itemData.actual_value);
+            if (isNaN(estimate) || isNaN(actual)) return 'unknown';
+            if (actual === 0) return estimate === 0 ? 'correct' : 'incorrect';
+            if (itemData.item_name === "Dish washer" && estimate === 2) return 'incorrect';
+            if (itemData.item_name === "Line-dry clothes" && estimate === 10) return 'incorrect';
+            const ratio = estimate / actual;
+            return (ratio >= 0.5 && ratio <= 1.5) ? 'correct' : 'incorrect';
+         },
+        determineTone(confidenceLevel) { /* ... (Same) ... */
+            if (typeof confidenceLevel !== 'string') return 'unknown';
+             switch (confidenceLevel.toLowerCase()) {
+                 case 'high': return 'confident';
+                 case 'medium': case 'low': return 'hedged';
+                 default: return 'unknown';
+             }
+        },
+        loadScenario(index) { /* ... (Modified slightly for estimation_task_key robustness) ... */
+            if (index >= this.currentState.selectedItems.length || index < 0) {
+                 if (index >= this.currentState.selectedItems.length) {
+                    const debriefingIndex = this.currentState.sections.indexOf('debriefing');
+                    if (debriefingIndex !== -1) this.goToSection(debriefingIndex);
+                    else console.error("Debriefing section not found in config after scenarios.");
+                 }
+                 return;
+            }
+            try {
+                const selectedItemInfo = this.currentState.selectedItems[index];
+                if (!selectedItemInfo || !selectedItemInfo.item_name) {
+                     throw new Error(`Selected item info is invalid or missing item_name at scenario index ${index}.`);
+                }
+                const itemData = this.getItemDataByName(selectedItemInfo.item_name);
+
+                if (!itemData) {
+                    throw new Error(`Full data not found in llmEstimatesData for item_name: '${selectedItemInfo.item_name}'.`);
+                }
+
+                this.currentState.currentScenarioItemData = itemData;
+                this.currentState.scenarioSubStage = 'ai_response';
+
+                const trialPrefix = `trial_${index + 1}`;
+                this.currentState.participantResponses[`${trialPrefix}_item_name`] = itemData.item_name;
+                this.currentState.participantResponses[`${trialPrefix}_item_label`] = itemData.item_label || itemData.item_name;
+                this.currentState.participantResponses[`${trialPrefix}_prompt`] = itemData.prompt;
+                this.currentState.participantResponses[`${trialPrefix}_actual_value`] = itemData.actual_value;
+                this.currentState.participantResponses[`${trialPrefix}_llm_estimate`] = itemData.llm_estimate;
+                this.currentState.participantResponses[`${trialPrefix}_llm_explanation`] = itemData.llm_explanation;
+                this.currentState.participantResponses[`${trialPrefix}_llm_confidence_score`] = itemData.llm_confidence_score;
+                this.currentState.participantResponses[`${trialPrefix}_llm_confidence_level`] = itemData.confidence_level;
+                this.currentState.participantResponses[`${trialPrefix}_effective_correctness`] = selectedItemInfo.effective_correctness;
+                this.currentState.participantResponses[`${trialPrefix}_effective_tone`] = selectedItemInfo.effective_tone;
+
+                // Critical: Check estimation_task_key *on the itemData from llmEstimatesData*
+                if (typeof itemData.estimation_task_key !== 'string' || itemData.estimation_task_key.trim() === "") {
+                    console.error(`CRITICAL ERROR DURING SCENARIO LOAD: Item '${itemData.item_name}' (selected for scenario) has an invalid or missing STRING 'estimation_task_key' in its data from llm_estimates1.json: ${JSON.stringify(itemData.estimation_task_key)}. This item should have been filtered out by selectRandomScenarioItems. The forced-choice comparison will fail. Storing key as 'INVALID_AT_SCENARIO_LOAD'.`);
+                    this.currentState.participantResponses[`${trialPrefix}_estimation_task_key`] = "INVALID_AT_SCENARIO_LOAD";
+                } else {
+                    this.currentState.participantResponses[`${trialPrefix}_estimation_task_key`] = itemData.estimation_task_key;
+                }
+                this.renderCurrentScenarioSubStage();
+            } catch (error) {
+                 console.error(`Error loading scenario item ${index} (Name: '${this.currentState.selectedItems[index]?.item_name || 'unknown'}'):`, error);
+                 alert(`An error occurred loading trial ${index + 1}. Check console. Will attempt to skip this item.`);
+                 this.skipScenarioItem();
+            }
+        },
+        renderCurrentScenarioSubStage() { /* ... (Same, but now relies on corrected estimation_task_key) ... */
+            const itemData = this.currentState.currentScenarioItemData;
+            const subStage = this.currentState.scenarioSubStage;
+            const scenarioIndex = this.currentState.scenarioIndex;
+            const trialPrefix = `trial_${scenarioIndex + 1}`;
+
+            const scenarioContentContainer = document.getElementById('scenario-content');
+            const scenarioQuestionsContainer = document.getElementById('scenario-questions');
+            const nextButton = document.getElementById('scenario-next-button');
+
+            if (!itemData || !scenarioContentContainer || !scenarioQuestionsContainer || !nextButton) {
+                console.error("Scenario DOM elements or currentScenarioItemData missing for renderCurrentScenarioSubStage. ItemData:", itemData);
+                 if (!itemData && scenarioIndex >= 0 && scenarioIndex < this.currentState.selectedItems.length) {
+                    console.error("currentScenarioItemData is null, trying to skip this broken item.");
+                    this.skipScenarioItem();
+                 } else if (itemData && (!scenarioContentContainer || !scenarioQuestionsContainer || !nextButton)) {
+                    alert("A critical error occurred rendering the scenario stage: required HTML elements are missing. Check console.");
+                 }
+                return;
+            }
+
+            if (subStage === 'ai_response') {
+                scenarioContentContainer.innerHTML = `
+                    <h3>Trial ${scenarioIndex + 1} of ${this.currentState.selectedItems.length}: ${itemData.item_label || itemData.item_name}</h3>
+                    <div class="scenario-box">
+                        <div class="scenario-prompt">${itemData.prompt}</div>
+                         <div class="ai-response-container">
+                            <span class="ai-prefix">EnergyAI says:</span>
+                            <span class="ai-response-estimate">My estimate is: ${itemData.llm_estimate} units</span>
+                            <div class="ai-response-explanation">${itemData.llm_explanation}</div>
+                            ${this.currentState.isAdmin ? `<div class="ai-confidence-display">Debug: Conf. Score=${itemData.llm_confidence_score?.toFixed(3)}, Level=${itemData.confidence_level}, Actual=${itemData.actual_value}, Est.Key='${itemData.estimation_task_key || 'NOT_DEFINED_IN_ITEMDATA!'}' (Type: ${typeof itemData.estimation_task_key})</div>` : ''}
+                         </div>
+                    </div>
+                `;
+            }
+            scenarioQuestionsContainer.innerHTML = '';
+
+            if (subStage === 'ai_response') {
+                nextButton.textContent = "Rate AI Confidence";
+            } else if (subStage === 'confidence_rating') {
+                const confidenceQId = `${trialPrefix}_confidence_in_ai`;
+                const confidenceQHtml = this.createQuestionHtml({
+                    id: confidenceQId, type: 'slider',
+                    text: 'How confident are you that the AI’s estimate shown above is correct for this scenario?',
+                    min: 0, max: 100, step: 10
+                });
+                scenarioQuestionsContainer.innerHTML = confidenceQHtml;
+                this.attachSliderListener(scenarioQuestionsContainer, confidenceQId);
+                nextButton.textContent = "Proceed to Choice";
+            } else if (subStage === 'forced_choice') {
+                const estimationKey = itemData.estimation_task_key; // This MUST be the correct string key like "est_cfl"
+                let userEstimate = 'N/A (Your estimate not found or item not in prior list)';
+
+                if (typeof estimationKey === 'string' && estimationKey.trim() !== "" && estimationKey !== "INVALID_AT_SCENARIO_LOAD") {
+                    if (typeof this.currentState.participantResponses[estimationKey] !== 'undefined' &&
+                        this.currentState.participantResponses[estimationKey] !== null &&
+                        String(this.currentState.participantResponses[estimationKey]).trim() !== '') {
+                        userEstimate = this.currentState.participantResponses[estimationKey];
+                    } else {
+                        console.warn(`Forced choice: User's prior estimate for key '${estimationKey}' (item: ${itemData.item_name}) is undefined, null, or empty in participantResponses. Displaying default 'N/A'. Participant Responses for this key: ${this.currentState.participantResponses[estimationKey]}`);
+                    }
+                } else {
+                    console.warn(`Forced choice: 'estimation_task_key' is missing or invalid for item '${itemData.item_name}'. User's prior estimate cannot be retrieved. Key was: '${estimationKey}'. This indicates a problem with the item data in 'llm_estimates1.json' or the filtering logic. Ensure 'estimation_task_key' is a valid STRING in the JSON.`);
+                }
+
+                const forcedChoiceQId = `${trialPrefix}_forced_choice_q`;
+                const forcedChoiceQHtml = this.createQuestionHtml({
+                    type: 'forced-choice-estimates', id: forcedChoiceQId,
+                    text: 'Comparison of Estimates:',
+                    itemLabel: itemData.item_label || itemData.item_name,
+                    userEstimate: userEstimate, aiEstimate: itemData.llm_estimate,
+                    userChoiceValue: 'user_estimate', aiChoiceValue: 'ai_estimate'
+                });
+                scenarioQuestionsContainer.innerHTML = forcedChoiceQHtml;
+                nextButton.textContent = (scenarioIndex === this.currentState.selectedItems.length - 1) ? "Finish Interaction Task" : "Next Item";
+            }
+             this.updateAdminBar();
+        },
+        advanceScenarioStage() { /* ... (Same) ... */
+            const currentScenarioIndex = this.currentState.scenarioIndex;
+            const currentSubStage = this.currentState.scenarioSubStage;
+            const itemData = this.currentState.currentScenarioItemData;
+
+            if (!itemData) {
+                console.error("Cannot advance scenario stage: currentScenarioItemData is null. Attempting to skip.");
+                this.skipScenarioItem();
+                return;
+            }
+            const trialPrefix = `trial_${currentScenarioIndex + 1}`;
+
+            if (currentSubStage === 'confidence_rating') {
+                const confidenceInput = document.getElementById(`${trialPrefix}_confidence_in_ai`);
+                if (confidenceInput) {
+                    this.currentState.participantResponses[`${trialPrefix}_confidence_in_ai`] = confidenceInput.value;
+                } else { console.warn(`Input not found for ${trialPrefix}_confidence_in_ai when saving.`); }
+            } else if (currentSubStage === 'forced_choice') {
+                const choiceInput = document.querySelector(`input[name="${trialPrefix}_forced_choice_q"]:checked`);
+                if (choiceInput) {
+                    this.currentState.participantResponses[`${trialPrefix}_forced_choice_selection`] = choiceInput.value;
+                    const estimationKey = itemData.estimation_task_key;
+                    let userEstimateShown = 'N/A (Not found or key issue)';
+                     if (typeof estimationKey === 'string' && estimationKey.trim() !== "" && estimationKey !== "INVALID_AT_SCENARIO_LOAD") {
+                        if (typeof this.currentState.participantResponses[estimationKey] !== 'undefined' && this.currentState.participantResponses[estimationKey] !== null && String(this.currentState.participantResponses[estimationKey]).trim() !== '') {
+                            userEstimateShown = this.currentState.participantResponses[estimationKey];
+                        }
+                    }
+                    this.currentState.participantResponses[`${trialPrefix}_user_estimate_in_choice`] = userEstimateShown;
+                    this.currentState.participantResponses[`${trialPrefix}_ai_estimate_in_choice`] = itemData.llm_estimate;
+                } else {
+                    console.warn(`No selection made for ${trialPrefix}_forced_choice_q.`);
+                 }
+            }
+
+            if (currentSubStage === 'ai_response') {
+                this.currentState.scenarioSubStage = 'confidence_rating';
+                this.renderCurrentScenarioSubStage();
+            } else if (currentSubStage === 'confidence_rating') {
+                this.currentState.scenarioSubStage = 'forced_choice';
+                this.renderCurrentScenarioSubStage();
+            } else if (currentSubStage === 'forced_choice') {
+                this.currentState.scenarioIndex++;
+                if (this.currentState.scenarioIndex < this.currentState.selectedItems.length) {
+                    this.loadScenario(this.currentState.scenarioIndex);
+                } else {
+                    const debriefingIndex = this.currentState.sections.indexOf('debriefing');
+                    if (debriefingIndex !== -1) this.goToSection(debriefingIndex);
+                    else console.error("Debriefing section not found after scenarios completion.");
+                }
+            }
+        },
+        attachSliderListener(container, sliderId) { /* ... (Same) ... */
+            const slider = container.querySelector(`#${sliderId}`);
+             const valueDisplay = container.querySelector(`.${sliderId}-value-display`);
+             if (slider && valueDisplay) {
+                 const updateSliderDisplay = () => {
+                     const percent = ((parseFloat(slider.value) - parseFloat(slider.min)) / (parseFloat(slider.max) - parseFloat(slider.min))) * 100;
+                     valueDisplay.textContent = slider.value + (slider.dataset.unit || '');
+                     slider.style.background = `linear-gradient(to right, var(--theme-primary-hover), var(--theme-primary-hover) ${percent}%, var(--progress-bar-bg) ${percent}%, var(--progress-bar-bg))`;
+                 };
+                 slider.addEventListener('input', updateSliderDisplay);
+                 updateSliderDisplay();
+             }
+        },
+        skipScenarioItem() { /* ... (Same) ... */
+             console.warn(`Admin/Error Handler skipping scenario item at index: ${this.currentState.scenarioIndex}`);
+             this.currentState.scenarioIndex++;
+             if (this.currentState.scenarioIndex < this.currentState.selectedItems.length) {
+                 this.loadScenario(this.currentState.scenarioIndex);
+             } else {
+                  const debriefingIndex = this.currentState.sections.indexOf('debriefing');
+                  if (debriefingIndex !== -1) this.goToSection(debriefingIndex);
+                  else console.error("Debriefing section not found after attempting to skip the last scenario item.");
+             }
+        },
+        validateCurrentSection() { return true; },
+        saveCurrentSectionResponses() { /* ... (Same logic for saving, relies on correct keys) ... */
+             const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+             if (['instructions', 'scenario-task', 'debriefing'].includes(currentSectionId)) return;
+
+             console.log(`Saving responses for section: ${currentSectionId}`);
+             const container = document.getElementById(`section-${currentSectionId}`);
+             if (!container) { console.warn(`Container for section '${currentSectionId}' not found when trying to save responses.`); return; }
+
+             const inputs = container.querySelectorAll('input, textarea'); // Selects, if any, would also be caught
+             inputs.forEach(input => {
+                 let id = input.name || input.id;
+                 if (!id) return;
+
+                 if (input.type === 'radio') {
+                     if (input.checked) this.currentState.participantResponses[id] = input.value;
+                 } else if (input.type === 'checkbox') {
+                     this.currentState.participantResponses[id] = input.checked;
+                 } else {
+                      // For estimation table inputs (id starts with 'est_') or any number input
+                      if ((input.type === 'number' || id.startsWith('est_')) && input.value.trim() === '') {
+                         this.currentState.participantResponses[id] = null; // Store empty number entries as null
+                      } else {
+                         this.currentState.participantResponses[id] = input.value.trim();
+                      }
+                 }
+             });
+             console.log("Current participant responses after saving section:", JSON.parse(JSON.stringify(this.currentState.participantResponses)));
+        },
+        nextSection() { /* ... (Same) ... */
+            this.saveCurrentSectionResponses();
+            if (this.currentState.sectionIndex < this.currentState.sections.length - 1) {
+                this.currentState.sectionIndex++;
+                this.showSection(this.currentState.sections[this.currentState.sectionIndex]);
+            } else { console.log("End of experiment sections reached."); }
+        },
+        skipSection(targetSectionId = null) { /* ... (Same) ... */
+            const currentSectionIdBeforeSkip = this.currentState.sections[this.currentState.sectionIndex];
+            console.log(`Admin skipping from section: '${currentSectionIdBeforeSkip}' to target: '${targetSectionId}'`);
+            this.saveCurrentSectionResponses();
+
+             let targetIndex = -1;
+             if (targetSectionId) {
+                 targetIndex = this.currentState.sections.indexOf(targetSectionId);
+                 if (targetIndex === -1) {
+                     console.error(`Skip target section ID '${targetSectionId}' not found in sections array. Cannot skip.`);
+                     return;
+                 }
+                 if (targetSectionId === 'scenario-task' && this.currentState.selectedItems.length === 0) {
+                     this.selectRandomScenarioItems();
+                     if (this.currentState.selectedItems.length < NUM_SCENARIOS_TO_SELECT) {
+                         alert("Skipping to scenarios failed: Could not select enough valid items. Check 'llm_estimates1.json' for STRING 'estimation_task_key' values (e.g., \"est_cfl\") matching estimation table keys. Cannot proceed with skip.");
+                         return;
+                     }
+                 }
+             }
+
+             if (targetIndex !== -1) {
+                 this.goToSection(targetIndex);
+             } else {
+                 console.warn("SkipSection called without a valid targetSectionId. Attempting to go to next section.");
+                 this.nextSection();
+             }
+        },
+        goToSection(index) { /* ... (Same) ... */
+            if (index >= 0 && index < this.currentState.sections.length) {
+                const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
+                if (!['instructions', 'scenario-task', 'debriefing'].includes(currentSectionId)) {
+                    this.saveCurrentSectionResponses();
+                }
+                this.currentState.sectionIndex = index;
+                this.showSection(this.currentState.sections[index]);
+            } else { console.warn("Invalid section index for goToSection:", index); }
+        },
+        populateDebriefing() { /* ... (Same) ... */
+             const list = document.getElementById('debrief-clarifications');
+             if (!list) { console.error("Debrief clarifications list element not found."); return; }
+             list.innerHTML = '';
+             if (!this.currentState.selectedItems || this.currentState.selectedItems.length === 0) {
+                 list.innerHTML = '<li>No scenario items were completed or selected. This might indicate an issue with the item data in "llm_estimates1.json" (specifically, missing or mismatched STRING "estimation_task_key" values) or the random selection process.</li>';
+                 return;
+             }
+             this.currentState.selectedItems.forEach((selectedInfo, index) => {
+                 if (!selectedInfo || !selectedInfo.item_name) {
+                     list.innerHTML += `<li>Trial ${index + 1}: Error displaying item data.</li>`;
+                     console.error("Error in populateDebriefing: selectedInfo or item_name missing for trial", index + 1, selectedInfo);
+                     return;
+                 }
+                 const itemData = this.getItemDataByName(selectedInfo.item_name);
+                 if (!itemData) {
+                     list.innerHTML += `<li>Trial ${index + 1}: Full data for item '${selectedInfo.item_name}' not found for debriefing.</li>`;
+                     console.error("Error in populateDebriefing: Full itemData not found for", selectedInfo.item_name);
+                     return;
+                 }
+                 const li = document.createElement('li');
+                 const llmConfText = itemData.llm_confidence_level ? `(LLM Confidence Level: ${itemData.llm_confidence_level})` : '';
+                 li.innerHTML = `<strong>Trial ${index + 1}: ${itemData.item_label || itemData.item_name} ${llmConfText}</strong><ul><li>Actual energy use: ${itemData.actual_value} units</li><li>AI's estimate: ${itemData.llm_estimate} units</li></ul>`;
+                 list.appendChild(li);
+             });
+        },
+        displayResults() { /* ... (Same) ... */
+             const resultsArea = document.getElementById('final-results');
+            if (!resultsArea) { console.error("Final results textarea not found."); return; }
+            try {
+                const finalData = {
+                    experimentFramework: "Purdue_Short_Version_v1.1",
+                    studyTimestamp: new Date().toISOString(),
+                    participantResponses: this.currentState.participantResponses
+                };
+                resultsArea.value = JSON.stringify(finalData, null, 2);
+                console.log("--- FINAL PARTICIPANT RESPONSES (Purdue Short Version v1.1) ---");
+                console.log(JSON.stringify(finalData, null, 2));
+                console.log("--- END OF DUMP ---");
+            } catch (error) {
+                console.error("Error stringifying final results:", error);
+                resultsArea.value = "Error: Could not display results due to a stringification error. Check console.";
+            }
+        },
+        updateAdminBar() { /* ... (Same) ... */
+             const adminSectionSpan = document.getElementById('admin-current-section');
+             if (adminSectionSpan) {
+                 let sectionName = "Unknown Section";
+                 if (this.currentState.sectionIndex >= 0 && this.currentState.sectionIndex < this.currentState.sections.length) {
+                    sectionName = this.currentState.sections[this.currentState.sectionIndex].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    if (sectionName === "Energy Knowledge") sectionName = "Energy Estimation";
+                 }
+
+                 let suffix = "";
+                 if (this.currentState.sections[this.currentState.sectionIndex] === 'scenario-task' &&
+                     this.currentState.scenarioIndex >= 0 &&
+                     this.currentState.selectedItems && this.currentState.selectedItems.length > 0 &&
+                     this.currentState.scenarioIndex < this.currentState.selectedItems.length) {
+                     const subStageDisplay = this.currentState.scenarioSubStage.replace(/_/g, ' ');
+                     suffix = ` (Item ${this.currentState.scenarioIndex + 1} of ${this.currentState.selectedItems.length}, Stage: ${subStageDisplay})`;
+                 }
+                 adminSectionSpan.textContent = sectionName + suffix;
+             }
+        },
+        updateProgressBar() { /* ... (Same) ... */
+             const progressBar = document.getElementById('progress-bar');
+             const progressText = document.getElementById('progress-text');
+             if (progressBar && progressText) {
+                 const currentMainSectionIndex = this.currentState.sectionIndex;
+                 const totalMainSections = this.currentState.totalSections;
+
+                 let overallProgress = 0;
+                 if (totalMainSections > 1) {
+                    overallProgress = (currentMainSectionIndex / (totalMainSections - 1)) * 100;
+                 }
+
+                 if (this.currentState.sections[currentMainSectionIndex] === 'scenario-task' &&
+                     this.currentState.selectedItems && this.currentState.selectedItems.length > 0 &&
+                     totalMainSections > 1) {
+                     const scenarioBaseSectionIndex = this.currentState.sections.indexOf('scenario-task');
+                     const scenarioBaseProgress = (scenarioBaseSectionIndex / (totalMainSections - 1)) * 100;
+                     const scenarioSectionSpan = (1 / (totalMainSections - 1)) * 100;
+
+                     let subStageCompletion = 0;
+                     if (this.currentState.scenarioSubStage === 'confidence_rating') subStageCompletion = 1/3;
+                     else if (this.currentState.scenarioSubStage === 'forced_choice') subStageCompletion = 2/3;
+
+                     const itemProgress = (this.currentState.scenarioIndex + subStageCompletion) / this.currentState.selectedItems.length;
+                     overallProgress = scenarioBaseProgress + (itemProgress * scenarioSectionSpan);
+                 }
+
+                 const displayPercentage = Math.max(0, Math.min(100, overallProgress));
+                 progressBar.style.width = `${displayPercentage}%`;
+
+                 let currentSectionDisplayName = "Start";
+                 if (currentMainSectionIndex >= 0 && currentMainSectionIndex < totalMainSections) {
+                     currentSectionDisplayName = this.currentState.sections[currentMainSectionIndex]
+                        .replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                     if (currentSectionDisplayName === "Energy Knowledge") currentSectionDisplayName = "Energy Estimation";
+                     if (currentSectionDisplayName === "Scenario Task") currentSectionDisplayName = "AI Interaction";
+                 }
+
+                 if (currentMainSectionIndex === totalMainSections - 1) {
+                      progressBar.style.width = '100%';
+                      progressText.textContent = `Study Complete`;
+                 } else if (currentMainSectionIndex === 0 && this.currentState.sections[0] === 'instructions') {
+                      progressBar.style.width = '0%';
+                      progressText.textContent = `Section: ${currentSectionDisplayName} (1 of ${totalMainSections})`;
+                 } else {
+                      progressText.textContent = `Section: ${currentSectionDisplayName} (${currentMainSectionIndex + 1} of ${totalMainSections})`;
+                 }
+             }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        window.experiment = experiment;
+        experiment.init();
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Psychology Energy Planning Task Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .api-key-section, .scenario-selection, .task-area {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .api-key-section label, .api-key-section input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        td:first-child {
+            text-align: left;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .slider-container label {
+            width: 150px; /* Adjust as needed */
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        .slider-container input[type="range"] {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .slider-container .value-display {
+            min-width: 50px; /* Ensure space for numbers */
+            text-align: right;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+         .plan-totals {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+        }
+        .llm-interaction {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+        }
+        .chat-history {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat-history div {
+            margin-bottom: 8px;
+        }
+        .user-message {
+            text-align: right;
+            color: blue;
+        }
+        .llm-message {
+            text-align: left;
+            color: green;
+        }
+        .llm-interaction textarea {
+            width: calc(100% - 22px); /* Account for padding/border */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid red;
+            background-color: #ffebeb;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        .plan-column {
+             width: 120px; /* Fixed width for plan columns */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cognitive Psychology Energy Planning Task</h1>
+
+        <div class="api-key-section">
+            <label for="api-key">Purdue GenAI API Key:</label>
+            <input type="password" id="api-key" placeholder="Enter your JWT or API Key">
+            <button id="set-api-key-btn">Set API Key</button>
+             <div id="api-key-error" class="error-message hidden"></div>
+        </div>
+
+        <div id="scenario-selector" class="scenario-selection hidden">
+            <h2>Select Experiment Scenario</h2>
+            <button class="scenario-btn" data-scenario="advisor-client">Participant as Advisor, AI as Client</button>
+            <button class="scenario-btn" data-scenario="compare-plans">Compare Participant Plan vs. AI Planner</button>
+            <!-- Add more buttons for other scenarios as needed -->
+        </div>
+
+         <div id="loading-indicator" class="hidden">
+            <p>Loading scenario / Contacting AI...</p>
+        </div>
+
+         <div id="task-area" class="task-area hidden">
+            <h2 id="scenario-title">Scenario Title</h2>
+            <p id="scenario-description">Scenario description will load here.</p>
+            <p id="target-reduction-info">Target reduction goal will load here.</p>
+             <p id="family-comparison-info">Family comparison info will load here.</p>
+
+            <table id="energy-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th id="last-year-header">Electricity Used Last Year by Family (kWh)</th>
+                        <th id="state-avg-header">Average Electricity Used Last Year by State Households (kWh)</th>
+                        <th class="plan-column">Action Plan 1 (kWh)</th>
+                        <th class="plan-column">Action Plan 2 (kWh)</th>
+                    </tr>
+                </thead>
+                <tbody id="energy-table-body">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total kWh</strong></td>
+                        <td id="last-year-total"></td>
+                        <td id="state-avg-total"></td>
+                        <td id="plan1-total" class="plan-totals">0</td>
+                        <td id="plan2-total" class="plan-totals">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p id="target-validation-plan1" style="text-align:right; color: grey;"></p>
+            <p id="target-validation-plan2" style="text-align:right; color: grey;"></p>
+
+            <div id="llm-interaction-area" class="llm-interaction hidden">
+                <h3 id="interaction-title">LLM Interaction</h3>
+
+                <!-- Advisor/Client Elements -->
+                <div id="advisor-client-interaction" class="hidden">
+                    <p>You are the energy advisor. The AI is the client (the Davis family). Use the chat below to convince the client how to adjust their energy usage based on your Plan 1.</p>
+                    <div id="advisor-chat-history" class="chat-history"></div>
+                    <textarea id="advisor-message-input" rows="3" placeholder="Enter your advice or question for the client..."></textarea>
+                    <button id="send-advisor-message-btn">Send Message to Client (AI)</button>
+                     <div id="advisor-client-error" class="error-message hidden"></div>
+                </div>
+
+                 <!-- Compare Plans Elements -->
+                 <div id="compare-plans-interaction" class="hidden">
+                    <p>You have created two plans. Now, let's see a plan generated by an AI planning assistant for the same goal.</p>
+                    <button id="get-llm-plan-btn">Generate AI Planner's Plan</button>
+                     <div id="ai-plan-error" class="error-message hidden"></div>
+                    <div id="ai-plan-display" class="hidden">
+                        <h4>AI Planner's Suggested Plan</h4>
+                        <table id="ai-plan-table">
+                           <thead>
+                               <tr><th>Category</th><th>AI Suggested Usage (kWh)</th></tr>
+                           </thead>
+                           <tbody id="ai-plan-table-body"></tbody>
+                           <tfoot>
+                               <tr><td><strong>Total kWh</strong></td><td id="ai-plan-total"></td></tr>
+                           </tfoot>
+                        </table>
+                         <p id="ai-plan-target-validation" style="color: grey;"></p>
+                        <p>Which plan would you prefer to implement?</p>
+                        <button onclick="alert('Participant chose Plan 1')">Choose Your Plan 1</button>
+                        <button onclick="alert('Participant chose Plan 2')">Choose Your Plan 2</button>
+                        <button onclick="alert('Participant chose AI Plan')">Choose AI Planner's Plan</button>
+                         <p><small>Optional: You could also implement features here to modify/merge plans.</small></p>
+                    </div>
+                </div>
+
+                <!-- General Interaction Error Display -->
+                 <div id="interaction-error" class="error-message hidden"></div>
+
+            </div>
+
+             <button id="finish-task-btn" class="hidden" style="background-color: #f0ad4e;">Finish Task (Demo)</button>
+             <button id="reset-btn" style="background-color: #d9534f;">Reset / Select New Scenario</button>
+        </div>
+
+    </div> <!-- /container -->
+
+    <script>
+        // --- Configuration ---
+        const config = {
+            purdue_api_key: null, // Will be set from input
+            apiUrl: "https://genai.rcac.purdue.edu/api/chat/completions", // OpenAI-compatible endpoint [cite: 7]
+            model: "llama3.1:latest", // Specify the model [cite: 10]
+            maxTokens: 400, // Allow more tokens for plan generation/advice
+            temperature: 0.5 // Balance creativity and predictability
+        };
+
+        // --- Scenario Data ---
+        // Using Davis/Mass as the primary example
+        const scenarios = {
+            "davis-mass": {
+                familyName: "Davis",
+                state: "Massachusetts",
+                comparisonNote: "The Davis family used 14,086 more kWh than the average household in Massachusetts last year.",
+                categories: [
+                    { name: "Cooling (Central A/C)", family: 419, average: 322 },
+                    { name: "Heating the Home", family: 26751, average: 19108 },
+                    { name: "Water Heating", family: 10543, average: 5070 },
+                    { name: "Refrigerator", family: 1230, average: 1025 },
+                    { name: "Other (TV, Lights, etc.)", family: 7350, average: 6682 }
+                ],
+                // Targets based on 15% reduction of 46,293 kWh total
+                targets: {
+                    kwh: 6944, // Exact 15%
+                    usd: 1042, // Exact 15% (assuming $0.15/kWh for MA, 46293 * 0.15 * 0.15 ~= 1041.6) - using provided value
+                    percent: 15
+                },
+                costPerKwh: 0.15 // Approximate for MA for USD conversion logic
+            }
+            // Add other scenarios (Adams/Cali, Smith/Texas, Wells/Colorado) here
+            // "adams-cali": { ... }
+        };
+
+        let currentScenarioKey = null;
+        let currentScenarioData = null;
+        let lastYearTotal = 0;
+        let stateAverageTotal = 0;
+        let targetReductionValue = 0;
+        let targetReductionUnit = '';
+        let targetReductionKwh = 0; // The equivalent kWh reduction regardless of unit displayed
+
+        // --- DOM Elements ---
+        const apiKeyInput = document.getElementById('api-key');
+        const setApiKeyBtn = document.getElementById('set-api-key-btn');
+        const apiKeyError = document.getElementById('api-key-error');
+        const scenarioSelector = document.getElementById('scenario-selector');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const taskArea = document.getElementById('task-area');
+        const scenarioTitle = document.getElementById('scenario-title');
+        const scenarioDescription = document.getElementById('scenario-description');
+        const targetReductionInfo = document.getElementById('target-reduction-info');
+        const familyComparisonInfo = document.getElementById('family-comparison-info');
+        const energyTableBody = document.getElementById('energy-table-body');
+        const lastYearHeader = document.getElementById('last-year-header');
+        const stateAvgHeader = document.getElementById('state-avg-header');
+        const lastYearTotalEl = document.getElementById('last-year-total');
+        const stateAvgTotalEl = document.getElementById('state-avg-total');
+        const plan1TotalEl = document.getElementById('plan1-total');
+        const plan2TotalEl = document.getElementById('plan2-total');
+        const targetValidationPlan1El = document.getElementById('target-validation-plan1');
+        const targetValidationPlan2El = document.getElementById('target-validation-plan2');
+        const llmInteractionArea = document.getElementById('llm-interaction-area');
+        const interactionTitle = document.getElementById('interaction-title');
+        const advisorClientInteraction = document.getElementById('advisor-client-interaction');
+        const advisorChatHistory = document.getElementById('advisor-chat-history');
+        const advisorMessageInput = document.getElementById('advisor-message-input');
+        const sendAdvisorMessageBtn = document.getElementById('send-advisor-message-btn');
+        const advisorClientError = document.getElementById('advisor-client-error');
+        const comparePlansInteraction = document.getElementById('compare-plans-interaction');
+        const getLlmPlanBtn = document.getElementById('get-llm-plan-btn');
+        const aiPlanError = document.getElementById('ai-plan-error');
+        const aiPlanDisplay = document.getElementById('ai-plan-display');
+        const aiPlanTableBody = document.getElementById('ai-plan-table-body');
+        const aiPlanTotalEl = document.getElementById('ai-plan-total');
+        const aiPlanTargetValidationEl = document.getElementById('ai-plan-target-validation');
+        const interactionError = document.getElementById('interaction-error');
+        const finishTaskBtn = document.getElementById('finish-task-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // --- Event Listeners ---
+        setApiKeyBtn.addEventListener('click', setApiKey);
+        resetBtn.addEventListener('click', resetExperiment);
+        document.querySelectorAll('.scenario-btn').forEach(button => {
+            button.addEventListener('click', () => startScenario(button.dataset.scenario));
+        });
+        sendAdvisorMessageBtn.addEventListener('click', handleAdvisorClientMessage);
+        getLlmPlanBtn.addEventListener('click', handleGenerateAiPlan);
+        finishTaskBtn.addEventListener('click', () => {
+            alert("Task finished (Demo). In a real experiment, data would be logged here.");
+            resetExperiment();
+        });
+
+
+        // --- Initialization ---
+        function init() {
+            // Check if API key is stored locally (optional, for convenience)
+            // config.purdue_api_key = localStorage.getItem('purdueApiKey');
+            // if (config.purdue_api_key) {
+            //    apiKeyInput.value = config.purdue_api_key;
+            //    setApiKey();
+            // } else {
+                apiKeyInput.value = '';
+                setApiKeyBtn.disabled = false;
+                scenarioSelector.classList.add('hidden');
+                taskArea.classList.add('hidden');
+           // }
+        }
+
+        // --- API Key Handling ---
+        function setApiKey() {
+            const key = apiKeyInput.value.trim();
+            if (!key) {
+                displayError("API Key cannot be empty.", "api-key-error");
+                return;
+            }
+            config.purdue_api_key = key;
+            // localStorage.setItem('purdueApiKey', key); // Optional: Store locally
+            apiKeyInput.disabled = true;
+            setApiKeyBtn.disabled = true;
+            apiKeyError.classList.add('hidden');
+            scenarioSelector.classList.remove('hidden');
+             console.log("API Key set.");
+        }
+
+        // --- Scenario Loading ---
+        function startScenario(scenarioType) {
+            console.log("Starting scenario:", scenarioType);
+            scenarioSelector.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+            taskArea.classList.add('hidden'); // Hide task area while loading
+
+            // For this demo, we'll always use the Davis/Mass data.
+            // In a real experiment, you might randomly select or cycle through scenarios.
+            currentScenarioKey = "davis-mass";
+            currentScenarioData = scenarios[currentScenarioKey];
+            if (!currentScenarioData) {
+                 displayError("Selected scenario data not found.", "interaction-error", true); // Use main error display
+                loadingIndicator.classList.add('hidden');
+                scenarioSelector.classList.remove('hidden'); // Show selector again
+                return;
+            }
+
+            // Determine the reduction format (randomly for demo, or based on experimental condition)
+            const formats = ['kwh', 'usd', 'percent'];
+            const selectedFormat = formats[Math.floor(Math.random() * formats.length)];
+            targetReductionUnit = selectedFormat;
+            targetReductionValue = currentScenarioData.targets[selectedFormat];
+            targetReductionKwh = currentScenarioData.targets.kwh; // Always store the kWh equivalent
+
+             console.log(`Target set: ${targetReductionValue} ${targetReductionUnit} (equivalent to ${targetReductionKwh} kWh)`);
+
+
+            // Populate UI elements
+            scenarioTitle.textContent = `Energy Planning Task: The ${currentScenarioData.familyName} Family (${currentScenarioData.state})`;
+            lastYearHeader.textContent = `Electricity Used Last Year by ${currentScenarioData.familyName} Family (kWh)`;
+            stateAvgHeader.textContent = `Average Electricity Used Last Year by ${currentScenarioData.state} Households (kWh)`;
+            familyComparisonInfo.textContent = currentScenarioData.comparisonNote;
+
+            let description = `The ${currentScenarioData.familyName} family wants to reduce its household electricity usage next year. `;
+            let targetString = "";
+            switch(targetReductionUnit) {
+                case 'kwh': targetString = `by ${formatNumber(targetReductionValue)} kWh`; break;
+                case 'usd': targetString = `electricity bill by $${formatNumber(targetReductionValue)}`; break;
+                case 'percent': targetString = `total usage by ${targetReductionValue}%`; break;
+            }
+            description += `Your goal is to create two possible action plans to achieve a reduction of approximately ${targetString}.`;
+            description += " Please adjust the sliders below to set how many kWh should be used next year by each appliance category for each plan. Enter only whole numbers using the sliders.";
+
+            scenarioDescription.textContent = description;
+            targetReductionInfo.textContent = `Target Reduction: ~${targetString} (which is equivalent to ${formatNumber(targetReductionKwh)} kWh)`;
+
+
+            populateTableAndSliders();
+            updatePlanTotals(); // Initial calculation
+
+             // Reset and configure interaction area based on scenario type
+             resetInteractionAreas();
+             llmInteractionArea.classList.remove('hidden');
+             finishTaskBtn.classList.remove('hidden');
+
+            if (scenarioType === 'advisor-client') {
+                interactionTitle.textContent = 'Advise the Client (AI)';
+                 advisorClientInteraction.classList.remove('hidden');
+                 // Optional: Send an initial message from the "client" AI
+                 // addChatMessage('llm', "I'm not sure I want to change much, convince me why I should follow your plan.", 'advisor-chat-history');
+            } else if (scenarioType === 'compare-plans') {
+                 interactionTitle.textContent = 'Compare Your Plan with an AI Planner';
+                comparePlansInteraction.classList.remove('hidden');
+                 aiPlanDisplay.classList.add('hidden'); // Hide AI plan until generated
+            }
+            // Add 'else if' blocks for other scenarios (e.g., 'collaborative')
+
+            loadingIndicator.classList.add('hidden');
+            taskArea.classList.remove('hidden');
+        }
+
+        function resetInteractionAreas() {
+             // Clear any previous interaction state
+             advisorClientInteraction.classList.add('hidden');
+             comparePlansInteraction.classList.add('hidden');
+             // Add other interaction areas here if created
+
+             advisorChatHistory.innerHTML = '';
+             advisorMessageInput.value = '';
+             aiPlanTableBody.innerHTML = '';
+             aiPlanTotalEl.textContent = '';
+             aiPlanDisplay.classList.add('hidden');
+
+             clearError('advisor-client-error');
+             clearError('ai-plan-error');
+             clearError('interaction-error');
+        }
+
+
+        function populateTableAndSliders() {
+            energyTableBody.innerHTML = ''; // Clear previous rows
+            lastYearTotal = 0;
+            stateAverageTotal = 0;
+
+            currentScenarioData.categories.forEach((cat, index) => {
+                lastYearTotal += cat.family;
+                stateAverageTotal += cat.average;
+
+                const row = document.createElement('tr');
+
+                // Category Name
+                const nameCell = document.createElement('td');
+                nameCell.textContent = cat.name;
+                row.appendChild(nameCell);
+
+                // Family Last Year Usage
+                const familyCell = document.createElement('td');
+                familyCell.textContent = formatNumber(cat.family);
+                row.appendChild(familyCell);
+
+                // State Average Usage
+                const averageCell = document.createElement('td');
+                averageCell.textContent = formatNumber(cat.average);
+                row.appendChild(averageCell);
+
+                // Plan 1 Slider
+                const plan1Cell = document.createElement('td');
+                plan1Cell.appendChild(createSlider(`plan1-cat${index}`, cat.name, cat.family, 1));
+                row.appendChild(plan1Cell);
+
+                // Plan 2 Slider
+                const plan2Cell = document.createElement('td');
+                plan2Cell.appendChild(createSlider(`plan2-cat${index}`, cat.name, cat.family, 2));
+                row.appendChild(plan2Cell);
+
+                energyTableBody.appendChild(row);
+            });
+
+            lastYearTotalEl.textContent = formatNumber(lastYearTotal);
+            stateAvgTotalEl.textContent = formatNumber(stateAverageTotal);
+        }
+
+        function createSlider(id, categoryName, maxValue, planNumber) {
+            const container = document.createElement('div');
+            container.className = 'slider-container';
+
+            // Slider input
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.id = id;
+            slider.min = 0;
+            // Set max slightly higher than last year's usage to allow small increases if desired
+            slider.max = Math.ceil(maxValue * 1.1);
+            slider.value = maxValue; // Default to last year's value
+            slider.dataset.plan = planNumber; // Store which plan this belongs to
+            slider.dataset.categoryIndex = id.replace(`plan${planNumber}-cat`, ''); // Store category index
+
+            // Value display span
+            const valueDisplay = document.createElement('span');
+            valueDisplay.className = 'value-display';
+            valueDisplay.id = `${id}-value`;
+            valueDisplay.textContent = slider.value;
+
+            // Update value display and totals on input
+            slider.addEventListener('input', (event) => {
+                valueDisplay.textContent = event.target.value;
+                updatePlanTotals();
+            });
+
+            // Although the prompt asked not to have labels here to save space in the table cell,
+            // adding a hidden label for accessibility is good practice.
+            const label = document.createElement('label');
+            label.htmlFor = id;
+            label.textContent = `${categoryName} Plan ${planNumber}`;
+            label.classList.add('hidden'); // Hide it visually
+
+            container.appendChild(label); // Hidden label
+            container.appendChild(slider);
+            container.appendChild(valueDisplay);
+
+            return container;
+        }
+
+
+        // --- Plan Calculation ---
+        function updatePlanTotals() {
+            let total1 = 0;
+            let total2 = 0;
+
+            currentScenarioData.categories.forEach((cat, index) => {
+                const slider1 = document.getElementById(`plan1-cat${index}`);
+                const slider2 = document.getElementById(`plan2-cat${index}`);
+                if (slider1) total1 += parseInt(slider1.value, 10);
+                if (slider2) total2 += parseInt(slider2.value, 10);
+            });
+
+            plan1TotalEl.textContent = formatNumber(total1);
+            plan2TotalEl.textContent = formatNumber(total2);
+
+            validatePlanTarget(1, total1);
+            validatePlanTarget(2, total2);
+        }
+
+        function validatePlanTarget(planNumber, currentTotal) {
+            const reductionAchieved = lastYearTotal - currentTotal;
+            const targetMet = reductionAchieved >= targetReductionKwh;
+            const difference = reductionAchieved - targetReductionKwh;
+            const validationEl = planNumber === 1 ? targetValidationPlan1El : targetValidationPlan2El;
+
+            let message = `Reduction: ${formatNumber(reductionAchieved)} kWh. `;
+            if (targetMet) {
+                message += `Target (${formatNumber(targetReductionKwh)} kWh) met or exceeded by ${formatNumber(difference)} kWh.`;
+                validationEl.style.color = 'green';
+            } else {
+                 message += `Target (${formatNumber(targetReductionKwh)} kWh) missed by ${formatNumber(Math.abs(difference))} kWh.`;
+                 validationEl.style.color = 'orange';
+            }
+             validationEl.textContent = message;
+        }
+
+        // --- LLM API Call ---
+       async function callLLM(systemPrompt, userPrompt) {
+            if (!config.purdue_api_key) {
+                 displayError("API Key not set. Please enter your Purdue GenAI API key.", "interaction-error", true);
+                 throw new Error("API Key not set");
+            }
+            clearError("interaction-error"); // Clear previous general errors
+
+            console.log("Calling LLM with:", { systemPrompt, userPrompt });
+            loadingIndicator.classList.remove('hidden'); // Show loading indicator during API call
+            // Disable interaction buttons during call
+            sendAdvisorMessageBtn.disabled = true;
+            getLlmPlanBtn.disabled = true;
+
+            try {
+                const response = await fetch(config.apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${config.purdue_api_key}`, // [cite: 4, 8]
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": config.model,
+                        "messages": [
+                            { "role": "system", "content": systemPrompt },
+                            { "role": "user", "content": userPrompt }
+                        ],
+                        "max_tokens": config.maxTokens,
+                        "temperature": config.temperature,
+                        "stream": false // Use non-streaming for simpler response handling [cite: 6 gives streaming example, we use non-streaming]
+                    })
+                });
+
+                 loadingIndicator.classList.add('hidden'); // Hide loading indicator
+                 // Re-enable buttons
+                 sendAdvisorMessageBtn.disabled = false;
+                 getLlmPlanBtn.disabled = false;
+
+
+                if (!response.ok) {
+                    let errorBody = ''; try { errorBody = await response.text(); } catch(e) {}
+                    // More specific error for 401 Unauthorized
+                    if (response.status === 401) {
+                         errorBody = "Authorization failed. Please check your API key.";
+                    }
+                    const errorMsg = `API Error: ${response.status} ${response.statusText}. Details: ${errorBody}`;
+                    // Display error in the specific interaction area if possible
+                    const errorTargetId = getCurrentInteractionErrorId();
+                    displayError(errorMsg, errorTargetId, !errorTargetId); // Fallback to general error if no specific target
+                    console.error(errorMsg);
+                    throw new Error(errorMsg);
+                }
+
+                const data = await response.json();
+                 console.log("LLM Response Data:", data);
+
+
+                if (!data.choices || data.choices.length === 0 || !data.choices[0].message || !data.choices[0].message.content) {
+                    const errorMsg = "Invalid API response structure (missing content)";
+                    const errorTargetId = getCurrentInteractionErrorId();
+                     displayError(errorMsg, errorTargetId, !errorTargetId);
+                    console.error("Invalid API response structure received:", data);
+                    throw new Error(errorMsg);
+                }
+                return data.choices[0].message.content.trim();
+            } catch (error) {
+                 loadingIndicator.classList.add('hidden'); // Ensure loading is hidden on catch
+                  // Re-enable buttons
+                 sendAdvisorMessageBtn.disabled = false;
+                 getLlmPlanBtn.disabled = false;
+                console.error("Error calling LLM API:", error);
+                 // Don't display error again if it was already displayed by response check
+                 if (!document.getElementById(getCurrentInteractionErrorId() || 'interaction-error').textContent) {
+                      const errorTargetId = getCurrentInteractionErrorId();
+                     displayError(`Network or API call failed: ${error.message}`, errorTargetId, !errorTargetId);
+                 }
+                throw error; // Re-throw
+            }
+        }
+
+        // --- Scenario-Specific Logic ---
+
+        // Advisor <-> Client (AI)
+        function getCurrentPlanAsString(planNumber) {
+             let planString = `Plan ${planNumber} proposal:\n`;
+             let total = 0;
+             currentScenarioData.categories.forEach((cat, index) => {
+                 const slider = document.getElementById(`plan${planNumber}-cat${index}`);
+                 const value = slider ? parseInt(slider.value, 10) : cat.family; // Default to original if slider not found
+                 planString += `- ${cat.name}: ${formatNumber(value)} kWh\n`;
+                 total += value;
+             });
+             planString += `Total: ${formatNumber(total)} kWh (Reduction of ${formatNumber(lastYearTotal - total)} kWh from last year's ${formatNumber(lastYearTotal)} kWh)`;
+             return planString;
+        }
+
+        async function handleAdvisorClientMessage() {
+            const userMessage = advisorMessageInput.value.trim();
+            if (!userMessage) return;
+
+            addChatMessage('user', userMessage, 'advisor-chat-history');
+            advisorMessageInput.value = ''; // Clear input
+
+            // Construct prompts
+            // System prompt defines the AI's persona (the client)
+            const systemPrompt = `You are playing the role of the ${currentScenarioData.familyName} family homeowner in Massachusetts. Your family used ${formatNumber(lastYearTotal)} kWh last year. An energy advisor is trying to convince you to adopt their proposed plan to reduce energy usage. Be somewhat skeptical or resistant initially, asking questions about the feasibility, cost, or lifestyle changes required by the advisor's suggestions. Your goal is to discuss the plan, not just agree immediately. Reference the specific appliance categories when relevant.`;
+
+             // User prompt includes context (the proposed plan) and the advisor's message
+             const plan1String = getCurrentPlanAsString(1); // Use Plan 1 for this interaction
+             const userPrompt = `The energy advisor proposes the following plan (Plan 1) for you:\n${plan1String}\n\nTheir message to you is: "${userMessage}"\n\nRespond to the advisor's message from the perspective of the homeowner.`;
+
+
+            try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt);
+                addChatMessage('llm', llmResponse, 'advisor-chat-history');
+            } catch (error) {
+                // Error already displayed by callLLM
+                addChatMessage('system-error', 'Error receiving response from AI client.', 'advisor-chat-history');
+            }
+        }
+
+        function addChatMessage(role, text, historyElementId) {
+            const historyDiv = document.getElementById(historyElementId);
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add(role === 'user' ? 'user-message' : (role === 'llm' ? 'llm-message' : 'system-error'));
+            // Basic sanitization to prevent HTML injection - replace < and >
+             messageDiv.textContent = text; //.replace(/</g, "<").replace(/>/g, ">");
+            historyDiv.appendChild(messageDiv);
+            historyDiv.scrollTop = historyDiv.scrollHeight; // Scroll to bottom
+        }
+
+        // Compare Plans (AI as Planner)
+        async function handleGenerateAiPlan() {
+            aiPlanDisplay.classList.add('hidden'); // Hide previous plan if any
+            clearError('ai-plan-error');
+
+             const systemPrompt = `You are an AI energy planning assistant. Your task is to create a single, concrete action plan for the ${currentScenarioData.familyName} family in ${currentScenarioData.state} to reduce their total household energy usage.
+Last year's usage:
+${currentScenarioData.categories.map(c => `- ${c.name}: ${formatNumber(c.family)} kWh`).join('\n')}
+Total last year: ${formatNumber(lastYearTotal)} kWh.
+The target is to reduce usage by approximately ${formatNumber(targetReductionKwh)} kWh.
+Provide a plausible plan by suggesting a new kWh usage number for *each* category listed above. Ensure the total kWh for your plan achieves the target reduction.
+Format your response *only* as a JSON object where keys are the exact category names and values are the suggested integer kWh numbers for the plan. Example format: {"Category Name 1": KwhValue1, "Category Name 2": KwhValue2, ...}`;
+
+            const userPrompt = `Generate the energy reduction plan for the ${currentScenarioData.familyName} family as described in the system prompt. The target reduction is ${formatNumber(targetReductionKwh)} kWh. Output *only* the JSON object.`;
+
+            try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt);
+                console.log("Raw AI Plan Response:", llmResponse);
+                parseAndDisplayAiPlan(llmResponse);
+            } catch (error) {
+                 // Error already displayed by callLLM
+                 displayError(`Failed to generate AI plan. ${error.message}`, 'ai-plan-error');
+            }
+        }
+
+        function parseAndDisplayAiPlan(jsonString) {
+            try {
+                 // Attempt to find JSON within potentially extraneous text LLMs sometimes add
+                const jsonMatch = jsonString.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) {
+                    throw new Error("No valid JSON object found in the AI response.");
+                }
+                const planData = JSON.parse(jsonMatch[0]);
+                console.log("Parsed AI Plan:", planData);
+
+
+                aiPlanTableBody.innerHTML = ''; // Clear previous
+                let aiTotal = 0;
+                let categoriesFound = 0;
+
+                 // Use the original category list to ensure order and completeness
+                currentScenarioData.categories.forEach(cat => {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = cat.name;
+                    row.appendChild(nameCell);
+
+                    const valueCell = document.createElement('td');
+                    // Find the corresponding value in the parsed JSON, allowing for slight variations/case issues if needed
+                    const plannedValue = planData[cat.name]; // Simple key match first
+
+                    if (plannedValue !== undefined && !isNaN(parseInt(plannedValue))) {
+                         const kwhValue = parseInt(plannedValue);
+                         valueCell.textContent = formatNumber(kwhValue);
+                         aiTotal += kwhValue;
+                         categoriesFound++;
+                    } else {
+                         valueCell.textContent = "N/A";
+                          console.warn(`Category "${cat.name}" not found or invalid in AI plan JSON:`, planData);
+                    }
+                     row.appendChild(valueCell);
+                     aiPlanTableBody.appendChild(row);
+                });
+
+
+                aiPlanTotalEl.textContent = formatNumber(aiTotal);
+
+                if (categoriesFound !== currentScenarioData.categories.length) {
+                     displayError("AI plan response was incomplete or improperly formatted (missing categories).", 'ai-plan-error');
+                }
+
+                 // Validate AI plan against target
+                 const reductionAchieved = lastYearTotal - aiTotal;
+                 const targetMet = reductionAchieved >= targetReductionKwh;
+                 const difference = reductionAchieved - targetReductionKwh;
+                 let message = `AI Plan Reduction: ${formatNumber(reductionAchieved)} kWh. `;
+                 if (targetMet) {
+                     message += `Target (${formatNumber(targetReductionKwh)} kWh) met or exceeded by ${formatNumber(difference)} kWh.`;
+                     aiPlanTargetValidationEl.style.color = 'green';
+                 } else {
+                     message += `Target (${formatNumber(targetReductionKwh)} kWh) missed by ${formatNumber(Math.abs(difference))} kWh.`;
+                     aiPlanTargetValidationEl.style.color = 'orange';
+                 }
+                 aiPlanTargetValidationEl.textContent = message;
+
+
+                 aiPlanDisplay.classList.remove('hidden');
+
+            } catch (e) {
+                 console.error("Error parsing AI plan JSON:", e);
+                 console.error("Problematic JSON string:", jsonString);
+                 displayError(`Failed to parse the AI's plan response. It might not be valid JSON. Details: ${e.message}`, 'ai-plan-error');
+                 aiPlanDisplay.classList.add('hidden');
+            }
+        }
+
+
+        // --- Utility Functions ---
+        function formatNumber(num) {
+            if (isNaN(num)) return 'N/A';
+            return Math.round(num).toLocaleString(); // Add commas for readability
+        }
+
+        function displayError(message, elementId, isGeneral = false) {
+            let errorElement = document.getElementById(elementId);
+            if (!errorElement || isGeneral) {
+                errorElement = interactionError; // Fallback to general error area
+                 console.log(`Displaying error in general area (${interactionError.id}): ${message}`);
+             } else {
+                 console.log(`Displaying error in ${elementId}: ${message}`);
+             }
+             if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
+            }
+        }
+
+         function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+             if (errorElement) {
+                 errorElement.textContent = '';
+                 errorElement.classList.add('hidden');
+             }
+             // Also clear the general error if clearing a specific one related to interactions
+             if (elementId !== 'api-key-error') {
+                 interactionError.textContent = '';
+                 interactionError.classList.add('hidden');
+             }
+         }
+
+         function getCurrentInteractionErrorId() {
+             // Determine which interaction area is visible to display context-specific errors
+             if (!advisorClientInteraction.classList.contains('hidden')) {
+                 return 'advisor-client-error';
+             } else if (!comparePlansInteraction.classList.contains('hidden')) {
+                 return 'ai-plan-error';
+             }
+             // Add other interaction checks here
+             return null; // If no specific area, error will go to general 'interaction-error'
+         }
+
+
+        function resetExperiment() {
+            console.log("Resetting experiment.");
+             // Reset state variables
+             currentScenarioKey = null;
+             currentScenarioData = null;
+             lastYearTotal = 0;
+             stateAverageTotal = 0;
+             targetReductionValue = 0;
+             targetReductionUnit = '';
+             targetReductionKwh = 0;
+
+             // Reset UI
+             taskArea.classList.add('hidden');
+             llmInteractionArea.classList.add('hidden');
+             finishTaskBtn.classList.add('hidden');
+             loadingIndicator.classList.add('hidden');
+             resetInteractionAreas(); // Clear chat, AI plan etc.
+             clearError('interaction-error'); // Clear general errors
+             clearError('api-key-error');
+
+             // Only show API key section if key not already set, otherwise show scenario selector
+            if (!config.purdue_api_key) {
+                apiKeyInput.disabled = false;
+                setApiKeyBtn.disabled = false;
+                apiKeyInput.value=''; // Clear the key input visually on full reset
+                scenarioSelector.classList.add('hidden');
+             } else {
+                 scenarioSelector.classList.remove('hidden');
+             }
+
+             // Do not clear the API key itself from config unless explicitly needed
+             // config.purdue_api_key = null;
+             // apiKeyInput.disabled = false;
+             // setApiKeyBtn.disabled = false;
+        }
+
+        // --- Run Initialization ---
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+
+</body>
+</html>

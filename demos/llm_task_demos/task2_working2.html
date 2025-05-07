@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Psychology Energy Planning Task Demo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+        /* Removed API Key Section Style */
+        .task-area {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        td:first-child {
+            text-align: left;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin: 5px 0; /* Add some vertical margin */
+             min-height: 30px; /* Ensure consistent height */
+        }
+        .slider-container label { /* Hidden label for accessibility */
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .slider-container input[type="range"] {
+            flex-grow: 1;
+            margin: 0 10px;
+            cursor: pointer;
+            height: 5px; /* Make sliders less chunky */
+        }
+        .slider-container .value-display {
+            min-width: 50px; /* Ensure space for numbers */
+            text-align: right;
+            font-weight: bold;
+            font-size: 0.95em;
+            padding-left: 5px; /* Space between slider and number */
+        }
+         .plan-totals {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+            padding-right: 8px; /* Align with table cells */
+        }
+        .plan-column {
+             width: 200px; /* Adjust width for slider + value */
+        }
+        .llm-interaction {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .chat-history {
+            min-height: 100px; /* Start with min height */
+            max-height: 250px; /* Allow scrolling */
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0; /* Slightly different background */
+        }
+        .chat-history div {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            clear: both; /* Ensure messages don't overlap weirdly */
+            max-width: 85%; /* Prevent messages from taking full width */
+            word-wrap: break-word; /* Prevent long words overflowing */
+        }
+        .client-initial-message, .llm-message {
+            background-color: #e6ffed; /* Light green for LLM */
+            text-align: left;
+            float: left;
+        }
+        .system-message { /* For user prompts or system info */
+             background-color: #e7f3fe; /* Light blue for user/system */
+             text-align: right;
+             float: right;
+             font-style: italic;
+             color: #555;
+        }
+         .system-error {
+             background-color: #ffebeb; /* Light red for errors */
+             text-align: center;
+             float: none; /* Center errors */
+             color: #c00;
+             font-weight: bold;
+         }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid red;
+            background-color: #ffebeb;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        #loading-indicator {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        .info-box {
+            background-color: #e7f3fe;
+            border-left: 5px solid #2196F3;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cognitive Psychology Energy Planning Task</h1>
+        <p><strong>Scenario:</strong> You are an energy advisor helping a client (played by an AI) create an energy reduction plan.</p>
+
+        <!-- API Key section removed - Key is hardcoded -->
+
+        <div id="loading-indicator" class="hidden">
+            <p>Loading scenario / Contacting AI client...</p>
+        </div>
+
+         <div id="task-area" class="task-area hidden">
+            <h2 id="scenario-title">Scenario Title</h2>
+
+            <div class="info-box">
+                <p id="scenario-description">Scenario description will load here.</p>
+                <p id="target-reduction-info">Target reduction goal will load here.</p>
+                 <p id="family-comparison-info">Family comparison info will load here.</p>
+            </div>
+
+             <div id="llm-interaction-area" class="llm-interaction">
+                <h3>Client Communication</h3>
+                <div id="chat-history" class="chat-history">
+                    <!-- Initial client message and subsequent feedback will appear here -->
+                </div>
+                 <div id="interaction-error" class="error-message hidden"></div>
+            </div>
+
+
+            <h3>Your Action Plan</h3>
+             <p>Adjust the sliders below to propose next year's energy usage (in kWh) for each category. The goal is to meet the client's target reduction while considering their preferences expressed above.</p>
+            <table id="energy-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th id="last-year-header">Electricity Used Last Year (kWh)</th>
+                        <th id="state-avg-header">State Average Usage (kWh)</th>
+                        <th class="plan-column">Your Proposed Action Plan (kWh)</th>
+                    </tr>
+                </thead>
+                <tbody id="energy-table-body">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total kWh</strong></td>
+                        <td id="last-year-total"></td>
+                        <td id="state-avg-total"></td>
+                        <td id="plan-total" class="plan-totals">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p id="target-validation" style="text-align:right; font-weight: bold; margin-top: 5px; padding-right: 8px;"></p>
+
+            <div style="text-align: center; margin-top: 20px;">
+                 <button id="submit-plan-btn" disabled>Submit Plan to Client (AI)</button>
+            </div>
+
+             <hr style="margin: 30px 0;">
+
+             <button id="reset-btn" style="background-color: #d9534f; float: right;">Reset Task</button>
+             <div style="clear: both;"></div>
+        </div>
+
+    </div> <!-- /container -->
+
+    <script>
+        // --- Configuration ---
+        const config = {
+            // API Key is Hardcoded as requested
+            purdue_api_key: "sk-4597455063b242e9a43187a32115c04a",
+            apiUrl: "https://genai.rcac.purdue.edu/api/chat/completions",
+            model: "gemma3:4b",//"gemma3:27b", // Using 3.1 as potentially more stable/tested than 3.2
+            initialStatementMaxTokens: 150, // Slightly increased just in case
+            clientResponseMaxTokens: 150,   // Slightly increased just in case
+            temperature: 0.3
+        };
+
+        // --- Scenario Data ---
+        const scenarioData = {
+            key: "davis-mass",
+            familyName: "Davis",
+            state: "Massachusetts",
+            comparisonNote: "The Davis family used 14,086 kWh more than the average household in Massachusetts last year.",
+            categories: [
+                { name: "Cooling (Central A/C)", family: 419, average: 322, comfortImportance: 0.8 },
+                { name: "Heating the Home", family: 26751, average: 19108, comfortImportance: 1.0 },
+                { name: "Water Heating", family: 10543, average: 5070, comfortImportance: 0.7 },
+                { name: "Refrigerator", family: 1230, average: 1025, comfortImportance: 0.2 },
+                { name: "Other (TV, Lights, etc.)", family: 7350, average: 6682, comfortImportance: 0.5 }
+            ],
+            latentPreferences: {
+                comfortWeight: 0.65,
+                savingsWeight: 0.35,
+                comfortSensitivity: 1.3,
+                reductionTargetPercent: 10
+            }
+        };
+
+        let lastYearTotal = 0;
+        let stateAverageTotal = 0;
+        let targetReductionKwh = 0;
+        let clientPreferences = null;
+
+        // --- DOM Elements ---
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const taskArea = document.getElementById('task-area');
+        const scenarioTitle = document.getElementById('scenario-title');
+        const scenarioDescription = document.getElementById('scenario-description');
+        const targetReductionInfo = document.getElementById('target-reduction-info');
+        const familyComparisonInfo = document.getElementById('family-comparison-info');
+        const energyTableBody = document.getElementById('energy-table-body');
+        const lastYearHeader = document.getElementById('last-year-header');
+        const stateAvgHeader = document.getElementById('state-avg-header');
+        const lastYearTotalEl = document.getElementById('last-year-total');
+        const stateAvgTotalEl = document.getElementById('state-avg-total');
+        const planTotalEl = document.getElementById('plan-total');
+        const targetValidationEl = document.getElementById('target-validation');
+        const llmInteractionArea = document.getElementById('llm-interaction-area');
+        const chatHistory = document.getElementById('chat-history');
+        const interactionError = document.getElementById('interaction-error');
+        const submitPlanBtn = document.getElementById('submit-plan-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // --- Event Listeners ---
+        resetBtn.addEventListener('click', resetExperiment);
+        submitPlanBtn.addEventListener('click', handlePlanSubmission);
+
+
+        // --- Initialization ---
+        function init() {
+             console.log("init: Document loaded. API Key is hardcoded. Starting scenario...");
+             taskArea.classList.add('hidden'); // Ensure task area is hidden initially
+             startScenario(); // Start scenario directly as API key is set
+        }
+
+        // --- Scenario Loading ---
+        async function startScenario() {
+            console.log(`startScenario: Starting scenario setup for ${scenarioData.key}`);
+            loadingIndicator.classList.remove('hidden');
+            taskArea.classList.add('hidden'); // Hide task area while loading/getting initial statement
+            chatHistory.innerHTML = ''; // Clear previous chat
+            clearError('interaction-error');
+            submitPlanBtn.disabled = true; // Disable submit button until client statement is received
+
+            // Calculate totals and target
+            lastYearTotal = scenarioData.categories.reduce((sum, cat) => sum + cat.family, 0);
+            stateAverageTotal = scenarioData.categories.reduce((sum, cat) => sum + cat.average, 0);
+            clientPreferences = scenarioData.latentPreferences;
+            targetReductionKwh = Math.round(lastYearTotal * (clientPreferences.reductionTargetPercent / 100));
+
+            console.log(`startScenario: Calculated Totals - LastYear=${lastYearTotal}, StateAvg=${stateAverageTotal}`);
+            console.log(`startScenario: Target reduction set based on latent prefs: ~${clientPreferences.reductionTargetPercent}% (${formatNumber(targetReductionKwh)} kWh)`);
+
+            // Populate static UI elements
+            scenarioTitle.textContent = `Energy Planning Task: The ${scenarioData.familyName} Family (${scenarioData.state})`;
+            lastYearHeader.textContent = `Electricity Used Last Year by ${scenarioData.familyName} Family (kWh)`;
+            stateAvgHeader.textContent = `Average Electricity Used Last Year by ${scenarioData.state} Households (kWh)`;
+            familyComparisonInfo.textContent = scenarioData.comparisonNote;
+            scenarioDescription.textContent = `The ${scenarioData.familyName} family (your client) wants to reduce their household electricity usage.`;
+            targetReductionInfo.textContent = `Last year, they used ${formatNumber(lastYearTotal)} kWh. Listen to their initial statement below regarding their goals.`;
+
+            console.log("startScenario: Populating table and sliders.");
+            populateTableAndSliders();
+            updatePlanTotals(); // Initial calculation based on default slider values
+
+            // Get the initial statement from the AI client
+            console.log("startScenario: Attempting to get initial client statement...");
+            try {
+                 await displayInitialClientStatement();
+                 console.log("startScenario: Successfully received initial client statement.");
+                 submitPlanBtn.disabled = false; // Enable submit button ONLY after client speaks
+                 taskArea.classList.remove('hidden'); // Show task area now
+            } catch (error) {
+                 console.error("startScenario: Failed to get initial statement from AI client.", error);
+                 displayError("Failed to get initial statement from AI client. The API might be unavailable or the key invalid. Please check console logs and Reset Task if needed.", "interaction-error");
+                 submitPlanBtn.disabled = true; // Ensure button remains disabled on error
+                 taskArea.classList.remove('hidden'); // Show task area with the error message visible
+            } finally {
+                loadingIndicator.classList.add('hidden'); // Always hide loading indicator
+                console.log("startScenario: Setup complete (or failed).");
+            }
+        }
+
+
+        function populateTableAndSliders() {
+            energyTableBody.innerHTML = ''; // Clear previous rows
+
+            scenarioData.categories.forEach((cat, index) => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td'); nameCell.textContent = cat.name; row.appendChild(nameCell);
+                const familyCell = document.createElement('td'); familyCell.textContent = formatNumber(cat.family); row.appendChild(familyCell);
+                const averageCell = document.createElement('td'); averageCell.textContent = formatNumber(cat.average); row.appendChild(averageCell);
+                const planCell = document.createElement('td');
+                planCell.appendChild(createSlider(`plan-cat${index}`, cat.name, cat.family, index));
+                row.appendChild(planCell);
+                energyTableBody.appendChild(row);
+            });
+
+            lastYearTotalEl.textContent = formatNumber(lastYearTotal);
+            stateAvgTotalEl.textContent = formatNumber(stateAverageTotal);
+            console.log("populateTableAndSliders: Table rows created.");
+        }
+
+        function createSlider(id, categoryName, maxValue, categoryIndex) {
+            const container = document.createElement('div'); container.className = 'slider-container';
+            const slider = document.createElement('input'); slider.type = 'range'; slider.id = id; slider.min = 0; slider.max = Math.max(Math.ceil(maxValue * 1.1), 50); slider.value = maxValue; slider.dataset.categoryIndex = categoryIndex;
+            const valueDisplay = document.createElement('span'); valueDisplay.className = 'value-display'; valueDisplay.id = `${id}-value`; valueDisplay.textContent = formatNumber(slider.value);
+            slider.addEventListener('input', (event) => { valueDisplay.textContent = formatNumber(event.target.value); updatePlanTotals(); });
+            const label = document.createElement('label'); label.htmlFor = id; label.textContent = `Proposed ${categoryName} Usage`; container.appendChild(label);
+            container.appendChild(slider); container.appendChild(valueDisplay);
+            return container;
+        }
+
+        // --- Plan Calculation & Validation ---
+        function updatePlanTotals() {
+            let currentTotal = 0;
+            scenarioData.categories.forEach((cat, index) => {
+                const slider = document.getElementById(`plan-cat${index}`);
+                if (slider) currentTotal += parseInt(slider.value, 10);
+                else currentTotal += cat.family; // Fallback
+            });
+            planTotalEl.textContent = formatNumber(currentTotal);
+            validatePlanTarget(currentTotal);
+        }
+
+        function validatePlanTarget(currentTotal) {
+            const reductionAchieved = lastYearTotal - currentTotal;
+            const difference = reductionAchieved - targetReductionKwh;
+            const percentDifference = targetReductionKwh === 0 ? 0 : (difference / targetReductionKwh) * 100;
+            let message = `Current Plan Reduction: ${formatNumber(reductionAchieved)} kWh. `;
+            if (Math.abs(percentDifference) <= 5) { message += `✓ Meets target (${formatNumber(targetReductionKwh)} kWh) well.`; targetValidationEl.style.color = 'green'; }
+            else if (difference > 0) { message += `↑ Exceeds target by ${formatNumber(difference)} kWh.`; targetValidationEl.style.color = 'blue'; }
+            else { message += `↓ Misses target by ${formatNumber(Math.abs(difference))} kWh.`; targetValidationEl.style.color = 'orange'; }
+            targetValidationEl.textContent = message;
+        }
+
+        // --- Latent Preference & Distance Calculation ---
+        function getCurrentPlanValues() {
+            const planValues = {};
+            scenarioData.categories.forEach((cat, index) => {
+                 const slider = document.getElementById(`plan-cat${index}`);
+                 planValues[cat.name] = slider ? parseInt(slider.value, 10) : cat.family;
+            });
+            return planValues;
+        }
+
+        function calculatePlanDistance(planValues) {
+             let comfortImpact = 0; let totalReductionAchieved = 0; let weightedMaxPossibleComfortImpact = 0;
+             scenarioData.categories.forEach(cat => {
+                 const planValue = planValues[cat.name]; const lastYearValue = cat.family; const change = Math.abs(planValue - lastYearValue);
+                 comfortImpact += change * cat.comfortImportance;
+                 totalReductionAchieved += (lastYearValue - planValue);
+                 weightedMaxPossibleComfortImpact += lastYearValue * cat.comfortImportance;
+             });
+             const normalizedComfortImpact = weightedMaxPossibleComfortImpact > 0 ? comfortImpact / weightedMaxPossibleComfortImpact : 0;
+             const savingsDifference = totalReductionAchieved - targetReductionKwh;
+             let savingsError = savingsDifference >= 0 ? (savingsDifference / targetReductionKwh) * 0.2 : Math.abs(savingsDifference / targetReductionKwh);
+             savingsError = Math.min(savingsError, 2.0); // Cap max savings penalty
+             const comfortPenalty = normalizedComfortImpact * clientPreferences.comfortWeight * clientPreferences.comfortSensitivity;
+             const savingsPenalty = savingsError * clientPreferences.savingsWeight;
+             const totalDistance = comfortPenalty + savingsPenalty;
+             console.log(`Distance Calc: Reduction=${formatNumber(totalReductionAchieved)}, Target=${formatNumber(targetReductionKwh)}, SavingsDiff=${formatNumber(savingsDifference)}, NormComfortImpact=${normalizedComfortImpact.toFixed(3)}, ComfortPenalty=${comfortPenalty.toFixed(3)}, SavingsError=${savingsError.toFixed(3)}, SavingsPenalty=${savingsPenalty.toFixed(3)}, TotalDistance=${totalDistance.toFixed(3)}`);
+             return Math.max(0, Math.min(totalDistance, 2.0)); // Ensure distance is within a reasonable range [0, 2]
+        }
+
+
+        // --- LLM API Call ---
+       async function callLLM(systemPrompt, userPrompt, maxTokens) {
+            console.log(`callLLM: Entering function. Max Tokens: ${maxTokens}`);
+            if (!config.purdue_api_key) {
+                 console.error("callLLM: API Key is missing!");
+                 displayError("API Key configuration error.", "interaction-error");
+                 throw new Error("API Key not set");
+            }
+            clearError("interaction-error");
+
+            console.info("callLLM: Preparing request data...");
+            console.log("callLLM: System Prompt (first 100 chars):", systemPrompt.substring(0, 100) + "...");
+            console.log("callLLM: User Prompt:", userPrompt);
+
+            loadingIndicator.classList.remove('hidden');
+            submitPlanBtn.disabled = true; // Disable submit button during any LLM call
+
+            let response;
+            try {
+                console.info(`callLLM: Attempting fetch to: ${config.apiUrl} with model ${config.model}`);
+                response = await fetch(config.apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${config.purdue_api_key}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": config.model,
+                        "messages": [ { "role": "system", "content": systemPrompt }, { "role": "user", "content": userPrompt } ],
+                        "max_tokens": maxTokens, "temperature": config.temperature, "stream": false
+                    })
+                });
+                console.info(`callLLM: Fetch completed. Status: ${response.status}, OK: ${response.ok}`);
+
+                if (!response.ok) {
+                    let errorBody = '';
+                    try { errorBody = await response.text(); console.warn("callLLM: API Error Response Body:", errorBody); }
+                    catch(e) { console.warn("callLLM: Could not read error response body:", e); errorBody = '(Could not read error body)'; }
+                    if (response.status === 401) errorBody = "Authorization failed. Check API key.";
+                    const errorMsg = `API Error: ${response.status} ${response.statusText}. ${errorBody}`;
+                    console.error(`callLLM: ${errorMsg}`);
+                    displayError(errorMsg, "interaction-error");
+                    throw new Error(errorMsg);
+                }
+
+                console.log("callLLM: Attempting response.json()...");
+                const data = await response.json();
+                console.log("callLLM: JSON parsing successful.");
+                // console.dir(data); // Uncomment for full response details if needed
+
+                if (!data || !data.choices || data.choices.length === 0 || !data.choices[0].message || typeof data.choices[0].message.content !== 'string') {
+                    console.error("callLLM: Invalid API response structure received:", data);
+                     const errorMsg = "Invalid API response structure (missing or invalid content)";
+                     displayError(errorMsg, "interaction-error");
+                    throw new Error(errorMsg);
+                }
+
+                const content = data.choices[0].message.content.trim();
+                if (!content) {
+                     console.warn("callLLM: API returned empty content string.");
+                     // Treat empty content as potentially valid but log it. Depending on use case, might throw error.
+                }
+                 console.log("callLLM: Successfully extracted content:", content || "(empty)");
+                return content; // Return even if empty, let caller decide what to do
+
+            } catch (error) {
+                 console.error("callLLM: Caught error during fetch or processing:", error);
+                 if (!interactionError.textContent) {
+                      displayError(`Network or processing error: ${error.message}`, "interaction-error");
+                 }
+                 throw error;
+            } finally {
+                 console.log("callLLM: Exiting function (finally block).");
+                 loadingIndicator.classList.add('hidden');
+                 // Always re-enable submit button after ANY call finishes (success or failure)
+                 // This simplifies logic compared to checking which call it was.
+                 // If the initial statement fails, the button remains disabled via startScenario's catch block.
+                 // If plan submission fails, we want the user to be able to try again.
+                 submitPlanBtn.disabled = false;
+            }
+        }
+
+        // --- Interaction Logic ---
+
+        async function displayInitialClientStatement() {
+            console.log("displayInitialClientStatement: Entering function.");
+            let preferenceDesc = "";
+            if (clientPreferences.comfortWeight > clientPreferences.savingsWeight * 1.2) { preferenceDesc = "You prioritize maintaining your current comfort levels quite a bit, even if it means saving less."; }
+            else if (clientPreferences.savingsWeight > clientPreferences.comfortWeight * 1.2) { preferenceDesc = "You are strongly focused on hitting the savings goal, even if it requires noticeable lifestyle changes."; }
+            else { preferenceDesc = "You want a balance between saving energy and maintaining your lifestyle comfort."; }
+            preferenceDesc += ` Your sensitivity to large changes is moderate (Sensitivity factor: ${clientPreferences.comfortSensitivity.toFixed(1)}).`
+
+            const systemPrompt = `You are the ${scenarioData.familyName} family homeowner in ${scenarioData.state}. An energy advisor is about to help you create a plan. Your goal is to reduce your total energy usage by about ${clientPreferences.reductionTargetPercent}%, which is roughly ${formatNumber(targetReductionKwh)} kWh from your last year's total of ${formatNumber(lastYearTotal)} kWh. Your underlying preference is: ${preferenceDesc}. Introduce yourself briefly (1-2 sentences). State your approximate reduction goal (${formatNumber(targetReductionKwh)} kWh or ${clientPreferences.reductionTargetPercent}%) and subtly hint at your preference (e.g., mention comfort, budget, or practicality). Do NOT reveal the exact preference weights or sensitivity factor. Be concise.`;
+            const userPrompt = "Please provide your brief introductory statement.";
+
+            console.log("displayInitialClientStatement: Calling callLLM...");
+            try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt, config.initialStatementMaxTokens);
+                console.log("displayInitialClientStatement: Received response from callLLM:", llmResponse || "(empty)");
+                if (!llmResponse) {
+                    // Handle case where API returns empty string but no error
+                    console.warn("displayInitialClientStatement: Received empty response from LLM for initial statement.");
+                    addChatMessage('system-error', 'Client AI provided no initial statement. Proceed with caution or reset.');
+                    // Optionally, throw an error here if an initial statement is mandatory
+                    // throw new Error("Client AI failed to provide an initial statement.");
+                } else {
+                    addChatMessage('client-initial', llmResponse);
+                }
+                console.log("displayInitialClientStatement: Added message (or error) to chat.");
+            } catch (error) {
+                console.error("displayInitialClientStatement: callLLM failed.", error);
+                addChatMessage('system-error', 'Error: Could not get initial statement from client AI.');
+                throw error; // Re-throw so startScenario knows it failed
+            } finally {
+                console.log("displayInitialClientStatement: Exiting function.");
+            }
+        }
+
+
+        async function handlePlanSubmission() {
+            console.log("handlePlanSubmission: Entering function.");
+            clearError('interaction-error');
+            const currentPlan = getCurrentPlanValues();
+            console.log("handlePlanSubmission: Current Plan Values:", currentPlan);
+            const planDistance = calculatePlanDistance(currentPlan);
+            console.log(`handlePlanSubmission: Calculated Plan Distance: ${planDistance.toFixed(3)}`);
+
+            let planSummary = "Proposed Plan:\n"; let planTotal = 0;
+             scenarioData.categories.forEach(cat => {
+                 const value = currentPlan[cat.name];
+                 planSummary += `- ${cat.name}: ${formatNumber(value)} kWh (Change from last year: ${formatNumber(value - cat.family)})\n`;
+                 planTotal += value;
+             });
+             const reduction = lastYearTotal - planTotal;
+             planSummary += `Total: ${formatNumber(planTotal)} kWh (Reduction: ${formatNumber(reduction)} kWh)`;
+
+            console.log("handlePlanSubmission: Adding submitted plan summary to chat.");
+            addChatMessage('system', `You submitted the following plan:\n${planSummary}`);
+
+            // Finishing the prompt text from previous turn
+            const systemPrompt = `You are the ${scenarioData.familyName} family homeowner. You previously stated your goal (around ${formatNumber(targetReductionKwh)} kWh / ${clientPreferences.reductionTargetPercent}% reduction) and hinted at your preferences (comfort vs. savings). An advisor has proposed the plan detailed below. Your task is to react *briefly* (1 short sentence, max 2) to this plan. Your reaction MUST be influenced by how well the plan aligns with your hidden preferences. This alignment is represented by a 'distance score' provided below (lower score is better, 0 is ideal, > 1.0 is significantly off). A high score means the plan is far from what you'd like (e.g., requires too much discomfort for the savings, or doesn't save enough). Consider both the total reduction achieved and the specific changes in categories you care about (like Heating/Cooling). Do NOT mention the score itself in your response. Just react naturally based on whether the score is low (good fit) or high (bad fit).`;
+
+            const userPrompt = `Here is the proposed plan:
+${planSummary}
+
+This plan has a distance score of ${planDistance.toFixed(3)} from your preferences (lower is better). React very briefly (1 short sentence, max 2) to this plan based on how you feel about it, considering the distance score.`;
+
+            console.log("handlePlanSubmission: Calling callLLM for client reaction...");
+            try {
+                const llmResponse = await callLLM(systemPrompt, userPrompt, config.clientResponseMaxTokens);
+                console.log("handlePlanSubmission: Received response from callLLM:", llmResponse || "(empty)");
+                 if (!llmResponse) {
+                    console.warn("handlePlanSubmission: Received empty response from LLM for client reaction.");
+                    addChatMessage('system-error', 'Client AI provided no reaction to the plan.');
+                } else {
+                     addChatMessage('llm', llmResponse);
+                 }
+                 console.log("handlePlanSubmission: Added client reaction (or error) to chat.");
+            } catch (error) {
+                console.error("handlePlanSubmission: callLLM failed.", error);
+                addChatMessage('system-error', 'Error receiving response from AI client.');
+                // Error should have been displayed by callLLM
+            } finally {
+                 console.log("handlePlanSubmission: Exiting function.");
+                 // Button re-enabled in callLLM's finally block
+            }
+        }
+
+        function addChatMessage(role, text) {
+            const historyDiv = chatHistory;
+            const messageDiv = document.createElement('div');
+            let roleClass = 'llm-message'; let prefix = "Client: ";
+            if (role === 'client-initial') { roleClass = 'client-initial-message'; prefix = "Client (Initial Statement): "; }
+            else if (role === 'system') { roleClass = 'system-message'; prefix = "You: "; }
+            else if (role === 'system-error') { roleClass = 'system-error'; prefix = "System Note: "; }
+            messageDiv.classList.add(roleClass);
+            messageDiv.textContent = prefix + text; // Use textContent for safety
+            historyDiv.appendChild(messageDiv);
+            historyDiv.scrollTop = historyDiv.scrollHeight; // Scroll to bottom
+        }
+
+
+        // --- Utility Functions ---
+        function formatNumber(num) {
+             if (isNaN(num) || num === null) return 'N/A';
+            return Math.round(num).toLocaleString(); // Add commas
+        }
+
+        function displayError(message, elementId, isGeneral = false) {
+            let errorElement = document.getElementById(elementId);
+            if (!errorElement || isGeneral) {
+                errorElement = interactionError; // Fallback to main interaction error area
+             }
+             if (errorElement) {
+                 errorElement.textContent = message;
+                 errorElement.classList.remove('hidden');
+            } else {
+                 console.error("displayError: Could not find error element:", elementId, "Message:", message);
+            }
+        }
+
+         function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+             if (errorElement) {
+                 errorElement.textContent = '';
+                 errorElement.classList.add('hidden');
+             }
+             // Also clear the general interaction error
+             const generalErrorElement = document.getElementById('interaction-error');
+             if (generalErrorElement && elementId !== generalErrorElement.id) {
+                  generalErrorElement.textContent = '';
+                  generalErrorElement.classList.add('hidden');
+             }
+         }
+
+        function resetExperiment() {
+            console.warn("resetExperiment: Resetting task state and UI.");
+             // Reset state variables
+             lastYearTotal = 0; stateAverageTotal = 0; targetReductionKwh = 0; clientPreferences = null;
+
+             // Reset UI
+             taskArea.classList.add('hidden'); loadingIndicator.classList.add('hidden');
+             chatHistory.innerHTML = '';
+             clearError('interaction-error');
+             submitPlanBtn.disabled = true;
+             targetValidationEl.textContent = '';
+             targetValidationEl.style.color = 'black'; // Reset color
+
+             // Restart the scenario automatically
+             console.log("resetExperiment: Calling startScenario() to restart.");
+             startScenario();
+        }
+
+        // --- Run Initialization ---
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+
+</body>
+</html>

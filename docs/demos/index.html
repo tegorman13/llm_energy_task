@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Energy Planning Task Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>LLM-Assisted Energy Planning: Task Demo Dashboard</h1>
+
+    <div class="tab-container">
+        <button class="tab-button active" onclick="openTab('tab-task1')">Task 1: LLM Roles Demo</button>
+        <button class="tab-button" onclick="openTab('tab-task2')">Task 2: Heuristic Feedback Demo</button>
+        <button class="tab-button" onclick="openTab('tab-info-study1')">Info: Study 1 Design</button>
+        <button class="tab-button" onclick="openTab('tab-info-study2')">Info: Study 2 Design</button>
+        <button class="tab-button" onclick="openTab('tab-info-general')">Info: General Materials</button>
+    </div>
+
+    <!-- Task 1: LLM Roles Demo -->
+    <div id="tab-task1" class="tab-content active">
+        <h2>Task 1 Demo: Comparing LLM Assistance Roles</h2>
+        <p>This demo simulates Study 1, where participants plan energy savings under different LLM assistance roles.</p>
+
+        <div class="controls">
+            <label for="task1-condition">Select Condition:</label>
+            <select id="task1-condition">
+                <option value="control">Control (No AI)</option>
+                <option value="generator">Generator (AI provides draft)</option>
+                <option value="critic">Critic (AI critiques draft)</option>
+                <option value="collaborator">Collaborator (AI chat)</option>
+            </select>
+            <button onclick="loadTask1Demo()">Load Selected Condition</button>
+        </div>
+
+        <hr>
+
+        <div class="task-area">
+            <h3>Scenario</h3>
+            <div id="task1-profile" class="profile-box">Select a condition to load profile...</div>
+            <div id="task1-goal" class="goal-box">Select a condition to load goal...</div>
+
+            <div id="task1-workspace">
+                <!-- Control Interface -->
+                <div id="task1-control-ui" class="condition-ui" style="display: none;">
+                    <h4>Your Task (Control)</h4>
+                    <p>Review the profile and goal. Use the space below to list specific actions to meet the goal. You can consult the (simulated) Action Database for ideas.</p>
+                    <label for="task1-control-plan">Enter your plan:</label>
+                    <textarea id="task1-control-plan" rows="10" placeholder="List your specific actions here..."></textarea>
+                    <button onclick="submitPlan('task1-control')">Submit Final Plan</button>
+                     <button onclick="showActionDatabase()">View Action Database (Simulated)</button>
+                </div>
+
+                <!-- Generator Interface -->
+                <div id="task1-generator-ui" class="condition-ui" style="display: none;">
+                     <h4>Your Task (Generator)</h4>
+                    <p>Review the profile and goal. The AI has generated an initial draft plan below. Review it, edit it as needed (add, remove, modify actions/estimates), and then submit your final version.</p>
+                    <label for="task1-generator-plan">AI Draft Plan (Editable):</label>
+                    <textarea id="task1-generator-plan" rows="10"></textarea>
+                     <button onclick="submitPlan('task1-generator')">Submit Final Plan</button>
+                </div>
+
+                <!-- Critic Interface -->
+                <div id="task1-critic-ui" class="condition-ui" style="display: none;">
+                    <h4>Your Task (Critic)</h4>
+                    <p>Review the profile and goal. First, create your own draft plan below. Then, submit it to get feedback from the AI critic. Finally, revise your plan based on the feedback.</p>
+                    <label for="task1-critic-draft">Enter your initial draft plan:</label>
+                    <textarea id="task1-critic-draft" rows="8" placeholder="List your specific actions here..."></textarea>
+                    <button id="task1-critic-submit-draft" onclick="getCriticFeedback()">Submit Draft for Feedback</button>
+
+                    <div id="task1-critic-feedback-area" style="display:none; margin-top: 15px;">
+                        <h4>AI Critic Feedback:</h4>
+                        <div id="task1-critic-feedback-text" class="feedback-box"></div>
+                        <label for="task1-critic-revision">Revise your plan based on feedback:</label>
+                        <textarea id="task1-critic-revision" rows="8"></textarea>
+                        <button onclick="submitPlan('task1-critic')">Submit Final Plan</button>
+                    </div>
+                </div>
+
+                <!-- Collaborator Interface -->
+                <div id="task1-collaborator-ui" class="condition-ui" style="display: none;">
+                    <h4>Your Task (Collaborator)</h4>
+                    <p>Review the profile and goal. Use the chat interface below to discuss with the AI energy advisor. Ask questions, brainstorm ideas, and get estimates to develop your plan together. Compile your final plan in the text area at the bottom when ready.</p>
+                    <div id="task1-collaborator-chatlog" class="chat-log">
+                        <!-- Chat messages will appear here -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="task1-collaborator-input" placeholder="Type your message to the AI...">
+                        <button onclick="sendChatMessage()">Send</button>
+                    </div>
+                     <label for="task1-collaborator-finalplan" style="margin-top: 15px; display: block;">Compile your final plan here:</label>
+                     <textarea id="task1-collaborator-finalplan" rows="6" placeholder="List the final actions agreed upon..."></textarea>
+                     <button onclick="submitPlan('task1-collaborator')">Submit Final Plan</button>
+                </div>
+            </div>
+             <div id="task-output" style="margin-top: 15px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Task 2: Heuristic Feedback Demo -->
+    <div id="tab-task2" class="tab-content">
+        <h2>Task 2 Demo: Targeted Heuristic Feedback</h2>
+        <p>This demo simulates Study 2, focusing on providing different types of feedback after participants draft a plan *and provide justifications*.</p>
+
+        <div class="controls">
+            <label for="task2-condition">Select Feedback Condition:</label>
+            <select id="task2-condition">
+                <option value="control">Control (No Feedback)</option>
+                <option value="generic">Generic Expert Feedback</option>
+                <option value="targeted">Targeted Heuristic Feedback</option>
+            </select>
+             <button onclick="loadTask2Demo()">Load Selected Condition</button>
+        </div>
+         <hr>
+
+         <div class="task-area">
+            <h3>Scenario</h3>
+            <div id="task2-profile" class="profile-box">Select a condition to load profile...</div>
+            <div id="task2-goal" class="goal-box">Select a condition to load goal...</div>
+
+             <div id="task2-workspace">
+                <h4>Your Task (All Conditions - Step 1)</h4>
+                <p>Review the profile and goal. Create your draft plan below. For *each action*, briefly explain **why** you chose it or how you estimated its savings.</p>
+                <label for="task2-draft-plan-justifications">Enter your draft plan AND justifications:</label>
+                <textarea id="task2-draft-plan-justifications" rows="12" placeholder="Example:
+1. Turn off lights when leaving room. (Justification: Easy habit, saves electricity visibility).
+2. Lower thermostat to 68F in winter. (Justification: Heating uses a lot, small change might save significantly).
+..."></textarea>
+                <button id="task2-submit-draft" onclick="getHeuristicFeedback()">Submit Draft + Justifications</button>
+
+                 <div id="task2-feedback-area" style="display:none; margin-top: 15px;">
+                    <h4>Feedback Received:</h4>
+                    <div id="task2-feedback-text" class="feedback-box"></div>
+                    <label for="task2-revision">Revise your plan based on feedback (or self-review):</label>
+                    <textarea id="task2-revision" rows="8" placeholder="Enter revised plan here..."></textarea>
+                    <button onclick="submitPlan('task2')">Submit Final Plan</button>
+                 </div>
+             </div>
+             <div id="task2-output" style="margin-top: 15px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Info: Study 1 Design -->
+    <div id="tab-info-study1" class="tab-content info-tab">
+        <h2>Study 1 Info: Comparing LLM Assistance Roles</h2>
+        <h3>Design</h3>
+        <ul>
+            <li>**Structure:** 4 (LLM Role: Control vs. Generator vs. Critic vs. Collaborator) between-subjects design.</li>
+            <li>**Task:** Participants create a detailed energy reduction plan for a hypothetical household to meet a specific % cost savings goal.</li>
+            <li>**Conditions:**
+                <ul>
+                    <li>**Control:** Plan created manually, reference database available.</li>
+                    <li>**Generator:** AI provides an initial draft plan, user edits/finalizes.</li>
+                    <li>**Critic:** User creates a draft, AI provides feedback, user revises.</li>
+                    <li>**Collaborator:** User and AI co-create plan via interactive chat.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Key Hypotheses (Examples)</h3>
+        <ul>
+            <li>**H1 (Quality):** Collaborator & Critic plans > Generator plans > Control plans in accuracy and feasibility.</li>
+            <li>**H2 (Load/Learning):** Generator lowest cognitive load, but potentially least knowledge gain. Critic/Collaborator higher engagement and learning.</li>
+            <li>**H3 (Anchoring):** Generator condition may show anchoring to AI's initial plan (less deviation).</li>
+            <li>**H4 (User Perception):** User satisfaction/trust may vary; Generator might be seen as easy but Collaborator/Critic might foster more calibrated trust or satisfaction if effective.</li>
+        </ul>
+        <h3>Primary Measures</h3>
+        <ul>
+            <li>Plan Accuracy (vs. target, benchmarked)</li>
+            <li>Plan Feasibility (expert rated)</li>
+            <li>Action Prioritization (high vs. low impact actions)</li>
+            <li>Plan Diversity</li>
+            <li>Knowledge Change (pre/post quiz)</li>
+            <li>Cognitive Load (NASA-TLX)</li>
+            <li>Trust (MDMTv2 or similar)</li>
+            <li>User Satisfaction/Perceptions (Likert scales)</li>
+            <li>Interaction Logs (edits, chat analysis)</li>
+        </ul>
+    </div>
+
+    <!-- Info: Study 2 Design -->
+    <div id="tab-info-study2" class="tab-content info-tab">
+        <h2>Study 2 Info: Targeted Heuristic Feedback</h2>
+        <h3>Design</h3>
+        <ul>
+            <li>**Structure:** 3 (Feedback Type: Control vs. Generic Expert vs. Targeted Heuristic) between-subjects design.</li>
+            <li>**Task:** Participants create an initial energy reduction plan WITH justifications for choices/estimates. After feedback (or none), they revise the plan.</li>
+             <li>**Conditions:**
+                <ul>
+                    <li>**Control:** No feedback provided after draft submission.</li>
+                    <li>**Generic Expert:** AI provides standard tips based on expert energy principles (e.g., "focus on heating/cooling").</li>
+                    <li>**Targeted Heuristic:** AI (simulated) infers likely novice heuristic(s) from plan/justifications (e.g., Visibility Bias, Curtailment Bias) and provides feedback specifically addressing that heuristic.</li>
+                </ul>
+            </li>
+        </ul>
+         <h3>Key Hypotheses (Examples)</h3>
+        <ul>
+            <li>**H1 (Plan Improvement):** Improvement from draft to final plan (accuracy, feasibility) will be greatest in the Targeted condition > Generic > Control.</li>
+            <li>**H2 (Heuristic Shift):** Targeted condition participants will show greater reduction in endorsing targeted novice heuristics and greater adoption of expert heuristics (measured pre/post).</li>
+            <li>**H3 (Learning):** Knowledge gain will be highest in the Targeted condition.</li>
+             <li>**H4 (Trust/Perception):** Targeted feedback, if accurate and well-framed, may enhance perceived AI expertise and trust more than generic feedback.</li>
+        </ul>
+        <h3>Primary Measures</h3>
+        <ul>
+            <li>Plan Accuracy/Feasibility Improvement (Draft vs. Final)</li>
+            <li>Heuristic Endorsement Change (pre/post quiz)</li>
+            <li>Knowledge Change (pre/post quiz)</li>
+            <li>Trust in Feedback (custom scale)</li>
+            <li>Cognitive Load (NASA-TLX)</li>
+             <li>Analysis of Justifications (coding for heuristic use)</li>
+             <li>*(Internal: LLM Heuristic Inference Accuracy Validation)*</li>
+        </ul>
+    </div>
+
+    <!-- Info: General Materials -->
+    <div id="tab-info-general" class="tab-content info-tab">
+        <h2>General Materials Info</h2>
+        <h3>Household Profiles</h3>
+        <p>Studies use hypothetical but realistic profiles detailing dwelling type, size, location (climate context), occupancy, key appliances (HVAC, water heater, fridge), and baseline energy use (kWh/$/therms). Example:</p>
+        <div class="profile-box example-box">
+            <strong>Profile Example (Midwest Homeowner):</strong><br>
+            You own a 1800 sq ft single-family house in Indiana (4 occupants). It has a gas furnace (10 yrs old), central AC (8 yrs old), electric water heater (5 yrs old), standard refrigerator, washer/dryer. Baseline: ~12,000 kWh/year electricity, ~600 therms/year gas. Avg. monthly cost: ~$160.
+        </div>
+
+        <h3>Savings Goals</h3>
+        <p>Goals are specific targets relative to the baseline, presented in different formats depending on the study (e.g., "Reduce costs by 15%", "Save $25/month", "Reduce electricity use by 100 kWh/month").</p>
+         <div class="goal-box example-box">
+             <strong>Goal Example:</strong> Reduce total annual energy costs by 15% (approx. $24/month based on the example profile).
+         </div>
+
+        <h3>Action Database (Simulated Concept)</h3>
+        <p>A background database contains information on common energy-saving actions (behavioral, efficiency upgrades). For each action, it includes estimated savings (kWh/$), implementation cost, and feasibility notes. This database informs AI responses and can be made available to participants. For this demo, a pop-up shows a simplified version.</p>
+         <div id="action-db-popup" class="popup">
+             <div class="popup-content">
+                 <span class="close-button" onclick="hideActionDatabase()">×</span>
+                 <h4>Simulated Action Database (Examples)</h4>
+                 <ul>
+                     <li><b>Set Thermostat Back 5°F (8hrs/day):</b> Saves ~5-10% heating/cooling costs. Cost: $0.</li>
+                     <li><b>Wash Laundry in Cold Water:</b> Saves ~90% of washer energy (mostly water heating). Cost: $0.</li>
+                     <li><b>Replace 5 Incandescent Bulbs with LEDs:</b> Saves ~50-75 kWh/year. Cost: ~$25.</li>
+                     <li><b>Add Attic Insulation (R-30):</b> Saves ~10-20% heating/cooling costs. Cost: $500-$1500+. (Homeowner)</li>
+                     <li><b>Unplug Phone Chargers When Not Used:</b> Saves <1 kWh/year per charger. Cost: $0.</li>
+                      <li><b>Install Low-Flow Showerhead:</b> Saves water heating energy (~5-10%). Cost: ~$30.</li>
+                 </ul>
+             </div>
+         </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

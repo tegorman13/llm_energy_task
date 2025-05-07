@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Energy Reduction Planning Task Dashboard</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    #app {
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    header {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3, h4 {
+      color: #2c3e50;
+    }
+    .tabs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+      display: flex;
+      border-bottom: 1px solid #ccc;
+    }
+    .tabs li {
+      padding: 10px 15px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      margin-bottom: -1px;
+      background-color: #eee;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+    .tabs li.active {
+      background-color: #fff;
+      border-color: #ccc;
+      border-bottom-color: #fff;
+      font-weight: bold;
+    }
+    .tabs li:hover {
+      background-color: #ddd;
+    }
+    .tab-content {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      min-height: 400px;
+    }
+    .task-setup {
+      background-color: #e9f7ef;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      border: 1px solid #a9d6bb;
+    }
+    label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    select, input[type="number"], input[type="text"], button {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    button:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+    .action-list, .plan-builder, .seed-plan {
+      margin-top: 20px;
+    }
+    .action-item, .plan-item, .seed-item {
+      border: 1px solid #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f9f9f9;
+    }
+    .plan-item {
+      background-color: #f0f9ff;
+    }
+    .savings-tracker {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .progress-bar-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      height: 20px;
+      margin-top: 5px;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #4caf50;
+      text-align: center;
+      line-height: 20px;
+      color: white;
+      transition: width 0.5s ease;
+    }
+    .llm-response, .feedback {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #fffbe6;
+      border: 1px solid #ffeeba;
+      border-radius: 4px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    .estimate-item {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .estimate-item label { margin-right: 0;}
+    .background-info details {
+      margin-bottom: 15px;
+      border: 1px solid #eee;
+      border-radius: 4px;
+    }
+    .background-info summary {
+      padding: 10px;
+      background-color: #f7f7f7;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .background-info summary:hover {
+      background-color: #e7e7e7;
+    }
+    .background-info div {
+      padding: 15px;
+      border-top: 1px solid #eee;
+    }
+    .survey-question {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #ccc;
+      background-color: #fafafa;
+    }
+    .survey-question label { display: block; margin-bottom: 8px; }
+    .survey-question input[type="radio"] { margin-right: 5px; }
+    .survey-question div { margin-bottom: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .seed-item input[type="number"] {
+      width: 80px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Energy Reduction Planning Task Dashboard</h1>
+  </header>
+
+  <ul class="tabs">
+    <li :class="{ active: activeTab === 'background' }" @click="changeTab('background')">Background Info</li>
+    <li :class="{ active: activeTab === 'task1' }" @click="changeTab('task1')">Task 1: Action Selection &amp; LLM Query</li>
+    <li :class="{ active: activeTab === 'task2' }" @click="changeTab('task2')">Task 2: Guided Plan Construction (Simulated)</li>
+    <li :class="{ active: activeTab === 'task3' }" @click="changeTab('task3')">Task 3: Estimate-then-Plan w/ Feedback</li>
+    <li :class="{ active: activeTab === 'task4' }" @click="changeTab('task4')">Task 4: Plan Editing from AI Seed</li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- Background Info Tab -->
+    <div v-if="activeTab === 'background'" class="background-info">
+      <h2>Study Background and Hypotheses</h2>
+      <p>This dashboard demonstrates interactive prototypes for cognitive tasks aimed at understanding how individuals plan for household energy reduction. The tasks explore different ways humans might interact with information sources (including simulated AI/LLM assistants) to translate abstract goals (e.g., “reduce usage by 10%”) into concrete, appliance-level action plans.</p>
+
+      <details>
+        <summary>Core Problem: Misperceptions of Energy Use</summary>
+        <div>
+          <p>Research consistently shows people misjudge appliance energy use (Attari et al., 2010; Marghetis et al., 2019):</p>
+          <ul>
+            <li><strong>Underestimation of High-Impact Systems:</strong> Heating, cooling, and water heating often account for the largest shares of energy use, but their impact is frequently underestimated.</li>
+            <li><strong>Overestimation of Low-Impact Actions:</strong> Visible, frequently used items like lighting or small electronics are often perceived as consuming more energy or offering greater savings potential than they actually do.</li>
+            <li><strong>Flat Mental Models:</strong> People may incorrectly assume a linear relationship between effort/cost and energy savings, whereas actual savings often follow a more convex curve.</li>
+          </ul>
+          <p>These misperceptions hinder effective planning, leading individuals to focus on less impactful actions.</p>
+          <p><em>References:</em></p>
+          <ul>
+            <li>Attari, S. Z., DeKay, M. L., Davidson, C. I., &amp; Bruine de Bruin, W. (2010). Public perceptions of energy consumption and savings. <em>PNAS, 107</em>(37), 16054–16059.</li>
+            <li>Marghetis, T., Attari, S. Z., &amp; Landy, D. (2019). Lost in the kilowatt-hours: Misperceiving and misrepresenting the impact of home energy actions. <em>Journal of Experimental Psychology: Applied</em>, 25(4), 545–561.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Task Design Rationale</summary>
+        <div>
+          <p>The tasks presented here aim to simulate the cognitive challenge of creating an energy reduction plan under different conditions:</p>
+          <ul>
+            <li><strong>Goal Translation:</strong> Converting a percentage or kWh target into a sum of specific actions.</li>
+            <li><strong>Information Seeking:</strong> How users acquire (or fail to acquire) accurate savings data.</li>
+            <li><strong>Plan Construction:</strong> Building a coherent set of actions.</li>
+            <li><strong>Interaction with AI:</strong> Exploring how AI (simulated here) can act as an information source, guide, feedback provider, or drafter, and how this affects planning and user cognition.</li>
+          </ul>
+          <p><strong>Realism Elements:</strong></p>
+          <ul>
+            <li>Using standardized household profiles based on archetypes (e.g., from EIA RECS data).</li>
+            <li>Employing realistic energy saving estimates for common actions (derived from TRMs, NREL, ENERGY STAR).</li>
+            <li>Setting plausible reduction goals (e.g., 10–15%).</li>
+            <li>Incorporating questions about feasibility or implementation likelihood.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Example Hypotheses Across Tasks</summary>
+        <div>
+          <ul>
+            <li><strong>Task 1 (LLM Query):</strong> Accessing specific kWh savings via LLM query will lead to more accurate plans compared to relying on prior knowledge. Users may initially query low-impact actions due to salience bias.</li>
+            <li><strong>Task 2 (Guided):</strong> Guided construction will reduce cognitive load and potentially steer users toward higher-impact actions, but might reduce user agency or learning compared to more active search.</li>
+            <li><strong>Task 3 (Estimate-Feedback):</strong> Explicit feedback on estimates will help calibrate users’ mental models, leading to more accurate subsequent planning compared to Task 1 where feedback is implicit.</li>
+            <li><strong>Task 4 (Seed Editing):</strong> Participants shown a biased seed plan will produce final plans that deviate more from ground truth allocations, demonstrating anchoring effects.</li>
+            <li><strong>General:</strong> Cognitive load (e.g., NASA-TLX) will vary depending on the level of AI assistance and task structure. Trust in the AI will influence reliance on its outputs.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Incorporated Survey Measures (Examples)</summary>
+        <div>
+          <p>Tasks may include variations of:</p>
+          <ul>
+            <li><strong>Attari-style Estimation (Task 3):</strong> “Estimate the annual kWh savings from replacing 5 incandescent bulbs with LEDs.”</li>
+            <li><strong>Cognitive Load (Post-Task):</strong> Simplified NASA-TLX items (Mental Demand, Effort, Success).</li>
+            <li><strong>Trust in Automation (Post-Task):</strong> Simplified items (e.g., “The assistant provided accurate information.”).</li>
+            <li><strong>Implementation Likelihood (Post-Plan):</strong> “How likely are you to implement [Action X] in the next year?” (Likert scale).</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- Task 1: Action Selection & LLM Query -->
+    <div v-if="activeTab === 'task1'">
+      <h2>Task 1: Action Selection with Information Lookup</h2>
+      <p><strong>Goal:</strong> Create a plan of specific actions to meet the target kWh reduction for the chosen household. Use the simulated LLM query tool to find the estimated annual kWh savings for each action <em>before</em> adding it to your plan.</p>
+
+      <div class="task-setup">
+        <label for="t1-profile">Select Household Profile:</label>
+        <select id="t1-profile" v-model="task1State.selectedProfileId" @change="resetTaskState('task1')">
+          <option disabled value="">Please select one</option>
+          <option v-for="profile in householdProfiles" :key="profile.id" :value="profile.id">
+            {{ profile.name }} (Baseline: {{ profile.baselineKWh }} kWh/year)
+          </option>
+        </select>
+        <button @click="setReductionGoal('task1', 10)" :disabled="!task1State.selectedProfileId">Set 10% Reduction Goal</button>
+        <button @click="setReductionGoal('task1', 15)" :disabled="!task1State.selectedProfileId">Set 15% Reduction Goal</button>
+        <button @click="resetTaskState('task1')" v-if="task1State.targetReductionKWh > 0">Reset Task</button>
+
+        <div v-if="currentHousehold('task1')">
+          <h4>Household Details:</h4>
+          <p>{{ currentHousehold('task1').description }}</p>
+          <p><strong>Baseline Annual Usage:</strong> {{ currentHousehold('task1').baselineKWh }} kWh</p>
+          <p v-if="task1State.targetReductionKWh > 0">
+            <strong>Target Annual Reduction:</strong>
+            {{ task1State.targetReductionKWh.toFixed(0) }} kWh
+          </p>
+          <p v-else class="error">Please select a profile and set a reduction goal.</p>
+        </div>
+      </div>
+
+      <div v-if="task1State.targetReductionKWh > 0">
+        <div class="action-list">
+          <h4>Available Actions (Query LLM for Savings)</h4>
+          <div v-for="action in applianceActions" :key="action.id" class="action-item">
+            <span>{{ action.name }} <small>({{ action.description }})</small></span>
+            <button @click="queryLLMSavings('task1', action.id)">Query LLM for Savings</button>
+          </div>
+          <div>
+            <label for="t1-custom-query">Custom Query:</label>
+            <input type="text" id="t1-custom-query" v-model="task1State.customQueryText"
+                   placeholder="e.g., 'savings from shorter showers'">
+            <button @click="queryLLMSavings('task1', task1State.customQueryText)">Query LLM</button>
+          </div>
+        </div>
+
+        <div v-if="task1State.llmResponse" class="llm-response">
+          <strong>Simulated LLM Response:</strong>
+          <p>Query: "{{ task1State.lastQuery }}"</p>
+          <p>Estimated Savings: {{ task1State.llmResponse.savings }} kWh/year</p>
+          <p v-if="task1State.llmResponse.explanation">Explanation: {{ task1State.llmResponse.explanation }}</p>
+          <button
+            v-if="task1State.llmResponse.actionId && !task1State.plan.find(a => a.id === task1State.llmResponse.actionId)"
+            @click="addActionToPlan('task1', task1State.llmResponse.actionId, task1State.llmResponse.savings)">
+            Add to Plan
+          </button>
+          <span
+            v-if="task1State.llmResponse.actionId && task1State.plan.find(a => a.id === task1State.llmResponse.actionId)">
+            (Already in plan)
+          </span>
+        </div>
+
+        <div class="plan-builder">
+          <h4>Your Energy Reduction Plan</h4>
+          <div v-if="task1State.plan.length === 0">
+            Your plan is empty. Query actions and add them.
+          </div>
+          <div v-for="(action, index) in task1State.plan" :key="action.id" class="plan-item">
+            <span>{{ getActionById(action.id)?.name }}</span>
+            <span>{{ action.savings }} kWh</span>
+            <button @click="removeActionFromPlan('task1', index)">Remove</button>
+          </div>
+        </div>
+
+        <div class="savings-tracker">
+          Total Planned Savings: {{ task1State.planTotal.toFixed(0) }} / {{ task1State.targetReductionKWh.toFixed(0) }} kWh
+          <div class="progress-bar-container">
+            <div class="progress-bar" :style="{ width: calculateProgress('task1') + '%' }">
+              {{ calculateProgress('task1').toFixed(0) }}%
+            </div>
+          </div>
+          <p v-if="isGoalMet('task1')" style="color: green; font-weight: bold;">Target Met or Exceeded!</p>
+        </div>
+
+        <div class="survey-question">
+          <h4>Post-Task Questions</h4>
+          <div>
+            <label>How mentally demanding was this task? (1=Very Low, 7=Very High)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task1State.survey.mentalDemand">
+            {{ task1State.survey.mentalDemand }}
+          </div>
+          <div>
+            <label>How reliable did you find the LLM assistant's information? (1=Not at all, 7=Very Reliable)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task1State.survey.trust">
+            {{ task1State.survey.trust }}
+          </div>
+          <button @click="submitTask('task1')">Submit Final Plan &amp; Survey</button>
+          <p v-if="task1State.submitted">
+            Task submitted. Accuracy: {{ task1State.finalAccuracy.toFixed(2) }}% deviation from target.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task 2: Guided Plan Construction -->
+    <div v-if="activeTab === 'task2'">
+      <h2>Task 2: Guided Plan Construction (Simulated)</h2>
+      <p><strong>Goal:</strong> Follow the simulated LLM guide to build an energy reduction plan. The guide will suggest areas to focus on and ask for details.</p>
+
+      <div class="task-setup">
+        <label for="t2-profile">Select Household Profile:</label>
+        <select id="t2-profile" v-model="task2State.selectedProfileId" @change="resetTaskState('task2')">
+          <option disabled value="">Please select one</option>
+          <option v-for="profile in householdProfiles" :key="profile.id" :value="profile.id">
+            {{ profile.name }} (Baseline: {{ profile.baselineKWh }} kWh/year)
+          </option>
+        </select>
+        <button @click="setReductionGoal('task2', 10)" :disabled="!task2State.selectedProfileId">
+          Set 10% Reduction Goal
+        </button>
+        <!-- Fixing the disabled logic here -->
+        <button @click="startGuidedPlan('task2')" :disabled="!(task2State.targetReductionKWh > 0) || task2State.guidedPlanStarted">
+          Start Guided Plan
+        </button>
+        <button @click="resetTaskState('task2')" v-if="task2State.guidedPlanStarted">Reset Task</button>
+
+        <div v-if="currentHousehold('task2')">
+          <p><strong>Baseline Annual Usage:</strong> {{ currentHousehold('task2').baselineKWh }} kWh</p>
+          <p v-if="task2State.targetReductionKWh > 0">
+            <strong>Target Annual Reduction:</strong> {{ task2State.targetReductionKWh.toFixed(0) }} kWh
+          </p>
+          <p v-else class="error">Please select a profile and set a reduction goal.</p>
+        </div>
+      </div>
+
+      <div v-if="task2State.guidedPlanStarted">
+        <h4>Guided Planning Session (Simulation)</h4>
+        <div v-for="(step, index) in task2State.guidedSteps" :key="index" class="llm-response" style="margin-bottom: 10px;">
+          <p><strong>{{ step.speaker }}:</strong> {{ step.text }}</p>
+
+          <div v-if="step.type === 'prompt' && task2State.currentStep === index">
+            <input type="text" v-model="task2State.userInput" :placeholder="step.placeholder">
+            <button @click="processGuidedInput('task2')">Send Response</button>
+          </div>
+
+          <div v-if="step.type === 'action_confirm' && task2State.currentStep === index">
+            <button @click="confirmGuidedAction('task2', step.action, step.savings)">
+              Add "{{ getActionById(step.action.id)?.name }}" ({{ step.savings }} kWh) to Plan
+            </button>
+            <button @click="advanceGuidedStep('task2')">Skip this action</button>
+          </div>
+
+          <div v-if="step.type === 'end' && task2State.currentStep === index">
+            <p>End of guided simulation.</p>
+          </div>
+        </div>
+
+        <div class="plan-builder">
+          <h4>Your Energy Reduction Plan</h4>
+          <div v-if="task2State.plan.length === 0">Plan is empty.</div>
+          <div v-for="(action, index) in task2State.plan" :key="action.id" class="plan-item">
+            <span>{{ getActionById(action.id)?.name }}</span>
+            <span>{{ action.savings }} kWh</span>
+            <!-- No remove button in guided plan for simplicity -->
+          </div>
+        </div>
+
+        <div class="savings-tracker">
+          Total Planned Savings: {{ task2State.planTotal.toFixed(0) }} / {{ task2State.targetReductionKWh.toFixed(0) }} kWh
+          <div class="progress-bar-container">
+            <div class="progress-bar" :style="{ width: calculateProgress('task2') + '%' }">
+              {{ calculateProgress('task2').toFixed(0) }}%
+            </div>
+          </div>
+          <p v-if="isGoalMet('task2')" style="color: green; font-weight: bold;">Target Met or Exceeded!</p>
+        </div>
+
+        <div class="survey-question">
+          <h4>Post-Task Questions</h4>
+          <div>
+            <label>How helpful was the guided process? (1=Not at all, 7=Very Helpful)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task2State.survey.helpfulness">
+            {{ task2State.survey.helpfulness }}
+          </div>
+          <div>
+            <label>How much control did you feel you had over the final plan? (1=Very Little, 7=Complete Control)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task2State.survey.agency">
+            {{ task2State.survey.agency }}
+          </div>
+          <button @click="submitTask('task2')" :disabled="task2State.currentStep < task2State.guidedSteps.length -1">
+            Submit Final Plan &amp; Survey
+          </button>
+          <p v-if="task2State.submitted">
+            Task submitted. Accuracy: {{ task2State.finalAccuracy.toFixed(2) }}% deviation from target.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task 3: Estimate-then-Plan -->
+    <div v-if="activeTab === 'task3'">
+      <h2>Task 3: Estimate-then-Plan with Feedback</h2>
+      <p><strong>Goal:</strong> First, estimate the annual kWh savings for the actions listed below based on your own knowledge. Then, receive feedback on your estimates. Finally, build a plan to meet the target reduction using the corrected information.</p>
+
+      <div class="task-setup">
+        <label for="t3-profile">Select Household Profile:</label>
+        <select id="t3-profile" v-model="task3State.selectedProfileId" @change="resetTaskState('task3')">
+          <option disabled value="">Please select one</option>
+          <option v-for="profile in householdProfiles" :key="profile.id" :value="profile.id">
+            {{ profile.name }} (Baseline: {{ profile.baselineKWh }} kWh/year)
+          </option>
+        </select>
+        <button @click="setReductionGoal('task3', 10)" :disabled="!task3State.selectedProfileId">Set 10% Reduction Goal</button>
+        <button @click="resetTaskState('task3')" v-if="task3State.currentPhase !== 'estimate'">Reset Task</button>
+
+        <div v-if="currentHousehold('task3')">
+          <p><strong>Baseline Annual Usage:</strong> {{ currentHousehold('task3').baselineKWh }} kWh</p>
+          <p v-if="task3State.targetReductionKWh > 0">
+            <strong>Target Annual Reduction:</strong> {{ task3State.targetReductionKWh.toFixed(0) }} kWh
+          </p>
+          <p v-else class="error">Please select a profile and set a reduction goal.</p>
+        </div>
+      </div>
+
+      <div v-if="task3State.targetReductionKWh > 0">
+
+        <!-- Estimation Phase -->
+        <div v-if="task3State.currentPhase === 'estimate'">
+          <h4>Phase 1: Estimate Savings</h4>
+          <p>For each action, estimate the typical annual kWh savings for this household.</p>
+          <div v-for="action in task3State.actionsToEstimate" :key="action.id" class="estimate-item">
+            <label :for="'est-' + action.id">{{ action.name }}</label>
+            <input type="number" :id="'est-' + action.id" v-model.number="task3State.userEstimates[action.id]" placeholder="Your kWh estimate">
+            <span>kWh/year</span>
+          </div>
+          <button @click="submitEstimates('task3')" :disabled="!allEstimatesMade('task3')">
+            Submit Estimates &amp; Get Feedback
+          </button>
+          <p v-if="!allEstimatesMade('task3')" class="error">
+            Please provide an estimate for all actions.
+          </p>
+        </div>
+
+        <!-- Feedback Phase -->
+        <div v-if="task3State.currentPhase === 'feedback'">
+          <h4>Phase 2: Feedback on Your Estimates</h4>
+          <div v-for="action in task3State.actionsToEstimate" :key="action.id" class="feedback">
+            <strong>{{ action.name }}</strong>
+            <p>Your Estimate: {{ task3State.userEstimates[action.id] ?? 'N/A' }} kWh/year</p>
+            <p>Actual Estimated Savings: {{ getActionById(action.id)?.savings }} kWh/year</p>
+            <p v-if="getSimulatedLLMResponse(action.id)?.explanation">
+              <em>Simulated LLM Explanation:</em> {{ getSimulatedLLMResponse(action.id)?.explanation }}
+            </p>
+            <p :style="{ color: Math.abs((task3State.userEstimates[action.id] ?? 0) - getActionById(action.id)?.savings) > 50 ? 'red' : 'green' }">
+              Accuracy: {{ calculateEstimateAccuracy(task3State.userEstimates[action.id], getActionById(action.id)?.savings) }}
+            </p>
+          </div>
+          <button @click="startPlanningPhase('task3')">Proceed to Planning</button>
+        </div>
+
+        <!-- Planning Phase -->
+        <div v-if="task3State.currentPhase === 'plan'">
+          <h4>Phase 3: Build Your Plan</h4>
+          <p>Use the corrected savings information to build your plan.</p>
+          <div class="action-list">
+            <h4>Available Actions (with Accurate Savings)</h4>
+            <div v-for="action in applianceActions" :key="action.id" class="action-item">
+              <span>{{ action.name }} ({{ action.savings }} kWh/year)</span>
+              <button @click="addActionToPlan('task3', action.id, action.savings)"
+                      :disabled="task3State.plan.find(a => a.id === action.id)">
+                Add to Plan
+              </button>
+              <span v-if="task3State.plan.find(a => a.id === action.id)">
+                (Already in plan)
+              </span>
+            </div>
+          </div>
+
+          <div class="plan-builder">
+            <h4>Your Energy Reduction Plan</h4>
+            <div v-if="task3State.plan.length === 0">
+              Your plan is empty.
+            </div>
+            <div v-for="(action, index) in task3State.plan" :key="action.id" class="plan-item">
+              <span>{{ getActionById(action.id)?.name }}</span>
+              <span>{{ action.savings }} kWh</span>
+              <button @click="removeActionFromPlan('task3', index)">Remove</button>
+            </div>
+          </div>
+
+          <div class="savings-tracker">
+            Total Planned Savings: {{ task3State.planTotal.toFixed(0) }} / {{ task3State.targetReductionKWh.toFixed(0) }} kWh
+            <div class="progress-bar-container">
+              <div class="progress-bar" :style="{ width: calculateProgress('task3') + '%' }">
+                {{ calculateProgress('task3').toFixed(0) }}%
+              </div>
+            </div>
+            <p v-if="isGoalMet('task3')" style="color: green; font-weight: bold;">Target Met or Exceeded!</p>
+          </div>
+
+          <div class="survey-question">
+            <h4>Post-Task Questions</h4>
+            <div>
+              <label>How surprising was the feedback on your estimates? (1=Not at all, 7=Very Surprising)</label>
+              <input type="range" min="1" max="7" step="1" v-model="task3State.survey.surprise">
+              {{ task3State.survey.surprise }}
+            </div>
+            <div>
+              <label>How confident are you in your final plan's accuracy? (1=Not at all, 7=Very Confident)</label>
+              <input type="range" min="1" max="7" step="1" v-model="task3State.survey.confidence">
+              {{ task3State.survey.confidence }}
+            </div>
+            <button @click="submitTask('task3')">Submit Final Plan &amp; Survey</button>
+            <p v-if="task3State.submitted">
+              Task submitted. Final Plan Accuracy: {{ task3State.finalAccuracy.toFixed(2) }}% deviation.
+              Initial Estimate Error: {{ task3State.initialEstimateError.toFixed(2) }}% avg deviation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task 4: Plan Editing from AI Seed -->
+    <div v-if="activeTab === 'task4'">
+      <h2>Task 4: Plan Editing from AI Seed</h2>
+      <p><strong>Goal:</strong> You will be presented with an initial plan drafted by an AI assistant. Review the plan and edit the kWh savings allocated to each action until the total <em>exactly</em> matches the target reduction goal.</p>
+
+      <div class="task-setup">
+        <label for="t4-profile">Select Household Profile:</label>
+        <select id="t4-profile" v-model="task4State.selectedProfileId" @change="resetTaskState('task4')">
+          <option disabled value="">Please select one</option>
+          <option v-for="profile in householdProfiles" :key="profile.id" :value="profile.id">
+            {{ profile.name }} (Baseline: {{ profile.baselineKWh }} kWh/year)
+          </option>
+        </select>
+        <button @click="setReductionGoal('task4', 10)" :disabled="!task4State.selectedProfileId">
+          Set 10% Reduction Goal
+        </button>
+        <!-- Fixing the disabled logic here -->
+        <button @click="generateSeedPlan('task4', 'accurate')" :disabled="!(task4State.targetReductionKWh > 0) || task4State.seedPlan.length > 0">
+          Load Accurate Seed Plan
+        </button>
+        <button @click="generateSeedPlan('task4', 'biased')" :disabled="!(task4State.targetReductionKWh > 0) || task4State.seedPlan.length > 0">
+          Load Biased Seed Plan
+        </button>
+        <button @click="resetTaskState('task4')" v-if="task4State.seedPlan.length > 0">Reset Task</button>
+
+        <div v-if="currentHousehold('task4')">
+          <p><strong>Baseline Annual Usage:</strong> {{ currentHousehold('task4').baselineKWh }} kWh</p>
+          <p v-if="task4State.targetReductionKWh > 0">
+            <strong>Target Annual Reduction:</strong>
+            <strong style="color: blue;">{{ task4State.targetReductionKWh.toFixed(0) }} kWh</strong>
+          </p>
+          <p v-else class="error">Please select a profile and set a reduction goal.</p>
+        </div>
+      </div>
+
+      <div v-if="task4State.seedPlan.length > 0">
+        <h4>AI Seed Plan ({{ task4State.seedType }} seed) - Edit kWh Values</h4>
+        <p>Adjust the 'Edited Savings' values below until the 'Current Total Savings' exactly matches the target.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Seed Savings (kWh)</th>
+              <th>Edited Savings (kWh)</th>
+              <th>Ground Truth (for reference)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in task4State.seedPlan" :key="item.id" class="seed-item">
+              <td>{{ getActionById(item.id)?.name }}</td>
+              <td>{{ item.seedSavings.toFixed(0) }}</td>
+              <td>
+                <input type="number" v-model.number="item.editedSavings" @input="updatePlanTotal('task4')">
+              </td>
+              <td>{{ getActionById(item.id)?.savings }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="savings-tracker">
+          Current Total Savings:
+          <strong :style="{ color: task4State.planTotal === task4State.targetReductionKWh ? 'green' : 'red' }">
+            {{ task4State.planTotal.toFixed(0) }}
+          </strong>
+          / {{ task4State.targetReductionKWh.toFixed(0) }} kWh (Target)
+          <p v-if="task4State.planTotal === task4State.targetReductionKWh" style="color: green; font-weight: bold;">
+            Target Matched Exactly!
+          </p>
+          <p v-else class="error">Keep adjusting until the total matches the target.</p>
+        </div>
+
+        <div class="survey-question">
+          <h4>Post-Task Questions</h4>
+          <div>
+            <label>How much effort did it take to adjust the plan to meet the target? (1=Very Little, 7=A Lot)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task4State.survey.effort">
+            {{ task4State.survey.effort }}
+          </div>
+          <div>
+            <label>How accurate did the initial AI seed plan seem? (1=Very Inaccurate, 7=Very Accurate)</label>
+            <input type="range" min="1" max="7" step="1" v-model="task4State.survey.initialTrust">
+            {{ task4State.survey.initialTrust }}
+          </div>
+          <button @click="submitTask('task4')" :disabled="task4State.planTotal !== task4State.targetReductionKWh">
+            Submit Final Plan &amp; Survey
+          </button>
+          <p v-if="task4State.submitted">
+            Task submitted. Final Plan Accuracy: {{ task4State.finalAccuracy.toFixed(2) }}% deviation from target.
+            Deviation from Ground Truth Allocation: {{ task4State.deviationFromGroundTruth.toFixed(2) }}
+            avg kWh diff per item.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end tab-content -->
+</div> <!-- end #app -->
+
+<script>
+  const { createApp, ref, reactive, computed, watch } = Vue;
+
+  createApp({
+    data() {
+      return {
+        activeTab: 'background', // Default tab
+        householdProfiles: [
+          {
+            id: 'p1',
+            name: 'Midwest Single Family',
+            baselineKWh: 11000,
+            description: '2000 sq ft home in a cold climate, electric heat pump, moderate appliance usage.'
+          },
+          {
+            id: 'p2',
+            name: 'Sunbelt Apartment',
+            baselineKWh: 7500,
+            description: '800 sq ft apartment in a hot climate, central AC (heavy use), efficient appliances.'
+          },
+          {
+            id: 'p3',
+            name: 'Coastal Townhouse',
+            baselineKWh: 9000,
+            description: '1500 sq ft townhouse in a mild climate, gas heating, mix of old and new appliances.'
+          },
+          {
+            id: 'p4',
+            name: 'Large Rural Home',
+            baselineKWh: 15000,
+            description: '3000 sq ft older home in a mixed climate, electric resistance heat backup, well pump, older appliances.'
+          }
+        ],
+        // Realistic annual kWh savings estimates
+        applianceActions: [
+          { id: 'a1', name: 'Replace 5 Incandescent Bulbs with LEDs', description: 'Replace 60W incandescents used 3hrs/day', savings: 250 },
+          { id: 'a2', name: 'Lower Thermostat 2°F (Heating Season)', description: 'For 8 hours/day during winter months', savings: 400 },
+          { id: 'a3', name: 'Raise Thermostat 2°F (Cooling Season)', description: 'For 8 hours/day during summer months', savings: 350 },
+          { id: 'a4', name: 'Lower Water Heater Temp by 20°F', description: 'Reduce from 140°F to 120°F', savings: 450 },
+          { id: 'a5', name: 'Wash Clothes in Cold Water', description: 'Switch from hot/warm wash cycles', savings: 300 },
+          { id: 'a6', name: 'Air Dry Clothes (Half of Loads)', description: 'Instead of using electric dryer', savings: 400 },
+          { id: 'a7', name: 'Replace Old Refrigerator with ENERGY STAR', description: 'Upgrade 15+ year old model', savings: 550 },
+          { id: 'a8', name: 'Unplug Electronics/Use Smart Strip', description: 'Reduce phantom load from TVs, chargers, etc.', savings: 100 },
+          { id: 'a9', name: 'Reduce Shower Time by 5 Minutes', description: 'Per person per day (assumes electric water heating)', savings: 350 },
+          { id: 'a10', name: 'Install Low-Flow Showerhead', description: 'Reduces hot water usage', savings: 250 },
+          { id: 'a11', name: 'Air Seal Home (Basic DIY)', description: 'Caulk windows, weatherstrip doors', savings: 600 },
+          { id: 'a12', name: 'Install Smart Thermostat', description: 'Optimize heating/cooling schedules', savings: 500 },
+        ],
+        // Simplified pre-generated LLM responses
+        simulatedLLMResponses: {
+          'a1': {
+            actionId: 'a1',
+            savings: 250,
+            explanation: 'LED bulbs use about 80–85% less energy than traditional incandescent bulbs.'
+          },
+          'a2': {
+            actionId: 'a2',
+            savings: 400,
+            explanation: 'Reducing thermostat settings during winter significantly cuts down on heating energy.'
+          },
+          'a3': {
+            actionId: 'a3',
+            savings: 350,
+            explanation: 'Raising the thermostat in summer reduces the workload on your AC system.'
+          },
+          'a4': {
+            actionId: 'a4',
+            savings: 450,
+            explanation: 'Water heating is a large energy user; lowering the temperature reduces standby losses.'
+          },
+          'a5': {
+            actionId: 'a5',
+            savings: 300,
+            explanation: 'Most energy in laundry goes into heating water; cold washes are effective for most loads.'
+          },
+          'a6': {
+            actionId: 'a6',
+            savings: 400,
+            explanation: 'Electric dryers consume a great deal of energy. Air drying eliminates that usage.'
+          },
+          'a7': {
+            actionId: 'a7',
+            savings: 550,
+            explanation: 'Modern ENERGY STAR fridges are more efficient due to better insulation and compressors.'
+          },
+          'a8': {
+            actionId: 'a8',
+            savings: 100,
+            explanation: 'Many electronics draw power when off (phantom load). Smart strips can reduce this waste.'
+          },
+          'a9': {
+            actionId: 'a9',
+            savings: 350,
+            explanation: 'Shorter showers reduce hot water usage, saving water heating energy.'
+          },
+          'a10': {
+            actionId: 'a10',
+            savings: 250,
+            explanation: 'Low-flow showerheads reduce water consumption, thus reducing energy for water heating.'
+          },
+          'a11': {
+            actionId: 'a11',
+            savings: 600,
+            explanation: 'Reducing air leaks means heating/cooling systems don’t work as hard.'
+          },
+          'a12': {
+            actionId: 'a12',
+            savings: 500,
+            explanation: 'Smart thermostats optimize temperatures automatically, reducing wasted heating/cooling.'
+          },
+          'custom_fallback': {
+            actionId: null,
+            savings: 150,
+            explanation: 'For unrecognized queries, we provide a rough estimate of 150 kWh as a placeholder.'
+          }
+        },
+        // Each task’s state
+        task1State: null,
+        task2State: null,
+        task3State: null,
+        task4State: null,
+      };
+    },
+    created() {
+      // Initialize each task’s state
+      this.task1State = this.getDefaultTaskState();
+      this.task2State = this.getDefaultTaskState();
+      this.task3State = this.getDefaultTaskState();
+      this.task4State = this.getDefaultTaskState();
+      // Set up Task 3 initially
+      this.setupTask3Estimates('task3');
+    },
+    methods: {
+      // Return a fresh task-state object
+      getDefaultTaskState() {
+        return {
+          selectedProfileId: '',
+          targetReductionKWh: 0,
+          plan: [],
+          planTotal: 0,
+          llmResponse: null,
+          lastQuery: '',
+          customQueryText: '',
+          submitted: false,
+          finalAccuracy: 0,
+          // Task 2 specifics
+          guidedPlanStarted: false,
+          guidedSteps: [],
+          currentStep: 0,
+          userInput: '',
+          // Task 3 specifics
+          currentPhase: 'estimate', // can be: estimate, feedback, plan
+          actionsToEstimate: [],
+          userEstimates: {},
+          initialEstimateError: 0,
+          // Task 4 specifics
+          seedPlan: [],
+          seedType: '',
+          deviationFromGroundTruth: 0,
+          // Survey data
+          survey: {
+            mentalDemand: 4,
+            trust: 4,
+            helpfulness: 4,
+            agency: 4,
+            surprise: 4,
+            confidence: 4,
+            effort: 4,
+            initialTrust: 4,
+          }
+        };
+      },
+      // Tab switching
+      changeTab(tabName) {
+        this.activeTab = tabName;
+      },
+      // Reset a given task’s state (retaining the current profile if present)
+      resetTaskState(taskId) {
+        const oldProfile = this[taskId + 'State'] ? this[taskId + 'State'].selectedProfileId : '';
+        this[taskId + 'State'] = this.getDefaultTaskState();
+        if (oldProfile) {
+          this[taskId + 'State'].selectedProfileId = oldProfile;
+        }
+        if (taskId === 'task3') {
+          this.setupTask3Estimates(taskId);
+        }
+      },
+      // Set reduction goal
+      setReductionGoal(taskId, percentage) {
+        const state = this[taskId + 'State'];
+        const profile = this.currentHousehold(taskId);
+        if (profile) {
+          state.targetReductionKWh = profile.baselineKWh * (percentage / 100);
+          // Reset relevant fields
+          state.plan = [];
+          state.planTotal = 0;
+          state.submitted = false;
+          state.llmResponse = null;
+          state.seedPlan = [];
+          state.currentPhase = 'estimate';
+          state.userEstimates = {};
+          state.guidedPlanStarted = false;
+          state.guidedSteps = [];
+          state.currentStep = 0;
+          if (taskId === 'task3') {
+            this.setupTask3Estimates(taskId);
+          }
+        } else {
+          alert("Please select a household profile first.");
+        }
+      },
+      // Submit final plan for a task
+      submitTask(taskId) {
+        const state = this[taskId + 'State'];
+        state.finalAccuracy = this.calculateFinalAccuracy(taskId);
+        if (taskId === 'task3') {
+          this.calculateInitialEstimateError(taskId);
+        }
+        if (taskId === 'task4') {
+          this.calculateDeviationFromGroundTruth(taskId);
+        }
+        state.submitted = true;
+      },
+      // Identify current household
+      currentHousehold(taskId) {
+        const state = this[taskId + 'State'];
+        if (!state) return null;
+        return this.householdProfiles.find(p => p.id === state.selectedProfileId) || null;
+      },
+      // Access an action by ID
+      getActionById(id) {
+        return this.applianceActions.find(a => a.id === id);
+      },
+      // Access a simulated LLM response
+      getSimulatedLLMResponse(query) {
+        if (this.simulatedLLMResponses[query]) {
+          return this.simulatedLLMResponses[query];
+        }
+        // Attempt simple keyword matching for custom queries
+        const lowerQuery = String(query).toLowerCase();
+        if (lowerQuery.includes('shower')) return this.simulatedLLMResponses['a9'];
+        if (lowerQuery.includes('bulb') || lowerQuery.includes('led')) return this.simulatedLLMResponses['a1'];
+        if (lowerQuery.includes('thermostat') || lowerQuery.includes('heat') || lowerQuery.includes('cool')) return this.simulatedLLMResponses['a2'];
+        return this.simulatedLLMResponses['custom_fallback'];
+      },
+      // Calculate plan totals, progress, and accuracy
+      calculatePlanTotal(taskId) {
+        const state = this[taskId + 'State'];
+        state.planTotal = state.plan.reduce((sum, a) => sum + a.savings, 0);
+      },
+      calculateProgress(taskId) {
+        const state = this[taskId + 'State'];
+        if (!state.targetReductionKWh) return 0;
+        const progress = (state.planTotal / state.targetReductionKWh) * 100;
+        return Math.min(Math.max(progress, 0), 100);
+      },
+      isGoalMet(taskId) {
+        const state = this[taskId + 'State'];
+        return state.planTotal >= state.targetReductionKWh;
+      },
+      calculateFinalAccuracy(taskId) {
+        const state = this[taskId + 'State'];
+        if (!state.targetReductionKWh) return 0;
+        return Math.abs(state.planTotal - state.targetReductionKWh) / state.targetReductionKWh * 100;
+      },
+
+      // --- Task 1 Methods ---
+      queryLLMSavings(taskId, query) {
+        const state = this[taskId + 'State'];
+        state.llmResponse = this.getSimulatedLLMResponse(query);
+        // If the query corresponds to a known action, use that for display
+        const matchedAction = this.getActionById(query);
+        state.lastQuery = matchedAction ? matchedAction.name : query;
+      },
+      addActionToPlan(taskId, actionId, savings) {
+        const state = this[taskId + 'State'];
+        if (!state.plan.find(a => a.id === actionId)) {
+          state.plan.push({ id: actionId, savings });
+        }
+        this.calculatePlanTotal(taskId);
+      },
+      removeActionFromPlan(taskId, index) {
+        const state = this[taskId + 'State'];
+        state.plan.splice(index, 1);
+        this.calculatePlanTotal(taskId);
+      },
+
+      // --- Task 2 Methods ---
+      startGuidedPlan(taskId) {
+        const state = this[taskId + 'State'];
+        if (!state.targetReductionKWh) {
+          alert("Set a reduction goal first.");
+          return;
+        }
+        state.guidedPlanStarted = true;
+        state.currentStep = 0;
+        state.plan = [];
+        state.planTotal = 0;
+        // Very simple guided script
+        state.guidedSteps = [
+          {
+            speaker: 'LLM Guide',
+            text: 'Let’s make a plan to save ' + state.targetReductionKWh.toFixed(0) + ' kWh. High-impact areas: heating/cooling and water heating. Shall we start there?',
+            type: 'info'
+          },
+          {
+            speaker: 'LLM Guide',
+            text: 'Suggest one action for heating/cooling (e.g., "adjust thermostat", "air seal").',
+            type: 'prompt',
+            placeholder: 'Your suggestion...'
+          }
+        ];
+      },
+      processGuidedInput(taskId) {
+        const state = this[taskId + 'State'];
+        const userInput = state.userInput.toLowerCase();
+        state.userInput = '';
+        // Insert user response
+        state.guidedSteps.push({ speaker: 'User', text: userInput, type: 'info' });
+        state.currentStep++;
+
+        // Simple action matching
+        let nextLLMStep;
+        const matched = this.applianceActions.find(a => userInput.includes(a.name.toLowerCase().split(" ")[0]) || userInput.includes(a.id));
+        if (matched && (userInput.includes('thermostat') || userInput.includes('seal'))) {
+          nextLLMStep = {
+            speaker: 'LLM Guide',
+            text: `Good idea. ${matched.name} can save around ${matched.savings} kWh. Add this to the plan?`,
+            type: 'action_confirm',
+            action: { id: matched.id },
+            savings: matched.savings
+          };
+        } else if (userInput.includes('water')) {
+          nextLLMStep = {
+            speaker: 'LLM Guide',
+            text: 'Okay, consider water heating actions (lower temp, shorter showers, etc.).',
+            type: 'prompt',
+            placeholder: 'Water heating action...'
+          };
+        } else {
+          nextLLMStep = {
+            speaker: 'LLM Guide',
+            text: 'Interesting. Let’s also consider major categories like water heating or lighting. Suggest an action.',
+            type: 'prompt',
+            placeholder: 'Water heating/lighting action...'
+          };
+        }
+        state.guidedSteps.push(nextLLMStep);
+        this.advanceGuidedStep(taskId);
+      },
+      confirmGuidedAction(taskId, action, savings) {
+        const state = this[taskId + 'State'];
+        if (!state.plan.find(a => a.id === action.id)) {
+          state.plan.push({ id: action.id, savings });
+        }
+        this.calculatePlanTotal(taskId);
+
+        let nextStep;
+        if (state.plan.length < 3 && state.planTotal < state.targetReductionKWh * 0.8) {
+          nextStep = {
+            speaker: 'LLM Guide',
+            text: 'Added. Suggest another area (appliances, lighting) or finalize your plan.',
+            type: 'prompt',
+            placeholder: 'Next action...'
+          };
+        } else {
+          nextStep = {
+            speaker: 'LLM Guide',
+            text: 'Great progress! Review your plan and submit when ready.',
+            type: 'end'
+          };
+        }
+        state.guidedSteps.push(nextStep);
+        this.advanceGuidedStep(taskId);
+      },
+      advanceGuidedStep(taskId) {
+        const state = this[taskId + 'State'];
+        if (state.currentStep < state.guidedSteps.length - 1) {
+          state.currentStep++;
+        }
+      },
+
+      // --- Task 3 Methods ---
+      setupTask3Estimates(taskId) {
+        const state = this[taskId + 'State'];
+        // Pick a subset of actions to estimate
+        const highImpact = ['a2', 'a4', 'a7', 'a11'];
+        const lowImpact = ['a1', 'a8', 'a10'];
+        const selectedIds = [...highImpact.slice(0, 2), ...lowImpact.slice(0, 2)];
+        state.actionsToEstimate = this.applianceActions.filter(a => selectedIds.includes(a.id));
+        state.userEstimates = {};
+        state.actionsToEstimate.forEach(a => state.userEstimates[a.id] = null);
+      },
+      allEstimatesMade(taskId) {
+        const state = this[taskId + 'State'];
+        if (!state.actionsToEstimate) return false;
+        return state.actionsToEstimate.every(a => {
+          const val = state.userEstimates[a.id];
+          return val !== null && val !== undefined && String(val).trim() !== '';
+        });
+      },
+      submitEstimates(taskId) {
+        if (this.allEstimatesMade(taskId)) {
+          this[taskId + 'State'].currentPhase = 'feedback';
+        } else {
+          alert("Please provide an estimate for all actions.");
+        }
+      },
+      calculateEstimateAccuracy(userEstimate, actualSavings) {
+        const numEst = Number(userEstimate);
+        if (isNaN(numEst)) return 'Invalid Input';
+        if (actualSavings === 0) {
+          return numEst === 0 ? 'Correct (Zero Savings)' : 'Incorrect (Should be Zero)';
+        }
+        const diff = Math.abs(numEst - actualSavings);
+        const percDiff = (diff / actualSavings) * 100;
+        if (percDiff <= 25) return 'Close!';
+        if (percDiff <= 75) return 'Somewhat Off';
+        return 'Significantly Different';
+      },
+      calculateInitialEstimateError(taskId) {
+        const state = this[taskId + 'State'];
+        let totalDev = 0, count = 0;
+        state.actionsToEstimate.forEach(a => {
+          const userEst = Number(state.userEstimates[a.id]) || 0;
+          const actual = a.savings;
+          if (actual > 0) {
+            totalDev += Math.abs(userEst - actual) / actual;
+            count++;
+          } else if (userEst !== 0) {
+            totalDev += 1;
+            count++;
+          } else {
+            count++;
+          }
+        });
+        state.initialEstimateError = count > 0 ? (totalDev / count) * 100 : 0;
+      },
+      startPlanningPhase(taskId) {
+        const state = this[taskId + 'State'];
+        state.currentPhase = 'plan';
+        state.plan = [];
+        state.planTotal = 0;
+      },
+
+      // --- Task 4 Methods ---
+      generateSeedPlan(taskId, type) {
+        const state = this[taskId + 'State'];
+        const target = state.targetReductionKWh;
+        if (!target) return;
+
+        state.seedType = type;
+        state.seedPlan = [];
+        const actionPool = this.applianceActions.filter(a => ['a1','a2','a4','a7','a8','a11','a5'].includes(a.id));
+        const poolTotal = actionPool.reduce((sum, a) => sum + a.savings, 0);
+        if (poolTotal === 0) return;
+
+        let runningTotal = 0;
+        actionPool.forEach((action, index) => {
+          let seedSavings;
+          const groundTruth = action.savings;
+          if (type === 'accurate') {
+            // proportionally to groundTruth
+            seedSavings = groundTruth * (target / poolTotal);
+          } else {
+            // biased seed
+            const isLowImpact = ['a1', 'a8', 'a5'].includes(action.id);
+            const biasFactor = isLowImpact ? 1.5 : 0.7;
+            const biasedPoolTotal = actionPool.reduce((sum, a) => {
+              const low = ['a1','a8','a5'].includes(a.id) ? 1.5 : 0.7;
+              return sum + (a.savings * low);
+            }, 0);
+            seedSavings = groundTruth * biasFactor * (target / biasedPoolTotal);
+          }
+          seedSavings = Math.max(5, Math.round(seedSavings / 5) * 5);
+
+          if (index === actionPool.length - 1) {
+            const targetSum = target * 1.05;
+            seedSavings = Math.max(5, Math.round((targetSum - runningTotal)/5)*5);
+          }
+
+          state.seedPlan.push({
+            id: action.id,
+            seedSavings,
+            editedSavings: seedSavings,
+            groundTruth
+          });
+          runningTotal += seedSavings;
+        });
+
+        this.updatePlanTotal(taskId);
+      },
+      updatePlanTotal(taskId) {
+        const state = this[taskId + 'State'];
+        state.planTotal = state.seedPlan.reduce((sum, item) => sum + (Number(item.editedSavings) || 0), 0);
+      },
+      calculateDeviationFromGroundTruth(taskId) {
+        const state = this[taskId + 'State'];
+        let totalAbsDiff = 0;
+        state.seedPlan.forEach(item => {
+          totalAbsDiff += Math.abs((Number(item.editedSavings) || 0) - item.groundTruth);
+        });
+        state.deviationFromGroundTruth = state.seedPlan.length
+          ? totalAbsDiff / state.seedPlan.length
+          : 0;
+      },
+    },
+  }).mount('#app');
+</script>
+</body>
+</html>

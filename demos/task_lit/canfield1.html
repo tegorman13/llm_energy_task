@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Perception Study Demo (Admin)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for icon graphs */
+        .icon-graph-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+            position: relative;
+            padding-bottom: 40px; /* Increased space for rotated x-axis labels */
+            padding-left: 30px; /* Space for y-axis */
+            min-height: 300px; /* Ensure minimum height */
+        }
+        .icon-graph-y-axis {
+             position: absolute;
+             left: 0;
+             top: 0;
+             bottom: 40px; /* Match padding-bottom */
+             display: flex;
+             flex-direction: column-reverse;
+             justify-content: space-between;
+             padding-right: 8px; /* Space between labels and axis line */
+             border-right: 1px solid #d1d5db; /* gray-300 */
+             font-size: 0.75rem; /* 12px */
+             color: #6b7280; /* gray-500 */
+             text-align: right;
+        }
+         .icon-graph-y-axis span {
+             display: block; /* Ensure labels take space */
+         }
+
+        .icon-graph-main-area {
+             display: flex;
+             flex-direction: row;
+             align-items: flex-end; /* Align stacks to bottom */
+             justify-content: space-around; /* Distribute stacks */
+             width: 100%;
+             height: 100%; /* Fill the container height */
+             position: relative; /* For x-axis positioning */
+             padding-left: 10px; /* Space after Y axis */
+        }
+        .icon-stack {
+            display: flex;
+            flex-direction: column-reverse; /* Stack icons upwards */
+            align-items: center;
+            margin: 0 2px; /* Reduced spacing between stacks */
+            position: relative; /* For label positioning */
+            flex-shrink: 0; /* Prevent stacks from shrinking */
+        }
+        .icon {
+            width: 14px; /* Slightly smaller icons */
+            height: 14px;
+            margin-bottom: 1px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .icon-lightbulb { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="orange" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.311a14.994 14.994 0 01-3.75 0M10.5 1.5L12 3l1.5-1.5m-3 0V.75A.75.75 0 0111.25 0h1.5A.75.75 0 0113.5.75V1.5m-3 0h3m-3 18c0 1.105.895 2 2 2h1c1.105 0 2-.895 2-2v-1.75a.75.75 0 00-.75-.75H11.25a.75.75 0 00-.75.75V19.5zm-1.5-9.75a6.01 6.01 0 00-1.5.189m1.5-.189a6.01 6.01 0 011.5.189m-1.5-.189H12M6.75 7.5h10.5l-1.75 1.75L12 11.25l-3.25-1.75L6.75 7.5z" /></svg>'); }
+        .icon-house { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="gray" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>'); }
+        .icon-ac { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="lightblue" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>'); } /* Simple Snowflake */
+        .icon-heat { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.985-1.069A11.95 11.95 0 0012 2.25c-.377 0-.74.029-1.095.087A5.99 5.99 0 009 9.6a3.75 3.75 0 00.495 7.467 8.21 8.21 0 003-2.479z" /></svg>'); } /* Simple Flame */
+        .icon-kitchen { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="brown" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M12 3l-3.75 5.25M12 3l3.75 5.25M6 12.75h12m-12 0a.75.75 0 110-1.5h12a.75.75 0 110 1.5zm-3.75 4.5h15m-15 0a.75.75 0 110-1.5h15a.75.75 0 110 1.5z" /></svg>'); } /* Simple Utensil */
+        .icon-other { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="purple" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>'); } /* Question Mark */
+
+        .icon-graph-xaxis {
+            position: absolute;
+            bottom: 0;
+            left: 0; /* Align with the start of the main area */
+            right: 0;
+            display: flex;
+            justify-content: space-around; /* Distribute labels */
+            width: 100%; /* Take full width of main area */
+            padding-top: 5px; /* Space above labels */
+        }
+         .icon-graph-xaxis-label {
+            font-size: 0.7rem; /* Smaller font */
+            color: #6b7280; /* gray-500 */
+            text-align: center;
+            transform-origin: center bottom; /* Rotate around bottom center */
+            transform: rotate(-60deg); /* Rotate labels */
+            white-space: nowrap; /* Prevent wrapping */
+            /* Adjust position slightly if needed */
+             position: relative;
+             /* top: 5px; */
+         }
+         .icon-graph-xaxis-label-neighbor {
+             font-size: 0.7rem; /* Smaller font */
+             color: #6b7280; /* gray-500 */
+             text-align: center;
+             white-space: nowrap; /* Prevent wrapping */
+         }
+
+
+        /* Ensure canvas is responsive */
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Style Likert scale */
+        .likert-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .likert-label {
+            font-size: 0.875rem; /* text-sm */
+            margin: 0 0.5rem;
+            flex-shrink: 0; /* Prevent labels from shrinking */
+        }
+        .likert-options {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            flex-wrap: nowrap; /* Prevent wrapping */
+        }
+        .likert-options label {
+             display: inline-flex;
+             flex-direction: column; /* Stack radio and number */
+             align-items: center;
+             margin: 0 2px; /* Adjust spacing */
+             min-width: 25px; /* Ensure minimum width for spacing */
+             text-align: center;
+        }
+        .likert-options input[type="radio"] {
+            margin: 0 0 2px 0; /* Space below radio button */
+        }
+         .likert-options span {
+             font-size: 0.75rem; /* Smaller number label */
+         }
+
+
+        /* Style True/False buttons */
+        .tf-button {
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            font-weight: 500;
+            border: 2px solid transparent; /* Placeholder for selected border */
+        }
+        .tf-true { background-color: #22c55e; color: white; } /* green-500 */
+        .tf-false { background-color: #ef4444; color: white; } /* red-500 */
+        .tf-selected { border-color: black; } /* Use border instead of outline */
+
+        /* Style Multiple Choice */
+        .mc-option {
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+        }
+         .mc-option:hover {
+             background-color: #f3f4f6; /* gray-100 */
+         }
+        .mc-option input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        /* General Button Styling */
+        .nav-button {
+            padding: 0.75rem 1.5rem;
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            border: none;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+            margin-right: 0.5rem; /* Add spacing between buttons */
+        }
+        .nav-button:hover {
+            background-color: #2563eb; /* blue-600 */
+        }
+        .nav-button:disabled {
+            background-color: #9ca3af; /* gray-400 */
+            cursor: not-allowed;
+        }
+        /* Skip Button Styling */
+        .skip-button {
+            padding: 0.5rem 1rem;
+            background-color: #6b7280; /* gray-500 */
+            color: white;
+            border: none;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+            margin-left: 0.5rem; /* Add spacing */
+             font-size: 0.875rem; /* text-sm */
+        }
+        .skip-button:hover {
+             background-color: #4b5563; /* gray-600 */
+        }
+
+         /* Admin Controls Section */
+         .admin-controls {
+             border: 1px dashed #9ca3af; /* gray-400 */
+             padding: 1rem;
+             margin-top: 1.5rem;
+             margin-bottom: 1rem;
+             border-radius: 0.375rem; /* rounded-md */
+             background-color: #f9fafb; /* gray-50 */
+         }
+         .admin-controls h3 {
+             font-weight: 600;
+             margin-bottom: 0.5rem;
+             color: #4b5563; /* gray-600 */
+         }
+
+         /* Message Box */
+        #message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f87171; /* red-400 */
+            color: white;
+            padding: 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <div id="experiment-container" class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-md">
+
+        <h1 class="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-800">Electricity Perception Study (Admin Version)</h1>
+
+        <div id="message-box"></div>
+
+        <div id="screen-intro" class="text-gray-700 space-y-4">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Welcome!</h2>
+            <p>This is the admin version of the electricity perception study demo.</p>
+            <p>You can select the presentation format and skip sections as needed.</p>
+            <p>You will be shown information about the electricity use of a fictional household, the "Smith family". This family has relatively high electricity consumption.</p>
+            <p>You will see three different types of information about their usage, presented one after another:</p>
+            <ol class="list-decimal list-inside ml-4 space-y-1">
+                <li>Historical Use (how much they used each month over time)</li>
+                <li>Neighbor Comparison (how their use compares to similar neighbors for one month)</li>
+                <li>Appliance Breakdown (which appliances contributed most to their historical use)</li>
+            </ol>
+             <p>After viewing each type of information, you will be asked some questions about your understanding and opinion of it.</p>
+             <p>Finally, you will answer some general questions about energy use and provide some demographic information.</p>
+
+             <div class="admin-controls">
+                 <h3>Admin Controls</h3>
+                 <div id="format-selection" class="mb-4">
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Select Presentation Format:</label>
+                     <div class="flex space-x-4">
+                         <label class="inline-flex items-center">
+                             <input type="radio" class="form-radio" name="format" value="table" checked>
+                             <span class="ml-2">Table</span>
+                         </label>
+                         <label class="inline-flex items-center">
+                             <input type="radio" class="form-radio" name="format" value="bar">
+                             <span class="ml-2">Bar Graph</span>
+                         </label>
+                         <label class="inline-flex items-center">
+                             <input type="radio" class="form-radio" name="format" value="icon">
+                             <span class="ml-2">Icon Graph</span>
+                         </label>
+                     </div>
+                 </div>
+                 <div>
+                     <label class="block text-sm font-medium text-gray-700 mb-1">Skip Sections:</label>
+                     <button id="skip-to-literacy-button" class="skip-button">Skip to Literacy</button>
+                     <button id="skip-to-demographics-button" class="skip-button">Skip to Demographics</button>
+                     <button id="skip-to-end-button" class="skip-button">Skip to End</button>
+                 </div>
+             </div>
+
+            <div class="text-center">
+                <button id="start-button" class="nav-button">Start Experiment</button>
+            </div>
+        </div>
+
+        <div id="screen-info" class="hidden text-gray-700">
+            <h2 id="info-title" class="text-xl font-semibold mb-4 text-gray-800"></h2>
+            <p class="mb-4">Please carefully review the information below about the Smith family's electricity use.</p>
+            <div id="info-content" class="border border-gray-300 p-4 rounded-md mb-6 min-h-[350px] overflow-x-auto"> </div>
+            <div class="text-center">
+                <button id="info-next-button" class="nav-button">Continue to Questions</button>
+                <button id="skip-info-button" class="skip-button">Skip Info (Go to Questions)</button>
+            </div>
+        </div>
+
+        <div id="screen-questionnaire" class="hidden text-gray-700">
+            <h2 id="questionnaire-title" class="text-xl font-semibold mb-4 text-gray-800">Questions</h2>
+            <form id="questionnaire-form">
+                </form>
+            <div class="text-center">
+                <button id="questionnaire-next-button" class="nav-button">Next</button>
+                 <button id="skip-questions-button" class="skip-button">Skip Questions (Go to Next Section)</button>
+            </div>
+        </div>
+
+         <div id="screen-literacy" class="hidden text-gray-700">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Energy Literacy Questions</h2>
+            <p class="mb-4">Please answer the following general knowledge questions about energy.</p>
+            <form id="literacy-form">
+                </form>
+            <div class="text-center">
+                <button id="literacy-next-button" class="nav-button">Continue</button>
+                 <button id="skip-literacy-button" class="skip-button">Skip Literacy (Go to Demographics)</button>
+            </div>
+        </div>
+
+         <div id="screen-demographics" class="hidden text-gray-700">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Demographic Information</h2>
+            <p class="mb-4">Finally, please provide some basic demographic information. (In this demo, these are placeholders).</p>
+            <form id="demographics-form" class="space-y-4">
+                 <div>
+                    <label for="demo-age" class="block text-sm font-medium text-gray-700">Age:</label>
+                    <input type="number" id="demo-age" name="demo-age" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-700">Gender:</label>
+                    <select id="demo-gender" name="demo-gender" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Prefer not to say</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                 <div>
+                    <label for="demo-education" class="block text-sm font-medium text-gray-700">Highest Education Level:</label>
+                    <select id="demo-education" name="demo-education" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                         <option value="">Prefer not to say</option>
+                         <option value="lt-hs">Less than high school</option>
+                         <option value="hs">High school graduate or equivalent (e.g., GED)</option>
+                         <option value="sc">Some college, no degree</option>
+                         <option value="ad">Associate degree</option>
+                         <option value="bd">Bachelor's degree</option>
+                         <option value="gd">Graduate or professional degree</option>
+                    </select>
+                </div>
+                 </form>
+            <div class="text-center">
+                <button id="demographics-next-button" class="nav-button">Finish Experiment</button>
+                 <button id="skip-demographics-button" class="skip-button">Skip Demographics (Go to End)</button>
+            </div>
+        </div>
+
+        <div id="screen-end" class="hidden text-center text-gray-700">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Thank You!</h2>
+            <p>You have completed the simulated experiment.</p>
+            <p class="mt-4">This demo replicated the procedure from Canfield et al. (2017) to show how different information formats might be presented and evaluated in a research context.</p>
+            <div id="results-summary" class="mt-6 text-left p-4 border rounded-md bg-gray-50">
+                <h3 class="font-semibold mb-2">Demo Summary:</h3>
+                <p>Selected Format: <strong id="summary-format"></strong></p>
+                <p class="mt-2 text-sm">Raw Responses (for debugging):</p>
+                 <pre id="raw-responses" class="text-xs bg-gray-200 p-2 rounded overflow-auto max-h-40"></pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA (Same as before) ---
+        const data = {
+            historical: {
+                labels: ["Jan 11", "Feb 11", "Mar 11", "Apr 11", "May 11", "Jun 11", "Jul 11", "Aug 11", "Sep 11", "Oct 11", "Nov 11", "Dec 11", "Jan 12", "Feb 12"],
+                values: [1300, 1000, 900, 700, 800, 900, 1300, 1800, 1000, 800, 800, 800, 900, 1000],
+                title: "Historical Usage",
+                description: "The Smith's Electricity Bill - Historical Usage"
+            },
+            neighbor: {
+                categories: [
+                    { kWh: 137, homes: 1 }, { kWh: 238, homes: 2 }, { kWh: 279, homes: 4 },
+                    { kWh: 322, homes: 3 }, { kWh: 364, homes: 3 }, { kWh: 412, homes: 1 },
+                    { kWh: 450, homes: 1 }, { kWh: 504, homes: 2 }, { kWh: 581, homes: 1 },
+                    { kWh: 682, homes: 1 }, { kWh: 758, homes: 1 }, { kWh: 833, homes: 1 }
+                ],
+                smithsUsage: 682,
+                title: "Neighbor Comparison",
+                description: "The Smith's Electricity Use Compared to Neighbors"
+            },
+            appliance: {
+                labels: ["Jan 11", "Feb 11", "Mar 11", "Apr 11", "May 11", "Jun 11", "Jul 11", "Aug 11", "Sep 11", "Oct 11", "Nov 11", "Dec 11", "Jan 12", "Feb 12"],
+                categories: ["Central A/C", "Space Heating", "Lighting", "Kitchen Appliances", "Other Appliances"],
+                values: [
+                    [0, 600, 200, 200, 300],[0, 300, 200, 200, 300],[0, 200, 200, 200, 300],[0, 100, 100, 100, 300],[0, 0, 200, 200, 300], [300, 0, 100, 200, 300],
+                    [600, 0, 100, 200, 400],[1100, 0, 100, 200, 400],[400, 100, 100, 200, 300],[100, 200, 100, 200, 300],[0, 200, 200, 100, 300],[0, 300, 200, 100, 300],
+                    [0, 200, 200, 100, 300],[0, 300, 200, 200, 300]
+                ],
+                totals: [1300, 1000, 900, 700, 800, 900, 1300, 1800, 1000, 800, 800, 800, 900, 1000],
+                title: "Appliance Breakdown",
+                description: "The Smith's Electricity Bill - Appliance Usage (kWh)"
+            }
+        };
+
+        // --- QUESTIONS (Same as before) ---
+         const questions = {
+            historical: {
+                understanding: [
+                    { id: "hist_u1", text: "The highest electricity use was 1800kWh.", type: "tf", correct: true, verbatim: true },
+                    { id: "hist_u2", text: "The lowest electricity use was 700kWh.", type: "tf", correct: true, verbatim: true },
+                    { id: "hist_u3", text: "Just looking at the winter months (Dec, Jan, Feb), the Smiths tend to use the most on electricity in February.", type: "tf", correct: false, verbatim: false },
+                    { id: "hist_u4", text: "The Smith’s home used more electricity in February 2011 than February 2012.", type: "tf", correct: false, verbatim: false },
+                    { id: "hist_u5", text: "The Smith’s home used the most electricity in August.", type: "tf", correct: true, verbatim: false },
+                    { id: "hist_u6", text: "The Smith’s home used the most electricity in the summer months (Jun, Jul, Aug).", type: "tf", correct: true, verbatim: false },
+                    { id: "hist_u7", text: "Every month, the Smith’s electricity use was above 600kWh.", type: "tf", correct: true, verbatim: true },
+                ],
+                preference: [
+                    { id: "hist_p1", text: "How clear is this information?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p2", text: "How easy is this information to understand?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p3", text: "How much do you like the way this information was presented?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p4", text: "How easy is this information to use?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p5", text: "How much would you like it if this information were included in your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p6", text: "How useful would it be if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p7", text: "How professional does this information seem?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p8", text: "How much would you trust this information if it came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "hist_p9", text: "How much more detail would you like to see if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                    { id: "hist_p10", text: "How much would this information help you decide how to change your electricity use?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                ],
+                intention: [ { id: "hist_i1", text: "How much does this information make you want to lower your electricity usage?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] } ]
+            },
+            neighbor: {
+                understanding: [
+                     { id: "neigh_u1", text: "The Smith’s neighbors vary in how much electricity they use.", type: "tf", correct: true, verbatim: false },
+                     { id: "neigh_u2", text: "18 homes used less electricity than the Smith’s home.", type: "tf", correct: true, verbatim: false },
+                     { id: "neigh_u3", text: "The Smith’s home used more electricity than most of their neighbors.", type: "tf", correct: true, verbatim: false },
+                     { id: "neigh_u4", text: "The Smith’s home should use less electricity to be closer to the neighborhood average.", type: "tf", correct: true, verbatim: false },
+                     { id: "neigh_u5", text: "Most homes used more than 300kWh of electricity.", type: "tf", correct: true, verbatim: true },
+                     { id: "neigh_u6", text: "There is a difference of about 696kWh between the home that used the most and the least electricity.", type: "tf", correct: true, verbatim: true },
+                     { id: "neigh_u7", text: "The maximum amount of electricity used by the Smith’s neighbors was about 279kWh.", type: "tf", correct: false, verbatim: true },
+                ],
+                preference: [ // Same questions, different IDs
+                    { id: "neigh_p1", text: "How clear is this information?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p2", text: "How easy is this information to understand?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p3", text: "How much do you like the way this information was presented?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p4", text: "How easy is this information to use?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p5", text: "How much would you like it if this information were included in your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p6", text: "How useful would it be if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p7", text: "How professional does this information seem?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p8", text: "How much would you trust this information if it came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "neigh_p9", text: "How much more detail would you like to see if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                    { id: "neigh_p10", text: "How much would this information help you decide how to change your electricity use?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                ],
+                intention: [ { id: "neigh_i1", text: "How much does this information make you want to lower your electricity usage?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] } ]
+            },
+            appliance: {
+                understanding: [
+                    { id: "app_u1", text: "In January 2011, the Smiths used the most electricity for space heating.", type: "tf", correct: true, verbatim: false },
+                    { id: "app_u2", text: "In May 2011, the Smiths used the most electricity for running their “other” appliances.", type: "tf", correct: true, verbatim: false },
+                    { id: "app_u3", text: "The Smith’s home used less electricity in January 2011 than in January 2012.", type: "tf", correct: false, verbatim: false },
+                    { id: "app_u4", text: "The Smith’s use 300-400kWh of electricity a month for “other” appliances.", type: "tf", correct: true, verbatim: true },
+                    { id: "app_u5", text: "The difference in usage for lighting and kitchen appliances is never more than 100kWh.", type: "tf", correct: true, verbatim: true },
+                    { id: "app_u6", text: "The main reason why the Smith’s electricity use changes from month-to-month is because of lighting.", type: "tf", correct: false, verbatim: false },
+                    { id: "app_u7", text: "Without heat or air-conditioning, the Smiths would probably use between 400-500kWh per month.", type: "tf", correct: false, verbatim: true },
+                ],
+                 preference: [ // Same questions, different IDs
+                    { id: "app_p1", text: "How clear is this information?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p2", text: "How easy is this information to understand?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p3", text: "How much do you like the way this information was presented?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p4", text: "How easy is this information to use?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p5", text: "How much would you like it if this information were included in your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p6", text: "How useful would it be if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p7", text: "How professional does this information seem?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p8", text: "How much would you trust this information if it came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "Very much"] },
+                    { id: "app_p9", text: "How much more detail would you like to see if this information came with your electricity bill?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                    { id: "app_p10", text: "How much would this information help you decide how to change your electricity use?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] },
+                ],
+                intention: [ { id: "app_i1", text: "How much does this information make you want to lower your electricity usage?", type: "likert", scale: 7, labels: ["Not at all", "A lot"] } ]
+            },
+            literacy: [
+                 { id: "lit_1", text: "The amount of ELECTRICAL ENERGY (ELECTRICITY) we use is measured in units called …", type: "mc", options: ["Kilowatt (kW)", "Kilowatt-hours (kWh)", "British Thermal Units (BTU)", "Volts (V)", "Horsepower (HP)"], correct: "Kilowatt-hours (kWh)" },
+                 { id: "lit_2", text: "The amount of ENERGY consumed by an electrical appliance is equal to the power rating of the appliance (watts or kilowatts) …", type: "mc", options: ["Multiplied by the cost of electricity", "Added to the cost of electricity", "Multiplied by the time it’s used", "Divided by the time it’s used", "Added to the time it’s used"], correct: "Multiplied by the time it’s used" },
+                 { id: "lit_3", text: "When you turn on an incandescent light bulb, which of the following energy conversion takes place?", type: "mc", options: ["Electrical energy to radient energy (light)", "Chemical energy to radient energy (light)", "Electrical energy to radient energy (light) and thermal energy (heat)", "Chemical energy to radient energy (light) and thermal energy (heat)", "Electrical energy to radient energy (light) and mechanical energy"], correct: "Electrical energy to radient energy (light) and thermal energy (heat)" },
+                 { id: "lit_4", text: "The best reason to buy an ENERGY STAR® appliance is …", type: "mc", options: ["ENERGY STAR appliances are usually bigger", "ENERGY STAR appliances cost more", "ENERGY STAR appliances use less energy", "ENERGY STAR appliances are more modern looking", "ENERGY STAR appliances cost less"], correct: "ENERGY STAR appliances use less energy" },
+                 { id: "lit_5", text: "Which uses the MOST ENERGY in the average American home in one year?", type: "mc", options: ["Refrigerating food and beverages", "Washing and drying clothing", "Heating and cooling rooms", "Heating and cooling water", "Lighting the home"], correct: "Heating and cooling rooms" },
+                 { id: "lit_6", text: "Which of the following items uses the MOST ELECTRICITY in the average home in one year?", type: "mc", options: ["Lights", "Refrigerator", "Telephone", "Television", "Computer"], correct: "Refrigerator" },
+                 { id: "lit_7", text: "Which of the following sources provides most of the ELECTRICITY in the United States?", type: "mc", options: ["Nuclear power", "Burning petroleum", "Burning coal", "Solar energy", "Water (hydro) power"], correct: "Burning coal" },
+                 { id: "lit_8", text: "Some people think that if we run out of fossil fuels we can just switch over to electric cars. What is wrong with this idea?", type: "mc", options: ["Most electricity is currently produced from fossil fuels (coal, oil, natural gas)", "Switching to electric cars will make unemployment rates go up", "It has been proven that it is impossible to build electric cars in great quantities", "You can’t use electricity to operate a car", "There is nothing wrong with this idea"], correct: "Most electricity is currently produced from fossil fuels (coal, oil, natural gas)" },
+            ]
+        };
+
+        // --- STATE ---
+        let currentState = 'intro'; // intro, info, questionnaire, literacy, demographics, end
+        let assignedFormat = 'table'; // Default format
+        let currentInfoType = null; // historical, neighbor, appliance
+        const infoSequence = ['historical', 'neighbor', 'appliance'];
+        let infoIndex = 0;
+        let userResponses = {}; // Store responses: { questionId: value }
+        let currentChart = null; // To hold the Chart.js instance
+
+        // --- DOM ELEMENTS ---
+        const screens = {
+            intro: document.getElementById('screen-intro'),
+            info: document.getElementById('screen-info'),
+            questionnaire: document.getElementById('screen-questionnaire'),
+            literacy: document.getElementById('screen-literacy'),
+            demographics: document.getElementById('screen-demographics'),
+            end: document.getElementById('screen-end')
+        };
+        const infoTitle = document.getElementById('info-title');
+        const infoContent = document.getElementById('info-content');
+        const questionnaireTitle = document.getElementById('questionnaire-title');
+        const questionnaireForm = document.getElementById('questionnaire-form');
+        const literacyForm = document.getElementById('literacy-form');
+        const demographicsForm = document.getElementById('demographics-form');
+        const startButton = document.getElementById('start-button');
+        const infoNextButton = document.getElementById('info-next-button');
+        const questionnaireNextButton = document.getElementById('questionnaire-next-button');
+        const literacyNextButton = document.getElementById('literacy-next-button');
+        const demographicsNextButton = document.getElementById('demographics-next-button');
+        const summaryFormat = document.getElementById('summary-format');
+        const messageBox = document.getElementById('message-box');
+        const rawResponsesContainer = document.getElementById('raw-responses');
+
+        // Admin/Skip Buttons
+        const skipToIntroLiteracyButton = document.getElementById('skip-to-literacy-button');
+        const skipToIntroDemographicsButton = document.getElementById('skip-to-demographics-button');
+        const skipToIntroEndButton = document.getElementById('skip-to-end-button');
+        const skipInfoButton = document.getElementById('skip-info-button');
+        const skipQuestionsButton = document.getElementById('skip-questions-button');
+        const skipLiteracyButton = document.getElementById('skip-literacy-button');
+        const skipDemographicsButton = document.getElementById('skip-demographics-button');
+
+
+        // --- HELPER FUNCTIONS ---
+
+        /**
+         * Shows a specific screen and hides others.
+         * @param {string} screenId - The ID of the screen to show ('intro', 'info', etc.)
+         */
+        function showScreen(screenId) {
+            Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+            if (screens[screenId]) {
+                screens[screenId].classList.remove('hidden');
+                currentState = screenId;
+                window.scrollTo(0, 0); // Scroll to top
+
+                // Update raw responses display on end screen
+                if (screenId === 'end') {
+                    rawResponsesContainer.textContent = JSON.stringify(userResponses, null, 2);
+                }
+            } else {
+                console.error("Screen ID not found:", screenId);
+            }
+        }
+
+        /**
+         * Displays a temporary message to the user.
+         * @param {string} message - The message text.
+         * @param {string} type - 'error' (default) or 'info'.
+         * @param {number} duration - How long to show the message in ms.
+         */
+         function showMessage(message, type = 'error', duration = 3000) {
+            messageBox.textContent = message;
+            if (type === 'error') {
+                messageBox.style.backgroundColor = '#f87171'; // red-400
+            } else {
+                messageBox.style.backgroundColor = '#60a5fa'; // blue-400
+            }
+            messageBox.style.display = 'block';
+            // Clear previous timer if any
+            if (messageBox.timer) clearTimeout(messageBox.timer);
+            messageBox.timer = setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, duration);
+        }
+
+        /**
+         * Sets the assigned format based on user selection.
+         */
+        function setFormatFromSelection() {
+            const selectedFormatInput = document.querySelector('input[name="format"]:checked');
+            if (selectedFormatInput) {
+                assignedFormat = selectedFormatInput.value;
+                console.log("Selected format:", assignedFormat);
+                summaryFormat.textContent = assignedFormat.charAt(0).toUpperCase() + assignedFormat.slice(1); // Capitalize
+                return true;
+            } else {
+                 showMessage("Please select a presentation format.", 'error');
+                 return false;
+            }
+        }
+
+        /**
+         * Destroys the existing Chart.js chart if it exists.
+         */
+        function destroyChart() {
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+        }
+
+        // --- DISPLAY FUNCTIONS (Modified for Icon Graph Layout) ---
+
+        /**
+         * Displays data in a table format. (No changes needed from previous version)
+         * @param {object} dataToShow - The data object (e.g., data.historical).
+         * @param {string} type - 'historical', 'neighbor', or 'appliance'.
+         */
+        function displayTable(dataToShow, type) {
+            destroyChart();
+            let tableHTML = `<h3 class="text-lg font-medium mb-3">${dataToShow.description}</h3>`;
+            tableHTML += '<div class="overflow-x-auto"><table class="min-w-full divide-y divide-gray-200">';
+
+            if (type === 'historical') {
+                tableHTML += `<thead class="bg-gray-50"><tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bill Month</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Electricity Use (kWh)</th>
+                              </tr></thead><tbody class="bg-white divide-y divide-gray-200">`;
+                dataToShow.labels.forEach((label, index) => {
+                    tableHTML += `<tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${label}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${dataToShow.values[index]}</td>
+                                  </tr>`;
+                });
+            } else if (type === 'neighbor') {
+                 tableHTML += `<thead class="bg-gray-50"><tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number of Homes</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Electricity Use (kWh)</th>
+                              </tr></thead><tbody class="bg-white divide-y divide-gray-200">`;
+                 const sortedCategories = [...dataToShow.categories].sort((a, b) => a.kWh - b.kWh);
+                 sortedCategories.forEach(cat => {
+                     const isSmiths = cat.kWh === dataToShow.smithsUsage;
+                     tableHTML += `<tr>
+                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${cat.homes}</td>
+                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${isSmiths ? 'text-red-600 font-bold' : 'text-gray-900'}">${cat.kWh}${isSmiths ? ' &larr; The Smiths' : ''}</td>
+                                   </tr>`;
+                 });
+            } else if (type === 'appliance') {
+                 tableHTML += `<thead class="bg-gray-50"><tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bill Month</th>`;
+                 dataToShow.categories.forEach(cat => { tableHTML += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${cat}</th>`; });
+                 tableHTML += `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (kWh)</th>`;
+                 tableHTML += `</tr></thead><tbody class="bg-white divide-y divide-gray-200">`;
+                 dataToShow.labels.forEach((label, index) => {
+                     tableHTML += `<tr><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${label}</td>`;
+                     let total = 0;
+                     dataToShow.values[index].forEach(val => { tableHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${val}</td>`; total += val; });
+                     tableHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-700">${total}</td></tr>`;
+                 });
+            }
+            tableHTML += '</tbody></table></div>';
+            infoContent.innerHTML = tableHTML;
+        }
+
+        /**
+         * Displays data in a bar graph format using Chart.js. (No changes needed from previous version)
+         * @param {object} dataToShow - The data object.
+         * @param {string} type - 'historical', 'neighbor', or 'appliance'.
+         */
+        function displayBarGraph(dataToShow, type) {
+            destroyChart();
+            infoContent.innerHTML = `<h3 class="text-lg font-medium mb-3">${dataToShow.description}</h3><canvas id="info-chart"></canvas>`;
+            const ctx = document.getElementById('info-chart').getContext('2d');
+            let chartConfig = {};
+            const colors = ['#60a5fa', '#fb923c', '#a78bfa', '#facc15', '#f87171', '#4ade80'];
+
+            if (type === 'historical') {
+                chartConfig = {
+                    type: 'bar', data: { labels: dataToShow.labels, datasets: [{ label: 'Electricity Use (kWh)', data: dataToShow.values, backgroundColor: '#60a5fa', borderColor: '#3b82f6', borderWidth: 1 }] },
+                    options: { scales: { y: { beginAtZero: true, title: { display: true, text: 'Electricity Use (kWh)' } }, x: { title: { display: true, text: 'Bill Month' } } }, plugins: { legend: { display: false } } }
+                };
+            } else if (type === 'neighbor') {
+                const sortedCategories = [...dataToShow.categories].sort((a, b) => a.kWh - b.kWh);
+                const labels = sortedCategories.map(cat => `${cat.kWh} kWh`);
+                const dataValues = sortedCategories.map(cat => cat.homes);
+                const backgroundColors = sortedCategories.map(cat => cat.kWh === dataToShow.smithsUsage ? '#ef4444' : '#60a5fa');
+                const borderColors = sortedCategories.map(cat => cat.kWh === dataToShow.smithsUsage ? '#dc2626' : '#3b82f6');
+                chartConfig = {
+                    type: 'bar', data: { labels: labels, datasets: [{ label: 'Number of Homes', data: dataValues, backgroundColor: backgroundColors, borderColor: borderColors, borderWidth: 1 }] },
+                    options: { scales: { y: { beginAtZero: true, title: { display: true, text: 'Number of Homes' } }, x: { title: { display: true, text: 'Electricity Use (kWh)' } } },
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { title: (ctx) => ctx[0].label, label: (ctx) => { let l = ctx.dataset.label || ''; if(l) l += ': '; if(ctx.parsed.y !== null) l += ctx.parsed.y; const kv = parseInt(ctx.label.split(' ')[0]); if(kv === dataToShow.smithsUsage) l += ' (The Smiths)'; return l; } } } }
+                    }
+                };
+            } else if (type === 'appliance') {
+                chartConfig = {
+                    type: 'bar', data: { labels: dataToShow.labels, datasets: dataToShow.categories.map((cat, i) => ({ label: cat, data: dataToShow.values.map(m => m[i]), backgroundColor: colors[i % colors.length], borderColor: colors[i % colors.length], borderWidth: 1 })) },
+                    options: { scales: { y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Electricity Use (kWh)' } }, x: { stacked: true, title: { display: true, text: 'Bill Month' } } },
+                        plugins: { legend: { position: 'top' }, title: { display: true, text: 'Each color is the amount of electricity used in kWh.' } }, responsive: true, maintainAspectRatio: false
+                    }
+                };
+            }
+            if (chartConfig.data) { currentChart = new Chart(ctx, chartConfig); }
+            else { infoContent.innerHTML = "<p>Error: Could not generate bar graph.</p>"; }
+        }
+
+        /**
+         * Displays data in an icon graph format. (Layout improved)
+         * @param {object} dataToShow - The data object.
+         * @param {string} type - 'historical', 'neighbor', or 'appliance'.
+         */
+        function displayIconGraph(dataToShow, type) {
+            destroyChart();
+            let iconHTML = `<h3 class="text-lg font-medium mb-1">${dataToShow.description}</h3>`;
+            const iconValue = 100; // Each icon represents 100 kWh or 1 home
+            const iconClasses = ['icon-ac', 'icon-heat', 'icon-lightbulb', 'icon-kitchen', 'icon-other'];
+
+            if (type === 'historical') {
+                iconHTML += `<p class="text-sm text-gray-600 mb-4">Each light bulb (<span class="icon icon-lightbulb inline-block align-middle"></span>) is ${iconValue}kWh of electricity.</p>`;
+                iconHTML += '<div class="icon-graph-container">'; // Outer container
+
+                let maxYValue = Math.max(...dataToShow.values);
+                const numIconsMax = Math.ceil(maxYValue / iconValue);
+
+                // Y-axis
+                iconHTML += '<div class="icon-graph-y-axis">';
+                for (let i = numIconsMax; i >= 0; i--) {
+                    if (i === 0 || i % 2 === 0 || i === numIconsMax) { iconHTML += `<span>${i * iconValue}</span>`; }
+                    else { iconHTML += `<span>&nbsp;</span>`; }
+                }
+                iconHTML += '</div>';
+
+                // Main graph area (stacks + x-axis)
+                iconHTML += '<div class="icon-graph-main-area">';
+                // Stacks
+                dataToShow.labels.forEach((label, index) => {
+                    const value = dataToShow.values[index];
+                    const numIcons = Math.round(value / iconValue);
+                    iconHTML += `<div class="icon-stack">`;
+                    for (let i = 0; i < numIcons; i++) { iconHTML += `<div class="icon icon-lightbulb"></div>`; }
+                    iconHTML += `</div>`;
+                });
+                // X-axis (inside main area, positioned at bottom)
+                 iconHTML += '<div class="icon-graph-xaxis">';
+                 dataToShow.labels.forEach(label => { iconHTML += `<div class="icon-graph-xaxis-label">${label}</div>`; });
+                 iconHTML += '</div>';
+
+                iconHTML += '</div>'; // Close main-area
+                iconHTML += '</div>'; // Close container
+
+            } else if (type === 'neighbor') {
+                iconHTML += `<p class="text-sm text-gray-600 mb-4">Each house (<span class="icon icon-house inline-block align-middle"></span>) is 1 home.</p>`;
+                iconHTML += '<div class="icon-graph-container">';
+
+                const sortedCategories = [...dataToShow.categories].sort((a, b) => a.kWh - b.kWh);
+                let maxHomes = Math.max(...sortedCategories.map(c => c.homes));
+
+                // Y-axis
+                iconHTML += '<div class="icon-graph-y-axis">';
+                for (let i = maxHomes; i >= 0; i--) { iconHTML += `<span>${i}</span>`; }
+                iconHTML += '</div>';
+
+                 // Main graph area
+                 iconHTML += '<div class="icon-graph-main-area">';
+                 // Stacks
+                 sortedCategories.forEach(cat => {
+                     const isSmiths = cat.kWh === dataToShow.smithsUsage;
+                     iconHTML += `<div class="icon-stack relative">`;
+                     for (let i = 0; i < cat.homes; i++) { iconHTML += `<div class="icon icon-house"></div>`; }
+                     if (isSmiths) { iconHTML += `<div class="absolute -top-4 left-1/2 transform -translate-x-1/2 text-xs font-bold text-red-600 whitespace-nowrap">&darr; The Smiths</div>`; }
+                     iconHTML += `</div>`;
+                 });
+                 // X-axis
+                 iconHTML += '<div class="icon-graph-xaxis">';
+                 sortedCategories.forEach(cat => { iconHTML += `<div class="icon-graph-xaxis-label-neighbor">${cat.kWh}</div>`; });
+                 iconHTML += '</div>';
+
+                 iconHTML += '</div>'; // Close main-area
+                 iconHTML += '</div>'; // Close container
+
+            } else if (type === 'appliance') {
+                 iconHTML += `<p class="text-sm text-gray-600 mb-4">Each picture is ${iconValue}kWh of electricity.</p>`;
+                 iconHTML += '<div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4 text-xs">'; // Legend
+                 dataToShow.categories.forEach((catName, catIndex) => { iconHTML += `<div class="flex items-center"><span class="icon ${iconClasses[catIndex]} mr-1"></span> ${catName}</div>`; });
+                 iconHTML += '</div>';
+                 iconHTML += '<div class="icon-graph-container">';
+
+                 let maxYValue = Math.max(...dataToShow.totals);
+                 const numIconsMax = Math.ceil(maxYValue / iconValue);
+
+                 // Y-axis
+                 iconHTML += '<div class="icon-graph-y-axis">';
+                 for (let i = numIconsMax; i >= 0; i--) {
+                     if (i === 0 || i % 2 === 0 || i === numIconsMax) { iconHTML += `<span>${i * iconValue}</span>`; }
+                     else { iconHTML += `<span>&nbsp;</span>`; }
+                 }
+                 iconHTML += '</div>';
+
+                 // Main graph area
+                 iconHTML += '<div class="icon-graph-main-area">';
+                 // Stacks
+                 dataToShow.labels.forEach((label, monthIndex) => {
+                     iconHTML += `<div class="icon-stack">`;
+                     for (let catIndex = dataToShow.categories.length - 1; catIndex >= 0; catIndex--) { // Reverse for stacking
+                         const value = dataToShow.values[monthIndex][catIndex];
+                         const numIcons = Math.round(value / iconValue);
+                         const iconClass = iconClasses[catIndex];
+                         for (let i = 0; i < numIcons; i++) { iconHTML += `<div class="icon ${iconClass}"></div>`; }
+                     }
+                     iconHTML += `</div>`;
+                 });
+                 // X-axis
+                 iconHTML += '<div class="icon-graph-xaxis">';
+                 dataToShow.labels.forEach(label => { iconHTML += `<div class="icon-graph-xaxis-label">${label}</div>`; });
+                 iconHTML += '</div>';
+
+                 iconHTML += '</div>'; // Close main-area
+                 iconHTML += '</div>'; // Close container
+            }
+
+            infoContent.innerHTML = iconHTML;
+        }
+
+
+         /**
+         * Displays the appropriate information based on current state.
+         */
+        function displayCurrentInfo() {
+            // Ensure infoIndex is valid
+            if (infoIndex < 0 || infoIndex >= infoSequence.length) {
+                 console.error("Invalid infoIndex:", infoIndex);
+                 // Decide how to handle this - maybe go to literacy?
+                 proceedToLiteracy();
+                 return;
+            }
+            currentInfoType = infoSequence[infoIndex];
+            const dataToShow = data[currentInfoType];
+            infoTitle.textContent = `${dataToShow.title} (${infoIndex + 1}/${infoSequence.length})`; // Show progress
+
+            if (assignedFormat === 'table') {
+                displayTable(dataToShow, currentInfoType);
+            } else if (assignedFormat === 'bar') {
+                displayBarGraph(dataToShow, currentInfoType);
+            } else if (assignedFormat === 'icon') {
+                displayIconGraph(dataToShow, currentInfoType);
+            }
+            showScreen('info');
+        }
+
+        /**
+         * Generates and displays the questionnaire for the current info type. (No changes needed)
+         */
+        function displayQuestionnaire() {
+            // Ensure infoIndex is valid before accessing questions
+             if (infoIndex < 0 || infoIndex >= infoSequence.length) {
+                 console.error("Cannot display questionnaire for invalid infoIndex:", infoIndex);
+                 proceedToLiteracy(); // Skip to next major section
+                 return;
+             }
+             currentInfoType = infoSequence[infoIndex]; // Make sure currentInfoType is set
+             questionnaireTitle.textContent = `Questions about ${data[currentInfoType].title} (${infoIndex + 1}/${infoSequence.length})`;
+             questionnaireForm.innerHTML = '';
+
+             const questionSet = questions[currentInfoType];
+             const allQuestions = [...questionSet.understanding, ...questionSet.preference, ...questionSet.intention];
+
+             allQuestions.forEach((q, index) => {
+                 let questionHTML = `<div class="mb-6 p-4 border-b border-gray-200">`;
+                 questionHTML += `<p class="mb-2 font-medium">${index + 1}. ${q.text}</p>`;
+                 if (q.type === 'tf') {
+                     questionHTML += `<div class="flex space-x-4">
+                                         <button type="button" data-qid="${q.id}" data-value="true" class="tf-button tf-true">True</button>
+                                         <button type="button" data-qid="${q.id}" data-value="false" class="tf-button tf-false">False</button>
+                                      </div>
+                                      <input type="hidden" name="${q.id}" id="input-${q.id}">`;
+                 } else if (q.type === 'likert') {
+                     questionHTML += `<div class="likert-scale">
+                                        <span class="likert-label text-xs text-gray-600">${q.labels[0]}</span>
+                                        <div class="likert-options">`;
+                     for (let i = 1; i <= q.scale; i++) {
+                         questionHTML += `<label class="inline-flex items-center mx-1">
+                                            <input type="radio" class="form-radio h-4 w-4 text-blue-600" name="${q.id}" value="${i}" required>
+                                            <span class="ml-1 text-xs">${i}</span>
+                                          </label>`;
+                     }
+                     questionHTML += `</div>
+                                        <span class="likert-label text-xs text-gray-600">${q.labels[1]}</span>
+                                      </div>`;
+                 }
+                 questionHTML += `</div>`;
+                 questionnaireForm.insertAdjacentHTML('beforeend', questionHTML);
+             });
+
+             questionnaireForm.querySelectorAll('.tf-button').forEach(button => {
+                 button.addEventListener('click', handleTFButtonClick);
+             });
+             showScreen('questionnaire');
+        }
+
+         /**
+         * Generates and displays the energy literacy questions. (No changes needed)
+         */
+        function displayLiteracy() {
+            literacyForm.innerHTML = '';
+            questions.literacy.forEach((q, index) => {
+                let questionHTML = `<div class="mb-6 p-4 border-b border-gray-200">`;
+                questionHTML += `<p class="mb-2 font-medium">${index + 1}. ${q.text}</p>`;
+                if (q.type === 'mc') {
+                    q.options.forEach((option) => {
+                        questionHTML += `<label class="mc-option">
+                                           <input type="radio" name="${q.id}" value="${option}" required>
+                                           <span>${option}</span>
+                                         </label>`;
+                    });
+                }
+                questionHTML += `</div>`;
+                literacyForm.insertAdjacentHTML('beforeend', questionHTML);
+            });
+            showScreen('literacy');
+        }
+
+
+        // --- EVENT HANDLERS ---
+
+        /**
+         * Handles clicks on True/False buttons. (No changes needed)
+         * @param {Event} event - The click event.
+         */
+        function handleTFButtonClick(event) {
+            const button = event.target;
+            const qid = button.dataset.qid;
+            const value = button.dataset.value;
+            const hiddenInput = document.getElementById(`input-${qid}`);
+             // Check if hiddenInput exists before setting value
+             if (!hiddenInput) {
+                 console.error(`Hidden input not found for qid: ${qid}`);
+                 return;
+             }
+            const buttonsInGroup = questionnaireForm.querySelectorAll(`.tf-button[data-qid="${qid}"]`);
+
+            hiddenInput.value = value;
+            buttonsInGroup.forEach(btn => btn.classList.remove('tf-selected'));
+            button.classList.add('tf-selected');
+            userResponses[qid] = value === 'true';
+        }
+
+
+        /**
+         * Validates if all questions on the current form are answered. (No changes needed)
+         * @param {HTMLFormElement} formElement - The form to validate.
+         * @returns {boolean} - True if all questions are answered, false otherwise.
+         */
+        function validateForm(formElement) {
+            // Find all required inputs and selects within the form
+            const inputs = formElement.querySelectorAll('input[required], select[required]');
+            // Find all hidden inputs associated with T/F questions within the form
+            const tfHiddens = formElement.querySelectorAll('input[type="hidden"]');
+            let allAnswered = true;
+
+            // Reset previous validation highlights
+            formElement.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500', 'border-2'));
+
+            // Check standard required inputs (like radio buttons in Likert)
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    const groupName = input.name;
+                    // Check if *any* radio button in the group is checked
+                    const group = formElement.querySelectorAll(`input[name="${groupName}"]`);
+                    const isChecked = Array.from(group).some(radio => radio.checked);
+                    if (!isChecked) {
+                        allAnswered = false;
+                        // Highlight the container of the radio group
+                        input.closest('.mb-6').classList.add('border-red-500', 'border-2');
+                    }
+                } else if (!input.value) { // Check other required inputs like select, number
+                    allAnswered = false;
+                    input.classList.add('border-red-500');
+                    // Also highlight the parent container for consistency
+                    input.closest('.mb-6')?.classList.add('border-red-500', 'border-2');
+                }
+            });
+
+             // Check T/F hidden inputs - ensure they have a value ('true' or 'false')
+             tfHiddens.forEach(hiddenInput => {
+                 if (!hiddenInput.value) {
+                     allAnswered = false;
+                     // Highlight the container of the T/F question
+                     hiddenInput.closest('.mb-6').classList.add('border-red-500', 'border-2');
+                 }
+             });
+
+            if (!allAnswered) {
+                 showMessage("Please answer all questions before continuing.", 'error');
+            }
+            return allAnswered;
+        }
+
+        /**
+         * Saves responses from the current form. (No changes needed)
+         * @param {HTMLFormElement} formElement - The form containing the responses.
+         */
+         function saveResponses(formElement) {
+             const formData = new FormData(formElement);
+             for (let [key, value] of formData.entries()) {
+                 if (value === 'true') userResponses[key] = true;
+                 else if (value === 'false') userResponses[key] = false;
+                 else userResponses[key] = value;
+             }
+             console.log("Saved Responses:", userResponses);
+         }
+
+         /**
+          * Logic to proceed to the next info type or the literacy section.
+          */
+         function proceedToNextInfoOrLiteracy() {
+             infoIndex++;
+             if (infoIndex < infoSequence.length) {
+                 displayCurrentInfo(); // Show next info type
+             } else {
+                 proceedToLiteracy(); // Move to literacy questions
+             }
+         }
+
+         /**
+          * Logic to proceed to the literacy section.
+          */
+         function proceedToLiteracy() {
+              // Ensure infoIndex is past the info sequence
+              infoIndex = infoSequence.length;
+              displayLiteracy();
+         }
+
+         /**
+          * Logic to proceed to the demographics section.
+          */
+         function proceedToDemographics() {
+             // Ensure infoIndex is past the info sequence
+             infoIndex = infoSequence.length;
+             showScreen('demographics');
+         }
+
+         /**
+          * Logic to proceed to the end screen.
+          */
+         function proceedToEnd() {
+              // Ensure infoIndex is past the info sequence
+              infoIndex = infoSequence.length;
+              showScreen('end');
+              console.log("Final User Responses:", userResponses);
+         }
+
+
+        // --- NAVIGATION LOGIC ---
+
+        startButton.addEventListener('click', () => {
+            if (setFormatFromSelection()) {
+                 infoIndex = 0; // Reset index
+                 userResponses = {}; // Reset responses
+                 displayCurrentInfo();
+            }
+        });
+
+        infoNextButton.addEventListener('click', () => {
+            displayQuestionnaire();
+        });
+
+        questionnaireNextButton.addEventListener('click', () => {
+             if (!validateForm(questionnaireForm)) return;
+             saveResponses(questionnaireForm);
+             proceedToNextInfoOrLiteracy();
+        });
+
+        literacyNextButton.addEventListener('click', () => {
+             if (!validateForm(literacyForm)) return;
+             saveResponses(literacyForm);
+             proceedToDemographics();
+        });
+
+        demographicsNextButton.addEventListener('click', () => {
+            // Basic validation example - adapt if needed
+            const ageInput = document.getElementById('demo-age');
+            if (!ageInput.value) {
+                 showMessage("Please enter age (or skip).", 'error');
+                 ageInput.classList.add('border-red-500');
+                 return;
+            }
+            ageInput.classList.remove('border-red-500');
+            saveResponses(demographicsForm);
+            proceedToEnd();
+        });
+
+        // --- SKIP BUTTON LOGIC ---
+
+         // Intro Screen Skips
+         skipToIntroLiteracyButton.addEventListener('click', () => {
+             if (setFormatFromSelection()) {
+                 proceedToLiteracy();
+             }
+         });
+         skipToIntroDemographicsButton.addEventListener('click', () => {
+             if (setFormatFromSelection()) {
+                 proceedToDemographics();
+             }
+         });
+         skipToIntroEndButton.addEventListener('click', () => {
+              if (setFormatFromSelection()) {
+                 proceedToEnd();
+              }
+         });
+
+         // Info Screen Skip
+         skipInfoButton.addEventListener('click', () => {
+             // Skips *viewing* info, goes directly to its questions
+             displayQuestionnaire();
+         });
+
+         // Questionnaire Screen Skip
+         skipQuestionsButton.addEventListener('click', () => {
+             // Skips answering questions for the current info type
+             proceedToNextInfoOrLiteracy();
+         });
+
+         // Literacy Screen Skip
+         skipLiteracyButton.addEventListener('click', () => {
+             proceedToDemographics();
+         });
+
+         // Demographics Screen Skip
+         skipDemographicsButton.addEventListener('click', () => {
+             proceedToEnd();
+         });
+
+
+        // --- INITIALIZATION ---
+        showScreen('intro');
+
+    </script>
+
+</body>
+</html>
