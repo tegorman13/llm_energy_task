@@ -621,6 +621,19 @@
     // --- Constants ---
     const NUM_SCENARIOS_TO_SELECT = 4;
     const LLM_ESTIMATES_URL = 'llm_estimates1.json';
+    const APPLIANCE_ICONS = {
+        'default': '⚙️', // Default icon (Gear)
+        'bulb_reference': '💡', // For the reference text (Light Bulb)
+        'est_cfl': '💡', // Compact Fluorescent Bulb (Light Bulb)
+        'est_desktop': '🖥️', // Desktop Computer (Laptop)
+        'est_laptop': '💻', // Laptop Computer (Laptop)
+        'est_stereo': '🔊', // Stereo (Speaker High Volume)
+        'est_electric_clothes_dryer': '👕', // Electric Clothes Dryer (T-shirt)
+        'est_portable_heater': '🔥', // Portable Heater (Fire)
+        'est_room_air_conditioner': '❄️', // Room Air-Conditioner (Snowflake)
+        'est_central_air_conditioner': '🌬️', // Central Air Conditioner (Wind Face)
+        'est_dish_washer': '🍽️' // Dish Washer (Fork and Knife with Plate)
+    };
     
     // --- Data Definitions ---
     const questions = {
@@ -864,38 +877,20 @@
         
         if (potentialItems.length < NUM_SCENARIOS_TO_SELECT) {
             console.warn(`Cannot select ${NUM_SCENARIOS_TO_SELECT} random scenarios. Only ${potentialItems.length} linkable "Energy Used" items are available. Ensure 'llm_estimates1.json' has enough items with 'estimation_task_key' as a STRING (e.g., "est_cfl") that matches a key in the 'q18_energy_estimation' table definition, AND type is "Energy Used".`);
-            // Do not return early, let it select fewer if that's all available, or handle upstream. The upstream caller already checks.
         }
         
         const shuffled = [...potentialItems].sort(() => 0.5 - Math.random());
         const selectedFullData = shuffled.slice(0, NUM_SCENARIOS_TO_SELECT);
         
         this.currentState.selectedItems = selectedFullData.map(itemData => ({
-            item_name: itemData.item_name, // Keep this for getItemDataByName
-            // Store the full itemData to avoid repeated lookups and ensure all fields are available
-            // This was previously just a slimmed down object, now let's store the full item.
-            // However, loadScenario expects selectedItemInfo.item_name, and then getItemDataByName.
-            // To maintain that, we can just store what is needed by loadScenario or simplify loadScenario.
-            // For now, stick to original structure of selectedItems if it works, just ensure the source 'itemData' is correctly filtered.
-            // Actually, selectedItems in loadScenario is just used to get item_name.
-            // The `effective_correctness` and `effective_tone` are calculated here based on `itemData`.
-            // So, the current structure for selectedItems is okay.
-            effective_correctness: this.determineCorrectness(itemData),
-            effective_tone: this.determineTone(itemData.confidence_level)
-            // Add item_name directly here to simplify loadScenario later if we want.
-            // For now: itemData is the full data from llm_estimates.json for the selected item.
-        }));
-        // Map to just item_names for logging, but selectedItems holds {item_name, effective_correctness, effective_tone}
-        // Let's map to an object that includes item_name explicitly if it's not already part of selectedFullData
-        this.currentState.selectedItems = selectedFullData.map(itemData => ({
-            item_name: itemData.item_name, // This is the key used by getItemDataByName
+            item_name: itemData.item_name, 
             effective_correctness: this.determineCorrectness(itemData),
             effective_tone: this.determineTone(itemData.confidence_level)
         }));
         
         console.log("Randomly selected 'Energy Used' items for scenarios (names):", this.currentState.selectedItems.map(s => s.item_name));
     },
-    renderQuestionsForSection(sectionId) { /* ... (Same as previous) ... */
+    renderQuestionsForSection(sectionId) { 
         const container = document.getElementById(`section-${sectionId}`);
         if (!container) { console.error(`Container not found for section: ${sectionId}`); return; }
         const navButtons = container.querySelector('.navigation-buttons');
@@ -917,7 +912,7 @@
             }
         });
     },
-    createQuestionHtml(qDef) { /* ... (Same as previous) ... */
+    createQuestionHtml(qDef) { 
         if (qDef.type === 'likert') {
             const points = qDef.points || 5;
             let listItems = '';
@@ -961,14 +956,16 @@
                     }
                     else if (qDef.type === 'estimation-table') {
                         let tableRows = '';
-                        qDef.items.forEach(item => { // qDef.items is now pre-filtered to "Energy Used"
-                        tableRows += `<tr>
-                                         <td>${item.name}</td>
-                                         <td><input type="number" id="${item.key}" name="${item.key}" min="0" step="any" pattern="[0-9]*(\.[0-9]+)?"></td>
-                                      </tr>`;
+                        qDef.items.forEach(item => { 
+                            const icon = APPLIANCE_ICONS[item.key] || APPLIANCE_ICONS['default'];
+                            tableRows += `<tr>
+                                             <td>${icon} ${item.name}</td>
+                                             <td><input type="number" id="${item.key}" name="${item.key}" min="0" step="any" pattern="[0-9]*(\.[0-9]+)?"></td>
+                                          </tr>`;
                         });
+                        const mainLabelIcon = APPLIANCE_ICONS['bulb_reference'] || '💡';
                         return `<div class="question-block" id="block-${qDef.id}">
-                              <label class="input-group-label">${qDef.text || 'Energy Estimation'}</label>
+                              <label class="input-group-label">${mainLabelIcon} ${qDef.text || 'Energy Estimation'}</label>
                               <p>Reference: 100W incandescent bulb = 100 units/hour. Please provide your best guess. You can use whole numbers or decimals.</p>
                               <div class="estimation-table-wrapper">
                                   <table class="estimation-table">
@@ -999,7 +996,7 @@
                                 return `<div class="question-block" id="block-${qDef.id}" style="border-color:var(--danger-red);"><p style="color:var(--danger-red);">...Error loading question type ${qDef.type} for ${qDef.id}...</div>`;
                                 }
                             },
-                            getItemDataByName(itemName) { /* ... (Same as previous) ... */
+                            getItemDataByName(itemName) { 
                                 if (!this.currentState.llmEstimatesData) {
                                     console.error("getItemDataByName called but llmEstimatesData is not loaded.");
                                     return null;
@@ -1007,7 +1004,7 @@
                                 return this.currentState.llmEstimatesData.find(item =>
                                 item.item_name === itemName || item._row === itemName || item.item_label === itemName);
                             },
-                            determineCorrectness(itemData) { /* ... (Same as previous) ... */
+                            determineCorrectness(itemData) { 
                                 if (!itemData) return 'unknown';
                                 const estimate = parseFloat(itemData.llm_estimate);
                                 const actual = parseFloat(itemData.actual_value);
@@ -1018,7 +1015,7 @@
                                 const ratio = estimate / actual;
                                 return (ratio >= 0.5 && ratio <= 1.5) ? 'correct' : 'incorrect';
                             },
-                            determineTone(confidenceLevel) { /* ... (Same as previous) ... */
+                            determineTone(confidenceLevel) { 
                                 if (typeof confidenceLevel !== 'string') return 'unknown';
                                 switch (confidenceLevel.toLowerCase()) {
                                     case 'high': return 'confident';
@@ -1026,7 +1023,7 @@
                                     default: return 'unknown';
                                 }
                             },
-                            loadScenario(index) { /* ... (Same as previous, relies on selectedItems being correct) ... */
+                            loadScenario(index) { 
                                 if (index >= this.currentState.selectedItems.length || index < 0) {
                                     if (index >= this.currentState.selectedItems.length) {
                                         const debriefingIndex = this.currentState.sections.indexOf('debriefing');
@@ -1040,7 +1037,7 @@
                                     if (!selectedItemInfo || !selectedItemInfo.item_name) {
                                         throw new Error(`Selected item info is invalid or missing item_name at scenario index ${index}.`);
                                     }
-                                    const itemData = this.getItemDataByName(selectedItemInfo.item_name); // item_name is key
+                                    const itemData = this.getItemDataByName(selectedItemInfo.item_name); 
                                     
                                     if (!itemData) {
                                         throw new Error(`Full data not found in llmEstimatesData for item_name: '${selectedItemInfo.item_name}'. This item might have been filtered out or an issue with llm_estimates1.json structure.`);
@@ -1058,9 +1055,9 @@
                                     this.currentState.participantResponses[`${trialPrefix}_llm_explanation`] = itemData.llm_explanation;
                                     this.currentState.participantResponses[`${trialPrefix}_llm_confidence_score`] = itemData.llm_confidence_score;
                                     this.currentState.participantResponses[`${trialPrefix}_llm_confidence_level`] = itemData.confidence_level;
-                                    this.currentState.participantResponses[`${trialPrefix}_effective_correctness`] = selectedItemInfo.effective_correctness; // from selectRandomScenarioItems
-                                    this.currentState.participantResponses[`${trialPrefix}_effective_tone`] = selectedItemInfo.effective_tone; // from selectRandomScenarioItems
-                                    this.currentState.participantResponses[`${trialPrefix}_item_type`] = itemData.type; // Store item type
+                                    this.currentState.participantResponses[`${trialPrefix}_effective_correctness`] = selectedItemInfo.effective_correctness; 
+                                    this.currentState.participantResponses[`${trialPrefix}_effective_tone`] = selectedItemInfo.effective_tone; 
+                                    this.currentState.participantResponses[`${trialPrefix}_item_type`] = itemData.type; 
                                     
                                     if (typeof itemData.estimation_task_key !== 'string' || itemData.estimation_task_key.trim() === "") {
                                         console.error(`CRITICAL ERROR DURING SCENARIO LOAD: Item '${itemData.item_name}' (selected for scenario) has an invalid or missing STRING 'estimation_task_key' in its data from llm_estimates1.json: ${JSON.stringify(itemData.estimation_task_key)}. This item should have been filtered out by selectRandomScenarioItems. The forced-choice comparison will fail. Storing key as 'INVALID_AT_SCENARIO_LOAD'.`);
@@ -1096,7 +1093,6 @@
                                     return;
                                 }
                                 
-                                // Admin debug info line construction
                                 let adminDebugInfoHtml = '';
                                 if (this.currentState.isAdmin) {
                                     adminDebugInfoHtml = `
@@ -1109,8 +1105,10 @@
                                 }
                                 
                                 if (subStage === 'ai_response') {
+                                    const itemKeyForIcon = itemData.estimation_task_key;
+                                    const icon = APPLIANCE_ICONS[itemKeyForIcon] || APPLIANCE_ICONS['default'];
                                     scenarioContentContainer.innerHTML = `
-                    <h3>Trial ${scenarioIndex + 1} of ${this.currentState.selectedItems.length}: ${itemData.item_label || itemData.item_name}</h3>
+                    <h3>Trial ${scenarioIndex + 1} of ${this.currentState.selectedItems.length}: ${icon} ${itemData.item_label || itemData.item_name}</h3>
                     <div class="scenario-box">
                         <div class="scenario-prompt">${itemData.prompt}</div>
                          <div class="ai-response-container">
@@ -1122,7 +1120,7 @@
                     </div>
                 `;
                                 }
-                                scenarioQuestionsContainer.innerHTML = ''; // Clear previous questions
+                                scenarioQuestionsContainer.innerHTML = ''; 
                                 
                                 if (subStage === 'ai_response') {
                                     nextButton.textContent = "Rate AI Confidence";
@@ -1152,11 +1150,14 @@
                                         console.warn(`Forced choice: 'estimation_task_key' is missing or invalid for item '${itemData.item_name}'. User's prior estimate cannot be retrieved. Key was: '${estimationKey}'. This indicates a problem with the item data in 'llm_estimates1.json' or the filtering logic. Ensure 'estimation_task_key' is a valid STRING in the JSON.`);
                                     }
                                     
+                                    const itemKeyForIcon = itemData.estimation_task_key;
+                                    const iconForChoiceLabel = APPLIANCE_ICONS[itemKeyForIcon] || APPLIANCE_ICONS['default'];
+
                                     const forcedChoiceQId = `${trialPrefix}_forced_choice_q`;
                                     const forcedChoiceQHtml = this.createQuestionHtml({
                                         type: 'forced-choice-estimates', id: forcedChoiceQId,
                                         text: 'Comparison of Estimates:',
-                                        itemLabel: itemData.item_label || itemData.item_name,
+                                        itemLabel: `${iconForChoiceLabel} ${itemData.item_label || itemData.item_name}`,
                                         userEstimate: userEstimate, aiEstimate: itemData.llm_estimate,
                                         userChoiceValue: 'user_estimate', aiChoiceValue: 'ai_estimate'
                                     });
@@ -1165,7 +1166,7 @@
                                 }
                                 this.updateAdminBar();
                             },
-                            advanceScenarioStage() { /* ... (Same as previous) ... */
+                            advanceScenarioStage() { 
                                 const currentScenarioIndex = this.currentState.scenarioIndex;
                                 const currentSubStage = this.currentState.scenarioSubStage;
                                 const itemData = this.currentState.currentScenarioItemData;
@@ -1217,7 +1218,7 @@
                                     }
                                 }
                             },
-                            attachSliderListener(container, sliderId) { /* ... (Same as previous) ... */
+                            attachSliderListener(container, sliderId) { 
                                 const slider = container.querySelector(`#${sliderId}`);
                                 const valueDisplay = container.querySelector(`.${sliderId}-value-display`);
                                 if (slider && valueDisplay) {
@@ -1230,7 +1231,7 @@
                                     updateSliderDisplay();
                                 }
                             },
-                            skipScenarioItem() { /* ... (Same as previous) ... */
+                            skipScenarioItem() { 
                                 console.warn(`Admin/Error Handler skipping scenario item at index: ${this.currentState.scenarioIndex}`);
                                 this.currentState.scenarioIndex++;
                                 if (this.currentState.scenarioIndex < this.currentState.selectedItems.length) {
@@ -1242,7 +1243,7 @@
                                 }
                             },
                             validateCurrentSection() { return true; },
-                            saveCurrentSectionResponses() { /* ... (Same as previous) ... */
+                            saveCurrentSectionResponses() { 
                                 const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
                                 if (['instructions', 'scenario-task', 'debriefing'].includes(currentSectionId)) return;
                                 
@@ -1250,7 +1251,7 @@
                                 const container = document.getElementById(`section-${currentSectionId}`);
                                 if (!container) { console.warn(`Container for section '${currentSectionId}' not found when trying to save responses.`); return; }
                                 
-                                const inputs = container.querySelectorAll('input, textarea'); // Selects, if any, would also be caught
+                                const inputs = container.querySelectorAll('input, textarea'); 
                                 inputs.forEach(input => {
                                     let id = input.name || input.id;
                                     if (!id) return;
@@ -1258,13 +1259,11 @@
                                     if (input.type === 'radio') {
                                         if (input.checked) this.currentState.participantResponses[id] = input.value;
                                     } else if (input.type === 'checkbox') {
-                                        // Exclude the admin mode checkbox from participant responses
                                         if (id === 'admin-mode-checkbox') return;
                                         this.currentState.participantResponses[id] = input.checked;
                                     } else {
-                                        // For estimation table inputs (id starts with 'est_') or any number input
                                         if ((input.type === 'number' || id.startsWith('est_')) && input.value.trim() === '') {
-                                            this.currentState.participantResponses[id] = null; // Store empty number entries as null
+                                            this.currentState.participantResponses[id] = null; 
                                         } else {
                                             this.currentState.participantResponses[id] = input.value.trim();
                                         }
@@ -1272,14 +1271,14 @@
                                 });
                                 console.log("Current participant responses after saving section:", JSON.parse(JSON.stringify(this.currentState.participantResponses)));
                             },
-                            nextSection() { /* ... (Same as previous) ... */
+                            nextSection() { 
                                 this.saveCurrentSectionResponses();
                                 if (this.currentState.sectionIndex < this.currentState.sections.length - 1) {
                                     this.currentState.sectionIndex++;
                                     this.showSection(this.currentState.sections[this.currentState.sectionIndex]);
                                 } else { console.log("End of experiment sections reached."); }
                             },
-                            skipSection(targetSectionId = null) { /* ... (Same as previous, relies on isAdmin check for button visibility) ... */
+                            skipSection(targetSectionId = null) { 
                                 const currentSectionIdBeforeSkip = this.currentState.sections[this.currentState.sectionIndex];
                                 console.log(`Admin skipping from section: '${currentSectionIdBeforeSkip}' to target: '${targetSectionId}'`);
                                 this.saveCurrentSectionResponses();
@@ -1307,7 +1306,7 @@
                                     this.nextSection();
                                 }
                             },
-                            goToSection(index) { /* ... (Same as previous) ... */
+                            goToSection(index) { 
                                 if (index >= 0 && index < this.currentState.sections.length) {
                                     const currentSectionId = this.currentState.sections[this.currentState.sectionIndex];
                                     if (!['instructions', 'scenario-task', 'debriefing'].includes(currentSectionId)) {
@@ -1317,7 +1316,7 @@
                                     this.showSection(this.currentState.sections[index]);
                                 } else { console.warn("Invalid section index for goToSection:", index); }
                             },
-                            populateDebriefing() { /* ... (Same as previous) ... */
+                            populateDebriefing() { 
                                 const list = document.getElementById('debrief-clarifications');
                                 if (!list) { console.error("Debrief clarifications list element not found."); return; }
                                 list.innerHTML = '';
@@ -1337,32 +1336,56 @@
                                         console.error("Error in populateDebriefing: Full itemData not found for", selectedInfo.item_name);
                                         return;
                                     }
+                                    const itemKeyForIcon = itemData.estimation_task_key;
+                                    const icon = APPLIANCE_ICONS[itemKeyForIcon] || APPLIANCE_ICONS['default'];
                                     const li = document.createElement('li');
                                     const llmConfText = itemData.llm_confidence_level ? `(LLM Confidence Level: ${itemData.confidence_level})` : '';
-                                    li.innerHTML = `<strong>Trial ${index + 1}: ${itemData.item_label || itemData.item_name} ${llmConfText}</strong><ul><li>Actual energy use: ${itemData.actual_value} units</li><li>AI's estimate: ${itemData.llm_estimate} units</li></ul>`;
+                                    li.innerHTML = `<strong>Trial ${index + 1}: ${icon} ${itemData.item_label || itemData.item_name} ${llmConfText}</strong><ul><li>Actual energy use: ${itemData.actual_value} units</li><li>AI's estimate: ${itemData.llm_estimate} units</li></ul>`;
                                     list.appendChild(li);
                                 });
                             },
-                            displayResults() { /* ... (Same as previous) ... */
-                                const resultsArea = document.getElementById('final-results');
-                                if (!resultsArea) { console.error("Final results textarea not found."); return; }
-                                try {
-                                    const finalData = {
-                                        experimentFramework: "Purdue_Short_Version_v1.1_Mod1", // Updated version
-                                        studyTimestamp: new Date().toISOString(),
-                                        isAdminAtEnd: this.currentState.isAdmin, // Log admin state
-                                        participantResponses: this.currentState.participantResponses
-                                    };
-                                    resultsArea.value = JSON.stringify(finalData, null, 2);
-                                    console.log("--- FINAL PARTICIPANT RESPONSES (Short Version) ---");
-                                    console.log(JSON.stringify(finalData, null, 2));
-                                    console.log("--- END OF DUMP ---");
-                                } catch (error) {
-                                    console.error("Error stringifying final results:", error);
-                                    resultsArea.value = "Error: Could not display results due to a stringification error. Check console.";
-                                }
-                            },
-                            updateAdminBar() { /* ... (Same as previous) ... */
+                            displayResults() {
+                                        // Check if the results textarea exists in the debriefing section
+                                        const resultsArea = document.getElementById('final-results');
+                                        if (!resultsArea) {
+                                            // If it doesn't exist, create it dynamically
+                                            const debriefSection = document.getElementById('section-debriefing');
+                                            if (debriefSection) {
+                                                const resultsHeader = document.createElement('h3');
+                                                resultsHeader.textContent = "Study Data Summary (for review)";
+                                                debriefSection.insertBefore(resultsHeader, debriefSection.querySelector('.navigation-buttons'));
+
+                                                const newResultsArea = document.createElement('textarea');
+                                                newResultsArea.id = 'final-results';
+                                                newResultsArea.rows = 15;
+                                                newResultsArea.style.width = '100%';
+                                                newResultsArea.readOnly = true;
+                                                debriefSection.insertBefore(newResultsArea, debriefSection.querySelector('.navigation-buttons'));
+                                                this.displayResults(); // Call again now that the element exists
+                                            } else {
+                                                console.error("Debriefing section not found, cannot create results area.");
+                                            }
+                                            return; // Exit because the element wasn't there initially
+                                        }
+
+                                        // Now proceed with displaying results
+                                        try {
+                                            const finalData = {
+                                                experimentFramework: "Purdue_Short_Version_v1.1_Mod3_Icons", // Updated version with icons
+                                                studyTimestamp: new Date().toISOString(),
+                                                isAdminAtEnd: this.currentState.isAdmin, // Log admin state
+                                                participantResponses: this.currentState.participantResponses
+                                            };
+                                            resultsArea.value = JSON.stringify(finalData, null, 2);
+                                            console.log("--- FINAL PARTICIPANT RESPONSES (Short Version with Icons) ---");
+                                            console.log(JSON.stringify(finalData, null, 2));
+                                            console.log("--- END OF DUMP ---");
+                                        } catch (error) {
+                                            console.error("Error stringifying final results:", error);
+                                            resultsArea.value = "Error: Could not display results due to a stringification error. Check console.";
+                                        }
+                                    },
+                            updateAdminBar() { 
                                 const adminSectionSpan = document.getElementById('admin-current-section');
                                 if (adminSectionSpan) {
                                     let sectionName = "Unknown Section";
@@ -1382,7 +1405,7 @@
                                     adminSectionSpan.textContent = sectionName + suffix;
                                 }
                             },
-                            updateProgressBar() { /* ... (Same as previous) ... */
+                            updateProgressBar() { 
                                 const progressBar = document.getElementById('progress-bar');
                                 const progressText = document.getElementById('progress-text');
                                 if (progressBar && progressText) {
