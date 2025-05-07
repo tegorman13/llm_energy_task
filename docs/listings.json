@@ -1,0 +1,11 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/dash.html",
+      "/survey_dash.html",
+      "/task.html",
+      "/inspector.html"
+    ]
+  }
+]

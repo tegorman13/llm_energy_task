@@ -1,0 +1,4 @@
+{
+    "q19_numeracy_percentage": { "id": "q19_numeracy_percentage", "section": "numeracy", "type": "multiple-choice", "text": "Imagine a certain event has a 10% chance of happening. If **1000 people** experience this situation, about how many would you expect to see the event happen to?", "options": [ { "value": "a", "text": "1 person" }, { "value": "b", "text": "10 people" }, { "value": "c", "text": "100 people" }, { "value": "d", "text": "500 people" } ], "correctAnswer": "c" },
+    "q20_numeracy_probability_compare": { "id": "q20_numeracy_probability_compare", "section": "numeracy", "type": "multiple-choice", "text": "Which of the following represents the larger probability?", "options": [ { "value": "a", "text": "5%" }, { "value": "b", "text": "1 out of 20" }, { "value": "c", "text": "They are the same" } ], "correctAnswer": "c" }
+}

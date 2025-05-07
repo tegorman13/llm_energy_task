@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment Content Inspector</title>
+    <style>
+        :root {
+            --theme-primary: #CFB991; /* Purdue Gold */
+            --theme-secondary: #000000; /* Purdue Black */
+            --theme-secondary-light: #555960; /* Purdue Steel */
+            --bg-color: #F8F8F8;
+            --container-bg: #FFFFFF;
+            --border-color: #CCCCCC;
+            --ai-response-bg: #EBD99F; /* Purdue Dust */
+            --ai-response-border: var(--theme-primary);
+            --text-color: var(--theme-secondary);
+            --text-muted: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px; 
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--theme-secondary);
+            border-bottom: 2px solid var(--theme-primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap; /* Allow tabs to wrap if many */
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-button {
+            padding: 10px 15px; /* Slightly reduced padding for more tabs */
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-right: 5px;
+            margin-bottom: -1px; /* Align with border */
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+            font-weight: 500;
+            font-size: 0.9em; /* Slightly smaller font for more tabs */
+        }
+
+        .tab-button.active {
+            background-color: var(--container-bg);
+            border-color: var(--border-color);
+            border-bottom: 1px solid var(--container-bg); 
+            position: relative;
+            /* bottom: -1px; */ /* Removed as margin-bottom handles alignment */
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            min-height: 400px; 
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* AI Advisor Tab Styles */
+        .advisor-controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .advisor-controls label {
+            font-weight: bold;
+        }
+
+        .advisor-controls select, .advisor-controls button {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1em;
+        }
+         .advisor-controls button {
+            background-color: var(--theme-secondary-light);
+            color: var(--theme-primary);
+            cursor: pointer;
+         }
+         .advisor-controls button:hover {
+            background-color: var(--theme-secondary);
+         }
+
+
+        .ai-message-display {
+            margin-top: 20px;
+        }
+
+        .scenario-prompt {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap; 
+        }
+        .scenario-prompt strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--theme-secondary);
+        }
+
+
+        .ai-response-container {
+            background-color: var(--ai-response-bg);
+            border: 1px solid var(--ai-response-border);
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .ai-response-container .ai-prefix {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--theme-secondary); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 1.1em;
+        }
+
+        .ai-response-estimate {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--theme-secondary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .ai-response-explanation {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .admin-debug-info {
+            margin-top: 12px;
+            font-size: 0.9em;
+            font-style: italic;
+            color: var(--text-muted);
+            border-top: 1px dashed var(--ai-response-border);
+            padding-top: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .item-meta-info {
+            font-size: 0.9em;
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .item-meta-info strong { color: var(--theme-secondary); }
+
+
+        /* Survey Questions Tab Styles (shared for all survey tabs) */
+        .question-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .question-item h3 { /* More specific to avoid affecting All Responses h3 */
+            margin-top: 0;
+            font-size: 1.2em;
+            color: var(--theme-secondary);
+        }
+        .question-item p, .question-item ul {
+            margin-bottom: 8px;
+        }
+        .question-item strong { color: var(--theme-secondary-light); }
+        .question-item pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-size: 0.95em;
+        }
+        .question-item ul { padding-left: 20px; }
+
+        /* All Responses Tab Styles */
+        .confidence-group {
+            margin-bottom: 30px;
+        }
+        .confidence-group > h3 { 
+            color: var(--theme-secondary);
+            border-bottom: 1px solid var(--theme-primary);
+            padding-bottom: 5px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .responses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); 
+            gap: 20px;
+        }
+        .response-item {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 5px;
+            background-color: var(--container-bg); 
+            display: flex;
+            flex-direction: column;
+        }
+        .response-item h4 { 
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: var(--theme-secondary);
+        }
+        /* ... other styles ... */
+        .response-item .scenario-prompt {
+            font-size: 0.9em;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px; 
+            padding: 10px; 
+            /* white-space: pre-wrap; is inherited from the general .scenario-prompt rule */
+        }
+        .response-item .scenario-prompt strong { /* This is the specific rule for the grid */
+            display: inline; 
+            margin-bottom: 0; 
+            margin-right: 0.5em; 
+        } /* <<<< ADDED THE MISSING CLOSING BRACE HERE */
+
+        /* These rules should be separate, not nested */
+        .response-item .ai-response-container {
+            font-size: 0.9em;
+            margin-top: auto; 
+        }
+        .response-item .ai-response-container .ai-prefix {
+            font-size: 1.05em;
+         }
+        .response-item .ai-response-container .ai-response-estimate {
+            font-size: 1.1em;
+         }
+        .response-item .admin-debug-info {
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding-top: 6px;
+        }
+        /* ... */
+
+        #loading-message, #error-message {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 20px;
+            color: var(--text-muted);
+        }
+        #error-message { color: red; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Experiment Content Inspector</h1>
+
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'aiAdvisorTab')">AI Advisor Messages</button>
+            <button class="tab-button" onclick="openTab(event, 'allResponsesTab')">All Responses</button>
+            <!-- Survey tab buttons will be inserted here by JS -->
+        </div>
+
+        <div id="aiAdvisorTab" class="tab-content">
+            <h2>AI Advisor Messages (from llm_estimates1.json)</h2>
+            <div id="loading-message">Loading AI Advisor messages...</div>
+            <div id="error-message" style="display:none;"></div>
+
+            <div class="advisor-controls" style="display:none;">
+                <label for="item-select">Select Item:</label>
+                <select id="item-select" onchange="displaySelectedItem()"></select>
+                <button onclick="navigateItem(-1)">Previous</button>
+                <button onclick="navigateItem(1)">Next</button>
+            </div>
+
+            <div id="ai-message-display" class="ai-message-display">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div id="allResponsesTab" class="tab-content">
+            <h2>All AI Advisor Responses (Grouped by Confidence)</h2>
+            <div id="all-responses-container">
+                <!-- Content will be dynamically inserted here by renderAllResponses() -->
+            </div>
+        </div>
+        <!-- Survey tab content divs will be inserted here by JS -->
+    </div>
+
+    <script>
+        let llmEstimatesData = [];
+        let currentItemIndex = 0;
+        let allSurveyData = {}; // To store fetched survey data, keyed by tabId
+
+    // Example update to surveyConfigs in your dashboard's JavaScript:
+    const surveyConfigs = [
+        { file: 'numeracy_questions.json', tabId: 'numeracyTab', title: 'Numeracy' },
+        { file: 'energy_knowledge_questions.json', tabId: 'energyKnowledgeTab', title: 'Energy Knowledge' },
+        { file: 'ai_familiarity_questions.json', tabId: 'aiFamiliarityTab', title: 'AI Familiarity' },
+        { file: 'scenario_questions_template.json', tabId: 'scenarioTemplateTab', title: 'Scenario Templates' },
+        { file: 'post_task_questions.json', tabId: 'postTaskTab', title: 'Post-Task' },
+        // New Scales:
+        { file: 'ptt_a_questions.json', tabId: 'pttATab', title: 'PTT-A' },
+        { file: 'salah_ai_use_questions.json', tabId: 'salahAIUseTab', title: 'Salah AI Use' },
+        { file: 'pailq6_questions.json', tabId: 'pailq6Tab', title: 'PAILQ-6' },
+        { file: 'tillmi_questions.json', tabId: 'tillmiTab', title: 'TILLMI' },
+        { file: 'tpa_questions.json', tabId: 'tpaTab', title: 'TPA' },
+        { file: 'mails_s_questions.json', tabId: 'mailsSTab', title: 'MAILS-S' },
+        { file: 'llm_accuracy_beliefs_questions.json', tabId: 'llmAccuracyTab', title: 'LLM Accuracy Beliefs' },
+        { file: 'energy_heuristics_questions.json', tabId: 'energyHeuristicsTab', title: 'Energy Heuristics' }
+    ];
+
+        // Global utility function
+        const escapeHtml = (unsafe) => {
+            if (typeof unsafe !== 'string') return String(unsafe); // Convert to string if not already
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        };
+
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            const currentTabContent = document.getElementById(tabName);
+            if (currentTabContent) {
+                currentTabContent.style.display = "block";
+            }
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.className += " active";
+            } else { // Handle programmatic click
+                const targetButton = Array.from(tablinks).find(btn => btn.getAttribute('onclick').includes(`'${tabName}'`));
+                if (targetButton) targetButton.className += " active";
+            }
+        }
+
+        async function loadLLMDataAndRender() {
+            const loadingMsg = document.getElementById('loading-message');
+            const errorMsg = document.getElementById('error-message');
+            const controls = document.querySelector('.advisor-controls');
+            try {
+                const response = await fetch('llm_estimates1.json'); 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} - Could not load llm_estimates1.json.`);
+                }
+                const jsonData = await response.json();
+                llmEstimatesData = jsonData.data; 
+
+                if (!Array.isArray(llmEstimatesData) || llmEstimatesData.length === 0) {
+                     throw new Error("No data found in llm_estimates1.json or 'data' field is not an array.");
+                }
+
+                populateItemSelect();
+                if (document.getElementById('item-select').options.length > 0) { // only display if items populated
+                    displaySelectedItem(); 
+                }
+                renderAllResponses(); 
+                
+                if(loadingMsg) loadingMsg.style.display = 'none';
+                if(errorMsg) errorMsg.style.display = 'none';
+                if(controls) controls.style.display = 'flex';
+
+            } catch (error) {
+                console.error('Error loading LLM estimates:', error);
+                if(loadingMsg) loadingMsg.style.display = 'none';
+                if(errorMsg) {
+                    errorMsg.textContent = `Error (LLM Data): ${error.message}`;
+                    errorMsg.style.display = 'block';
+                }
+                if(controls) controls.style.display = 'none';
+            }
+        }
+        
+        function createSurveyTabsAndLoadData() {
+            const tabsContainer = document.querySelector('.tabs');
+            const dashboardContainer = document.querySelector('.dashboard-container'); 
+
+            const promises = surveyConfigs.map(async (config) => {
+                const tabButton = document.createElement('button');
+                tabButton.className = 'tab-button';
+                tabButton.textContent = config.title;
+                tabButton.onclick = (event) => openTab(event, config.tabId);
+                tabsContainer.appendChild(tabButton);
+
+                const tabContentDiv = document.createElement('div');
+                tabContentDiv.id = config.tabId;
+                tabContentDiv.className = 'tab-content';
+                // Create a unique div for rendering questions into for each survey tab
+                tabContentDiv.innerHTML = `<h2>${escapeHtml(config.title)} Survey Questions</h2><div id="${config.tabId}-display" class="survey-questions-display-area">Loading questions...</div>`;
+                dashboardContainer.appendChild(tabContentDiv);
+
+                try {
+                    const response = await fetch(config.file);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status} while fetching ${config.file}`);
+                    }
+                    const surveyData = await response.json();
+                    allSurveyData[config.tabId] = surveyData; 
+                    renderSurveyQuestions(surveyData, `${config.tabId}-display`, config.title);
+                } catch (error) {
+                    console.error(`Error loading ${config.file}:`, error);
+                    const displayDiv = document.getElementById(`${config.tabId}-display`);
+                    if (displayDiv) {
+                        displayDiv.innerHTML = `<p style="color:red;">Error loading questions from ${config.file}: ${error.message}</p>`;
+                    }
+                }
+            });
+            return Promise.allSettled(promises); // Use allSettled to ensure all attempts complete
+        }
+
+        function renderSurveyQuestions(surveyData, displayDivId, surveyFileTitle) {
+            const displayDiv = document.getElementById(displayDivId);
+            if (!displayDiv) {
+                console.error(`Display div ${displayDivId} not found for survey ${surveyFileTitle}`);
+                return;
+            }
+            displayDiv.innerHTML = ''; 
+
+            if (typeof surveyData !== 'object' || surveyData === null || Object.keys(surveyData).length === 0) {
+                displayDiv.innerHTML = `<p>No questions found or data is not in expected format for ${escapeHtml(surveyFileTitle)}.</p>`;
+                return;
+            }
+
+            for (const qKey in surveyData) {
+                const qDef = surveyData[qKey];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+
+                let questionIdText = 'N/A';
+                let sectionText = 'N/A';
+                let typeText = 'N/A';
+                let questionTextHtml = 'N/A';
+
+                if (typeof qDef === 'object' && qDef !== null) {
+                    questionIdText = qDef.id || qKey;
+                    sectionText = qDef.section || 'N/A';
+                    typeText = qDef.type || 'N/A';
+                    if (typeof qDef.text === 'string') {
+                        questionTextHtml = qDef.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    } else {
+                        questionTextHtml = escapeHtml(qDef.text || 'No text provided.');
+                    }
+                } else {
+                    questionIdText = qKey;
+                    questionTextHtml = `<pre>${escapeHtml(JSON.stringify(qDef, null, 2))}</pre>`;
+                    questionDiv.innerHTML = `<h3>${escapeHtml(questionIdText)}</h3>${questionTextHtml}`;
+                    displayDiv.appendChild(questionDiv);
+                    continue; 
+                }
+                
+                let content = `<h3>${escapeHtml(questionIdText)} (Section: ${escapeHtml(sectionText)})</h3>
+                               <p><strong>Type:</strong> ${escapeHtml(typeText)}</p>
+                               <p><strong>Text:</strong></p>
+                               <pre>${questionTextHtml}</pre>`;
+
+                if (qDef.options && Array.isArray(qDef.options)) {
+                    content += '<p><strong>Options:</strong></p><ul>';
+                    qDef.options.forEach(opt => {
+                        content += `<li>Value: ${escapeHtml(opt.value)}, Text: ${escapeHtml(opt.text)}</li>`;
+                    });
+                    content += '</ul>';
+                }
+                if (qDef.correctAnswer !== undefined) { // Check for presence, not just truthiness
+                    content += `<p><strong>Correct Answer:</strong> ${escapeHtml(qDef.correctAnswer)}</p>`;
+                }
+                if (qDef.items && Array.isArray(qDef.items)) { 
+                    content += '<p><strong>Estimation Items:</strong></p><ul>';
+                    qDef.items.forEach(item => {
+                        content += `<li>Name: ${escapeHtml(item.name)}, Key: ${escapeHtml(item.key)}</li>`;
+                    });
+                    content += '</ul>';
+                }
+                if (qDef.min !== undefined) content += `<p><strong>Min:</strong> ${escapeHtml(qDef.min)}</p>`;
+                if (qDef.max !== undefined) content += `<p><strong>Max:</strong> ${escapeHtml(qDef.max)}</p>`;
+                if (qDef.step !== undefined) content += `<p><strong>Step:</strong> ${escapeHtml(qDef.step)}</p>`;
+                if (qDef.points !== undefined) content += `<p><strong>Points (Likert):</strong> ${escapeHtml(qDef.points)}</p>`;
+                if (qDef.unit !== undefined) content += `<p><strong>Unit:</strong> ${escapeHtml(qDef.unit)}</p>`;
+                if (qDef.baseId) content += `<p><strong>Base ID:</strong> ${escapeHtml(qDef.baseId)}</p>`;
+
+                if (qDef.scale && Array.isArray(qDef.scale)) { 
+                     content += `<p><strong>Scale Endpoints:</strong> ${qDef.scale.map(s => escapeHtml(s)).join(' - ')}</p>`;
+                } else if (qDef.scale) { 
+                     content += `<p><strong>Scale Info:</strong> ${escapeHtml(JSON.stringify(qDef.scale))}</p>`;
+                }
+
+                questionDiv.innerHTML = content;
+                displayDiv.appendChild(questionDiv);
+            }
+        }
+
+
+        function populateItemSelect() {
+            const select = document.getElementById('item-select');
+            select.innerHTML = ''; 
+            llmEstimatesData.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${index + 1}. ${item.item_label || item.item_name || `Item ${index+1}`}`;
+                select.appendChild(option);
+            });
+        }
+
+        function displaySelectedItem(index = null) {
+            if (index !== null) {
+                currentItemIndex = index;
+            } else {
+                 if (!document.getElementById('item-select')) return; // Guard if element not ready
+                currentItemIndex = parseInt(document.getElementById('item-select').value) || 0;
+            }
+            
+            if (currentItemIndex < 0) currentItemIndex = 0;
+            if (currentItemIndex >= llmEstimatesData.length) currentItemIndex = llmEstimatesData.length - 1;
+
+            if (document.getElementById('item-select')) { // Guard if element not ready
+                document.getElementById('item-select').value = currentItemIndex;
+            }
+
+
+            const item = llmEstimatesData[currentItemIndex];
+            const displayDiv = document.getElementById('ai-message-display');
+            if (!displayDiv) return;
+
+            if (!item) {
+                displayDiv.innerHTML = '<p>No item selected or item data is missing.</p>';
+                return;
+            }
+            
+            displayDiv.innerHTML = `
+                <h2>${escapeHtml(item.item_label || item.item_name)}</h2>
+                <div class="scenario-prompt">
+                    <strong>Prompt:</strong>
+                    ${escapeHtml(item.prompt.trimStart())} 
+                </div>
+                <div class="ai-response-container">
+                    <span class="ai-prefix">Energy-AI-Advisor says:</span>
+                    <span class="ai-response-estimate">My estimate is: ${escapeHtml(item.llm_estimate)} units</span>
+                    <div class="ai-response-explanation">${escapeHtml(item.llm_explanation)}</div>
+                    <div class="admin-debug-info">
+                        <strong>Admin-Debug:</strong> 
+                        Conf. Score=${item.llm_confidence_score?.toFixed(3) || 'N/A'}, 
+                        Level=${escapeHtml(item.confidence_level) || 'N/A'}, 
+                        Actual=${escapeHtml(item.actual_value) || 'N/A'}
+                    </div>
+                </div>
+                <div class="item-meta-info">
+                    <p><strong>Item Name (raw):</strong> ${escapeHtml(item.item_name)}</p>
+                    <p><strong>Type:</strong> ${escapeHtml(item.type) || 'N/A'}</p>
+                    <p><strong>Estimation Task Key:</strong> ${escapeHtml(item.estimation_task_key) || 'N/A (Important for linking to user\'s estimate)'}</p>
+                    <p><strong>Correctness (Calculated):</strong> ${determineCorrectness(item)}</p>
+                    <p><strong>Tone (Calculated):</strong> ${determineTone(item.confidence_level)}</p>
+                </div>
+            `;
+        }
+        
+        function determineCorrectness(itemData) {
+            if (!itemData) return 'unknown';
+            const estimate = parseFloat(itemData.llm_estimate);
+            const actual = parseFloat(itemData.actual_value);
+            if (isNaN(estimate) || isNaN(actual)) return 'unknown';
+            if (actual === 0) return estimate === 0 ? 'correct' : 'incorrect';
+            if (itemData.item_name === "Dish washer" && estimate === 2) return 'incorrect (specific rule)';
+            if (itemData.item_name === "Line-dry clothes" && estimate === 10) return 'incorrect (specific rule)';
+
+            const ratio = estimate / actual;
+            return (ratio >= 0.5 && ratio <= 1.5) ? 'correct' : 'incorrect';
+        }
+
+        function determineTone(confidenceLevel) {
+            if (typeof confidenceLevel !== 'string') return 'unknown';
+            switch (confidenceLevel.toLowerCase()) {
+                case 'high': return 'confident';
+                case 'medium': case 'low': return 'hedged';
+                default: return 'unknown';
+            }
+        }
+
+        function navigateItem(direction) {
+            let newIndex = currentItemIndex + direction;
+            if (newIndex >= 0 && newIndex < llmEstimatesData.length) {
+                displaySelectedItem(newIndex);
+            }
+        }
+        
+        function renderAllResponses() {
+            const container = document.getElementById('all-responses-container');
+            if (!container) return;
+            container.innerHTML = ''; 
+
+            if (!llmEstimatesData || llmEstimatesData.length === 0) {
+                container.innerHTML = '<p>No LLM estimates data loaded or data is empty.</p>';
+                return;
+            }
+
+            const confidenceOrder = ['High', 'Medium', 'Low'];
+            const groupedData = {};
+            confidenceOrder.forEach(level => groupedData[level] = []);
+            groupedData['Unknown'] = []; 
+
+            llmEstimatesData.forEach(item => {
+                const level = item.confidence_level;
+                if (confidenceOrder.includes(level)) {
+                    groupedData[level].push(item);
+                } else {
+                    groupedData['Unknown'].push(item);
+                }
+            });
+
+            if (groupedData['Unknown'].length > 0 && !confidenceOrder.includes('Unknown')) {
+                confidenceOrder.push('Unknown');
+            }
+
+            let contentGenerated = false;
+            confidenceOrder.forEach(level => {
+                const itemsInGroup = groupedData[level];
+                if (!itemsInGroup || itemsInGroup.length === 0) return; 
+
+                contentGenerated = true;
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'confidence-group';
+
+                const groupHeader = document.createElement('h3');
+                groupHeader.textContent = `${level} Confidence Responses`;
+                groupDiv.appendChild(groupHeader);
+
+                const gridDiv = document.createElement('div');
+                gridDiv.className = 'responses-grid';
+
+
+                itemsInGroup.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'response-item';
+                    
+                    // MODIFIED THE LINE INSIDE .scenario-prompt:
+                    itemDiv.innerHTML = `
+                        <h4>${escapeHtml(item.item_label || item.item_name)}</h4>
+                        <div class="scenario-prompt"><strong>Prompt:</strong> ${escapeHtml(item.prompt.trimStart())}</div>
+                        <div class="ai-response-container">
+                            <span class="ai-prefix">Energy-AI-Advisor says:</span>
+                            <span class="ai-response-estimate">My estimate is: ${escapeHtml(item.llm_estimate)} units</span>
+                            <div class="ai-response-explanation">${escapeHtml(item.llm_explanation)}</div>
+                            <div class="admin-debug-info">
+                                <strong>Debug:</strong> 
+                                Conf. Score=${item.llm_confidence_score?.toFixed(3) || 'N/A'}, 
+                                Actual=${escapeHtml(item.actual_value) || 'N/A'}
+                            </div>
+                        </div>
+                    `;
+                    gridDiv.appendChild(itemDiv);
+                });
+                groupDiv.appendChild(gridDiv);
+                container.appendChild(groupDiv);
+            });
+             if (!contentGenerated) { 
+                container.innerHTML = '<p>No responses match the defined confidence level groups (High, Medium, Low) or data is missing confidence levels.</p>';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Create survey tabs and start loading their data.
+            // This function now also appends the tab buttons and content divs to the DOM.
+            await createSurveyTabsAndLoadData();
+
+            // Load LLM data for AI Advisor and All Responses tabs
+            await loadLLMDataAndRender();
+            
+            // Set the "All Responses" tab as active by default
+            const allResponsesTabButton = Array.from(document.querySelectorAll('.tab-button'))
+                                             .find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("openTab(event, 'allResponsesTab')"));
+
+            if (allResponsesTabButton) {
+                openTab(null, 'allResponsesTab'); // Pass null for event as it's a programmatic call
+            } else {
+                console.error("All Responses tab button not found to set as default.");
+                // Fallback to the first tab if the specific default is not found
+                const firstTabButton = document.querySelector('.tab-button');
+                if (firstTabButton) {
+                    // Extract tabId from the first button's onclick attribute
+                    const onclickAttr = firstTabButton.getAttribute('onclick');
+                    const match = onclickAttr ? onclickAttr.match(/openTab\(event, '(.*?)'\)/) : null;
+                    if (match && match[1]) {
+                        openTab(null, match[1]);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

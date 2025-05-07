@@ -1,0 +1,88 @@
+{
+    "scale_info": {
+      "name": "Subjective AI Literacy (MAILS-S - 10 Example Items)",
+      "source": "Carolus et al. (2024)",
+      "instructions": "Please rate your own ability regarding the following aspects of Artificial Intelligence (AI). Use the scale from 0 (Ability is not at all or hardly pronounced) to 10 (Ability is very well or almost perfectly pronounced).",
+      "note": "These are example items illustrating the format and factors. Actual MAILS-S uses 10 specific items detailed in the source publication."
+    },
+    "mails_s_1": {
+      "id": "mails_s_1",
+      "section": "MAILS-S Use/Apply AI",
+      "type": "likert",
+      "text": "I can operate AI applications.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_2": {
+      "id": "mails_s_2",
+      "section": "MAILS-S Knowledge/Understanding",
+      "type": "likert",
+      "text": "I know definitions of artificial intelligence.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_3": {
+      "id": "mails_s_3",
+      "section": "MAILS-S Evaluate AI",
+      "type": "likert",
+      "text": "I can assess what advantages and disadvantages the use of an artificial intelligence entails.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_4": {
+      "id": "mails_s_4",
+      "section": "MAILS-S Detect AI",
+      "type": "likert",
+      "text": "I can tell if I am dealing with an application based on artificial intelligence.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_5": {
+      "id": "mails_s_5",
+      "section": "MAILS-S Ethics AI",
+      "type": "likert",
+      "text": "I can weigh the consequences of using AI for society.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_6": {
+      "id": "mails_s_6",
+      "section": "MAILS-S Create AI",
+      "type": "likert",
+      "text": "I can program new applications in the field of AI.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_7": {
+      "id": "mails_s_7",
+      "section": "MAILS-S Create AI",
+      "type": "likert",
+      "text": "I can develop AI applications.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_8": {
+      "id": "mails_s_8",
+      "section": "MAILS-S Self-Efficacy: Problem Solving",
+      "type": "likert",
+      "text": "I can solve difficult problems using AI if I try hard enough.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_9": {
+      "id": "mails_s_9",
+      "section": "MAILS-S Self-Efficacy: Learning",
+      "type": "likert",
+      "text": "I am confident that I can learn complex things about AI.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    },
+    "mails_s_10": {
+      "id": "mails_s_10",
+      "section": "MAILS-S Self-Competency: Information",
+      "type": "likert",
+      "text": "I can find the information I need when dealing with AI.",
+      "points": 11,
+      "scale": ["0 (Ability is not at all or hardly pronounced)", "10 (Ability is very well or almost perfectly pronounced)"]
+    }
+  }

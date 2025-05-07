@@ -23,20 +23,38 @@ project:
     - "demos/dash/*"
     - "task/llm_estimates1.json"
     - "task/prop_task.html"
+    - "task/*"
 
 
 website:
   title: "Energy AI Study"
   repo-url: https://github.com/tegorman13/llm_energy_task
   site-url: https://tegorman13.github.io/llm_energy_task/
-  repo-actions: [source]
+  #repo-actions: [source]
   #reader-mode: true
   navbar:
+    search: true
     left:
       - text: "Task"
         href: task.qmd
+      - text: "Item_Inspector"
+        href: inspector.qmd
       - text: "Dash"
         href: survey_dash.qmd
+    right: 
+      - icon: github
+        aria-label: github
+        href: https://github.com/tegorman13/llm_energy_task
+  page-footer:
+    left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
+    center: "site made with [{{< fa brands r-project >}}](https://cran.r-project.org/) and [Quarto](https://quarto.org/)"
+    right: 
+      - text: "{{< fa brands github size=2.0x >}}"
+        aria-label: GitHub
+        target: _blank
+        href: "https://github.com/tegorman13/llm_energy_task"
+
+
       # - text: "Dash_js"
       #   menu: 
       #     - text: "Dash"
@@ -196,12 +214,4 @@ format:
   #           icon: file-post
 
 
-  # page-footer:
-  #   left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
-  #   center: "site made with [{{< fa brands r-project >}}](https://cran.r-project.org/) and [Quarto](https://quarto.org/)"
-  #   right: 
-  #     - text: "{{< fa brands github size=2.0x >}}"
-  #       aria-label: GitHub
-  #       target: _blank
-  #       href: https://github.com/tegorman13/Representation_Study
 

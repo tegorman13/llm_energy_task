@@ -1929,5 +1929,19 @@
     "title": "",
     "section": "Debrief and Feedback",
     "text": "Debrief and Feedback\n\nDebrief\n[CONTROL, UNCERTAIN1ST, UNCERTAINGENERAL Conditions Only]\n\nThank you for your participation in the study! To create a realistic experimental setting, we showed AI answers that are directly from, or only slightly adapted from, responses from an actual AI system. As known, AI systems can make up information. Please note that the AI answers you saw in this study may have been inaccurate, incomplete, or inconsistent, even when they sounded convincing.\n\n\n\nFeedback\n[All Conditions]\nQ. Can we change this study to make it more friendly for MTurkers? We can’t make it shorter, but if there’s anything else we can do—we appreciate any and all suggestions!"
+  },
+  {
+    "objectID": "inspector.html",
+    "href": "inspector.html",
+    "title": "Energy AI Task Inspector",
+    "section": "",
+    "text": "Open task in separate window (optional - provides more space)\n\n\n\n\nNote - to go to the actual task, click here"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "LLM Energy Task",
+    "section": "",
+    "text": "Demo Dashboard\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEnergy & AI Literacy Research Instruments\n\n\nInteractive preview of survey instruments for studying knowledge, attitudes, perceptions, and behaviors related to energy and artificial intelligence.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEnergy AI Task Demo\n\n\nA demo of the Energy AI Task is embedded below\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEnergy AI Task Inspector\n\n\nDisplays the LLM answers, and the survey instruments\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   }
 ]

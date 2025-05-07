@@ -1,0 +1,51 @@
+{
+    "scale_info": {
+      "name": "Energy Heuristics Evaluation (Custom)",
+      "source": "Based on Kantenbacher & Attari (2021)",
+      "instructions": "For each pair of statements below, please select the statement that you think is generally a **more accurate** rule of thumb for judging household energy use."
+    },
+    "eh_1": {
+      "id": "eh_1",
+      "section": "Energy Heuristics",
+      "type": "multiple-choice",
+      "text": "Which statement is generally MORE accurate?",
+      "options": [
+        { "value": "a", "text": "Appliances that primarily heat or cool things use much more energy than most other appliances." },
+        { "value": "b", "text": "The physical size of an appliance is the best indicator of its energy use." }
+      ],
+      "correctAnswer": "a"
+    },
+    "eh_2": {
+      "id": "eh_2",
+      "section": "Energy Heuristics",
+      "type": "multiple-choice",
+      "text": "Which statement is generally MORE accurate?",
+      "options": [
+        { "value": "a", "text": "Devices that charge other devices (like phone chargers) are major energy consumers in the home." },
+        { "value": "b", "text": "Devices that run for long periods, even at low power, can use a significant amount of energy over time." }
+      ],
+      "correctAnswer": "b"
+    },
+    "eh_3": {
+      "id": "eh_3",
+      "section": "Energy Heuristics",
+      "type": "multiple-choice",
+      "text": "Which statement is generally MORE accurate?",
+      "options": [
+        { "value": "a", "text": "Turning devices off completely is always much more effective than upgrading to energy-efficient models." },
+        { "value": "b", "text": "Upgrading to energy-efficient models (like Energy Star appliances) can often save more energy than simply using old devices less often." }
+      ],
+      "correctAnswer": "b"
+    },
+    "eh_4": {
+      "id": "eh_4",
+      "section": "Energy Heuristics",
+      "type": "multiple-choice",
+      "text": "Which statement is generally MORE accurate?",
+      "options": [
+        { "value": "a", "text": "How quickly a device completes its task (e.g., boiling water) is a good indicator of its total energy use for that task." },
+        { "value": "b", "text": "The power rating (watts) and the duration of use are the key factors determining total energy use for a task." }
+      ],
+      "correctAnswer": "b"
+    }
+  }

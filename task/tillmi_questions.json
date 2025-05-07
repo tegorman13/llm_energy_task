@@ -1,0 +1,68 @@
+{
+    "scale_info": {
+      "name": "Trust-In-LLMs Index (TILLMI) - Final 6 Items",
+      "source": "Duro et al. (derived from EFA results and Initial Item List)",
+      "instructions": "Please rate the following items on a scale from 1 to 5 according to how frequently you experience these elements.",
+      "scoring_notes": "Items Q2, Q3, Q4 belong to Factor 1 ('Closeness with LLMs') and Q6, Q7, Q8 belong to Factor 2 ('Reliance on LLMs')."
+    },
+    "tillmi_q2": {
+      "id": "tillmi_q2",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "I would feel a sense of dismay if my interactions with an LLM were suddenly disrupted or halted.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Closeness with LLMs",
+      "original_id": "Q2"
+    },
+    "tillmi_q3": {
+      "id": "tillmi_q3",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "If I share my wellbeing concerns with LLMs, I know these agents will respond constructively and caringly.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Closeness with LLMs",
+      "original_id": "Q3"
+    },
+    "tillmi_q4": {
+      "id": "tillmi_q4",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "I invest plenty of time developing and improving my prompts to interact with LLMs.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Closeness with LLMs",
+      "original_id": "Q4"
+    },
+    "tillmi_q6": {
+      "id": "tillmi_q6",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "I can rely on LLMs not to make my job more difficult by careless work.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Reliance on LLMs",
+      "original_id": "Q6"
+    },
+    "tillmi_q7": {
+      "id": "tillmi_q7",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "Despite trusting LLMs' results overall, the last word is always mine.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Reliance on LLMs",
+      "original_id": "Q7"
+    },
+    "tillmi_q8": {
+      "id": "tillmi_q8",
+      "section": "TILLMI",
+      "type": "likert",
+      "text": "I tend to trust LLMs more than other people.",
+      "points": 5,
+      "scale": ["1 (Least Frequent)", "5 (Most Frequent)"],
+      "factor": "Reliance on LLMs",
+      "original_id": "Q8"
+    }
+  }
