@@ -14,11 +14,15 @@ format:
 [Open task in separate window (optional - provides more space)](task/prop_task.html)
 
 
-::: column-page
+::: column-page 
 
+```{=html}
+<iframe src="task/prop_task.html" width="1300" height="1100" style="border:none; max-width: 100%;"></iframe>
 
-![](task/prop_task.html){width="1300" height="1000"}
+ ```
 
 :::
+
+
 
 :::: 
