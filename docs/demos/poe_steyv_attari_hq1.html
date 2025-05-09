@@ -1,0 +1,1739 @@
+<!DOCTYPE html><html lang="en" class="dark"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Perception &amp; AI Confidence Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#38bdf8',
+                        accent: '#fb923c',
+                        dark: {
+                            900: '#121827',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            background-color: #121827;
+            color: #e2e8f0;
+        }
+        
+        /* Custom slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #475569;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            border: 4px solid rgba(93, 92, 222, 0.1);
+            border-left-color: #5D5CDE;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        /* Tab transition */
+        .tab-enter-active,
+        .tab-leave-active {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .tab-enter-from,
+        .tab-leave-to {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5D5CDE;
+        }
+        
+        /* Math equation styles */
+        .math-eq {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+        
+        .blue-accent-left {
+            border-left: 4px solid #38bdf8;
+            padding-left: 16px;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(93, 92, 222, 0.2);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-200 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-6 max-w-7xl">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6 text-primary">
+            Energy Perception &amp; AI Confidence Simulation
+        </h1>
+        
+        <!-- Main Navigation Tabs -->
+        <div class="flex overflow-x-auto mb-6 bg-dark-800 rounded-lg shadow-md">
+            <button v-for="(tab, index) in mainTabs" :key="index" @click="activeMainTab = index" class="px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap" :class="activeMainTab === index ? 'text-primary border-b-2 border-primary' : 'text-gray-400 hover:text-gray-200'">
+                {{ tab.name }}
+            </button>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div v-if="activeMainTab === 0" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Overview: Cognitive Biases in Energy Perception and AI Confidence
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-dark-700 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg card-hover">
+                        <h3 class="text-xl font-semibold mb-3 text-secondary flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Attari et al. (2010)
+                        </h3>
+                        <h4 class="text-lg font-medium mb-2">Public Perceptions of Energy Consumption and Savings</h4>
+                        <p class="mb-3">This landmark study reveals that people systematically compress the true distribution of energy magnitudes:</p>
+                        <ul class="list-disc pl-6 mt-3 space-y-2">
+                            <li>Overestimating energy use of low-consumption activities</li>
+                            <li>Underestimating energy use of high-consumption activities</li>
+                            <li>The average compression factor is about 2.8</li>
+                            <li>Focus on curtailment rather than efficiency improvements</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-dark-700 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg card-hover">
+                        <h3 class="text-xl font-semibold mb-3 text-secondary flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            AI Confidence Calibration Concept
+                        </h3>
+                        <h4 class="text-lg font-medium mb-2">The Calibration Gap in AI Explanations</h4>
+                        <p class="mb-3 text-amber-400"><small>Note: Conceptual framework based on emerging research</small></p>
+                        <ul class="list-disc pl-6 mt-3 space-y-2">
+                            <li>Misalignment between AI internal confidence and human perception</li>
+                            <li>Longer explanations increase human confidence without improving accuracy</li>
+                            <li>Linguistic markers of uncertainty/confidence significantly impact trust</li>
+                            <li>A "discrimination gap" where humans struggle to identify AI errors</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-dark-700 p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-primary">Cognitive Connections: Parallel Biases Across Domains</h3>
+                    <p class="mb-4">Both areas of research reveal similar systematic biases in human perception and judgment:</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="blue-accent-left">
+                            <h4 class="text-lg font-medium mb-3 text-secondary">Shared Cognitive Mechanisms</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="inline-block bg-blue-800/50 text-blue-300 px-2 py-1 rounded text-sm mr-2">Compression</span>
+                                    <span>Flattening the true range of values, leading to overestimation of small values and underestimation of large ones</span>
+                                </div>
+                                <div>
+                                    <span class="inline-block bg-blue-800/50 text-blue-300 px-2 py-1 rounded text-sm mr-2">Anchoring</span>
+                                    <span>Starting from reference points and making insufficient adjustments</span>
+                                </div>
+                                <div>
+                                    <span class="inline-block bg-blue-800/50 text-blue-300 px-2 py-1 rounded text-sm mr-2">Availability</span>
+                                    <span>Giving disproportionate weight to easily recalled examples</span>
+                                </div>
+                                <div>
+                                    <span class="inline-block bg-blue-800/50 text-blue-300 px-2 py-1 rounded text-sm mr-2">Overconfidence</span>
+                                    <span>Being more confident than is warranted by actual accuracy</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="relative">
+                            <h4 class="text-lg font-medium mb-4 text-secondary">Compression Bias Across Domains</h4>
+                            <svg class="w-full h-64" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Coordinate system -->
+                                <line x1="50" y1="200" x2="350" y2="200" stroke="#6b7280" stroke-width="2"></line>
+                                <line x1="50" y1="200" x2="50" y2="50" stroke="#6b7280" stroke-width="2"></line>
+                                
+                                <!-- Perfect perception line -->
+                                <line x1="50" y1="200" x2="350" y2="50" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"></line>
+                                
+                                <!-- Energy perception line -->
+                                <path d="M50,200 Q200,120 350,100" stroke="#ef4444" stroke-width="3" fill="none"></path>
+                                
+                                <!-- AI confidence perception line -->
+                                <path d="M50,200 Q200,100 350,80" stroke="#10b981" stroke-width="3" fill="none"></path>
+                                
+                                <!-- Labels -->
+                                <text x="200" y="230" text-anchor="middle" fill="#e2e8f0">Actual Value</text>
+                                <text x="20" y="125" text-anchor="middle" fill="#e2e8f0" transform="rotate(-90, 20, 125)">Perceived Value</text>
+                                
+                                <!-- Legend -->
+                                <circle cx="50" cy="25" r="5" fill="#94a3b8"></circle>
+                                <text x="60" y="30" fill="#e2e8f0">Accurate Perception</text>
+                                
+                                <circle cx="170" cy="25" r="5" fill="#ef4444"></circle>
+                                <text x="180" y="30" fill="#e2e8f0">Energy Perception</text>
+                                
+                                <circle cx="290" cy="25" r="5" fill="#10b981"></circle>
+                                <text x="300" y="30" fill="#e2e8f0">AI Confidence Perception</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-blue-900/30 p-6 rounded-xl shadow-md">
+                <h3 class="text-lg font-semibold mb-3 flex items-center text-blue-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    How to Use This Simulation
+                </h3>
+                <ol class="list-decimal pl-8 space-y-3 text-blue-200">
+                    <li>Explore the <strong>Energy Perception</strong> tab to understand how people compress energy magnitude estimates</li>
+                    <li>Visit the <strong>AI Confidence</strong> tab to examine calibration gaps between model confidence and human perception</li>
+                    <li>See how these concepts interact in the <strong>Combined Model</strong> tab</li>
+                    <li>Check the <strong>Methods</strong> and <strong>Implications</strong> tabs for deeper insights</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Energy Perception Tab -->
+        <div v-if="activeMainTab === 1" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Energy Perception Compression (Attari et al., 2010)
+                </h2>
+                
+                <p class="mb-6 text-lg leading-relaxed">
+                    This simulation demonstrates how people systematically compress the true distribution of energy magnitudes, 
+                    overestimating small energy uses and underestimating large ones.
+                </p>
+                
+                <!-- Compression Factor Slider -->
+                <div class="bg-dark-700 p-5 rounded-xl shadow-md mb-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Adjust Compression Factor:
+                    </h3>
+                    <div class="flex items-center mt-4">
+                        <span class="text-xl font-semibold mr-4 min-w-[120px] text-primary">Factor: {{ compressionFactor.toFixed(1) }}</span>
+                        <input type="range" v-model.number="compressionFactor" min="1" max="5" step="0.1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <p class="mt-4 text-gray-400 italic">
+                        <span v-if="compressionFactor === 1">No compression - perceived energy equals actual energy</span>
+                        <span v-else-if="compressionFactor < 2">Mild compression - slightly overestimating small uses, slightly underestimating large uses</span>
+                        <span v-else-if="compressionFactor < 3">Moderate compression - similar to average person in Attari study</span>
+                        <span v-else="">Strong compression - severely overestimating small uses, severely underestimating large uses</span>
+                    </p>
+                </div>
+                
+                <!-- Energy Usage Chart -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Energy Usage: Actual vs. Perceived
+                    </h3>
+                    <div class="chart-container relative rounded-lg p-2">
+                        <div v-if="!energyChartReady" class="absolute inset-0 flex items-center justify-center">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <canvas v-show="energyChartReady" ref="energyChart" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Appliance Grid -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                        View Specific Appliances/Activities
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div v-for="(appliance, index) in appliances" :key="index" class="bg-dark-700 p-4 rounded-lg shadow-md cursor-pointer transition-all duration-300" :class="{'ring-2 ring-primary': selectedApplianceIndex === index}" @click="selectAppliance(index)">
+                            <div class="font-medium text-lg">{{ appliance.name }}</div>
+                            <div class="mt-2 space-y-1">
+                                <div class="text-gray-300">Actual: <span class="font-semibold">{{ appliance.actualEnergy }}W</span></div>
+                                <div class="text-gray-300">Perceived: <span class="font-semibold">{{ calculatePerceivedEnergy(appliance.actualEnergy, compressionFactor) }}W</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Findings Section -->
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-primary">Key Regression Findings</h3>
+                <div class="blue-accent-left mt-4">
+                    <div class="math-eq mb-6 text-xl text-center">
+                        log<sub>10</sub>Perception<sub>ij</sub> = β<sub>0j</sub> + β<sub>1j</sub>log<sub>10</sub>Actual<sub>i</sub> + β<sub>2j</sub>(log<sub>10</sub>Actual<sub>i</sub>)<sup>2</sup> + r<sub>ij</sub>
+                    </div>
+                    <p class="text-sm mb-4 text-gray-400">Where i indicates device/activity, j indicates participant, β<sub>0j</sub> is elevation (underestimation), β<sub>1j</sub> is slope (compression), and β<sub>2j</sub> is quadratic term (curvature).</p>
+                    
+                    <ul class="list-disc pl-8 space-y-3 mt-6">
+                        <li>
+                            Average elevation (β<sub>0j</sub>) = <span class="text-secondary">-0.44</span>, indicating underestimation by factor of <span class="text-secondary">2.8</span>
+                        </li>
+                        <li>
+                            Average slope (β<sub>1j</sub>) = <span class="text-secondary">0.28</span>, indicating compression of perceptions
+                        </li>
+                        <li>
+                            Significant negative quadratic effect (β<sub>2j</sub>) = <span class="text-secondary">-0.19</span>, showing flattening at high values
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Confidence Tab -->
+        <div v-if="activeMainTab === 2" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    AI Confidence Calibration Simulation
+                </h2>
+                
+                <p class="mb-6 text-lg leading-relaxed">
+                    This simulation explores the theoretical calibration gap between AI model confidence and human perception of that confidence, 
+                    and how explanation style affects this gap.
+                </p>
+                
+                <!-- AI Explanation Parameters -->
+                <div class="bg-dark-700 p-5 rounded-xl shadow-md mb-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Adjust AI Explanation Parameters:
+                    </h3>
+                    
+                    <!-- Confidence tone slider -->
+                    <div class="mb-6">
+                        <span class="block mb-2 font-medium">Confidence Tone:</span>
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">{{ confidenceTones[confidenceToneIndex] }}</span>
+                            <input type="range" v-model.number="confidenceToneIndex" min="0" max="2" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    
+                    <!-- Explanation length slider -->
+                    <div>
+                        <span class="block mb-2 font-medium">Explanation Length:</span>
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">{{ explanationLengths[explanationLengthIndex] }}</span>
+                            <input type="range" v-model.number="explanationLengthIndex" min="0" max="2" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Example AI Explanation -->
+                <div class="bg-dark-800 border border-dark-600 rounded-xl p-5 mb-8 shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                        Example AI Explanation
+                    </h3>
+                    <div class="p-5 bg-dark-900 rounded-lg shadow-inner">
+                        <p class="mb-2 text-gray-400"><strong>Question:</strong> How much energy does a washing machine use?</p>
+                        <p class="mt-2"><strong>AI Response:</strong> <span v-html="getConfidencePrefix()"></span> a typical washing machine uses around 500W while running, but this varies by model and settings.
+                        <span v-if="explanationLengthIndex >= 1"> The main energy consumption comes from heating the water, which is why cold-water washing saves significant energy. Most modern machines are designed to be more energy-efficient than older models.</span>
+                        <span v-if="explanationLengthIndex === 2"><br><br>For context, washing machines typically fall into these categories:<br>- Standard top-loading: 500-700W<br>- High-efficiency top-loading: 300-500W<br>- Front-loading: 250-400W<br><br>Energy use also depends on the wash cycle selected, water temperature, and load size. ENERGY STAR certified machines use about 25% less energy and 33% less water than conventional models.</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Calibration Gap Grid -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Calibration Gap Visualization
+                        </h3>
+                        <div class="chart-container relative rounded-lg mb-2">
+                            <div v-if="!calibrationChartReady" class="absolute inset-0 flex items-center justify-center">
+                                <div class="loading-spinner"></div>
+                            </div>
+                            <canvas v-show="calibrationChartReady" ref="calibrationChart" height="250"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-400 italic mt-2">
+                            This chart compares model confidence (how likely the model thinks it's correct) with human-perceived confidence. 
+                            Perfect calibration would follow the diagonal line.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Distribution of Human Confidence Ratings
+                        </h3>
+                        <div class="chart-container relative rounded-lg mb-2">
+                            <div v-if="!histogramChartReady" class="absolute inset-0 flex items-center justify-center">
+                                <div class="loading-spinner"></div>
+                            </div>
+                            <canvas v-show="histogramChartReady" ref="histogramChart" height="250"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-400 italic mt-2">
+                            This histogram shows how confidence tone and explanation length affect the distribution of human confidence judgments.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Calibration Metrics -->
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-dark-700 p-5 rounded-lg shadow-md">
+                        <h4 class="font-semibold mb-3 text-primary">Expected Calibration Error (ECE)</h4>
+                        <div class="blue-accent-left mt-4 mb-4">
+                            <div class="math-eq mb-4 text-lg text-center">
+                                ECE = Σ<sub>m=1</sub><sup>M</sup> |B<sub>m</sub>|/N · |conf(B<sub>m</sub>) - acc(B<sub>m</sub>)|
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span>Model:</span>
+                                <span class="font-semibold text-lg">{{ getModelECE().toFixed(3) }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Human (with current parameters):</span>
+                                <span class="font-semibold text-lg">{{ getHumanECE().toFixed(3) }}</span>
+                            </div>
+                        </div>
+                        <p class="text-sm mt-3 text-gray-400 italic">
+                            Lower ECE means better calibration between confidence and actual accuracy.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-dark-700 p-5 rounded-lg shadow-md">
+                        <h4 class="font-semibold mb-3 text-primary">Discrimination (AUC)</h4>
+                        <div class="blue-accent-left mt-4 mb-4">
+                            <div class="math-eq mb-4 text-lg text-center">
+                                AUC = 1/(N<sub>pos</sub> × N<sub>neg</sub>) · Σ<sub>i=1</sub><sup>N<sub>pos</sub></sup> Σ<sub>j=1</sub><sup>N<sub>neg</sub></sup> I(C<sub>i</sub> &gt; C<sub>j</sub>)
+                            </div>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span>Model:</span>
+                                <span class="font-semibold text-lg">{{ getModelAUC().toFixed(3) }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Human (with current parameters):</span>
+                                <span class="font-semibold text-lg">{{ getHumanAUC().toFixed(3) }}</span>
+                            </div>
+                        </div>
+                        <p class="text-sm mt-3 text-gray-400 italic">
+                            Higher AUC means better ability to discriminate between correct and incorrect answers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Combined Model Tab -->
+        <div v-if="activeMainTab === 3" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Combined Simulation: Energy Advice from AI
+                </h2>
+                
+                <p class="mb-6 text-lg leading-relaxed">
+                    This simulation combines both concepts, exploring how people might respond to energy-saving advice from AI systems
+                    that express different levels of confidence.
+                </p>
+                
+                <!-- Parameter Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Energy perception parameters -->
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Human Energy Perception
+                        </h3>
+                        <div class="mb-4">
+                            <span class="block mb-2 font-medium">User's Compression Factor:</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[100px] text-primary">{{ combinedCompressionFactor.toFixed(1) }}</span>
+                                <input type="range" v-model.number="combinedCompressionFactor" min="1" max="5" step="0.1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI parameters -->
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            AI Explanation Style
+                        </h3>
+                        <!-- Confidence tone slider -->
+                        <div class="mb-4">
+                            <span class="block mb-2 font-medium">AI Confidence Tone:</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">{{ confidenceTones[combinedConfidenceToneIndex] }}</span>
+                                <input type="range" v-model.number="combinedConfidenceToneIndex" min="0" max="2" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                        
+                        <!-- Explanation length slider -->
+                        <div>
+                            <span class="block mb-2 font-medium">AI Explanation Length:</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">{{ explanationLengths[combinedExplanationLengthIndex] }}</span>
+                                <input type="range" v-model.number="combinedExplanationLengthIndex" min="0" max="2" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Energy Saving Scenario -->
+                <div class="bg-dark-800 border border-dark-600 rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">Energy Saving Scenario</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-lg font-medium mb-3">Select an energy-saving action to evaluate:</label>
+                        <select v-model="selectedAction" class="w-full p-3 border border-dark-600 rounded-lg bg-dark-900 text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option v-for="action in energySavingActions" :key="action.id" :value="action">
+                                {{ action.name }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!-- User's initial estimate -->
+                    <div class="mb-6 p-5 bg-dark-700 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Your Initial Estimate
+                        </h4>
+                        <p>Without AI advice, how much energy do you think this action would save?</p>
+                        <div class="mt-4">
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">Your estimate: {{ userEstimate }}W</span>
+                                <input type="range" v-model.number="userEstimate" :min="getMinEstimateValue()" :max="getMaxEstimateValue()" :step="getEstimateStep()" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <p class="mt-3 text-sm text-gray-400 italic">
+                                Note: This estimate reflects the compressed perception based on your selected compression factor.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Advice -->
+                    <div class="mb-6 p-5 bg-blue-900/30 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center text-blue-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            AI Energy Advisor Response
+                        </h4>
+                        <div class="p-4 bg-dark-900 rounded-lg border border-dark-600 shadow-inner">
+                            <p v-if="selectedAction" v-html="getAIEnergyAdvice()" class="leading-relaxed text-blue-200"></p>
+                            <p v-else="" class="italic text-gray-500">Please select an energy-saving action to see AI advice.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust in AI Advice -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-3 text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            How much do you trust this AI advice?
+                        </h4>
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">Trust level: {{ (trustLevel * 100).toFixed(0) }}%</span>
+                            <input type="range" v-model.number="trustLevel" min="0" max="1" step="0.01" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    
+                    <!-- Final Estimate After AI Advice -->
+                    <div class="p-5 bg-green-900/30 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center text-green-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Your Final Estimate (After AI Advice)
+                        </h4>
+                        <p class="mb-4">
+                            Based on both your initial perception and the AI advice, your final estimate would be:
+                        </p>
+                        <div class="text-2xl font-bold text-center py-3 text-green-400">
+                            {{ selectedAction ? getFinalEstimate() : 0 }}W
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div class="bg-dark-900 p-3 rounded-lg shadow-sm">
+                                <p class="font-medium text-center">
+                                    <strong>Actual energy savings:</strong><br>
+                                    <span class="text-xl">{{ selectedAction ? selectedAction.actualSavings : 0 }}W</span>
+                                </p>
+                            </div>
+                            <div class="bg-dark-900 p-3 rounded-lg shadow-sm">
+                                <p class="font-medium text-center">
+                                    <strong>Estimation error:</strong><br>
+                                    <span class="text-xl" :class="{
+                                        'text-red-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) > 20,
+                                        'text-yellow-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) > 10 &amp;&amp; Math.abs(getEstimationError()) <= 20,
+                                        'text-green-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) <= 10
+                                    }">{{ selectedAction ? getEstimationError() : 0 }}%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Visualization -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Impact of AI Advice on Energy Perception
+                    </h3>
+                    <div class="chart-container relative rounded-lg">
+                        <div v-if="!combinedChartReady" class="absolute inset-0 flex items-center justify-center">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <canvas v-show="combinedChartReady" ref="combinedChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Methods Tab -->
+        <div v-if="activeMainTab === 4" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Methodology
+                </h2>
+                
+                <!-- Study Methodologies Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Attari Methodology -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 bg-blue-600 p-3 rounded-lg text-white">Attari et al. (2010) Methodology</h3>
+                        
+                        <div class="blue-accent-left mt-6 mb-6">
+                            <h4 class="font-medium mb-3">Participants and Design</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>505 participants completed an online survey</li>
+                                <li>Estimated energy used by 9 devices/appliances and saved by 6 activities</li>
+                                <li>A 100-watt incandescent light bulb used for 1 hour provided as a reference point</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="blue-accent-left mt-6 mb-6">
+                            <h4 class="font-medium mb-3">Data Analysis</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>Log-transformed both perceived and actual energy values to reduce skew</li>
+                                <li>Calculated correlation between perceived and actual energy</li>
+                                <li>Used multilevel regression to model relationship between perceptions and actual values</li>
+                                <li>Assessed individual differences (numeracy, environmental attitudes)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-8 bg-dark-700 p-4 rounded-lg">
+                            <h4 class="font-medium mb-3">Key Regression Equation</h4>
+                            <div class="math-eq mb-4 text-lg text-center">
+                                log<sub>10</sub>Perception<sub>ij</sub> = β<sub>0j</sub> + β<sub>1j</sub>log<sub>10</sub>Actual<sub>i</sub> + β<sub>2j</sub>(log<sub>10</sub>Actual<sub>i</sub>)<sup>2</sup> + r<sub>ij</sub>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-3">
+                                Where i indicates device/activity, j indicates participant, β<sub>0j</sub> is elevation (underestimation), 
+                                β<sub>1j</sub> is slope (compression), and β<sub>2j</sub> is quadratic term (curvature).
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Confidence Methodology -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 bg-blue-600 p-3 rounded-lg text-white">AI Confidence Calibration Methodology</h3>
+                        
+                        <div class="blue-accent-left mt-6 mb-6">
+                            <h4 class="font-medium mb-3">Experimental Design</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>Multiple experiments with online participants judging LLM answers</li>
+                                <li>Used multiple LLMs: GPT-3.5, PaLM2, and GPT-4o</li>
+                                <li>Multiple-choice and short-answer question formats</li>
+                                <li>Manipulated explanation style (uncertain, moderate, confident)</li>
+                                <li>Manipulated explanation length (short, medium, long)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="blue-accent-left mt-6 mb-6">
+                            <h4 class="font-medium mb-3">Measuring Confidence</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>Model confidence assessed through token probabilities</li>
+                                <li>Multiple-choice questions: normalized probabilities across answer options</li>
+                                <li>Short-answer questions: "pTrue" method asking model to evaluate its own answer</li>
+                                <li>Human confidence measured through explicit confidence ratings</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-8 bg-dark-700 p-4 rounded-lg space-y-6">
+                            <div>
+                                <h4 class="font-medium mb-3">Expected Calibration Error (ECE)</h4>
+                                <div class="math-eq mb-4 text-lg text-center">
+                                    ECE = Σ<sub>m=1</sub><sup>M</sup> |B<sub>m</sub>|/N · |conf(B<sub>m</sub>) - acc(B<sub>m</sub>)|
+                                </div>
+                                <p class="text-sm text-gray-400 mt-2">
+                                    Measures calibration by comparing confidence and accuracy across probability bins.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium mb-3">Area Under Curve (AUC)</h4>
+                                <div class="math-eq mb-4 text-lg text-center">
+                                    AUC = 1/(N<sub>pos</sub> × N<sub>neg</sub>) · Σ<sub>i=1</sub><sup>N<sub>pos</sub></sup> Σ<sub>j=1</sub><sup>N<sub>neg</sub></sup> I(C<sub>i</sub> &gt; C<sub>j</sub>)
+                                </div>
+                                <p class="text-sm text-gray-400 mt-2">
+                                    Measures discrimination ability by comparing confidence scores for correct vs. incorrect answers.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Methodological Connections -->
+                <div class="mt-8 bg-dark-800 border border-dark-600 rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-primary">Methodological Connections</h3>
+                    <p class="mb-4">Both studies employ similar approaches to investigate perception biases:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-dark-700 p-5 rounded-lg">
+                            <h4 class="font-medium mb-3 text-secondary">Shared Methodological Elements</h4>
+                            <ul class="list-disc pl-6 space-y-3">
+                                <li><strong class="text-blue-400">Reference Points:</strong> Both provide anchors for judgments (100W light bulb for energy; explanation formats for AI)</li>
+                                <li><strong class="text-blue-400">Manipulation of Key Variables:</strong> Both systematically vary factors that affect perception</li>
+                                <li><strong class="text-blue-400">Logarithmic Transformations:</strong> Both use log transformations to analyze skewed distributions</li>
+                                <li><strong class="text-blue-400">Quantitative Analysis:</strong> Both use statistical methods to model the relationship between actual and perceived values</li>
+                                <li><strong class="text-blue-400">Individual Differences:</strong> Both examine how personal characteristics affect calibration</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="relative">
+                            <h4 class="font-medium mb-4 text-secondary">Methodological Connections</h4>
+                            <svg class="w-full h-64" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Central overlapping circle -->
+                                <circle cx="200" cy="125" r="60" fill="#334155" stroke="#5D5CDE" stroke-width="2"></circle>
+                                <text x="200" y="125" text-anchor="middle" fill="#e2e8f0" font-size="14">Cognitive Bias Perception</text>
+                                
+                                <!-- Left circle (Attari) -->
+                                <circle cx="120" cy="125" r="80" fill="#dc262630" stroke="#ef4444" stroke-width="2"></circle>
+                                <text x="85" y="125" text-anchor="middle" fill="#ef4444" font-size="14">Attari et al.</text>
+                                <text x="85" y="145" text-anchor="middle" fill="#ef4444" font-size="12">Energy Perception</text>
+                                
+                                <!-- Right circle (AI) -->
+                                <circle cx="280" cy="125" r="80" fill="#10b98130" stroke="#10b981" stroke-width="2"></circle>
+                                <text x="315" y="125" text-anchor="middle" fill="#10b981" font-size="14">AI Confidence</text>
+                                <text x="315" y="145" text-anchor="middle" fill="#10b981" font-size="12">Calibration</text>
+                                
+                                <!-- Connection lines -->
+                                <line x1="140" y1="80" x2="260" y2="80" stroke="#94a3b8" stroke-width="1.5"></line>
+                                <text x="200" y="70" text-anchor="middle" fill="#94a3b8" font-size="12">Reference Point</text>
+                                
+                                <line x1="140" y1="170" x2="260" y2="170" stroke="#94a3b8" stroke-width="1.5"></line>
+                                <text x="200" y="185" text-anchor="middle" fill="#94a3b8" font-size="12">Log Transformation</text>
+                                
+                                <line x1="120" y1="45" x2="280" y2="45" stroke="#94a3b8" stroke-width="1.5"></line>
+                                <text x="200" y="35" text-anchor="middle" fill="#94a3b8" font-size="12">Variable Manipulation</text>
+                                
+                                <line x1="120" y1="205" x2="280" y2="205" stroke="#94a3b8" stroke-width="1.5"></line>
+                                <text x="200" y="220" text-anchor="middle" fill="#94a3b8" font-size="12">Individual Differences</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Implications Tab -->
+        <div v-if="activeMainTab === 5" class="space-y-6 animate-fadeIn">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Implications and Applications
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-dark-700 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-3 text-secondary">Implications for Energy Communication</h3>
+                        <ul class="list-disc pl-6 space-y-3">
+                            <li>Energy campaigns should focus on high-impact actions that are typically underestimated</li>
+                            <li>Communication about efficiency improvements (vs. curtailment) should be prioritized</li>
+                            <li>Use familiar reference points to help contextualize energy magnitudes</li>
+                            <li>Consider using log or percentage scales rather than absolute values</li>
+                            <li>Tailored feedback can help correct individual compression biases</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-dark-700 p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-3 text-secondary">Implications for AI Design</h3>
+                        <ul class="list-disc pl-6 space-y-3">
+                            <li>AI explanations should reflect the model's actual confidence levels</li>
+                            <li>Avoid lengthy explanations for low-confidence answers</li>
+                            <li>Use appropriate linguistic markers of uncertainty</li>
+                            <li>Design UIs that explicitly communicate confidence levels</li>
+                            <li>Train users to better interpret AI confidence signals</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-dark-700 p-6 rounded-xl shadow-md mt-8">
+                    <h3 class="text-xl font-semibold mb-4 text-primary">Combined Applications for AI Energy Advisors</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                        <div class="bg-dark-800 p-4 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-4px]">
+                            <h4 class="font-medium mb-2 text-secondary">Adaptive Explanations</h4>
+                            <p>AI energy advisors should provide more detailed explanations for high-energy activities that humans systematically underestimate, while using confidence language that matches the model's actual certainty.</p>
+                        </div>
+                        
+                        <div class="bg-dark-800 p-4 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-4px]">
+                            <h4 class="font-medium mb-2 text-secondary">Calibration Feedback</h4>
+                            <p>Systems should provide feedback on user estimates, helping to correct compression bias while clearly distinguishing between high-confidence factual information and lower-confidence recommendations.</p>
+                        </div>
+                        
+                        <div class="bg-dark-800 p-4 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-4px]">
+                            <h4 class="font-medium mb-2 text-secondary">Personalized Visualization</h4>
+                            <p>Create personalized dashboards that adjust visual scales and reference points based on the user's specific compression factor, while presenting AI confidence in ways that facilitate appropriate trust.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-5 bg-blue-900/30 rounded-lg">
+                        <h4 class="font-medium mb-3 text-lg text-blue-300">Future Research Directions</h4>
+                        <ul class="list-disc pl-6 space-y-2 text-blue-200">
+                            <li>Investigate how AI advice differentially affects perceptions of high vs. low energy activities</li>
+                            <li>Test whether appropriately calibrated AI explanations can help correct human compression effects</li>
+                            <li>Explore how domain expertise affects reliance on AI advice with varying confidence expressions</li>
+                            <li>Design interfaces that adjust explanation style based on both the AI's confidence and the magnitude of energy use</li>
+                            <li>Study how these cognitive biases might interact in other domains like financial planning or health risk assessment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            document.documentElement.classList.toggle('dark', event.matches);
+        });
+        
+        // Chart.js global defaults for dark mode
+        Chart.defaults.color = '#e2e8f0';
+        Chart.defaults.borderColor = '#475569';
+        Chart.defaults.font.family = "'system-ui', 'sans-serif'";
+        
+        // Safe chart helper function
+        function safeCreateChart(ctx, config) {
+            try {
+                return new Chart(ctx, config);
+            } catch (error) {
+                console.error("Chart creation error:", error);
+                return null;
+            }
+        }
+        
+        // Vue app
+        const app = Vue.createApp({
+            data() {
+                return {
+                    // Navigation
+                    activeMainTab: 0,
+                    mainTabs: [
+                        { name: "Overview" },
+                        { name: "Energy Perception" },
+                        { name: "AI Confidence" },
+                        { name: "Combined Model" },
+                        { name: "Methods" },
+                        { name: "Implications" }
+                    ],
+                    
+                    // Chart ready flags
+                    energyChartReady: false,
+                    calibrationChartReady: false,
+                    histogramChartReady: false,
+                    combinedChartReady: false,
+                    
+                    // Chart objects
+                    energyChart: null,
+                    calibrationChart: null,
+                    histogramChart: null,
+                    combinedChart: null,
+                    
+                    // Attari simulation data
+                    compressionFactor: 2.8,
+                    selectedApplianceIndex: null,
+                    appliances: [
+                        { 
+                            name: "Central AC (1 hour)", 
+                            actualEnergy: 3500, 
+                            category: "High Consumption", 
+                            savingPotential: "High - Upgrading to efficient models can save significantly",
+                            misconception: "Many people underestimate by 3-4x how much energy this uses"
+                        },
+                        { 
+                            name: "Clothes Dryer (1 load)", 
+                            actualEnergy: 3000, 
+                            category: "High Consumption", 
+                            savingPotential: "High - Air drying or efficient models can save significantly",
+                            misconception: "Often underestimated by consumers" 
+                        },
+                        { 
+                            name: "Water Heater (1 hour)", 
+                            actualEnergy: 4000, 
+                            category: "High Consumption", 
+                            savingPotential: "High - Lower temperature settings and insulation help",
+                            misconception: "Hidden energy use that people rarely think about"
+                        },
+                        { 
+                            name: "Incandescent Bulb (1 hour)", 
+                            actualEnergy: 100, 
+                            category: "Low Consumption", 
+                            savingPotential: "Medium - Replacing with LED saves 75-80%",
+                            misconception: "Used as reference point but still overestimated"
+                        },
+                        { 
+                            name: "LED Light (1 hour)", 
+                            actualEnergy: 15, 
+                            category: "Very Low Consumption", 
+                            savingPotential: "Low - Already efficient",
+                            misconception: "Efficiency often overestimated relative to other actions"
+                        },
+                        { 
+                            name: "Laptop Computer (1 hour)", 
+                            actualEnergy: 50, 
+                            category: "Low Consumption", 
+                            savingPotential: "Low - Sleep mode helps but overall impact is small",
+                            misconception: "People often overestimate energy use"
+                        },
+                        { 
+                            name: "Refrigerator (1 hour)", 
+                            actualEnergy: 150, 
+                            category: "Medium Consumption", 
+                            savingPotential: "Medium - Runs constantly, so efficiency matters",
+                            misconception: "Continuous operation makes total consumption higher than perceived"
+                        },
+                        { 
+                            name: "Electric Car Charging", 
+                            actualEnergy: 7200, 
+                            category: "Very High Consumption", 
+                            savingPotential: "Medium - More efficient than gas but still high energy",
+                            misconception: "Often perceived as 'no energy' rather than 'different energy source'"
+                        }
+                    ],
+                    
+                    // AI confidence simulation data
+                    confidenceToneIndex: 1, // 0=low, 1=medium, 2=high
+                    confidenceTones: ["Low Confidence", "Medium Confidence", "High Confidence"],
+                    explanationLengthIndex: 1, // 0=short, 1=medium, 2=long
+                    explanationLengths: ["Short", "Medium", "Long"],
+                    
+                    // Combined simulation data
+                    combinedCompressionFactor: 2.8,
+                    combinedConfidenceToneIndex: 1,
+                    combinedExplanationLengthIndex: 1,
+                    trustLevel: 0.5,
+                    userEstimate: 50,
+                    selectedAction: null,
+                    energySavingActions: [
+                        {
+                            id: 1,
+                            name: "Turn off lights when leaving a room",
+                            actualSavings: 60,
+                            type: "Curtailment",
+                            isAICorrect: true,
+                            description: "Turning off lights when not in use is a simple way to save energy.",
+                            aiExplanationBase: "Turning off lights when leaving a room can save around 60W per hour if you have standard bulbs."
+                        },
+                        {
+                            id: 2,
+                            name: "Replace incandescent bulbs with LEDs",
+                            actualSavings: 85,
+                            type: "Efficiency",
+                            isAICorrect: true,
+                            description: "Replacing traditional bulbs with energy-efficient ones reduces energy consumption.",
+                            aiExplanationBase: "Replacing an incandescent bulb with an LED can save about 85W per hour of use."
+                        },
+                        {
+                            id: 3,
+                            name: "Unplug electronics when not in use",
+                            actualSavings: 50,
+                            type: "Curtailment",
+                            isAICorrect: false,
+                            description: "Unplugging devices eliminates standby power consumption.",
+                            aiExplanationBase: "Unplugging electronics can save around 200W per day. This is incorrect - actual savings are closer to 50W."
+                        },
+                        {
+                            id: 4,
+                            name: "Upgrade to an ENERGY STAR refrigerator",
+                            actualSavings: 500,
+                            type: "Efficiency",
+                            isAICorrect: true,
+                            description: "ENERGY STAR appliances are more efficient than standard models.",
+                            aiExplanationBase: "Upgrading to an ENERGY STAR refrigerator can save approximately 500W per day compared to an older model."
+                        },
+                        {
+                            id: 5,
+                            name: "Wash clothes in cold water",
+                            actualSavings: 225,
+                            type: "Curtailment",
+                            isAICorrect: true,
+                            description: "Most of the energy used in washing clothes goes to heating water.",
+                            aiExplanationBase: "Washing clothes in cold water instead of hot can save around 225W per load by eliminating water heating."
+                        },
+                        {
+                            id: 6,
+                            name: "Install a programmable thermostat",
+                            actualSavings: 1200,
+                            type: "Efficiency",
+                            isAICorrect: false,
+                            description: "Programmable thermostats adjust temperature automatically to optimize energy use.",
+                            aiExplanationBase: "Installing a programmable thermostat saves about 300W per day. This is incorrect - actual savings are closer to 1200W."
+                        },
+                        {
+                            id: 7,
+                            name: "Air dry clothes instead of using dryer",
+                            actualSavings: 3000,
+                            type: "Curtailment",
+                            isAICorrect: true,
+                            description: "Clothes dryers are among the most energy-intensive household appliances.",
+                            aiExplanationBase: "Air drying clothes instead of using an electric dryer can save approximately 3000W per load."
+                        },
+                        {
+                            id: 8,
+                            name: "Add insulation to your attic",
+                            actualSavings: 2000,
+                            type: "Efficiency",
+                            isAICorrect: false,
+                            description: "Proper insulation reduces heating and cooling energy needs.",
+                            aiExplanationBase: "Adding insulation to your attic saves about 500W per day. This is incorrect - actual savings are closer to 2000W."
+                        }
+                    ]
+                }
+            },
+            mounted() {
+                // Initialize the first action as selectedAction
+                this.selectedAction = this.energySavingActions[0];
+                this.userEstimate = this.calculatePerceivedEnergy(this.selectedAction.actualSavings, this.combinedCompressionFactor);
+                
+                // Set up watchers
+                this.$watch('activeMainTab', this.handleTabChange);
+                this.$watch('compressionFactor', this.updateEnergyChartIfReady);
+                this.$watch('confidenceToneIndex', this.updateAIConfidenceChartsIfReady);
+                this.$watch('explanationLengthIndex', this.updateAIConfidenceChartsIfReady);
+                this.$watch('combinedCompressionFactor', this.updateCombinedData);
+                this.$watch('selectedAction', this.updateCombinedData);
+                this.$watch('trustLevel', this.updateCombinedChartIfReady);
+            },
+            methods: {
+                // Tab handling
+                handleTabChange() {
+                    // Initialize charts when tab becomes active
+                    this.$nextTick(() => {
+                        switch (this.activeMainTab) {
+                            case 1: // Energy Perception tab
+                                if (!this.energyChartReady) this.initEnergyChart();
+                                break;
+                            case 2: // AI Confidence tab
+                                if (!this.calibrationChartReady) this.initCalibrationChart();
+                                if (!this.histogramChartReady) this.initHistogramChart();
+                                break;
+                            case 3: // Combined Model tab
+                                if (!this.combinedChartReady) this.initCombinedChart();
+                                break;
+                        }
+                    });
+                },
+                
+                // Energy perception methods
+                calculatePerceivedEnergy(actualEnergy, compressionFactor) {
+                    // Simple power function model: perceived = actual^(1/compressionFactor)
+                    return Math.round(Math.pow(actualEnergy, 1/compressionFactor));
+                },
+                
+                selectAppliance(index) {
+                    this.selectedApplianceIndex = index;
+                },
+                
+                initEnergyChart() {
+                    // Wait for DOM element to be available
+                    if (!this.$refs.energyChart) {
+                        console.log("Energy chart ref not ready");
+                        setTimeout(() => this.initEnergyChart(), 100);
+                        return;
+                    }
+                    
+                    try {
+                        const ctx = this.$refs.energyChart.getContext('2d');
+                        
+                        // Generate simple data for curve
+                        const actualValues = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
+                        const perceivedValues = actualValues.map(actual => 
+                            this.calculatePerceivedEnergy(actual, this.compressionFactor)
+                        );
+                        
+                        // Perfect perception (diagonal) line
+                        const perfValues = actualValues.map(actual => actual);
+                        
+                        // Very simple config to avoid recursion issues
+                        const config = {
+                            type: 'line',
+                            data: {
+                                labels: actualValues,
+                                datasets: [
+                                    {
+                                        label: 'Perceived Energy',
+                                        data: perceivedValues,
+                                        borderColor: '#5D5CDE',
+                                        backgroundColor: 'rgba(93, 92, 222, 0.2)',
+                                        borderWidth: 3,
+                                        tension: 0.4,
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Perfect Perception',
+                                        data: perfValues,
+                                        borderColor: '#94a3b8',
+                                        backgroundColor: 'transparent',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        fill: false
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Actual Energy (Watts)'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Perceived Energy (Watts)'
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                        
+                        // Create chart and add appliance points
+                        this.energyChart = safeCreateChart(ctx, config);
+                        this.addAppliancePoints();
+                        this.energyChartReady = true;
+                    } catch (error) {
+                        console.error("Failed to initialize energy chart:", error);
+                    }
+                },
+                
+                addAppliancePoints() {
+                    if (!this.energyChart) return;
+                    
+                    try {
+                        // Create dataset with appliance points
+                        const applianceData = this.appliances.map(appliance => 
+                            this.calculatePerceivedEnergy(appliance.actualEnergy, this.compressionFactor)
+                        );
+                        
+                        // Background colors based on selection
+                        const bgColors = this.appliances.map((_, index) => 
+                            index === this.selectedApplianceIndex ? 'rgba(239, 68, 68, 0.8)' : 'rgba(56, 189, 248, 0.7)'
+                        );
+                        
+                        // Add appliance dataset
+                        this.energyChart.data.datasets.push({
+                            label: 'Appliances',
+                            data: applianceData,
+                            backgroundColor: bgColors,
+                            borderColor: bgColors,
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            type: 'scatter'
+                        });
+                        
+                        this.energyChart.update();
+                    } catch (error) {
+                        console.error("Error adding appliance points:", error);
+                    }
+                },
+                
+                updateEnergyChartIfReady() {
+                    if (!this.energyChart || !this.energyChartReady) return;
+                    
+                    try {
+                        // Update perceived values with new compression factor
+                        const actualValues = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
+                        const perceivedValues = actualValues.map(actual => 
+                            this.calculatePerceivedEnergy(actual, this.compressionFactor)
+                        );
+                        
+                        // Update chart data
+                        this.energyChart.data.datasets[0].data = perceivedValues;
+                        
+                        // Remove old appliance points
+                        if (this.energyChart.data.datasets.length > 2) {
+                            this.energyChart.data.datasets.pop();
+                        }
+                        
+                        // Add updated appliance points
+                        this.addAppliancePoints();
+                        
+                        // Update chart
+                        this.energyChart.update();
+                    } catch (error) {
+                        console.error("Error updating energy chart:", error);
+                    }
+                },
+                
+                // AI confidence methods
+                getConfidencePrefix() {
+                    if (this.confidenceToneIndex === 0) {
+                        return "<span class='text-yellow-400 font-medium'>I'm not completely sure, but</span>";
+                    } else if (this.confidenceToneIndex === 1) {
+                        return "<span class='text-blue-400 font-medium'>I'm fairly confident that</span>";
+                    } else {
+                        return "<span class='text-green-400 font-medium'>I'm certain that</span>";
+                    }
+                },
+                
+                initCalibrationChart() {
+                    if (!this.$refs.calibrationChart) {
+                        console.log("Calibration chart ref not ready");
+                        setTimeout(() => this.initCalibrationChart(), 100);
+                        return;
+                    }
+                    
+                    try {
+                        const ctx = this.$refs.calibrationChart.getContext('2d');
+                        
+                        // Simple data points for calibration curve
+                        const xPoints = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+                        
+                        // Perfect calibration: y = x
+                        const perfectCalibration = xPoints.map(x => x);
+                        
+                        // Model calibration: slightly imperfect
+                        const modelCalibration = xPoints.map(x => 
+                            Math.min(1, Math.max(0, x + (Math.random() * 0.06 - 0.03)))
+                        );
+                        
+                        // Human calibration based on current parameters
+                        const humanCalibration = this.generateHumanCalibration();
+                        
+                        const config = {
+                            type: 'line',
+                            data: {
+                                labels: xPoints.map(x => (x * 100) + '%'),
+                                datasets: [
+                                    {
+                                        label: 'Perfect Calibration',
+                                        data: perfectCalibration,
+                                        borderColor: '#94a3b8',
+                                        backgroundColor: 'transparent',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        tension: 0
+                                    },
+                                    {
+                                        label: 'Model Calibration',
+                                        data: modelCalibration,
+                                        borderColor: '#38bdf8',
+                                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                                        borderWidth: 3,
+                                        tension: 0.4
+                                    },
+                                    {
+                                        label: 'Human Calibration',
+                                        data: humanCalibration,
+                                        borderColor: '#5D5CDE',
+                                        backgroundColor: 'rgba(93, 92, 222, 0.1)',
+                                        borderWidth: 3,
+                                        tension: 0.4
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Confidence'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Accuracy'
+                                        },
+                                        min: 0,
+                                        max: 1,
+                                        ticks: {
+                                            callback: function(value) {
+                                                return (value * 100) + '%';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                        
+                        this.calibrationChart = safeCreateChart(ctx, config);
+                        this.calibrationChartReady = true;
+                    } catch (error) {
+                        console.error("Failed to initialize calibration chart:", error);
+                    }
+                },
+                
+                generateHumanCalibration() {
+                    // Generate human calibration data based on current parameters
+                    // This is a simplified model of the distortion between confidence and accuracy
+                    
+                    // Base distortion varies by confidence level
+                    let distortion;
+                    if (this.confidenceToneIndex === 0) {
+                        distortion = -0.05; // Low confidence - less overconfidence
+                    } else if (this.confidenceToneIndex === 1) {
+                        distortion = -0.1;  // Medium confidence - moderate overconfidence
+                    } else {
+                        distortion = -0.2;  // High confidence - high overconfidence
+                    }
+                    
+                    // Explanation length increases overconfidence
+                    distortion -= (this.explanationLengthIndex * 0.05);
+                    
+                    // Generate calibration points with increasing distortion at higher confidence levels
+                    const xPoints = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+                    return xPoints.map(x => {
+                        // Distortion increases with confidence level
+                        const pointDistortion = distortion * (x + 0.2);
+                        // Add a small amount of noise
+                        const noise = (Math.random() * 0.04) - 0.02;
+                        // Return y value (accuracy) with constraints
+                        return Math.min(1, Math.max(0, x + pointDistortion + noise));
+                    });
+                },
+                
+                initHistogramChart() {
+                    if (!this.$refs.histogramChart) {
+                        console.log("Histogram chart ref not ready");
+                        setTimeout(() => this.initHistogramChart(), 100);
+                        return;
+                    }
+                    
+                    try {
+                        const ctx = this.$refs.histogramChart.getContext('2d');
+                        
+                        // Generate histogram data based on current parameters
+                        const histogramData = this.generateConfidenceHistogram();
+                        
+                        const config = {
+                            type: 'bar',
+                            data: {
+                                labels: ['0-20%', '20-40%', '40-60%', '60-80%', '80-100%'],
+                                datasets: [{
+                                    label: 'Frequency',
+                                    data: histogramData,
+                                    backgroundColor: [
+                                        'rgba(93, 92, 222, 0.2)',
+                                        'rgba(93, 92, 222, 0.4)',
+                                        'rgba(93, 92, 222, 0.6)',
+                                        'rgba(93, 92, 222, 0.8)',
+                                        'rgba(93, 92, 222, 1.0)'
+                                    ],
+                                    borderColor: '#5D5CDE',
+                                    borderWidth: 1,
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Frequency'
+                                        },
+                                        max: 50
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        };
+                        
+                        this.histogramChart = safeCreateChart(ctx, config);
+                        this.histogramChartReady = true;
+                    } catch (error) {
+                        console.error("Failed to initialize histogram chart:", error);
+                    }
+                },
+                
+                generateConfidenceHistogram() {
+                    // Generate histogram data based on parameters
+                    let histogramData;
+                    
+                    if (this.confidenceToneIndex === 0) {
+                        // Low confidence - more uniform distribution
+                        histogramData = [15, 20, 30, 20, 15];
+                    } else if (this.confidenceToneIndex === 1) {
+                        // Medium confidence - centered distribution
+                        histogramData = [10, 15, 30, 25, 20];
+                    } else {
+                        // High confidence - skewed to high confidence
+                        histogramData = [5, 10, 15, 30, 40];
+                    }
+                    
+                    // Longer explanations shift toward higher confidence
+                    if (this.explanationLengthIndex === 2) {
+                        histogramData = histogramData.map((val, idx) => {
+                            if (idx < 2) return Math.max(0, val - 5);
+                            if (idx > 3) return val + 5;
+                            return val;
+                        });
+                    }
+                    
+                    return histogramData;
+                },
+                
+                updateAIConfidenceChartsIfReady() {
+                    // Update calibration chart
+                    if (this.calibrationChart && this.calibrationChartReady) {
+                        try {
+                            const humanCalibration = this.generateHumanCalibration();
+                            this.calibrationChart.data.datasets[2].data = humanCalibration;
+                            this.calibrationChart.update();
+                        } catch (error) {
+                            console.error("Error updating calibration chart:", error);
+                        }
+                    }
+                    
+                    // Update histogram chart
+                    if (this.histogramChart && this.histogramChartReady) {
+                        try {
+                            const histogramData = this.generateConfidenceHistogram();
+                            this.histogramChart.data.datasets[0].data = histogramData;
+                            this.histogramChart.update();
+                        } catch (error) {
+                            console.error("Error updating histogram chart:", error);
+                        }
+                    }
+                },
+                
+                getModelECE() {
+                    // Simulated model calibration error - close to perfect calibration
+                    return 0.03;
+                },
+                
+                getHumanECE() {
+                    // Human calibration error varies with parameters
+                    let baseECE = 0.15;
+                    
+                    // Confidence tone affects ECE - medium confidence is usually best
+                    if (this.confidenceToneIndex === 0) baseECE += 0.02;
+                    if (this.confidenceToneIndex === 2) baseECE += 0.08;
+                    
+                    // Longer explanations tend to increase miscalibration
+                    baseECE += this.explanationLengthIndex * 0.04;
+                    
+                    return baseECE;
+                },
+                
+                getModelAUC() {
+                    // Simulated model discrimination ability - quite good
+                    return 0.75;
+                },
+                
+                getHumanAUC() {
+                    // Human discrimination varies with parameters
+                    let baseAUC = 0.60;
+                    
+                    // Medium confidence tone slightly improves discrimination
+                    if (this.confidenceToneIndex === 1) baseAUC += 0.03;
+                    
+                    // Short explanations slightly decrease discrimination
+                    if (this.explanationLengthIndex === 0) baseAUC -= 0.01;
+                    
+                    return baseAUC;
+                },
+                
+                // Combined simulation methods
+                getMinEstimateValue() {
+                    if (!this.selectedAction) return 10;
+                    return Math.max(10, Math.round(this.selectedAction.actualSavings / 5));
+                },
+                
+                getMaxEstimateValue() {
+                    if (!this.selectedAction) return 300;
+                    return Math.min(this.selectedAction.actualSavings * 3, 5000);
+                },
+                
+                getEstimateStep() {
+                    if (!this.selectedAction) return 5;
+                    return this.selectedAction.actualSavings < 100 ? 5 : 50;
+                },
+                
+                updateCombinedData() {
+                    if (!this.selectedAction) return;
+                    
+                    // Update user estimate based on compression factor
+                    this.userEstimate = this.calculatePerceivedEnergy(this.selectedAction.actualSavings, this.combinedCompressionFactor);
+                    
+                    // Update combined chart if it's ready
+                    this.updateCombinedChartIfReady();
+                },
+                
+                getAIEstimate() {
+                    if (!this.selectedAction) return 0;
+                    
+                    // For correct AI, return actual value
+                    if (this.selectedAction.isAICorrect) {
+                        return this.selectedAction.actualSavings;
+                    } else {
+                        // For incorrect AI, extract from explanation text
+                        const match = this.selectedAction.aiExplanationBase.match(/(\d+)W/);
+                        return match ? parseInt(match[1]) : this.selectedAction.actualSavings * 0.5;
+                    }
+                },
+                
+                getAIEnergyAdvice() {
+                    if (!this.selectedAction) return "";
+                    
+                    // Get confidence prefix based on tone
+                    let prefix;
+                    if (this.combinedConfidenceToneIndex === 0) {
+                        prefix = "<span class='text-yellow-400 font-medium'>I'm not completely sure, but I believe that </span>";
+                    } else if (this.combinedConfidenceToneIndex === 1) {
+                        prefix = "<span class='text-blue-400 font-medium'>I'm fairly confident that </span>";
+                    } else {
+                        prefix = "<span class='text-green-400 font-medium'>I'm certain that </span>";
+                    }
+                    
+                    // Base explanation from action data
+                    const baseExplanation = this.selectedAction.aiExplanationBase;
+                    
+                    // Additional details based on explanation length
+                    let additionalDetails = "";
+                    if (this.combinedExplanationLengthIndex >= 1) {
+                        // Add action type for medium length
+                        if (this.selectedAction.type === "Curtailment") {
+                            additionalDetails = " This is a 'curtailment' action, which involves changing behavior rather than equipment.";
+                        } else {
+                            additionalDetails = " This is an 'efficiency' improvement, which involves upgrading to more efficient equipment.";
+                        }
+                    }
+                    
+                    if (this.combinedExplanationLengthIndex === 2) {
+                        // Add more context for long explanations
+                        const aiEstimate = this.getAIEstimate();
+                        additionalDetails += ` For context, the average household uses about 30,000W per day, so this action represents a ${((aiEstimate/30000)*100).toFixed(1)}% reduction in daily energy use. Over a year, this could save approximately ${(aiEstimate * 365 / 1000).toFixed(0)} kWh of electricity.`;
+                    }
+                    
+                    return `${prefix}${baseExplanation}${additionalDetails}`;
+                },
+                
+                getFinalEstimate() {
+                    if (!this.selectedAction) return 0;
+                    
+                    // Weighted average of user estimate and AI estimate
+                    const aiEstimate = this.getAIEstimate();
+                    return Math.round(this.userEstimate * (1 - this.trustLevel) + aiEstimate * this.trustLevel);
+                },
+                
+                getEstimationError() {
+                    if (!this.selectedAction) return 0;
+                    
+                    // Calculate percentage error from actual value
+                    const finalEstimate = this.getFinalEstimate();
+                    const actualValue = this.selectedAction.actualSavings;
+                    return ((finalEstimate - actualValue) / actualValue * 100).toFixed(1);
+                },
+                
+                initCombinedChart() {
+                    if (!this.$refs.combinedChart) {
+                        console.log("Combined chart ref not ready");
+                        setTimeout(() => this.initCombinedChart(), 100);
+                        return;
+                    }
+                    
+                    try {
+                        const ctx = this.$refs.combinedChart.getContext('2d');
+                        
+                        // Prepare data
+                        const labels = ['Initial User Estimate', 'AI Estimate', 'Final User Estimate', 'Actual Value'];
+                        const data = [
+                            this.userEstimate,
+                            this.getAIEstimate(),
+                            this.getFinalEstimate(),
+                            this.selectedAction ? this.selectedAction.actualSavings : 0
+                        ];
+                        
+                        // Bar colors
+                        const colors = [
+                            '#fb923c',   // Amber for user
+                            '#38bdf8',   // Blue for AI
+                            '#a855f7',   // Purple for final
+                            '#10b981'    // Green for actual
+                        ];
+                        
+                        const config = {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Energy Savings (Watts)',
+                                    data: data,
+                                    backgroundColor: colors,
+                                    borderColor: colors,
+                                    borderWidth: 1,
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Energy Savings (Watts)'
+                                        },
+                                        beginAtZero: true
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        };
+                        
+                        this.combinedChart = safeCreateChart(ctx, config);
+                        this.combinedChartReady = true;
+                    } catch (error) {
+                        console.error("Failed to initialize combined chart:", error);
+                    }
+                },
+                
+                updateCombinedChartIfReady() {
+                    if (!this.combinedChart || !this.combinedChartReady || !this.selectedAction) return;
+                    
+                    try {
+                        // Update data values
+                        this.combinedChart.data.datasets[0].data = [
+                            this.userEstimate,
+                            this.getAIEstimate(),
+                            this.getFinalEstimate(),
+                            this.selectedAction.actualSavings
+                        ];
+                        
+                        // Find highest value to set y-axis scale
+                        const maxValue = Math.max(
+                            this.userEstimate,
+                            this.getAIEstimate(),
+                            this.getFinalEstimate(),
+                            this.selectedAction.actualSavings
+                        );
+                        
+                        // Set y-axis max with some padding
+                        this.combinedChart.options.scales.y.max = maxValue * 1.2;
+                        
+                        this.combinedChart.update();
+                    } catch (error) {
+                        console.error("Error updating combined chart:", error);
+                    }
+                }
+            }
+        });
+        
+        // Mount the Vue app
+        app.mount('#app');
+    </script>
+
+
+</body></html>
