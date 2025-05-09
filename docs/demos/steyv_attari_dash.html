@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Science Simulation Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem; margin-right: 0.5rem; border-radius: 0.5rem 0.5rem 0 0;
+            font-weight: 500; cursor: pointer; transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            border: 1px solid #d1d5db; border-bottom: none;
+            background-color: #e5e7eb; color: #4b5563;
+        }
+        .tab-button:hover { background-color: #f0f2f5; border-color: #b0b8c0; }
+        .tab-button.active {
+            background-color: #ffffff; color: #1f2937; border-color: #d1d5db;
+            border-bottom: 1px solid #ffffff; position: relative; top: 1px;
+        }
+        .tab-content {
+            display: none; padding: 2.5rem; border: 1px solid #d1d5db;
+            border-radius: 0 0.5rem 0.5rem 0.5rem; background-color: #ffffff;
+            min-height: 600px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .tab-content.active { display: block; }
+        .slider-container { margin-bottom: 1.5rem; }
+        .slider-container label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; font-size: 0.9rem; }
+        .slider-container input[type="range"] { width: 100%; cursor: pointer; accent-color: #3b82f6; }
+        .slider-container span, .select-value-display {
+            font-weight: 600; color: #1e40af; background-color: #eff6ff;
+            padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-size: 0.9rem;
+        }
+        .chart-container { /* Attari chart */
+            width: 100%; max-width: 900px; height: 550px; margin: 2rem auto;
+            padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background-color: #f9fafb;
+        }
+        .steyvers-chart-container { /* Steyvers chart */
+            width: 100%; max-width: 600px; height: 400px; margin: 2rem auto;
+            padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background-color: #f9fafb;
+        }
+        h2 { font-size: 1.85rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem; border-bottom: 2px solid #60a5fa; padding-bottom: 0.75rem; }
+        h3 { font-size: 1.35rem; font-weight: 600; color: #1f2937; margin-top: 2rem; margin-bottom: 1rem; }
+        h4 { font-size: 1.15rem; font-weight: 600; color: #1f2937; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        p, li { color: #374151; line-height: 1.7; margin-bottom: 1rem; }
+        ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .info-box { background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 1.25rem; margin: 1.5rem 0; border-radius: 0.375rem; }
+        .info-box p, .info-box li { color: #1e3a8a; font-size: 0.95rem; }
+        button.primary-btn {
+            background-color: #3b82f6; color: white; padding: 0.7rem 1.4rem; border-radius: 0.375rem;
+            font-weight: 500; transition: background-color 0.3s, transform 0.1s; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        button.primary-btn:hover { background-color: #2563eb; transform: translateY(-1px); }
+        button.primary-btn:disabled { background-color: #9ca3af; cursor: not-allowed; transform: none; }
+        .forced-choice-btn { background-color: #10b981; margin: 0.5rem; }
+        .forced-choice-btn:hover { background-color: #059669; }
+        .forced-choice-btn:disabled { background-color: #9ca3af; cursor: not-allowed; transform: none; }
+        .simulation-item {
+            border: 1px solid #d1d5db; padding: 1.5rem; margin-bottom: 1.5rem;
+            border-radius: 0.5rem; background-color: #ffffff; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+        }
+        .mermaid {
+            margin: 2rem auto; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;
+            background-color: #f9fafb; display: flex; justify-content: center; overflow-x: auto;
+        }
+        /* Ensure mermaid svg has max-width to prevent overflow issues on smaller screens */
+        .mermaid svg { max-width: 100%; height: auto; }
+        code.language-latex { font-family: 'Courier New', Courier, monospace; background-color: #e5e7eb; padding: 0.2em 0.4em; border-radius: 0.25em; font-size: 0.9em; color: #1f2937; }
+        select { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: white; cursor: pointer; }
+        .feedback-box { border: 1px solid; padding: 1rem; margin-top: 1rem; border-radius: 0.375rem; }
+        .feedback-correct { border-color: #34d399; background-color: #ecfdf5; color: #065f46; }
+        .feedback-incorrect { border-color: #f87171; background-color: #fef2f2; color: #991b1b; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <script>
+        mermaid.initialize({ startOnLoad: false, theme: 'neutral' }); // Initialize but don't run on load
+        // Function to safely render mermaid diagrams in a container
+        async function renderMermaid(containerId) {
+            try {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    const mermaidElements = Array.from(container.querySelectorAll('.mermaid'));
+                    if (mermaidElements.length > 0) {
+                         // Ensure elements are visible and reset processed flag
+                        mermaidElements.forEach(el => {
+                            el.style.visibility = 'hidden'; // Hide before processing
+                            el.removeAttribute('data-processed');
+                            // Clear previous SVG if any to prevent duplicates
+                            const existingSvg = el.querySelector('svg');
+                            if(existingSvg) existingSvg.remove();
+                        });
+                        await mermaid.run({ nodes: mermaidElements });
+                        mermaidElements.forEach(el => el.style.visibility = 'visible'); // Show after processing
+                    }
+                }
+            } catch (e) {
+                console.error("Mermaid rendering error in container:", containerId, e);
+                // Optionally display an error message to the user in the mermaid div
+                 const mermaidElements = Array.from(document.getElementById(containerId).querySelectorAll('.mermaid'));
+                 mermaidElements.forEach(el => el.innerHTML = '<p class="text-red-600 text-center font-semibold">Error rendering diagram.</p>');
+            }
+        }
+    </script>
+
+    <header class="mb-10 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Cognitive Science Simulation Dashboard</h1>
+        <p class="text-lg text-gray-600 mt-2">Exploring Perceptions of Energy Use and AI Confidence</p>
+    </header>
+
+    <div class="tabs-container mb-0 -mb-px">
+        <button class="tab-button active" onclick="openTab(event, 'attariSummary')">Attari et al. (2010)</button>
+        <button class="tab-button" onclick="openTab(event, 'steyversSummary')">Steyvers et al. (2025)</button>
+        <button class="tab-button" onclick="openTab(event, 'combinedSim')">Combined Simulation</button>
+        <button class="tab-button" onclick="openTab(event, 'attariBg')">Attari Background</button>
+        <button class="tab-button" onclick="openTab(event, 'steyversBg')">Steyvers Background</button>
+    </div>
+
+    <div id="attariSummary" class="tab-content active">
+        <h2>Attari et al. (2010): Public Perceptions of Energy Consumption</h2>
+        <p>This study revealed systematic misperceptions about energy consumption and savings. A key finding is the "compression pattern": people tend to overestimate the energy used by low-consumption activities and underestimate that of high-consumption activities. This visualization attempts to replicate key aspects of Figure 1 from their paper, showing how simulated perceptions deviate from actual values.</p>
+        <div class="slider-container max-w-md mx-auto">
+            <label for="attariCompression">Simulated Degree of Compression Bias (0 = No Bias, 1 = Max Bias): <span id="attariCompressionValue">0.5</span></label>
+            <input type="range" id="attariCompression" min="0" max="1" step="0.01" value="0.5" oninput="updateAttariVisualization()">
+        </div>
+        <div class="chart-container">
+            <canvas id="attariChart"></canvas>
+        </div>
+        <p class="text-center text-sm text-gray-600 -mt-4 mb-6">Log-log scale. Squares = Energy Used, Circles = Energy Saved. Teal/Blue = Actual, Red = Simulated Perception.</p>
+        <h3>Key Takeaways:</h3>
+        <ul>
+            <li>Individuals often focus on less effective "curtailment" actions (e.g., turning off lights) over more impactful "efficiency" improvements (e.g., better appliances).</li>
+            <li>Perceptions of energy use are often "flat," meaning people don't fully grasp the vast differences in energy magnitudes between various activities, as shown by the shallow slope of perceived vs. actual energy (red line is flatter than dashed diagonal).</li>
+            <li>Numeracy and pro-environmental attitudes were correlated with more accurate perceptions, though the compression bias was still evident.</li>
+        </ul>
+        <div class="info-box">
+            <p><strong>Expert Insight:</strong> This compression means that even well-intentioned efforts to save energy might be misdirected towards actions with minimal impact, while neglecting high-leverage opportunities. The graph above illustrates how perceived values (simulated red line and points) deviate from actual values (dashed diagonal and teal/blue points).</p>
+        </div>
+        <h3>Visualizing the Compression Pattern</h3>
+        <div class="mermaid">
+graph LR
+    A[Low Actual Energy Item e.g., Laptop] --> B(Initial Perception);
+    C[High Actual Energy Item e.g., Dryer] --> D(Initial Perception);
+    R[Reference Point e.g., 100W bulb] --> B;
+    R --> D;
+    B -- Anchoring & Insufficient Adjustment --> E{Overestimation};
+    D -- Anchoring & Insufficient Adjustment --> F{Underestimation};
+    E --> G[Compressed Range of Perceptions];
+    F --> G;
+    style A fill:#ccf,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style R fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#ffdfba
+    style F fill:#ffdfba
+    style G fill:#baffc9,stroke-width:2px
+        </div>
+    </div>
+
+    <div id="steyversSummary" class="tab-content">
+        <h2>Steyvers et al. (2025): What LLMs Know & What People Think They Know</h2>
+        <p>This research explores how Large Language Models (LLMs) communicate uncertainty and how accurately humans perceive it. Key concepts include the "calibration gap" (difference between an LLM's internal confidence and human perception of this confidence) and "discrimination gap" (difference in ability to distinguish correct/incorrect answers).</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded-lg border">
+            <div class="slider-container">
+                <label for="llmInternalConfidence">LLM's Internal Confidence (Simulated): <span id="llmInternalConfidenceValue">70</span>%</label>
+                <input type="range" id="llmInternalConfidence" min="0" max="100" step="1" value="70" oninput="updateSteyversVisualization()">
+            </div>
+            <div class="slider-container">
+                <label for="llmExplanationStyle">LLM Explanation Style: <span id="llmExplanationStyleValue" class="select-value-display">Default</span></label>
+                <select id="llmExplanationStyle" class="w-full" onchange="updateSteyversVisualization()">
+                    <option value="default">Default Explanation</option>
+                    <option value="low_short">Low Confidence - Short</option>
+                    <option value="low_long">Low Confidence - Long</option>
+                    <option value="low_uncertainty_only">Low Confidence - Uncertainty Only</option>
+                    <option value="medium_short">Medium Confidence - Short</option>
+                    <option value="medium_long">Medium Confidence - Long</option>
+                    <option value="medium_uncertainty_only">Medium Confidence - Uncertainty Only</option>
+                    <option value="high_short">High Confidence - Short</option>
+                    <option value="high_long">High Confidence - Long</option>
+                    <option value="high_uncertainty_only">High Confidence - Uncertainty Only</option>
+                </select>
+            </div>
+        </div>
+        <div class="steyvers-chart-container">
+            <canvas id="steyversChart"></canvas>
+        </div>
+        <p class="text-center text-sm text-gray-600 -mt-4 mb-6">Blue = LLM Internal Confidence, Orange = Simulated Human Perceived Confidence.</p>
+        <h3>Key Takeaways:</h3>
+        <ul>
+            <li><strong>Calibration Gap:</strong> With default LLM explanations, users often overestimate LLM accuracy compared to the LLM's internal confidence (Orange bar > Blue bar in simulation). This gap is especially pronounced when explanations are long.</li>
+            <li><strong>Discrimination Gap:</strong> Default explanations make it hard for users to tell if an LLM's answer is likely correct or incorrect. Their ability to discriminate is much poorer than the LLM's internal signals.</li>
+            <li>Tailoring LLM explanations to reflect internal model confidence (e.g., using "I am not sure" for low confidence, "I am sure" for high) significantly narrows both the calibration and discrimination gaps (Adjusting style brings Orange bar closer to Blue bar).</li>
+            <li>Explanation length independently influences user confidence: longer explanations tend to increase user confidence, even if they don't improve discrimination or actual accuracy. Uncertainty-only explanations lead to lower user confidence than short or long explanations with rationale.</li>
+        </ul>
+        <div class="info-box">
+            <p><strong>Expert Insight:</strong> The linguistic style and length of an LLM's response are powerful levers on human trust and perceived accuracy. For reliable human-AI collaboration, LLM communication should be calibrated to its internal confidence state.</p>
+        </div>
+         <h3>Visualizing LLM Explanation Manipulation (Steyvers et al. Exp 2)</h3>
+        <div class="mermaid">
+graph TD
+    A[LLM Internal Confidence Level] --> B{Prompt Engineering};
+    subgraph "Confidence Cue Manipulation"
+        B -- Low Confidence Cue --> C1[Low Conf. Text];
+        B -- Medium Confidence Cue --> C2[Medium Conf. Text];
+        B -- High Confidence Cue --> C3[High Conf. Text];
+    end
+
+    subgraph "Length Manipulation"
+        C1 --> D1{Explanation Length};
+        C2 --> D2{Explanation Length};
+        C3 --> D3{Explanation Length};
+    end
+
+    subgraph "Resulting Explanation Styles (9 Types)"
+        D1 -- Short --> E1["Low-Short<br>(e.g., ~34 words)"];
+        D1 -- Long --> E2["Low-Long<br>(e.g., ~115 words)"];
+        D1 -- Uncertainty Only --> E3["Low-UncertaintyOnly<br>(e.g., ~9 words)"];
+        
+        D2 -- Short --> F1["Med-Short<br>(e.g., ~24 words)"];
+        D2 -- Long --> F2["Med-Long<br>(e.g., ~64 words)"];
+        D2 -- Uncertainty Only --> F3["Med-UncertaintyOnly<br>(e.g., ~9 words)"];
+
+        D3 -- Short --> G1["High-Short<br>(e.g., ~24 words)"];
+        D3 -- Long --> G2["High-Long<br>(e.g., ~64 words)"];
+        D3 -- Uncertainty Only --> G3["High-UncertaintyOnly<br>(e.g., ~9 words)"];
+    end
+
+    E1 --> H[Presented to Human Participant];
+    E2 --> H;
+    E3 --> H;
+    F1 --> H;
+    F2 --> H;
+    F3 --> H;
+    G1 --> H;
+    G2 --> H;
+    G3 --> H;
+    
+    H --> I[Human Confidence Rating];
+    I --> J[Analysis of Calibration & Discrimination Gaps];
+
+    style A fill:#ccf,stroke-width:2px
+    style B fill:#f9d,stroke-width:2px
+    style H fill:#bfb,stroke-width:2px
+    style J fill:#ddf,stroke-width:2px
+        </div>
+    </div>
+
+    <div id="combinedSim" class="tab-content">
+        <h2>Combined Simulation: Energy Estimation & AI Advisor</h2>
+        <p>This simulation integrates concepts from both papers. You'll act as a participant making energy estimates (influenced by Attari's compression bias) and then interacting with an AI Energy Advisor whose explanations vary (drawing from Steyvers' manipulations).</p>
+        <div class="slider-container max-w-md mx-auto">
+            <label for="userCompressionBias">Your General Estimation Bias (Compression Factor, 0=Perfect, >0 more compression): <span id="userCompressionBiasValue">0.3</span></label>
+            <input type="range" id="userCompressionBias" min="0" max="1" step="0.05" value="0.3" oninput="document.getElementById('userCompressionBiasValue').textContent = this.value; setupCombinedSimulation();">
+        </div>
+        <div class="text-center">
+           <button class="primary-btn mb-6" onclick="startCombinedSimulation()">Start/Restart Simulation (4 Items)</button>
+        </div>
+        <div id="simulationTrialsArea" class="space-y-6">
+            </div>
+        <h3 class="mt-8">Simulation Summary (Across 4 Trials):</h3>
+        <div id="simulationSummary" class="p-6 border rounded-lg bg-gray-50 shadow-inner">
+            <p>Complete the simulation to see summary statistics here.</p>
+        </div>
+    </div>
+
+    <div id="attariBg" class="tab-content">
+        <h2>Background: Attari et al. (2010) - Manipulations & Hypotheses</h2>
+        <h3>Study Design & Manipulations:</h3>
+        <ul>
+            <li><strong>Participants:</strong> 505 individuals recruited via Craigslist for a national online survey.</li>
+            <li><strong>Primary Task (Estimation):</strong>
+                <ul>
+                    <li>Participants estimated energy consumption (in relative units) for nine devices/appliances and energy savings for six household activities.</li>
+                    <li>The 15 items included: Compact fluorescent bulb (use), Laptop (use), Stereo (use), Desktop (use), Space heater (use), Room air conditioner (use), Dishwasher (use), Electric clothes dryer (use), Central air conditioner (use); and for savings: Lower wattage bulb, Replace Incandescent with CFL, Summer thermostat, Winter thermostat, Line-dry clothes, Washer's setting.</li>
+                    <li>A **reference point** was provided: a 100-Watt incandescent light bulb used for 1 hour equals 100 units of energy (100 Wh).</li>
+                    <li>Items covered a broad spectrum of actual energy magnitudes (approx. 25 Wh to 4000 Wh).</li>
+                </ul>
+            </li>
+            <li><strong>Open-ended Question:</strong> Participants stated the "most effective thing" they could do to conserve energy. Responses were categorized (e.g., curtailment vs. efficiency).</li>
+            <li><strong>Ranking Tasks:</strong> E.g., ranking modes of transportation by energy use per ton-mile; ranking energy for beverage container manufacturing.</li>
+            <li><strong>Individual Difference Measures:** Numeracy, pro-environmental attitudes (New Ecological Paradigm - NEP scale), self-reported environmental behaviors, demographics.</li>
+        </ul>
+        <h3>Key Hypotheses & Expectations:</h3>
+        <ul>
+            <li>**Compression Pattern:** Perceptions of energy use/savings would show a "flat" relationship relative to actual values (overestimating low-energy items, underestimating high-energy items), analogous to findings in risk perception.</li>
+            <li>**Heuristics:** Availability and anchoring-and-adjustment (insufficient adjustment from the 100Wh reference) would contribute to misperceptions.</li>
+            <li>**Action Focus:** Preference for "curtailment" over "efficiency" actions was anticipated.</li>
+            <li>**Individual Differences:** Higher numeracy and NEP scores would correlate with more accurate perceptions.</li>
+        </ul>
+        <h3>Multilevel Regression Models (from SI Text):</h3>
+        <p>The study used multilevel regression to precisely model the relationship between actual and perceived energy, accounting for individual differences. For household items, the core model (simplified) was:</p>
+        <p><code class="language-latex">log10(Perception<sub>ij</sub>) = Intercept<sub>j</sub> + Slope<sub>j</sub> * log10(Actual<sub>i</sub>) + Quadratic * (log10(Actual<sub>i</sub>))<sup>2</sup> + Error<sub>ij</sub></code></p>
+        <ul>
+            <li>The model allowed each participant (j) to have their own intercept (overall level of estimation) and slope (sensitivity to actual energy differences).</li>
+            <li>A quadratic term captured the non-linear flattening effect observed at higher energy values.</li>
+            <li>**Key Findings from Model:** Significant average underestimation (factor of ~2.8), average slope significantly less than 1 (0.28, indicating compression), and a significant negative quadratic term (confirming flattening).</li>
+            <li>Model 2 added individual difference variables (numeracy, NEP, etc.) to explain variance in participant intercepts and slopes.</li>
+        </ul>
+        <h3>Expanded Discussion of Flat Slopes (Anchoring Bias - from SI Text):</h3>
+        <p>The SI Text emphasizes that the observed compression (flat slope) results from both imperfect correlation and, crucially, **anchoring bias**:</p>
+        <ul>
+            <li>Participants anchor on the provided 100Wh reference point.</li>
+            <li>They adjust insufficiently from this anchor when estimating other values.</li>
+            <li>Because 100Wh is relatively low, this leads to systematic underestimation of high-energy items and overestimation of very low-energy items.</li>
+            <li>The authors suggest incandescent bulbs might be a natural anchor in real life, making this bias potentially widespread.</li>
+        </ul>
+        <h3>Visualizing Attari's Experimental Approach</h3>
+        <div class="mermaid">
+sequenceDiagram
+    participant P as Participant
+    participant S as Survey System
+    P->>S: Sees Question: Estimate energy for [Appliance X]
+    S-->>P: Provides Reference: 100W bulb = 100 units/hr
+    P->>P: Recalls 100W bulb (Anchor)
+    P->>P: Adjusts estimate for Appliance X (often insufficiently)
+    P->>S: Submits Perceived Energy for X
+    S->>S: Records (log10 Actual_X, log10 Perceived_X)
+    Note right of S: Repeats for ~15 items
+    S-->>Researcher: Data for Analysis
+    Researcher-->>Researcher: Fits Multilevel Model:<br>log(Perceived) ~ log(Actual) + log(Actual)^2 + (1 + log(Actual) | Participant)
+    Researcher-->>Researcher: Finds: <br>- Negative Intercept (Underestimation)<br>- Slope < 1 (Compression)<br>- Negative Quadratic (Flattening)
+        </div>
+        <div class="info-box">
+            <p><strong>Core Implication from Notes & SI Text:</strong> "Lay people systematically compress the true distribution of energy magnitudes... Even when individuals are motivated to 'do their part,' their baseline knowledge is too noisy and too flat to prioritise effective behaviours." The anchoring effect on a low-value reference point is a significant contributor to this widespread underestimation and compression. </p>
+        </div>
+    </div>
+
+    <div id="steyversBg" class="tab-content">
+        <h2>Background: Steyvers et al. (2025) - Manipulations & Hypotheses</h2>
+        <h3>Study Design & LLMs:</h3>
+        <ul>
+            <li><strong>Objective:</strong> To investigate the "calibration gap" (difference between LLM's internal confidence and human-perceived confidence) and "discrimination gap" (difference in ability to distinguish correct/incorrect answers) in human-LLM interactions.</li>
+            <li><strong>Participants:</strong> Human subjects recruited for behavioral experiments (sample sizes varied per experiment, e.g., n=41 for Exp 1a, n=60 for Exp 2a).</li>
+            <li><strong>LLMs Utilized:</strong> GPT-3.5, PaLM2 (MMLU dataset - multiple choice); GPT-4o (TriviaQA dataset - short answer).</li>
+        </ul>
+        <h3>Key Measures:</h3>
+        <ul>
+            <li><strong>Model Confidence (Internal):</strong> Derived from token likelihoods (MC) or p(True) method (short answer).</li>
+            <li><strong>Human Confidence (Perceived):</strong> Participant's rated probability (0-100%) of LLM correctness based *only* on its textual explanation.</li>
+        </ul>
+        <h3>Experimental Manipulations:</h3>
+        <ul>
+            <li><strong>Experiment 1 (Baseline):</strong> Used LLM's *default* explanations.</li>
+            <li><strong>Experiment 2 (Modified Explanations):</strong> Systematically varied explanation prompts in a 3x3 design:
+                <ul>
+                    <li><strong>Confidence Cues:</strong> Low ("not sure"), Medium ("somewhat sure"), High ("sure").</li>
+                    <li><strong>Explanation Length:</strong> Long (no constraint), Short ("few words"), Uncertainty Only (no rationale).</li>
+                </ul>
+            </li>
+        </ul>
+         <h3>Visualizing Steyvers et al. (2025) Experiment 2 Design</h3>
+        <div class="mermaid">
+graph TD
+    subgraph GlobalFactors
+        direction LR
+        Q[Question Type: MC / Short Answer]
+        M[LLM Type: GPT-3.5 / PaLM2 / GPT-4o]
+    end
+
+    subgraph HumanParticipantTask
+        H_Start((Start Trial)) --> H_ShowQ[Show Question + LLM Explanation]
+        H_ShowQ --> H_RateConf[Rate Confidence in LLM (0-100%)]
+        H_RateConf --> H_End((End Trial))
+    end
+    
+    subgraph LLM_ExplanationGeneration
+        InternalConf[LLM Internal Confidence Calculation] --> PromptManip{Prompt Engineering}
+        
+        subgraph ConfidenceCueManipulation ["Confidence Cue"]
+            direction LR
+            PromptManip -- "Prompt: 'not sure'" --> LowC[Low]
+            PromptManip -- "Prompt: 'somewhat sure'" --> MedC[Medium]
+            PromptManip -- "Prompt: 'sure'" --> HighC[High]
+        end
+
+        subgraph LengthManipulation ["Explanation Length"]
+            direction TD
+            LowC --> Low_L[Long]; LowC --> Low_S[Short]; LowC --> Low_UO[Uncertainty Only]
+            MedC --> Med_L[Long]; MedC --> Med_S[Short]; MedC --> Med_UO[Uncertainty Only]
+            HighC --> High_L[Long]; HighC --> High_S[Short]; HighC --> High_UO[Uncertainty Only]
+        end
+        
+        Low_L --> GeneratedExp[Generated Explanation (9 types)]; Med_L --> GeneratedExp; High_L --> GeneratedExp;
+        Low_S --> GeneratedExp; Med_S --> GeneratedExp; High_S --> GeneratedExp;
+        Low_UO --> GeneratedExp; Med_UO --> GeneratedExp; High_UO --> GeneratedExp;
+        
+        DefaultPrompt["Default Prompt (Exp 1)"] --> DefaultExp[Default Explanation];
+    end
+    
+    GeneratedExp --> H_ShowQ;
+    DefaultExp --> H_ShowQ;
+
+    style InternalConf fill:#cfe2f3,stroke:#333,stroke-width:1px
+    style PromptManip fill:#d9ead3,stroke:#333,stroke-width:1px
+    style GeneratedExp fill:#fff2cc,stroke:#333,stroke-width:1px
+    style DefaultExp fill:#fff2cc,stroke:#333,stroke-width:1px
+    style H_RateConf fill:#f4cccc,stroke:#333,stroke-width:1px
+        </div>
+        <h3>Analysis Metrics & Key Findings Illustrated in Paper Figures:</h3>
+        <ul>
+            <li><strong>Expected Calibration Error (ECE):</strong> Measures miscalibration (average absolute difference between confidence and accuracy). Lower is better.
+                <ul><li><em>Fig. 2 & 3 Insight:</em> Model confidence (gray bars/lines) is generally better calibrated (lower ECE) than human confidence based on default explanations (green bars/lines). Human miscalibration often involves overconfidence. Modified explanations (red bars) reduce human ECE, narrowing the gap.</li></ul>
+            </li>
+            <li><strong>Area Under the Curve (AUC):</strong> Assesses discrimination (ability to distinguish correct/incorrect answers using confidence). Higher is better (1=perfect, 0.5=chance).
+                <ul><li><em>Fig. 2 Insight:</em> Model confidence (gray) discriminates much better (higher AUC) than human confidence from default explanations (green). Tailored explanations (red) improve human AUC, narrowing the gap.</li></ul>
+            </li>
+        </ul>
+        <h3>Core Hypotheses/Research Questions Addressed:</h3>
+        <ul>
+            <li>Quantifying the calibration and discrimination gaps with standard LLM explanations.</li>
+            <li>Investigating whether these gaps can be mitigated by tailoring the LLM's textual output (uncertainty cues, length) to its internal confidence.</li>
+            <li>Examining how confidence cues and explanation length influence human perception of LLM accuracy.</li>
+        </ul>
+        <div class="info-box">
+            <p><strong>Core Implication from Notes & Paper:</strong> Default LLM explanations lead to poor human calibration and discrimination. Tailoring explanations based on the LLM's internal confidence significantly improves human judgment. Both linguistic cues (hedging/confidence) and explanation length impact user perception. </p>
+        </div>
+    </div>
+
+<script>
+    Chart.register(ChartDataLabels); // Register the datalabels plugin globally
+
+    // Store chart instances globally to manage destruction
+    window.attariChartInstance = null;
+    window.steyversChartInstance = null;
+
+    // --- Tab Navigation ---
+    function openTab(evt, tabName) {
+        let i, tabcontent, tabbuttons;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tabbuttons = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tabbuttons.length; i++) {
+            tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+        }
+        const activeTabContent = document.getElementById(tabName);
+        activeTabContent.style.display = "block";
+        evt.currentTarget.className += " active";
+        
+        // Initialize or update charts specifically for the opened tab
+        if (tabName === 'attariSummary') {
+            // Use requestAnimationFrame to ensure canvas is ready
+            requestAnimationFrame(initAttariChart);
+        }
+        if (tabName === 'steyversSummary') {
+             requestAnimationFrame(initSteyversChart);
+        }
+        if (tabName === 'combinedSim') {
+            setupCombinedSimulation(); 
+        }
+        // Re-render Mermaid diagrams if the tab contains them
+        if (activeTabContent.querySelector('.mermaid')) {
+            // Use requestAnimationFrame to ensure the element is visible before rendering
+            requestAnimationFrame(() => renderMermaid(tabName));
+        }
+    }
+
+    // --- Attari et al. (2010) Visualization ---
+    const attariEnergyData = [
+        { name: "Lower wattage bulb", actual: 25, type: 'saved' }, { name: "Replace Incand. w/ CFL", actual: 73, type: 'saved' }, { name: "Summer thermostat", actual: 115, type: 'saved' }, { name: "Winter thermostat", actual: 546, type: 'saved' }, { name: "Line-dry clothes", actual: 3400, type: 'saved' }, { name: "Washer's setting", actual: 4000, type: 'saved' }, { name: "Compact fluorescent bulb", actual: 27, type: 'used' }, { name: "Laptop", actual: 48, type: 'used' }, { name: "Stereo", actual: 128, type: 'used' }, { name: "Desktop", actual: 140, type: 'used' }, { name: "Space heater", actual: 925, type: 'used' }, { name: "Room air conditioner", actual: 1000, type: 'used' }, { name: "Dishwasher", actual: 1800, type: 'used' }, { name: "Electric clothes dryer", actual: 3400, type: 'used' }, { name: "Central air conditioner", actual: 3500, type: 'used' }
+    ].sort((a,b) => a.actual - b.actual); 
+
+    function initAttariChart() {
+        const canvas = document.getElementById('attariChart');
+        if (!canvas) { console.error("Attari chart canvas not found"); return; }
+        const ctx = canvas.getContext('2d');
+        
+        // Destroy existing chart instance before creating a new one
+        if (window.attariChartInstance) {
+            window.attariChartInstance.destroy();
+            window.attariChartInstance = null; // Clear the reference
+        }
+        
+        window.attariChartInstance = new Chart(ctx, {
+            type: 'scatter', 
+            data: { datasets: [] }, // Initialize with empty datasets
+            options: {} // Initialize with empty options
+        });
+        updateAttariVisualization(); // Populate data and options
+    }
+
+    function updateAttariVisualization() {
+        if (!window.attariChartInstance) { 
+             console.log("Attari chart instance not ready for update.");
+             // Attempt re-initialization if needed, might indicate a timing issue
+             // initAttariChart(); 
+             return; 
+        } 
+        const compressionFactor = parseFloat(document.getElementById('attariCompression').value);
+        document.getElementById('attariCompressionValue').textContent = compressionFactor.toFixed(2);
+        
+        const referencePoint = 100; 
+        const meanUnderestimationLog = 0.44; 
+        const quadraticCoefficient = -0.19; 
+
+        function getPerceivedValue(actual) {
+             if (actual <= 0) return 1; 
+            const logActual = Math.log10(actual);
+            const slope = 1 - compressionFactor * (1 - 0.28); 
+            const interceptEffect = -meanUnderestimationLog * compressionFactor; 
+            const quadraticEffect = quadraticCoefficient * compressionFactor; 
+            const meanLogActualInData = Math.log10(300); 
+            let logPerceived = interceptEffect + slope * (logActual - meanLogActualInData) + quadraticEffect * Math.pow((logActual - meanLogActualInData), 2) + meanLogActualInData;
+            if (compressionFactor > 0.7) { logPerceived = (logPerceived + Math.log10(referencePoint)) / 2; }
+            return Math.max(1, Math.pow(10, logPerceived)); 
+        }
+
+        // Define chart data structure
+        const chartData = {
+            datasets: [
+                 { label: 'Actual Energy (Reference Line)', data: [{x:1, y:1}, {x:10000, y:10000}], borderColor: 'rgba(0, 0, 0, 0.5)', borderDash: [5, 5], type: 'line', fill: false, pointRadius: 0, showLine: true, tension: 0.1, order: 0 }, 
+                 { label: 'Actual Energy Used', data: attariEnergyData.filter(d => d.type === 'used').map(d => ({x: d.actual, y: d.actual, label: d.name})), backgroundColor: 'rgba(75, 192, 192, 0.7)', pointStyle: 'rect', radius: 6, order: 1 }, 
+                 { label: 'Actual Energy Saved', data: attariEnergyData.filter(d => d.type === 'saved').map(d => ({x: d.actual, y: d.actual, label: d.name})), backgroundColor: 'rgba(54, 162, 235, 0.7)', pointStyle: 'circle', radius: 6, order: 1 }, 
+                 { label: 'Simulated Perceived Energy (Trend)', data: attariEnergyData.map(d => ({ x: d.actual, y: getPerceivedValue(d.actual) })), borderColor: 'rgb(255, 99, 132)', type: 'line', fill: false, tension: 0.1, pointRadius: 0, showLine: true, order: 2 }, 
+                 { label: 'Simulated Perceived Energy Used', data: attariEnergyData.filter(d => d.type === 'used').map(d => ({x: d.actual, y: getPerceivedValue(d.actual), label: d.name})), backgroundColor: 'rgba(255, 99, 132, 0.7)', pointStyle: 'rect', radius: 4, order: 3 }, 
+                 { label: 'Simulated Perceived Energy Saved', data: attariEnergyData.filter(d => d.type === 'saved').map(d => ({x: d.actual, y: getPerceivedValue(d.actual), label: d.name})), backgroundColor: 'rgba(255, 99, 132, 0.7)', pointStyle: 'circle', radius: 4, order: 3 }
+            ]
+        };
+
+        // Define chart options
+        const chartOptions = {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: 'Actual Energy Used or Saved (Wh)' }, type: 'logarithmic', min: 10, max: 10000, ticks: { callback: function(value) { if ([10, 100, 1000, 10000].includes(value)) return value.toString(); }, autoSkip: false, maxRotation: 0, minRotation: 0 } },
+                y: { title: { display: true, text: 'Perceived Energy Used or Saved (Wh)' }, type: 'logarithmic', min: 10, max: 10000, ticks: { callback: function(value) { if ([10, 100, 1000, 10000].includes(value)) return value.toString(); }, autoSkip: false, maxRotation: 0, minRotation: 0 } }
+            },
+            plugins: {
+                title: { display: true, text: 'Attari et al. (2010) - Compression Pattern (Simulated)' },
+                datalabels: {
+                    // FIX: Add checks for context and context.raw before accessing properties
+                    formatter: (value, context) => {
+                        // Check if context and raw data point exist
+                        if (context && context.raw) {
+                            return context.raw.label || null;
+                        }
+                        return null; // Return null if data is not available
+                    },
+                     // FIX: Add checks and simplify display logic
+                    display: (context) => {
+                         // Only attempt to display for the 'Actual' datasets initially and ensure data exists
+                         return (context.datasetIndex === 1 || context.datasetIndex === 2) && context.raw && typeof context.raw.x !== 'undefined';
+                         // Simplified: return false; // Disable direct labels to avoid errors, rely on tooltips
+                    },
+                    align: 'top', offset: 8, font: { size: 9 }, color: '#555'
+                },
+                tooltip: { 
+                    callbacks: { 
+                        label: function(context) { 
+                            let label = context.dataset.label || ''; 
+                            if (label) label += ': '; 
+                            // FIX: Check context.raw exists before accessing properties
+                            const itemLabel = context.raw?.label; 
+                            const actualX = context.raw?.x;
+                            const perceivedY = context.raw?.y; // Note: y might be perceived or actual depending on dataset
+                            
+                            if (itemLabel) label += itemLabel + ' - '; 
+                            if (typeof actualX !== 'undefined') label += `Actual: ${actualX.toFixed(0)} Wh`;
+                            
+                            // Determine if we should show perceived value based on dataset index
+                             if (context.datasetIndex >= 3) { // Indices for perceived trend and points
+                                 const perceivedValue = getPerceivedValue(actualX); // Recalculate or get from point
+                                 if (typeof perceivedValue !== 'undefined') label += `, Perceived: ${perceivedValue.toFixed(0)} Wh`;
+                             } else {
+                                 if (typeof perceivedY !== 'undefined' && context.datasetIndex !== 0) label += `, Perceived (Simulated): ${getPerceivedValue(actualX).toFixed(0)} Wh`; // Show simulated perception for actual points too
+                             }
+                            return label; 
+                        } 
+                    } 
+                },
+                legend: { position: 'bottom', labels: { filter: (item) => item.datasetIndex < 4 } } 
+            }
+        };
+
+        // Update chart with new data and options
+        window.attariChartInstance.data = chartData;
+        window.attariChartInstance.options = chartOptions;
+        window.attariChartInstance.update();
+    }
+
+    // --- Steyvers et al. (2025) Visualization ---
+    function initSteyversChart() {
+        const canvas = document.getElementById('steyversChart');
+         if (!canvas) { console.error("Steyvers chart canvas not found"); return; }
+        const ctx = canvas.getContext('2d');
+        
+        // FIX: Destroy existing chart instance
+        if (window.steyversChartInstance) {
+            window.steyversChartInstance.destroy();
+            window.steyversChartInstance = null; // Clear reference
+        }
+        
+        window.steyversChartInstance = new Chart(ctx, {
+            type: 'bar', 
+            data: { datasets: [] }, // Initialize empty
+            options: {} // Initialize empty
+        });
+        updateSteyversVisualization(); // Populate data and options
+    }
+
+    function updateSteyversVisualization() {
+        if (!window.steyversChartInstance) {
+             console.log("Steyvers chart instance not ready for update.");
+             return;
+        }
+        const llmInternalConfidence = parseFloat(document.getElementById('llmInternalConfidence').value);
+        const explanationStyleFull = document.getElementById('llmExplanationStyle').value;
+        document.getElementById('llmInternalConfidenceValue').textContent = llmInternalConfidence.toFixed(0);
+        const selectedOptionText = document.getElementById('llmExplanationStyle').selectedOptions[0].text;
+        document.getElementById('llmExplanationStyleValue').textContent = selectedOptionText;
+
+        let humanPerceivedConfidence = llmInternalConfidence; 
+        let baseOffset = 0; let lengthEffect = 0;
+
+        if (explanationStyleFull.startsWith('low_')) { baseOffset = -15; } 
+        else if (explanationStyleFull.startsWith('medium_')) { baseOffset = 0; } 
+        else if (explanationStyleFull.startsWith('high_')) { baseOffset = 15; } 
+        else if (explanationStyleFull === 'default') { baseOffset = 10 + (llmInternalConfidence > 70 ? 5 : 0); }
+
+        if (explanationStyleFull.endsWith('_long')) { lengthEffect = 10; } 
+        else if (explanationStyleFull.endsWith('_short')) { lengthEffect = 5; } 
+        else if (explanationStyleFull.endsWith('_uncertainty_only')) { lengthEffect = -5; }
+        if (explanationStyleFull === 'default') { lengthEffect = 7; }
+        
+        humanPerceivedConfidence = llmInternalConfidence + baseOffset + lengthEffect;
+        if (explanationStyleFull === 'default' || explanationStyleFull.endsWith('_long')) { if (humanPerceivedConfidence < 90) humanPerceivedConfidence += 5; }
+        humanPerceivedConfidence = Math.max(0, Math.min(100, humanPerceivedConfidence));
+
+        // Update chart data
+        window.steyversChartInstance.data = {
+            labels: ["LLM Internal Confidence", "Human Perceived LLM Confidence"],
+            datasets: [{
+                label: 'Confidence Score', data: [llmInternalConfidence, humanPerceivedConfidence],
+                backgroundColor: ['rgba(54, 162, 235, 0.7)', 'rgba(255, 159, 64, 0.7)'],
+                borderColor: ['rgb(54, 162, 235)', 'rgb(255, 159, 64)'], borderWidth: 1
+            }]
+        };
+        // Update options
+        window.steyversChartInstance.options = {
+            responsive: true, maintainAspectRatio: false, indexAxis: 'y', 
+            scales: { x: { beginAtZero: true, max: 100, title: { display: true, text: 'Confidence (%)' } }, y: { ticks: { autoSkip: false } } },
+            plugins: {
+                title: { display: true, text: 'Steyvers et al. (2025) - Calibration Gap Simulation' },
+                tooltip: { callbacks: { label: (context) => `${context.dataset.label}: ${context.parsed.x.toFixed(1)}%` } },
+                datalabels: { anchor: 'end', align: 'end', formatter: (value) => value.toFixed(1) + '%', color: '#333' },
+                legend: { display: false } 
+            }
+        };
+        window.steyversChartInstance.update();
+    }
+
+    // --- Combined Simulation ---
+    // (Using updated actualKWh values based on Attari SI where possible)
+    const energyItems = [
+        { id: 1, name: "Desktop Computer (1 hour)", actualKWh: 0.140, plausibleIncorrectKWhLow: 0.05, plausibleIncorrectKWhHigh: 0.5 }, 
+        { id: 2, name: "Clothes Dryer (1 load)", actualKWh: 3.400, plausibleIncorrectKWhLow: 1.0, plausibleIncorrectKWhHigh: 6.0 }, 
+        { id: 3, name: "Replace 100W w/ CFL (1hr save)", actualKWh: 0.073, plausibleIncorrectKWhLow: 0.02, plausibleIncorrectKWhHigh: 0.2 }, // 100W - 27W CFL mean
+        { id: 4, name: "Central Air Conditioner (1 hour)", actualKWh: 3.500, plausibleIncorrectKWhLow: 1.5, plausibleIncorrectKWhHigh: 7.0 }
+    ];
+
+    let currentTrialIndex = 0;
+    let simulationResults = [];
+
+    function setupCombinedSimulation() {
+        const trialsArea = document.getElementById('simulationTrialsArea');
+        trialsArea.innerHTML = '<p class="text-gray-500">Click "Start/Restart Simulation" to begin.</p>';
+        document.getElementById('simulationSummary').innerHTML = '<p>Complete the simulation to see summary statistics here.</p>';
+    }
+
+    function startCombinedSimulation() {
+        currentTrialIndex = 0;
+        simulationResults = [];
+        document.getElementById('simulationTrialsArea').innerHTML = ''; 
+        document.getElementById('simulationSummary').innerHTML = '<p>Simulation in progress...</p>';
+        // Use a fixed order for simplicity in demo
+        const itemsForSimulation = energyItems.slice(0, 4); 
+        itemsForSimulation.forEach((item, index) => createTrialUI(item, index));
+        
+        // Ensure the first trial is visible after creation
+        if (itemsForSimulation.length > 0) {
+             const firstTrialElement = document.getElementById(`trial-${itemsForSimulation[0].id}`);
+             if (firstTrialElement) {
+                 firstTrialElement.classList.remove('hidden');
+             } else {
+                 console.error("First trial element not found after creation.");
+             }
+        }
+    }
+    
+    function createTrialUI(item, index) {
+        const trialsArea = document.getElementById('simulationTrialsArea');
+        if (!trialsArea) { console.error("Simulation trials area not found."); return; }
+
+        const compressionBias = parseFloat(document.getElementById('userCompressionBias').value);
+        let userPhase1Estimate;
+        const actual = item.actualKWh;
+        
+        if (actual === 0) userPhase1Estimate = 0;
+        else {
+            const pivot = 0.5; // Pivot point in kWh
+            if (actual < pivot) { 
+                userPhase1Estimate = actual + (pivot - actual) * compressionBias * 0.8; 
+            } else { 
+                userPhase1Estimate = actual - (actual - pivot) * compressionBias * 0.8; 
+            }
+            userPhase1Estimate = Math.max(0.01, userPhase1Estimate); 
+        }
+
+        const trialDiv = document.createElement('div');
+        trialDiv.id = `trial-${item.id}`;
+        // Start hidden, will be shown by startCombinedSimulation or submitTrial
+        trialDiv.className = 'simulation-item p-6 bg-white shadow-lg rounded-lg space-y-4 hidden'; 
+
+        // Construct inner HTML carefully
+        trialDiv.innerHTML = `
+            <h3 class="text-xl font-semibold text-indigo-700 border-b pb-2 mb-4">Trial ${index + 1}: ${item.name}</h3>
+            <p class="text-md">Your Initial Estimate (Phase 1): <strong class="text-indigo-800">${userPhase1Estimate.toFixed(3)} kWh</strong></p>
+            
+            <div class="ai-advisor-section mt-4 p-4 border border-blue-200 rounded-md bg-blue-50/50">
+                <h4 class="text-lg font-medium text-blue-700 mb-3">AI Energy Advisor Response:</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 mb-3">
+                    <div class="slider-container">
+                        <label for="aiCorrectness-${item.id}" class="text-sm">AI True Accuracy (% Correct): <span id="aiCorrectnessValue-${item.id}">75</span>%</label>
+                        <input type="range" id="aiCorrectness-${item.id}" min="0" max="100" value="75" class="w-full">
+                    </div>
+                    <div class="slider-container">
+                        <label for="aiTone-${item.id}" class="text-sm">AI Explanation Tone: <span id="aiToneValue-${item.id}" class="select-value-display">Neutral</span></label>
+                        <select id="aiTone-${item.id}" class="w-full">
+                            <option value="hedged">Hedged/Uncertain</option>
+                            <option value="neutral" selected>Neutral</option>
+                            <option value="confident">Confident/Certain</option>
+                        </select>
+                    </div>
+                    <div class="slider-container">
+                        <label for="aiLength-${item.id}" class="text-sm">AI Explanation Length: <span id="aiLengthValue-${item.id}" class="select-value-display">Medium</span></label>
+                        <select id="aiLength-${item.id}" class="w-full">
+                            <option value="short">Short</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="long">Long</option>
+                            <option value="uncertainty_only">Uncertainty Only</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="mt-3 text-md">AI's Estimated Value: <strong id="aiEstimate-${item.id}" class="text-blue-800 text-lg">_ kWh</strong></p>
+                <p class="mt-1 text-sm italic text-gray-700 p-2 bg-blue-100/50 rounded" id="aiExplanation-${item.id}">AI explanation will appear here.</p>
+            </div>
+
+            <div class="user-response-section mt-6 border-t pt-4">
+                 <h4 class="text-lg font-medium text-gray-700 mb-3">Your Evaluation:</h4>
+                <div class="slider-container">
+                    <label for="userConfidenceInAI-${item.id}">Your Confidence in AI's Estimate (0-100%): <span id="userConfidenceInAIValue-${item.id}">50</span>%</label>
+                    <input type="range" id="userConfidenceInAI-${item.id}" min="0" max="100" value="50" class="w-full">
+                </div>
+                <div class="forced-choice mt-4 text-center">
+                    <p class="font-medium mb-2">Whose estimate do you find more accurate?</p>
+                    <button id="btn-user-${item.id}" class="primary-btn forced-choice-btn">My Estimate (${userPhase1Estimate.toFixed(3)} kWh)</button>
+                    <button id="btn-ai-${item.id}" class="primary-btn forced-choice-btn">AI's Estimate (<span id="aiEstimateButtonText-${item.id}">_ kWh</span>)</button>
+                </div>
+            </div>
+            <div id="trialFeedback-${item.id}" class="feedback-box hidden"></div>
+        `;
+        trialsArea.appendChild(trialDiv);
+
+        // Add event listeners after appending
+        const aiCorrectnessSlider = document.getElementById(`aiCorrectness-${item.id}`);
+        const aiToneSelect = document.getElementById(`aiTone-${item.id}`);
+        const aiLengthSelect = document.getElementById(`aiLength-${item.id}`);
+        const userConfidenceSlider = document.getElementById(`userConfidenceInAI-${item.id}`);
+        const userChoiceButton = document.getElementById(`btn-user-${item.id}`);
+        const aiChoiceButton = document.getElementById(`btn-ai-${item.id}`);
+
+        if(aiCorrectnessSlider) aiCorrectnessSlider.oninput = () => { document.getElementById(`aiCorrectnessValue-${item.id}`).textContent = aiCorrectnessSlider.value; updateAIResponse(item.id, item.actualKWh, item.plausibleIncorrectKWhLow, item.plausibleIncorrectKWhHigh, userPhase1Estimate); };
+        if(aiToneSelect) aiToneSelect.onchange = () => updateAIResponse(item.id, item.actualKWh, item.plausibleIncorrectKWhLow, item.plausibleIncorrectKWhHigh, userPhase1Estimate);
+        if(aiLengthSelect) aiLengthSelect.onchange = () => updateAIResponse(item.id, item.actualKWh, item.plausibleIncorrectKWhLow, item.plausibleIncorrectKWhHigh, userPhase1Estimate);
+        if(userConfidenceSlider) userConfidenceSlider.oninput = () => { document.getElementById(`userConfidenceInAIValue-${item.id}`).textContent = userConfidenceSlider.value; };
+        if(userChoiceButton) userChoiceButton.onclick = () => submitTrial(item.id, 'user', userPhase1Estimate, index);
+        if(aiChoiceButton) aiChoiceButton.onclick = () => submitTrial(item.id, 'ai', -1, index); // Pass -1 for AI choice estimate initially
+
+        // Initial update for AI response
+        updateAIResponse(item.id, item.actualKWh, item.plausibleIncorrectKWhLow, item.plausibleIncorrectKWhHigh, userPhase1Estimate);
+    }
+
+    function updateAIResponse(itemId, actualKWh, plausibleLow, plausibleHigh, userEstimate) {
+        const aiCorrectnessSlider = document.getElementById(`aiCorrectness-${itemId}`);
+        const aiToneSelect = document.getElementById(`aiTone-${itemId}`);
+        const aiLengthSelect = document.getElementById(`aiLength-${itemId}`);
+        const aiEstimateEl = document.getElementById(`aiEstimate-${itemId}`);
+        const aiEstimateButtonTextEl = document.getElementById(`aiEstimateButtonText-${itemId}`);
+        const aiExplanationEl = document.getElementById(`aiExplanation-${itemId}`);
+        const trialDiv = document.getElementById(`trial-${itemId}`); // Get trial div to store data
+
+        // Ensure elements exist before proceeding
+        if (!aiCorrectnessSlider || !aiToneSelect || !aiLengthSelect || !aiEstimateEl || !aiEstimateButtonTextEl || !aiExplanationEl || !trialDiv) {
+             console.error(`Elements missing for trial ID ${itemId}. Cannot update AI response.`);
+             return;
+        }
+
+        const aiCorrectnessProb = parseInt(aiCorrectnessSlider.value) / 100;
+        const tone = aiToneSelect.value;
+        const length = aiLengthSelect.value;
+
+        // Update display spans
+        document.getElementById(`aiToneValue-${itemId}`).textContent = aiToneSelect.options[aiToneSelect.selectedIndex].text;
+        document.getElementById(`aiLengthValue-${itemId}`).textContent = aiLengthSelect.options[aiLengthSelect.selectedIndex].text;
+
+        let aiEstimateValue;
+        // Determine AI correctness based on probability *only if not already determined for this update cycle*
+        // We store the determination in the dataset to keep it consistent until the next full trial setup
+        let isAICorrect;
+        if (trialDiv.dataset.isAICorrect === undefined) {
+             isAICorrect = Math.random() < aiCorrectnessProb;
+             trialDiv.dataset.isAICorrect = isAICorrect; // Store determination
+             trialDiv.dataset.needsNewEstimate = 'true'; // Flag that we need a new estimate value
+        } else {
+             isAICorrect = trialDiv.dataset.isAICorrect === 'true';
+             // Only generate a new *value* if correctness itself changed (which it doesn't here)
+             // or if explicitly flagged (e.g., on first load)
+             if (trialDiv.dataset.needsNewEstimate === 'true') {
+                  // Generate estimate based on stored correctness
+                  if (isAICorrect) {
+                      aiEstimateValue = actualKWh;
+                  } else {
+                      let potentialEstimate;
+                      do {
+                          if (Math.random() < 0.5) potentialEstimate = actualKWh * (0.2 + Math.random() * 0.5);
+                          else potentialEstimate = actualKWh * (1.3 + Math.random() * 1.2);
+                      } while (Math.abs(potentialEstimate - actualKWh) < 0.1 * actualKWh || Math.abs(potentialEstimate - userEstimate) < 0.1 * userEstimate);
+                      aiEstimateValue = Math.max(0.01, potentialEstimate);
+                  }
+                  trialDiv.dataset.aiEstimate = aiEstimateValue; // Store the generated estimate
+                  trialDiv.dataset.needsNewEstimate = 'false'; // Clear the flag
+             } else {
+                 // Reuse stored estimate if only tone/length changed
+                  aiEstimateValue = parseFloat(trialDiv.dataset.aiEstimate);
+             }
+        }
+         // Ensure aiEstimateValue is defined if we fall through
+         if (typeof aiEstimateValue === 'undefined') {
+             if (isAICorrect) aiEstimateValue = actualKWh;
+             else aiEstimateValue = Math.max(0.01, actualKWh * (Math.random() < 0.5 ? 0.5 : 1.5)); // Fallback incorrect
+             trialDiv.dataset.aiEstimate = aiEstimateValue;
+         }
+
+
+        aiEstimateEl.textContent = `${aiEstimateValue.toFixed(3)} kWh`;
+        aiEstimateButtonTextEl.textContent = `${aiEstimateValue.toFixed(3)} kWh`;
+
+        let explanationText = ""; let baseExplanation = "";
+        if (tone === "hedged") { explanationText = "It's possible the value is around this, but I'm not entirely certain. "; baseExplanation = "Factors like usage patterns can vary, making a precise estimate difficult. "; } 
+        else if (tone === "neutral") { explanationText = "The estimated energy value is calculated to be approximately this figure. "; baseExplanation = "This is based on typical device specifications and average usage. "; } 
+        else { explanationText = "I am quite confident the energy value is very close to this. "; baseExplanation = "My analysis, based on extensive data, strongly indicates this figure. "; }
+
+        if (length === "uncertainty_only") { /* Keep only initial cue */ } 
+        else if (length === "short") { explanationText += (baseExplanation.split('.')[0] + '.'); } 
+        else if (length === "long") { explanationText += baseExplanation + "Additional factors might include device age, specific settings used, and environmental conditions. For example, older appliances often consume more energy, and efficiency can be affected by ambient temperature. My models account for a range of these variables."; } 
+        else { explanationText += baseExplanation; } // Medium
+
+        aiExplanationEl.textContent = explanationText;
+        // Update stored data only if needed (already done for estimate/correctness)
+        // trialDiv.dataset.aiEstimate = aiEstimateValue; // Already stored
+        // trialDiv.dataset.isAICorrect = isAICorrect; // Already stored
+    }
+
+
+    function submitTrial(itemId, choice, userPhase1Estimate, trialIdx) {
+        const trialDiv = document.getElementById(`trial-${itemId}`);
+        if (!trialDiv) { console.error(`Trial div ${itemId} not found.`); return; }
+
+        // Retrieve stored AI estimate and correctness
+        const aiEstimateValue = parseFloat(trialDiv.dataset.aiEstimate);
+        const isAICorrect = trialDiv.dataset.isAICorrect === 'true';
+        
+        const userConfidenceSlider = document.getElementById(`userConfidenceInAI-${itemId}`);
+        const userConfidenceInAI = userConfidenceSlider ? parseInt(userConfidenceSlider.value) : 50; // Default if slider missing
+        
+        const actualKWh = energyItems.find(i => i.id === itemId)?.actualKWh;
+        if (typeof actualKWh === 'undefined') { console.error(`Actual kWh not found for item ${itemId}`); return; }
+
+
+        let chosenEstimateValue = (choice === 'user') ? userPhase1Estimate : aiEstimateValue;
+        let isUserChoiceCorrect;
+        const userError = Math.abs(userPhase1Estimate - actualKWh);
+        const aiError = Math.abs(aiEstimateValue - actualKWh);
+
+        if (Math.abs(userError - aiError) < 0.001) { isUserChoiceCorrect = (choice === 'user'); } 
+        else { isUserChoiceCorrect = (choice === 'user' && userError < aiError) || (choice === 'ai' && aiError < userError); }
+        
+        const aiToneSelect = document.getElementById(`aiTone-${itemId}`);
+        const aiLengthSelect = document.getElementById(`aiLength-${itemId}`);
+        const aiCorrectnessSlider = document.getElementById(`aiCorrectness-${itemId}`);
+
+        const trialResult = {
+            itemId: itemId, itemName: energyItems.find(i => i.id === itemId).name, actualKWh: actualKWh, userPhase1Estimate: userPhase1Estimate, aiEstimate: aiEstimateValue, isAICorrect: isAICorrect, userConfidenceInAI: userConfidenceInAI, userChoice: choice, chosenEstimateValue: chosenEstimateValue, isUserChoiceCorrect: isUserChoiceCorrect, 
+            aiTone: aiToneSelect ? aiToneSelect.value : 'N/A', 
+            aiLength: aiLengthSelect ? aiLengthSelect.value : 'N/A', 
+            aiCorrectnessSlider: aiCorrectnessSlider ? parseInt(aiCorrectnessSlider.value) : 'N/A'
+        };
+        simulationResults.push(trialResult);
+
+        const feedbackEl = document.getElementById(`trialFeedback-${itemId}`);
+        if (feedbackEl) {
+            feedbackEl.innerHTML = `
+                <p><strong>Trial Feedback:</strong></p>
+                <ul class="list-disc pl-5 text-sm">
+                    <li>Ground Truth: ${actualKWh.toFixed(3)} kWh.</li>
+                    <li>AI Estimate: ${aiEstimateValue.toFixed(3)} kWh (AI was ${isAICorrect ? '<span class="font-semibold text-green-700">Correct</span>' : '<span class="font-semibold text-red-700">Incorrect</span>'}).</li>
+                    <li>Your Estimate: ${userPhase1Estimate.toFixed(3)} kWh.</li>
+                    <li>You chose the ${choice === 'user' ? 'User' : 'AI'}'s estimate. Your choice was ${isUserChoiceCorrect ? '<span class="font-semibold text-green-700">Correct (Closer)</span>' : '<span class="font-semibold text-red-700">Incorrect (Further)</span>'}.</li>
+                </ul>
+            `;
+            feedbackEl.className = `feedback-box ${isUserChoiceCorrect ? 'feedback-correct' : 'feedback-incorrect'}`;
+            feedbackEl.classList.remove('hidden');
+        }
+        
+        // Disable controls for the completed trial
+        const controls = trialDiv.querySelectorAll('input[type=range], select, button');
+        controls.forEach(ctrl => ctrl.disabled = true);
+
+        // Advance to the next trial
+        currentTrialIndex++;
+        const itemsForSimulation = energyItems.slice(0, 4); 
+        const nextTrialId = itemsForSimulation[currentTrialIndex]?.id;
+        const nextTrialElement = nextTrialId ? document.getElementById(`trial-${nextTrialId}`) : null;
+
+        if (nextTrialElement) {
+            nextTrialElement.classList.remove('hidden');
+            nextTrialElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            displaySimulationSummary();
+            const summaryElement = document.getElementById('simulationSummary');
+            if (summaryElement) summaryElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function displaySimulationSummary() {
+        const summaryDiv = document.getElementById('simulationSummary');
+        if (!summaryDiv) return;
+        if (simulationResults.length === 0) {
+            summaryDiv.innerHTML = '<p>No trials completed yet.</p>'; return;
+        }
+        let totalAICorrect = 0, totalUserForcedChoiceCorrect = 0, sumUserConfidenceWhenAICorrect = 0, countAICorrect = 0, sumUserConfidenceWhenAIIncorrect = 0, countAIIncorrect = 0, timesUserChoseAI = 0, timesUserChoseSelf = 0;
+        simulationResults.forEach(res => {
+            if (res.isAICorrect) { totalAICorrect++; sumUserConfidenceWhenAICorrect += res.userConfidenceInAI; countAICorrect++; } else { sumUserConfidenceWhenAIIncorrect += res.userConfidenceInAI; countAIIncorrect++; }
+            if (res.isUserChoiceCorrect) { totalUserForcedChoiceCorrect++; }
+            if (res.userChoice === 'ai') { timesUserChoseAI++; } else { timesUserChoseSelf++; }
+        });
+        const avgConfidenceAICorrect = countAICorrect > 0 ? (sumUserConfidenceWhenAICorrect / countAICorrect).toFixed(1) : 'N/A';
+        const avgConfidenceAIIncorrect = countAIIncorrect > 0 ? (sumUserConfidenceWhenAIIncorrect / countAIIncorrect).toFixed(1) : 'N/A';
+
+        summaryDiv.innerHTML = `
+            <h4 class="text-lg font-semibold mb-3 text-center border-b pb-2">Overall Results (${simulationResults.length} Trials):</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-white p-3 rounded shadow-sm"><strong>AI Performance:</strong> ${totalAICorrect}/${simulationResults.length} correct (${((totalAICorrect / simulationResults.length) * 100).toFixed(1)}%)</div>
+                <div class="bg-white p-3 rounded shadow-sm"><strong>Your Forced Choice Accuracy:</strong> ${totalUserForcedChoiceCorrect}/${simulationResults.length} correct choices (${((totalUserForcedChoiceCorrect / simulationResults.length) * 100).toFixed(1)}%)</div>
+                <div class="bg-white p-3 rounded shadow-sm"><strong>Avg. Confidence when AI Correct:</strong> ${avgConfidenceAICorrect}%</div>
+                <div class="bg-white p-3 rounded shadow-sm"><strong>Avg. Confidence when AI Incorrect:</strong> ${avgConfidenceAIIncorrect}%</div>
+                <div class="bg-white p-3 rounded shadow-sm"><strong>Choices:</strong> Chose AI ${timesUserChoseAI} times, Chose Self ${timesUserChoseSelf} times</div>
+            </div>
+            <p class="mt-4 text-xs text-gray-600 text-center">Note: Results depend on parameters set per trial (AI accuracy, tone, length) and global user bias.</p>
+        `;
+    }
+
+    // --- Initializations ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ensure Mermaid is ready before trying to render
+        // mermaid.initialize({ startOnLoad: true, theme: 'neutral' }); // Already initialized above
+        
+        // Open the first tab and render its contents
+        const firstTabButton = document.querySelector('.tab-button');
+        if (firstTabButton) {
+            firstTabButton.click(); 
+        } else {
+            console.error("No tab buttons found on DOMContentLoaded.");
+        }
+    });
+
+</script>
+
+</body>
+</html>

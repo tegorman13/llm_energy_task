@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Proposal Dashboard: Energy, AI, and User Calibration</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50; /* Dark Blue-Gray - Professional */
+            --secondary-color: #27ae60; /* Green - Positive/Success */
+            --accent-color: #e74c3c;  /* Red - Attention/Caution */
+            --highlight-color: #f39c12; /* Orange - Highlight/Medium */
+            --text-color: #34495e;   /* Dark Gray - Readability */
+            --light-bg: #f4f6f6;     /* Very Light Gray Background */
+            --container-bg: #ffffff; /* White for content containers */
+            --tab-active: var(--primary-color);
+            --tab-inactive: #7f8c8d; /* Gray for inactive tabs */
+            --border-color: #d5dbdb; /* Softer border color */
+            --gradient-start: var(--primary-color);
+            --gradient-end: #34495e;   /* Slightly lighter shade of primary */
+        }
+
+        body {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Roboto for modern feel */
+            line-height: 1.7;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+            background-color: var(--light-bg);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            padding: 30px 25px;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700; /* Bolder */
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .tab-container {
+            margin: 0 25px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 0;
+            padding-left: 0;
+            list-style: none;
+            border-bottom: 2px solid var(--border-color);
+            overflow-x: auto;
+            white-space: nowrap;
+            background-color: var(--container-bg);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05) inset; /* Subtle inner shadow */
+        }
+
+        .tabs li {
+            margin-right: 1px;
+        }
+
+        .tabs li a {
+            display: block;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: var(--tab-inactive);
+            border-radius: 7px 7px 0 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-size: 15px;
+        }
+
+        .tabs li a:hover {
+            background-color: var(--light-bg);
+            color: var(--tab-active);
+        }
+
+        .tabs li a.active {
+            color: var(--tab-active);
+            border-bottom: 3px solid var(--tab-active);
+            background-color: var(--container-bg);
+            font-weight: 700;
+        }
+
+        .tab-content {
+            background-color: var(--container-bg);
+            border-radius: 0 0 10px 10px;
+            padding: 35px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+            min-height: 500px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+        }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        h2, h3, h4 { color: var(--text-color); }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .section { margin-bottom: 40px; }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 30px 0;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #fdfdfd;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .flex-item {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f9fafb;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e7e7e7;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .control-panel {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider-container { margin-bottom: 20px; }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 15px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        input[type="range"]:hover {
+            background: #cfcfcf;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-value {
+            display: inline-block;
+            min-width: 45px;
+            text-align: right;
+            margin-left: 10px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease-in-out;
+            font-weight: 500;
+            font-size: 15px;
+            text-transform: capitalize;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: #1f6a9c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary { background-color: var(--secondary-color); }
+        .btn-secondary:hover { background-color: #1e8449; }
+
+        .simulation-area {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 25px;
+        }
+
+        .appliance-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .appliance-icon {
+            width: 55px;
+            height: 55px;
+            margin-right: 18px;
+            background-color: #e9eff5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--primary-color);
+        }
+
+        .advice-box {
+            border-left: 5px solid var(--primary-color);
+            padding: 20px 25px;
+            background-color: #f4f8fb;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
+        }
+
+        .advice-high {
+            border-left-color: var(--secondary-color);
+            background-color: #e8f6ef;
+        }
+        .advice-medium {
+            border-left-color: var(--highlight-color);
+            background-color: #fef7e7;
+        }
+        .advice-low {
+            border-left-color: var(--accent-color);
+            background-color: #fbeeed;
+        }
+
+        .user-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .confidence-slider-container { margin: 12px 0; }
+
+        .confidence-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .decision-btns {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .decision-btns .btn { flex: 1; }
+
+        .user-btn { background-color: #3498db; }
+        .user-btn:hover { background-color: #2980b9; }
+        .ai-btn { background-color: #9b59b6; } /* Purple for AI */
+        .ai-btn:hover { background-color: #8e44ad; }
+
+        .results-display {
+            margin-top: 35px;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        table, th, td { border: 1px solid #e0e6eb; }
+
+        th, td { padding: 14px 18px; text-align: left; }
+
+        th {
+            background-color: #edf2f7;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        tr:nth-child(even) { background-color: #fbfcfe; }
+
+        .correct { color: var(--secondary-color); font-weight: bold; }
+        .incorrect { color: var(--accent-color); }
+
+        .research-question-box {
+            background-color: #e9eff5;
+            border-left: 5px solid var(--primary-color);
+            padding: 20px 25px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .research-question-box strong { color: var(--primary-color); }
+
+        .methods-diagram-container, .llm-diagram-container {
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 30px auto; /* Centered */
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #fdfdfd; /* Slightly off-white for diagram background */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .methods-diagram-container svg, .llm-diagram-container svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .insight-box {
+            background-color: #fff9e6;
+            border-left: 5px solid var(--highlight-color);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .insight-box p strong { color: #d35400; }
+
+        .paper-citation {
+            background-color: #f8f9fc;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .paper-citation h3 { margin-top: 0; font-size: 19px; color: var(--primary-color); }
+        .paper-citation p { margin-bottom: 10px; }
+        .paper-citation .authors { font-style: italic; color: #526d82; }
+
+        .hypothesis-box {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #d7ede2;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 0 8px 8px 0;
+            background-color: #f3fbf7;
+        }
+        .hypothesis-box h4 { color: var(--secondary-color); margin-top: 0; margin-bottom: 12px; }
+        .hypothesis-box p { margin-bottom: 6px; font-size: 15px; }
+
+        .variables-list { display: flex; flex-wrap: wrap; gap: 14px; margin: 25px 0; }
+        .variable-pill {
+            border-radius: 16px;
+            padding: 7px 15px;
+            font-size: 13.5px;
+            display: inline-block;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .iv-pill { background-color: #e9f5ff; border: 1px solid #a3cffd; color: #1a5f9e; }
+        .dv-pill { background-color: #e6f6f0; border: 1px solid #a0d8b9; color: #106343; }
+        .mod-pill { background-color: #fff8e1; border: 1px solid #ffe082; color: #8c5c00; }
+
+        .phase-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .phase-box h4 { color: #495057; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #e9ecef; padding-bottom: 10px; }
+        .phase-box ul { padding-left: 20px; }
+        .phase-box li { margin-bottom: 10px; }
+
+        .prediction-chart-container {
+            background-color: var(--container-bg);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .prediction-chart-container h3 { margin-top: 0; color: #34495e; font-size: 20px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+        .prediction-chart-container p { color: #555; margin-bottom: 18px; font-size: 15px; }
+
+        .hypothesis-summary {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-top: 20px;
+            padding: 12px 15px;
+            background-color: #f7f9fc;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .terminology-table {
+            margin: 30px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .terminology-table th { background-color: #eef3f7; color: var(--primary-color); font-weight: 600; }
+        .terminology-table td { background-color: var(--container-bg); }
+        .terminology-table tr:nth-child(even) td { background-color: #fbfcfd; }
+
+        @media (max-width: 768px) {
+            .tabs li a { padding: 12px 18px; font-size: 14px; }
+            .flex-container { flex-direction: column; }
+            .flex-item { min-width: 100%; }
+            .header h1 { font-size: 22px; }
+            .header p { font-size: 15px; }
+            .tab-content { padding: 20px; }
+            h2 {font-size: 20px;}
+            h3 {font-size: 18px;}
+            h4 {font-size: 16px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Research Proposal: AI, Energy Literacy, and Calibrated Trust</h1>
+        <p>Investigating the Impact of LLM-Expressed Uncertainty on User Reliance and Metacognition in Energy Estimation Tasks</p>
+    </div>
+
+    <div class="tab-container">
+        <ul class="tabs">
+            <li><a href="#overview" class="active">Overview & RQs</a></li>
+            <li><a href="#background">Background</a></li>
+            <li><a href="#approach">My Approach</a></li>
+            <li><a href="#experimental-design">Experimental Design</a></li>
+            <li><a href="#llm-advisor-sim">LLM Advisor Sim</a></li>
+            <li><a href="#predictions">Predictions</a></li>
+            <li><a href="#terminology">Key Terminology</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="overview" class="tab-pane active">
+                <h2>Project Overview</h2>
+                <p>This research investigates how individuals interact with and rely on Large Language Models (LLMs) for tasks requiring specialized knowledge, specifically in the domain of energy consumption. Drawing on findings from Attari et al. (2010) regarding public misperceptions of energy use and Steyvers et al. (2025, hypothetical) on calibrating trust in LLMs, this study examines the impact of aligning an LLM's linguistically expressed uncertainty with its internal confidence on user behavior and metacognition.</p>
+
+                <div class="research-question-box">
+                    <p><strong>Core Inquiry:</strong> How does manipulating an LLM's expressed linguistic uncertainty, calibrated to its internal confidence, affect participants' reliance on its advice, their metacognitive calibration, and the accuracy of their energy-related judgments, particularly given pre-existing biases in energy perception?</p>
+                </div>
+
+                <h3>Research Questions (RQs)</h3>
+                <div class="hypothesis-box">
+                    <h4>RQ1: Appropriate Reliance & Accuracy</h4>
+                    <p>How does aligning the LLM’s expressed confidence with its internal probability estimates affect participants' reliance when forced to choose between the AI's estimate and their own prior estimate for energy consumption?</p>
+                </div>
+
+                <div class="hypothesis-box">
+                    <h4>RQ2: Metacognitive Calibration of Confidence</h4>
+                    <p>Does aligning the LLM's linguistic expression of uncertainty with its internal confidence lead to better calibration between participants' confidence in the AI's estimates and the actual accuracy of those estimates?</p>
+                </div>
+
+                <div class="hypothesis-box">
+                    <h4>RQ3: Role of Prior Knowledge & Individual Differences</h4>
+                    <p>Do individual difference measures such as objective numeracy, energy literacy, and AI literacy moderate the impact of the AI's linguistic hedging on (a) reliance, (b) metacognitive calibration, and (c) discrimination between accurate and inaccurate AI advice?</p>
+                </div>
+
+                <h3>Hypotheses (Hs)</h3>
+                <div class="hypothesis-box">
+                    <h4>H1: Improved Metacognitive Calibration</h4>
+                    <p>Participants exposed to AI estimates with calibrated linguistic uncertainty cues (where hedging levels correspond to the AI's likelihood of being incorrect) will exhibit better metacognitive calibration (e.g., lower Brier scores or Expected Calibration Error on their confidence ratings) compared to participants exposed only to confidently expressed AI estimates.</p>
+                </div>
+
+                <div class="hypothesis-box">
+                    <h4>H2: Moderating Role of Energy Literacy</h4>
+                    <p>Participants with higher energy literacy will exhibit less overreliance on AI suggestions, particularly when the AI provides incorrect advice. The benefits of calibrated uncertainty cues from the AI may be more pronounced for individuals with lower initial energy literacy.</p>
+                </div>
+            </div>
+
+            <div id="background" class="tab-pane">
+                <h2>Background Literature</h2>
+                <p>This study builds upon two key lines of research: public perception of energy consumption and human-AI interaction, specifically concerning trust and calibration with LLMs.</p>
+
+                <div class="section">
+                    <h3>Energy Misperceptions (Attari et al., 2010)</h3>
+                    <div class="paper-citation">
+                        <h3>Attari et al. (2010): Public Perceptions of Energy Consumption and Savings</h3>
+                        <p class="authors">Shahzeen Z. Attari, Michael L. DeKay, Cliff I. Davidson, Wändi Bruine de Bruin</p>
+                        <p>This seminal study revealed systematic biases in how individuals perceive energy usage. Key findings include:</p>
+                        <ul>
+                            <li><strong>Compression Pattern:</strong> A tendency to underestimate the energy consumption of high-usage appliances (e.g., air conditioners) and overestimate that of low-usage items (e.g., light bulbs).</li>
+                            <li>The same pattern applies to estimates of energy savings from various activities.</li>
+                            <li>These misperceptions may stem from unreliable heuristics, such as a "size heuristic" (assuming larger appliances consume more energy, which is not always true or proportional).</li>
+                            <li>The pattern has been replicated in subsequent studies, highlighting its robustness.</li>
+                        </ul>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="energyPerceptionChart"></canvas>
+                    </div>
+                    <div class="control-panel">
+                        <div class="slider-container">
+                            <label for="underestimationFactor">High-Energy Appliance Underestimation Factor: <span id="underestimationValue" class="slider-value">2.8</span>x</label>
+                            <input type="range" id="underestimationFactor" min="1" max="5" step="0.1" value="2.8">
+                        </div>
+                        <div class="slider-container">
+                            <label for="overestimationFactor">Low-Energy Appliance Overestimation Factor: <span id="overestimationValue" class="slider-value">1.6</span>x</label>
+                            <input type="range" id="overestimationFactor" min="1" max="3" step="0.1" value="1.6">
+                        </div>
+                        <button id="updateEnergyChart" class="btn">Update Perception Model</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>AI Confidence & Trust Calibration (Steyvers et al., 2025, hypothetical)</h3>
+                     <div class="paper-citation">
+                        <h3>Steyvers et al. (2025, hypothetical): Calibrating Human Trust in LLM Accuracy via Linguistic Hedging</h3>
+                        <p class="authors">Mark Steyvers, Ananya Kumar, Pang Wei Koh, Pulkit Agrawal et al. (Illustrative citation based on proposal)</p>
+                        <p>Research in human-AI interaction suggests challenges in how users perceive and calibrate their trust in LLM outputs:</p>
+                        <ul>
+                            <li><strong>Overestimation of LLM Accuracy:</strong> In tasks like trivia, users often overestimate the accuracy of LLMs.</li>
+                            <li><strong>LLM Language vs. Internal Confidence:</strong> LLMs may use outwardly confident language that does not accurately reflect their own internal confidence scores (e.g., token probabilities).</li>
+                            <li><strong>Confidence Alignment:</strong> Steyvers et al. demonstrated a method to adjust LLM explanations to better reflect the LLM's internal confidence. Aligning expressed linguistic uncertainty (hedging) with internal confidence can lead to more appropriate reliance and a reduced "calibration gap" (i.e., user confidence in LLM accuracy becomes better aligned with actual LLM accuracy).</li>
+                        </ul>
+                    </div>
+                    <div class="llm-diagram-container">
+                        <div id="llmInternalDiagram">
+                            </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="calibrationGapChart"></canvas>
+                    </div>
+                     <div class="control-panel">
+                        <div class="slider-container">
+                            <label for="calibrationGapSize">Calibration Gap Size (User Overestimation): <span id="calibrationGapValue" class="slider-value">20</span>%</label>
+                            <input type="range" id="calibrationGapSize" min="0" max="50" step="1" value="20">
+                        </div>
+                        <div class="slider-container">
+                            <label for="hedgingEffect">Effect of Hedging (Reduces Overestimation by): <span id="hedgingEffectValue" class="slider-value">15</span>%</label>
+                            <input type="range" id="hedgingEffect" min="0" max="30" step="1" value="15">
+                        </div>
+                        <button id="updateCalibrationChart" class="btn">Update Calibration Model</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="approach" class="tab-pane">
+                <h2>My Approach: Integrating Energy Perception and AI Interaction</h2>
+                <p>This study synthesizes insights from Attari et al. (2010) and Steyvers et al. (2025, hypothetical) to investigate how AI assistance, particularly with calibrated linguistic uncertainty, can influence energy-related judgments.</p>
+
+                <div class="section">
+                    <h3>Energy Task - Drawing from Attari (2010)</h3>
+                    <p>The Attari findings motivate the core problem: public misperception of energy use and savings. The Attari estimation task is particularly useful because:</p>
+                    <ul>
+                        <li>It reliably produces a biased pattern of under- and overestimation (the "compression pattern").</li>
+                        <li>This known bias allows for a nuanced examination of AI's influence on both general accuracy and specific biases.</li>
+                        <li>While a knowledge task, this type of information is crucial for effective energy-related planning and goal implementation. It can serve as a foundation for more complex planning tasks in future research.</li>
+                    </ul>
+                    <div class="insight-box">
+                        <p><strong>Focus:</strong> To address the public misperception of energy use/savings by leveraging an estimation task known to elicit systematic biases, allowing for a detailed analysis of AI's impact.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>LLM Interaction - Drawing from Steyvers et al. (2025, hypothetical)</h3>
+                    <p>While a standard LLM could be used to improve energy estimates (an "uncalibrated condition" will be included), the study incorporates Steyvers' confidence-alignment manipulation for several reasons:</p>
+                    <ul>
+                        <li><strong>Principled Manipulation:</strong> It offers a more systematic and generalizable method of manipulating LLM communication compared to ad-hoc prompt engineering.</li>
+                        <li><strong>Relevance to AI Trust:</strong> The issue of human perception of AI uncertainty and confidence is a critical and rapidly evolving area of research.</li>
+                        <li><strong>Future Applications:</strong> Understanding how LLMs communicate their confidence is relevant for broader applications, including their role in transactive memory systems and collaborative decision-making.</li>
+                        <li>The LLM's internal confidence (e.g., derived from GPT-4.1-nano's output probabilities, as per Steyvers' method) will be used to modulate the degree of uncertain language in its explanations. Participants will only see the final explanation, not the raw confidence score.</li>
+                    </ul>
+                     <div class="insight-box">
+                        <p><strong>Focus:</strong> To employ a principled method for manipulating LLM-expressed uncertainty, connecting to current research on AI trust and confidence communication.</p>
+                    </div>
+                </div>
+                 <div class="section">
+                    <h3>Examples of Linguistic Uncertainty Expressions</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>AI Internal Confidence</th>
+                                <th>Linguistic Expression Style</th>
+                                <th>Example (Central AC ~3500 Wh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>High</strong></td>
+                                <td>Assertive, direct</td>
+                                <td>"A central AC unit uses 3500 Wh of energy per hour. This is because AC systems require significant power to cool air through the compression cycle."</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medium</strong></td>
+                                <td>Qualified, some hedges</td>
+                                <td>"A central AC unit likely uses around 3500 Wh of energy per hour. This is generally because most residential AC systems need substantial power, though exact usage can vary."</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Low</strong></td>
+                                <td>Multiple hedges, uncertainty emphasized</td>
+                                <td>"It's possible a central AC unit might use approximately 3500 Wh of energy per hour, but this is quite variable. Some sources suggest a range, perhaps from 2000 to 5000 Wh, depending on the model and conditions."</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="experimental-design" class="tab-pane">
+                <h2>Experimental Design & Procedure</h2>
+                <p>The study will employ a mixed-factorial design to investigate the research questions.</p>
+
+                <div class="section">
+                    <h3>Overall Structure (Reflecting "Current Proposal")</h3>
+                    <div class="phase-box">
+                        <h4>Part 1: Surveys & Baseline Measures</h4>
+                        <p>Participants will complete a series of surveys to gather data on:</p>
+                        <ul>
+                            <li><strong>Energy Literacy:</strong> Assessing knowledge of energy consumption and conservation.</li>
+                            <li><strong>AI Literacy:</strong> Measuring understanding of AI capabilities and limitations.</li>
+                            <li><strong>AI Usage:</strong> Documenting prior experience with AI tools, particularly LLMs.</li>
+                            <li><strong>Trust in Automation:</strong> Gauging general propensity to trust automated systems.</li>
+                            <li><strong>Demographics & Other Individual Differences:</strong> Including objective numeracy.</li>
+                        </ul>
+                    </div>
+                    <div class="phase-box">
+                        <h4>Part 2: Experimental Task (Energy Appliance Knowledge & AI Assistance)</h4>
+                        <p>This phase combines an energy estimation task with AI interaction, structured as follows:</p>
+                        <ol>
+                            <li><strong>Initial Energy Estimation:</strong> Participants estimate energy consumption for various appliances (based on Attari et al., 2010). This establishes their baseline knowledge and biases.
+                                <ul><li><em>Task Example:</em> "Relative to a 100-watt incandescent light bulb (100 units/hr), estimate the hourly energy use of a [Appliance Name]."</li></ul>
+                            </li>
+                            <li><strong>AI Interaction & Advice:</strong> For each appliance, after a delay or intervening tasks, participants are shown:
+                                <ul>
+                                    <li>The AI's estimate for the appliance's energy consumption.</li>
+                                    <li>An explanation from the AI. The linguistic uncertainty of this explanation is manipulated (between-subjects: calibrated vs. always confident) based on the AI's (simulated) internal confidence (e.g., computed using methods similar to Steyvers et al., 2025, potentially with a model like gpt-4.1-nano).</li>
+                                </ul>
+                            </li>
+                            <li><strong>User Confidence in AI:</strong> Participants rate their confidence in the accuracy of the AI's specific estimate for that appliance (e.g., on a 0-100% scale).</li>
+                            <li><strong>Forced Choice (Reliance Measure):</strong> Participants are shown their own initial estimate alongside the AI's estimate and must choose which one they believe is more accurate. This choice is the primary measure of "Reliance."</li>
+                        </ol>
+                         <p>This sequence is repeated for several appliances.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Variables</h3>
+                    <div class="variables-list">
+                        <div class="variable-pill iv-pill">IV1 (Between-Subjects): AI Linguistic Uncertainty Style (Calibrated vs. Always Confident)</div>
+                        <div class="variable-pill iv-pill">IV2 (Within-Subjects): AI Advice Correctness (Correct vs. Incorrect)</div>
+                        <div class="variable-pill iv-pill">IV3 (Within-Subjects): Appliance Type (High vs. Low Energy - based on Attari)</div>
+                        <div class="variable-pill dv-pill">DV1: Reliance (Forced choice: Own vs. AI estimate)</div>
+                        <div class="variable-pill dv-pill">DV2: User Confidence in AI's Estimate (Rated per item)</div>
+                        <div class="variable-pill dv-pill">DV3: Metacognitive Calibration (e.g., Brier Score, ECE based on confidence ratings and AI accuracy)</div>
+                        <div class="variable-pill dv-pill">DV4: Final Energy Estimate Accuracy (Accuracy of chosen estimate)</div>
+                        <div class="variable-pill mod-pill">Moderator: Energy Literacy (from survey & baseline task)</div>
+                        <div class="variable-pill mod-pill">Moderator: AI Literacy (from survey)</div>
+                        <div class="variable-pill mod-pill">Moderator: Objective Numeracy (from survey)</div>
+                        <div class="variable-pill mod-pill">Moderator: Trust Propensity (from survey)</div>
+                    </div>
+                </div>
+
+                <h3>Visualized Experimental Flow</h3>
+                <div class="methods-diagram-container">
+                    <svg id="methodsDiagramSGV" width="950" height="800" viewBox="0 0 950 800" xmlns="http://www.w3.org/2000/svg">
+                        </svg>
+                </div>
+
+                <div class="section">
+                    <h3>Key Analyses</h3>
+                    <ul>
+                        <li>Mixed-effects models to analyze reliance choices (DV1) and confidence ratings (DV2), considering the manipulated factors and covariates.</li>
+                        <li>Calculation of calibration metrics (e.g., Brier scores, ECE) from confidence ratings and AI advice accuracy to assess DV3.</li>
+                        <li>Moderation analyses to examine the role of individual differences (energy literacy, AI literacy, numeracy) on reliance, calibration, and discrimination (RQ3, H2).</li>
+                        <li>Analysis of final estimate accuracy (DV4) to determine overall performance improvement.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="llm-advisor-sim" class="tab-pane">
+                <h2>Interactive Simulation: LLM Energy Advisor Task</h2>
+                <p>This simulation models a single trial of the experimental task. You'll provide an initial estimate (simulated here), see an AI's advice (with varying linguistic styles), rate your confidence in the AI, and then choose between your estimate and the AI's.</p>
+
+                <div class="control-panel">
+                    <div class="slider-container">
+                        <label for="simUncertaintyLevel">AI Linguistic Uncertainty Style:</label>
+                        <select id="simUncertaintyLevel" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 15px;">
+                            <option value="0">Always Confident Language</option>
+                            <option value="1" selected>Calibrated Uncertainty (Hedges when less certain)</option>
+                        </select>
+                    </div>
+                    <div class="slider-container">
+                        <label for="simUserKnowledgeLevel">Your Simulated Energy Knowledge: <span id="simUserKnowledgeValue" class="slider-value">Medium</span></label>
+                        <input type="range" id="simUserKnowledgeLevel" min="0" max="2" step="1" value="1">
+                        <div class="confidence-labels" style="font-size: 12px;"><span>Low (Large Errors)</span><span>Medium</span><span>High (Small Errors)</span></div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="simAiActualCorrectness">Is AI's advice for this item actually correct? <span id="simAiCorrectnessValue" class="slider-value">Correct</span></label>
+                         <select id="simAiActualCorrectness" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 15px;">
+                            <option value="1" selected>Correct Advice</option>
+                            <option value="0">Incorrect Advice</option>
+                        </select>
+                    </div>
+                    <button id="startSimulation" class="btn btn-secondary" style="width: 100%; padding: 12px;">Start New Trial Simulation</button>
+                </div>
+
+                <div class="simulation-area" id="simulationArea">
+                    <p style="text-align: center; color: #777;">Configure parameters and click "Start New Trial Simulation" to begin.</p>
+                </div>
+
+                <div class="results-display" id="simulationResults" style="display: none;">
+                    <h3>Trial Results</h3>
+                    <p>Complete the trial to see the outcome.</p>
+                </div>
+            </div>
+
+            <div id="predictions" class="tab-pane">
+                <h2>Empirical Predictions & Expected Outcomes</h2>
+                <p>Based on the theoretical framework and hypotheses, the following patterns are anticipated:</p>
+
+                <div class="prediction-chart-container">
+                    <h3>Prediction for RQ1/H1 (Partial): Reliance by AI Uncertainty & Correctness</h3>
+                    <p>Aligning LLM's linguistic uncertainty with its internal confidence is expected to improve appropriate reliance. Specifically, participants should be more likely to disregard AI advice when it is expressed with uncertainty (hedging) AND is incorrect, compared to when it's incorrect but expressed confidently.</p>
+                    <div class="chart-container">
+                        <canvas id="relianceInteractionChart"></canvas>
+                    </div>
+                    <p class="hypothesis-summary">Expected: Calibrated hedging will reduce reliance on incorrect AI advice more than on correct advice, leading to better discrimination.</p>
+                </div>
+
+                <div class="prediction-chart-container">
+                    <h3>Prediction for RQ2/H1: Metacognitive Calibration</h3>
+                    <p>Calibrated linguistic uncertainty cues from the AI are predicted to lead to better alignment between participants' confidence in the AI's estimates and the actual accuracy of those estimates (i.e., improved metacognitive calibration).</p>
+                    <div class="chart-container">
+                        <canvas id="calibrationErrorChart"></canvas>
+                    </div>
+                    <p class="hypothesis-summary">Expected: Lower calibration error (e.g., Brier score, ECE) in the "Calibrated Uncertainty" condition compared to the "Always Confident" condition.</p>
+                </div>
+
+                <div class="prediction-chart-container">
+                    <h3>Prediction for RQ3/H2: Moderation by Energy Literacy</h3>
+                    <p>Participants with higher energy literacy are expected to show less overreliance on AI suggestions. The impact of calibrated uncertainty might be particularly beneficial for those with lower energy literacy by helping them better gauge AI reliability.</p>
+                    <div class="chart-container">
+                        <canvas id="knowledgeModerationChart"></canvas> </div>
+                    <p class="hypothesis-summary">Expected: Higher energy literacy correlates with better discrimination. Calibrated uncertainty may particularly boost discrimination for lower/medium literacy groups.</p>
+                </div>
+                 <div class="prediction-chart-container">
+                    <h3>Prediction for User Confidence in AI (Related to RQ2)</h3>
+                    <p>Participants are expected to report lower confidence in the AI's estimate when its explanation is hedged (indicating lower AI internal confidence) compared to when it is expressed confidently.</p>
+                    <div class="chart-container">
+                        <canvas id="confidenceChart"></canvas>
+                    </div>
+                    <p class="hypothesis-summary">Expected: Lower user confidence ratings for AI estimates accompanied by hedged language.</p>
+                </div>
+                <div class="prediction-chart-container">
+                    <h3>Prediction for RQ3: Moderation by AI Literacy</h3>
+                    <p>Participants with higher AI literacy are anticipated to be more sensitive to the AI's linguistic uncertainty cues, leading to more pronounced effects on appropriate reliance and better calibration.</p>
+                    <div class="chart-container">
+                        <canvas id="aiLiteracyModerationChart"></canvas>
+                    </div>
+                    <p class="hypothesis-summary">Expected: Higher AI literacy will enhance the positive effects of calibrated uncertainty on reliance discrimination.</p>
+                </div>
+            </div>
+
+             <div id="terminology" class="tab-pane">
+                <h2>Key Terminology</h2>
+                <p>Consistent terminology is crucial for clarity in this research. The following definitions, based on your proposal, will be used:</p>
+
+                <table class="terminology-table">
+                    <thead>
+                        <tr>
+                            <th>Key Term/Concept</th>
+                            <th>Definition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Internal Confidence (AI's)</strong></td>
+                            <td>GPT-4 (or similar LLM, e.g., gpt-4.1-nano) output layer probability associated with its generated response/estimate. This is a numeric value not directly shown to participants.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Linguistic Uncertainty (AI's Expressed)</strong></td>
+                            <td>How the LLM communicates its internal uncertainty through language (e.g., confident phrasing vs. hedging terms like "might," "could be," "around"). This is manipulated by the researcher based on the AI's internal confidence.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confidence (User's)</strong></td>
+                            <td>Participant's subjective belief or reported probability (e.g., on a 0-100% scale) that the AI's provided estimate is correct for a given item.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calibration (User's Metacognitive)</strong></td>
+                            <td>The alignment between a user's subjective confidence in the AI's estimate and the actual, objective accuracy of that estimate. Good calibration means high confidence for correct AI estimates and low confidence for incorrect AI estimates.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calibration Error</strong> (e.g., Brier Score, ECE)</td>
+                            <td>A dependent variable reflecting how well users' confidence ratings align with the AI's actual accuracy. Lower scores indicate better calibration. This measures the quality of metacognitive judgment about the AI's reliability.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calibrated Uncertainty (AI Condition)</strong></td>
+                            <td>An experimental condition where the AI's expressed linguistic uncertainty is deliberately aligned with its (simulated or actual) internal confidence (i.e., more hedging when internal confidence is low, less hedging when high).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uncalibrated/Always Confident (AI Condition)</strong></td>
+                            <td>An experimental condition where the AI always expresses its estimates with confident language, regardless of its internal confidence or actual accuracy.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reliance</strong></td>
+                            <td>The extent to which a user depends on or utilizes the AI's advice. In this study, primarily measured by the participant's forced choice between their own prior estimate and the AI's estimate for an appliance's energy consumption.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Trust (User's)</strong></td>
+                            <td>A broader, more general attitude or belief in the AI's overall capability, reliability, and helpfulness. Typically measured via post-task questionnaires.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Energy Literacy</strong></td>
+                            <td>An individual's understanding of energy concepts, including appliance energy consumption, energy units, and effective energy-saving behaviors.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI Literacy</strong></td>
+                            <td>An individual's understanding of AI concepts, capabilities, limitations, and societal implications.</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Discrimination (in Reliance)</strong></td>
+                            <td>The ability of participants to differentiate between accurate and inaccurate AI advice, typically reflected by relying more on correct AI advice and less on incorrect AI advice. Can be measured by metrics like AUC or a reliance discrimination index.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tabs a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                document.querySelectorAll('.tabs a').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+                this.classList.add('active');
+                const activePane = document.querySelector(this.getAttribute('href'));
+                if (activePane) {
+                    activePane.classList.add('active');
+                }
+
+                const activeTabId = this.getAttribute('href');
+                console.log("Switched to tab:", activeTabId);
+
+                // Re-initialize/resize charts if they are in the newly activated tab
+                // Added a small delay to allow the tab content to become visible before chart rendering/resizing
+                setTimeout(() => {
+                    try {
+                        if (activeTabId === '#background') {
+                            if (energyPerceptionChart) energyPerceptionChart.destroy(); // Destroy before re-init to prevent duplicates
+                            initEnergyPerceptionChart();
+                            if (calibrationGapChart) calibrationGapChart.destroy(); // Destroy before re-init
+                             initCalibrationGapChart();
+                            createLLMInternalDiagram();
+                        } else if (activeTabId === '#experimental-design') {
+                            createMethodsDiagram();
+                        } else if (activeTabId === '#predictions') {
+                            if (relianceInteractionChart) relianceInteractionChart.destroy();
+                            initRelianceInteractionChart();
+                            if (confidenceChart) confidenceChart.destroy();
+                            initConfidenceChart();
+                            if (calibrationErrorChart) calibrationErrorChart.destroy();
+                            initCalibrationErrorChart();
+                            if (knowledgeModerationChart) knowledgeModerationChart.destroy();
+                            initKnowledgeModerationChart();
+                            if (aiLiteracyModerationChart) aiLiteracyModerationChart.destroy();
+                            initAILiteracyModerationChart();
+                        }
+                         // Manually trigger resize for all charts in the active tab after a short delay
+                         const chartsInActiveTab = activePane ? activePane.querySelectorAll('canvas') : [];
+                         chartsInActiveTab.forEach(canvas => {
+                              const chartInstance = Chart.getChart(canvas);
+                              if(chartInstance && typeof chartInstance.resize === 'function') {
+                                   chartInstance.resize();
+                              }
+                         });
+
+                    } catch (err) {
+                        console.error("Error resizing/re-initializing chart on tab switch:", err);
+                    }
+                }, 50); // 50ms delay
+            });
+        });
+
+        // Ensure the first tab's content is visible on load
+        window.addEventListener('load', () => {
+             const initialActiveTab = document.querySelector('.tabs a.active');
+             if (initialActiveTab) {
+                 const initialActivePaneId = initialActiveTab.getAttribute('href');
+                 const initialActivePane = document.querySelector(initialActivePaneId);
+                 if (initialActivePane) {
+                      initialActivePane.classList.add('active');
+                      // Simulate click to trigger chart initialization/resize for the default tab
+                      initialActiveTab.click();
+                 }
+             }
+        });
+
+
+        const attariDataItems = [
+            { name: 'Central AC', actualEnergy: 3500, type: 'used' },
+            { name: 'Electric Clothes Dryer', actualEnergy: 3000, type: 'used' },
+            { name: 'Room Air Conditioner', actualEnergy: 1500, type: 'used' },
+            { name: 'Dishwasher (heated dry)', actualEnergy: 1200, type: 'used' },
+            { name: 'Electric Oven (baking)', actualEnergy: 2000, type: 'used' },
+            { name: 'Plasma TV (older)', actualEnergy: 300, type: 'used' },
+            { name: 'Desktop Computer & Monitor', actualEnergy: 150, type: 'used' },
+            { name: 'Refrigerator (modern)', actualEnergy: 50, type: 'used' },
+            { name: 'Incandescent Bulb (100W)', actualEnergy: 100, type: 'used' },
+            { name: 'LED Bulb (10W equivalent)', actualEnergy: 10, type: 'used' },
+            { name: 'Upgrade to Energy Star Fridge', actualEnergy: 50, type: 'saved' },
+            { name: 'Line-dry Clothes (vs. Dryer)', actualEnergy: 3000, type: 'saved' },
+            { name: 'Lower Thermostat (Winter, per degree)', actualEnergy: 200, type: 'saved' },
+            { name: 'Replace Incandescent with LED', actualEnergy: 90, type: 'saved' },
+            { name: 'Unplug Phone Charger', actualEnergy: 1, type: 'saved' }
+        ];
+
+        function generateEnergyPerceptionData(underestimationFactor, overestimationFactor) {
+            return attariDataItems.map(item => {
+                let perceivedEnergy;
+                if (item.actualEnergy > 500) {
+                    perceivedEnergy = item.actualEnergy / underestimationFactor;
+                } else if (item.actualEnergy < 50) {
+                    perceivedEnergy = item.actualEnergy * overestimationFactor;
+                } else {
+                    const logActual = Math.log(item.actualEnergy);
+                    const logLowThreshold = Math.log(50);
+                    const logHighThreshold = Math.log(500);
+                    const range = logHighThreshold - logLowThreshold;
+                    const pos = (logActual - logLowThreshold) / range;
+                    const perceivedAtLow = 50 * overestimationFactor;
+                    const perceivedAtHigh = 500 / underestimationFactor;
+                    const logPerceivedAtLow = Math.log(Math.max(1, perceivedAtLow));
+                    const logPerceivedAtHigh = Math.log(Math.max(1, perceivedAtHigh));
+                    const logPerceived = logPerceivedAtLow + pos * (logPerceivedAtHigh - logPerceivedAtLow);
+                    perceivedEnergy = Math.exp(logPerceived);
+                }
+                const noiseFactor = 0.85 + Math.random() * 0.3;
+                return {
+                    x: item.actualEnergy,
+                    y: Math.max(1, perceivedEnergy * noiseFactor),
+                    name: item.name,
+                    type: item.type,
+                };
+            });
+        }
+
+        function generateCalibrationData(gapSizePercent, hedgingEffectPercent) {
+             // Generate AI Internal Confidence values from 0 to 100 in steps of 10
+            const modelConfidences = Array.from({length: 11}, (_, i) => i * 10);
+            const gapFactor = gapSizePercent / 100;
+            const hedgeFactor = hedgingEffectPercent / 100;
+
+            // Perfect calibration line (y = x)
+            const perfectCalibration = modelConfidences.map(conf => ({ x: conf, y: conf }));
+
+            // Simulate human perception without calibrated hedging (tendency to overestimate low conf AI)
+            const humanPerceptionDefault = modelConfidences.map(conf => {
+                 // Simple non-linear overestimation model: higher gap at lower AI confidence
+                let perceived = conf + (gapFactor * 100 * Math.exp(-conf / 40)); // Exponential decay of overestimation with AI confidence
+                perceived = Math.min(100, Math.max(0, perceived)); // Clamp values between 0 and 100
+                return { x: conf, y: perceived };
+            });
+
+            // Simulate human perception with calibrated hedging (reduced overestimation, especially at low AI conf)
+            const humanPerceptionHedged = modelConfidences.map(conf => {
+                 // Base overestimation from default model
+                let overestimation = (gapFactor * 100 * Math.exp(-conf / 40));
+                 // Reduction in overestimation due to hedging, stronger at lower AI confidence
+                let reductionDueToHedging = overestimation * hedgeFactor * Math.exp(-(100 - conf) / 30); // Stronger effect when AI confidence is low
+                let perceived = conf + Math.max(0, overestimation - reductionDueToHedging); // Apply reduction, ensure no negative perceived confidence
+                perceived = Math.min(100, Math.max(0, perceived)); // Clamp values between 0 and 100
+                return { x: conf, y: perceived };
+            });
+
+            return { perfectCalibration, humanPerceptionDefault, humanPerceptionHedged };
+        }
+
+        // Chart instances - declared globally to be accessible for resize/destroy
+        let energyPerceptionChart, calibrationGapChart;
+        let relianceInteractionChart, confidenceChart, calibrationErrorChart;
+        let knowledgeModerationChart, aiLiteracyModerationChart;
+
+        function initEnergyPerceptionChart() {
+            console.log("Starting initEnergyPerceptionChart...");
+            try {
+                const underestimationFactor = parseFloat(document.getElementById('underestimationFactor').value);
+                const overestimationFactor = parseFloat(document.getElementById('overestimationFactor').value);
+                const perceptionData = generateEnergyPerceptionData(underestimationFactor, overestimationFactor);
+
+                const ctx = document.getElementById('energyPerceptionChart').getContext('2d');
+                if (energyPerceptionChart) energyPerceptionChart.destroy();
+
+                const energyUsedData = perceptionData.filter(d => d.type === 'used');
+                const energySavedData = perceptionData.filter(d => d.type === 'saved');
+
+                energyPerceptionChart = new Chart(ctx, {
+                    type: 'scatter', // Use scatter to ensure correct plotting of x,y pairs
+                    data: {
+                        datasets: [
+                            { label: 'Energy Used (Perceived)', data: energyUsedData, backgroundColor: 'rgba(231, 76, 60, 0.6)', pointRadius: 7, pointStyle: 'rectRot', borderColor: 'rgba(192, 57, 43, 1)', borderWidth: 1 },
+                            { label: 'Energy Saved (Perceived)', data: energySavedData, backgroundColor: 'rgba(39, 174, 96, 0.6)', pointRadius: 7, pointStyle: 'circle', borderColor: 'rgba(30, 132, 73, 1)', borderWidth: 1 },
+                            // Perfect Accuracy line - spans the range of potential actual values
+                            { label: 'Perfect Accuracy', data: [{x: 1, y: 1}, {x: Math.max(...perceptionData.map(p=>p.x), 10000), y: Math.max(...perceptionData.map(p=>p.x), 10000)}], borderColor: 'rgba(44, 62, 80, 0.7)', borderWidth: 2.5, borderDash: [8, 4], type: 'line', fill: false, pointRadius: 0 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'logarithmic', // Logarithmic scale for wide range of energy values
+                                title: { display: true, text: 'Actual Energy (Wh or equivalent)', font: {weight: '600', size:14} },
+                                min: 0.8, // Start slightly above 0 for log scale
+                                max: 12000, // Adjusted max based on data range
+                                ticks: {
+                                    callback: (val) => (val === 1 || val === 10 || val === 100 || val === 1000 || val === 10000) ? val.toLocaleString() : null, // Show key log values
+                                    font: {size: 11}
+                                }
+                            },
+                            y: {
+                                type: 'logarithmic', // Logarithmic scale for perceived values
+                                title: { display: true, text: 'Perceived Energy (Wh or equivalent)', font: {weight: '600', size:14} },
+                                min: 0.8, // Start slightly above 0 for log scale
+                                max: 12000, // Match x-axis max for square plot
+                                ticks: {
+                                     callback: (val) => (val === 1 || val === 10 || val === 100 || val === 1000 || val === 10000) ? val.toLocaleString() : null, // Show key log values
+                                     font: {size: 11}
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: { display: true, text: 'Attari et al. (2010) Style Energy Perception Bias', font: {size: 18, weight: '600'}, padding: {top: 5, bottom:15} },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctxEl) => `${ctxEl.dataset.data[ctxEl.dataIndex].name || ctxEl.dataset.label}: Actual: ${ctxEl.dataset.data[ctxEl.dataIndex].x.toFixed(0)}, Perceived: ${ctxEl.dataset.data[ctxEl.dataIndex].y.toFixed(0)}`
+                                },
+                                bodyFont: {size: 13},
+                                titleFont: {size:14}
+                            },
+                            legend: { position: 'bottom', labels: { usePointStyle: true, font: {size: 13}, padding: 20 } }
+                        }
+                    }
+                });
+                console.log("EnergyPerceptionChart created successfully.");
+            } catch (err) {
+                console.error("Error in initEnergyPerceptionChart:", err);
+            }
+        }
+
+        function initCalibrationGapChart() {
+            console.log("Starting initCalibrationGapChart...");
+            try {
+                const gapSize = parseInt(document.getElementById('calibrationGapSize').value);
+                const hedgingEffect = parseInt(document.getElementById('hedgingEffect').value);
+                const data = generateCalibrationData(gapSize, hedgingEffect);
+
+                const ctx = document.getElementById('calibrationGapChart').getContext('2d');
+                if (calibrationGapChart) calibrationGapChart.destroy(); // Destroy existing chart instance
+
+                calibrationGapChart = new Chart(ctx, {
+                    type: 'scatter', // Changed to scatter to explicitly plot x,y points
+                    data: {
+                        datasets: [
+                            { label: 'Perfect Calibration', data: data.perfectCalibration, borderColor: 'rgba(39, 174, 96, 0.9)', borderWidth: 2.5, fill: false, pointRadius: 4, borderDash: [6,3], pointBackgroundColor: 'rgba(39, 174, 96, 0.9)', showLine: true }, // Added showLine: true
+                            { label: 'Human Perception (Always Confident AI)', data: data.humanPerceptionDefault, borderColor: 'rgba(231, 76, 60, 0.9)', borderWidth: 2.5, fill: false, pointRadius: 5, tension: 0.2, pointBackgroundColor: 'rgba(231, 76, 60, 0.9)', showLine: true }, // Added showLine: true
+                            { label: 'Human Perception (Calibrated AI Uncertainty)', data: data.humanPerceptionHedged, borderColor: 'rgba(41, 128, 185, 0.9)', borderWidth: 2.5, fill: false, pointRadius: 5, tension: 0.2, pointBackgroundColor: 'rgba(41, 128, 185, 0.9)', showLine: true } // Added showLine: true
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'linear', // Linear scale for percentages
+                                title: { display: true, text: 'AI Internal Confidence / Actual Accuracy (%)', font: {weight: '600', size:14} },
+                                min: 0,
+                                max: 100,
+                                ticks:{font:{size:11}}
+                            },
+                            y: {
+                                type: 'linear', // Linear scale for percentages
+                                title: { display: true, text: 'User\'s Perceived AI Accuracy / Confidence in AI (%)', font: {weight: '600', size:14} },
+                                min: 0,
+                                max: 100,
+                                ticks:{font:{size:11}}
+                            }
+                        },
+                        plugins: {
+                            title: { display: true, text: 'Steyvers et al. Style Calibration Gap', font: {size: 18, weight: '600'}, padding: {top:5, bottom:15} },
+                            tooltip: { mode: 'index', intersect: false, bodyFont:{size:13}, titleFont:{size:14} },
+                            legend: { position: 'bottom', labels: {font:{size:13}, padding:20} }
+                        }
+                    }
+                });
+                console.log("CalibrationGapChart created successfully.");
+            } catch (err) {
+                console.error("Error in initCalibrationGapChart:", err);
+            }
+        }
+
+        function initRelianceInteractionChart() {
+            console.log("Starting initRelianceInteractionChart...");
+            try {
+                const ctx = document.getElementById('relianceInteractionChart').getContext('2d');
+                if (relianceInteractionChart) relianceInteractionChart.destroy();
+                relianceInteractionChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: ['AI Advice Correct', 'AI Advice Incorrect'], datasets: [ { label: 'Reliance (Always Confident AI)', data: [0.80, 0.65], backgroundColor: 'rgba(231, 76, 60, 0.75)', borderColor: 'rgba(192, 57, 43, 1)', borderWidth: 1.5 }, { label: 'Reliance (Calibrated AI Uncertainty)', data: [0.75, 0.35], backgroundColor: 'rgba(52, 152, 219, 0.75)', borderColor: 'rgba(41, 128, 185, 1)', borderWidth: 1.5 } ] },
+                    options: barChartOptions('Proportion Relying on AI', 'Predicted Reliance by AI Style & Correctness', {min:0, max:1, ticks:{font:{size:11}}})
+                });
+                console.log("RelianceInteractionChart created successfully.");
+            } catch (err) {
+                console.error("Error in initRelianceInteractionChart:", err);
+            }
+        }
+
+        function initConfidenceChart() {
+            console.log("Starting initConfidenceChart...");
+            try {
+                const ctx = document.getElementById('confidenceChart').getContext('2d');
+                if (confidenceChart) confidenceChart.destroy();
+                confidenceChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: ['AI Advice Correct', 'AI Advice Incorrect'], datasets: [ { label: 'User Confidence in AI (Always Confident AI)', data: [80, 70], backgroundColor: 'rgba(241, 196, 15, 0.75)', borderColor: 'rgba(212, 172, 13, 1)', borderWidth: 1.5 }, { label: 'User Confidence in AI (Calibrated AI Uncertainty)', data: [75, 40], backgroundColor: 'rgba(142, 68, 173, 0.75)', borderColor: 'rgba(118, 61, 146, 1)', borderWidth: 1.5 } ] },
+                    options: barChartOptions('User Confidence in AI Estimate (%)', 'Predicted User Confidence by AI Style & Correctness', {min:0, max:100, ticks:{font:{size:11}}})
+                });
+                console.log("ConfidenceChart created successfully.");
+            } catch (err) {
+                console.error("Error in initConfidenceChart:", err);
+            }
+        }
+
+        function initCalibrationErrorChart() {
+            console.log("Starting initCalibrationErrorChart...");
+            try {
+                const ctx = document.getElementById('calibrationErrorChart').getContext('2d');
+                if (calibrationErrorChart) calibrationErrorChart.destroy();
+                calibrationErrorChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: ['Low Energy Lit.', 'Medium Energy Lit.', 'High Energy Lit.'], datasets: [ { label: 'Calibration Error (Always Confident AI)', data: [0.30, 0.25, 0.20], backgroundColor: 'rgba(231, 76, 60, 0.75)', borderColor: 'rgba(192, 57, 43, 1)', borderWidth: 1.5 }, { label: 'Calibration Error (Calibrated AI Uncertainty)', data: [0.18, 0.12, 0.10], backgroundColor: 'rgba(52, 152, 219, 0.75)', borderColor: 'rgba(41, 128, 185, 1)', borderWidth: 1.5 } ] },
+                    options: barChartOptions('Calibration Error (e.g., Brier Score - Lower is Better)', 'Predicted Metacognitive Calibration by AI Style & User Literacy', {min:0, max:0.4, ticks:{font:{size:11}}})
+                });
+                console.log("CalibrationErrorChart created successfully.");
+            } catch (err) {
+                console.error("Error in initCalibrationErrorChart:", err);
+            }
+        }
+
+        function initKnowledgeModerationChart() {
+            console.log("Starting initKnowledgeModerationChart...");
+            try {
+                const ctx = document.getElementById('knowledgeModerationChart').getContext('2d');
+                if (knowledgeModerationChart) knowledgeModerationChart.destroy();
+                knowledgeModerationChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: ['Low Energy Lit.', 'Medium Energy Lit.', 'High Energy Lit.'], datasets: [ { label: 'Discrimination (AUC) - Always Confident AI', data: [0.55, 0.60, 0.70], borderColor: 'rgba(231, 76, 60, 0.9)', fill: false, tension: 0.2, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: 'rgba(231, 76, 60, 0.9)' }, { label: 'Discrimination (AUC) - Calibrated AI Uncertainty', data: [0.65, 0.75, 0.80], borderColor: 'rgba(52, 152, 219, 0.9)', fill: false, tension: 0.2, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: 'rgba(52, 152, 219, 0.9)' } ] },
+                    options: lineChartOptions('Discrimination (AUC - Higher is Better)', 'Predicted Moderation by Energy Literacy on Discrimination', {min:0.5, max:0.9, ticks:{font:{size:11}}})
+                });
+                console.log("KnowledgeModerationChart created successfully.");
+            } catch (err) {
+                console.error("Error in initKnowledgeModerationChart:", err);
+            }
+        }
+
+        function initAILiteracyModerationChart() {
+            console.log("Starting initAILiteracyModerationChart...");
+            try {
+                const ctx = document.getElementById('aiLiteracyModerationChart').getContext('2d');
+                if (aiLiteracyModerationChart) aiLiteracyModerationChart.destroy();
+                aiLiteracyModerationChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: ['Low AI Lit.', 'Medium AI Lit.', 'High AI Lit.'], datasets: [ { label: 'Benefit of Calibration (Δ Discrimination AUC)', data: [0.05, 0.10, 0.15], borderColor: 'rgba(39, 174, 96, 0.9)', fill: false, tension: 0.2, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: 'rgba(39, 174, 96, 0.9)' } ] },
+                    options: lineChartOptions('Benefit of Calibrated AI (Δ Discrimination AUC)', 'Predicted Moderation by AI Literacy', {min:0, max:0.25, ticks:{font:{size:11}}})
+                });
+                console.log("AILiteracyModerationChart created successfully.");
+            } catch (err) {
+                console.error("Error in initAILiteracyModerationChart:", err);
+            }
+        }
+
+        function barChartOptions(yLabel, titleText, yAxesOptions = {}) {
+            return {
+                responsive: true, maintainAspectRatio: false,
+                scales: { y: { title: { display: true, text: yLabel, font:{weight:'600', size:14} }, ...yAxesOptions }, x: { title: { display: true, text: 'Experimental Conditions / Groups', font:{weight:'600', size:14} }, ticks:{font:{size:12}} } },
+                plugins: { title: { display: true, text: titleText, font:{size:18, weight:'600'}, padding:{top:5, bottom:15} }, legend: {position: 'bottom', labels:{font:{size:13}, padding:20}}, tooltip:{bodyFont:{size:13}, titleFont:{size:14}} }
+            };
+        }
+        function lineChartOptions(yLabel, titleText, yAxesOptions = {}) {
+             return {
+                responsive: true, maintainAspectRatio: false,
+                scales: { y: { title: { display: true, text: yLabel, font:{weight:'600', size:14} }, ...yAxesOptions }, x: { title: { display: true, text: 'User Characteristic Level', font:{weight:'600', size:14} }, ticks:{font:{size:12}} } },
+                plugins: { title: { display: true, text: titleText, font:{size:18, weight:'600'}, padding:{top:5, bottom:15} }, legend: {position: 'bottom', labels:{font:{size:13}, padding:20}}, tooltip: {mode: 'index', intersect: false, bodyFont:{size:13}, titleFont:{size:14}} }
+            };
+        }
+
+        function createLLMInternalDiagram() {
+            console.log("Starting createLLMInternalDiagram...");
+            try {
+                const diagramContainer = document.getElementById('llmInternalDiagram');
+                if (!diagramContainer) { console.error("LLM Diagram container not found"); return; }
+                const svgContent = `
+                <svg width="750" height="550" viewBox="0 0 750 550" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
+                    <defs> <marker id="arrowMarker" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/></marker> <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="1" dy="1" result="offsetblur"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter> </defs>
+                    <style> .diagBox { stroke-width:1.5; rx:8; ry:8; filter:url(#dropShadow); } .diagLabel { font-family: 'Roboto', Helvetica, Arial, sans-serif; font-size:14px; fill:#333; } .diagTitle { font-size:16px; font-weight:600; fill: var(--primary-color); text-anchor:middle; } .diagText { font-size:13px; fill: var(--text-color); text-anchor:middle; } .diagArrow { stroke:#555; stroke-width:1.8; marker-end:url(#arrowMarker); } </style>
+                    <rect x="250" y="30" width="250" height="80" class="diagBox" style="fill:#eaf3fb; stroke:#a0c9e6;"/> <text x="375" y="55" class="diagTitle">LLM Internal State</text> <text x="375" y="80" class="diagText">Represented Knowledge</text> <text x="375" y="98" class="diagText">Internal Confidence (Probabilities)</text>
+                    <line x1="375" y1="110" x2="375" y2="150" class="diagArrow"/> <text x="385" y="135" class="diagLabel" style="font-size:11px; fill:#666;">Output Generation</text>
+                    <rect x="40" y="160" width="300" height="100" class="diagBox" style="fill:#fdecea; stroke:#f6b7b0;"/> <text x="190" y="185" class="diagTitle" style="fill:var(--accent-color);">AI Output (Uncalibrated)</text> <text x="190" y="210" class="diagText">Numeric Estimate</text> <text x="190" y="228" class="diagText">Standard/Confident Explanation</text>
+                    <rect x="410" y="160" width="300" height="100" class="diagBox" style="fill:#e8f6ef; stroke:#a2d8c0;"/> <text x="560" y="185" class="diagTitle" style="fill:var(--secondary-color);">AI Output (Calibrated)</text> <text x="560" y="210" class="diagText">Numeric Estimate</text> <text x="560" y="228" class="diagText">Explanation + Linguistic Hedging</text> <text x="560" y="245" class="diagText" style="font-size:11px;">(Hedging reflects Internal Confidence)</text>
+                    <line x1="190" y1="260" x2="190" y2="300" class="diagArrow"/> <text x="105" y="285" class="diagLabel" style="font-size:11px; fill:#666;">Presented (Control)</text> <line x1="560" y1="260" x2="560" y2="300" class="diagArrow"/> <text x="455" y="285" class="diagLabel" style="font-size:11px; fill:#666;">Presented (Experimental)</text>
+                    <rect x="250" y="310" width="250" height="110" class="diagBox" style="fill:#fff5e6; stroke:#ffe0b3;"/> <text x="375" y="335" class="diagTitle" style="fill:var(--highlight-color);">Human Cognition</text> <text x="375" y="360" class="diagText">Interpretation of AI Advice</text> <text x="375" y="378" class="diagText">Formation of Perceived Accuracy</text> <text x="375" y="396" class="diagText">Confidence Rating</text> <text x="375" y="414" class="diagText">Reliance Choice</text>
+                    <line x1="375" y1="420" x2="375" y2="460" class="diagArrow"/> <text x="385" y="445" class="diagLabel" style="font-size:11px; fill:#666;">Measures Recorded</text>
+                    <rect x="175" y="470" width="400" height="70" class="diagBox" style="fill:#f0e6fa; stroke:#d3c0e2;"/> <text x="375" y="495" class="diagTitle" style="fill:#8e44ad;">Research Metrics</text> <text x="375" y="518" class="diagText">Reliance, Confidence, Calibration (Brier/ECE), Discrimination (AUC)</text>
+                </svg>`;
+                diagramContainer.innerHTML = svgContent;
+                console.log("LLMInternalDiagram created successfully.");
+            } catch (err) {
+                console.error("Error in createLLMInternalDiagram:", err);
+            }
+        }
+
+        function createMethodsDiagram() {
+            console.log("Starting createMethodsDiagram...");
+            try {
+                const svgContainer = document.getElementById('methodsDiagramSGV');
+                if (!svgContainer) { console.error("Methods Diagram container not found"); return;}
+
+                const svgWidth = 900;
+                const startX = 50;
+                const colWidth = 220;
+                const subColX = startX + colWidth + 80;
+                const subColWidth = 240;
+                const boxBaseHeight = 65; const spacingY = 45; const arrowOffset = 5; let currentY = 40;
+                const elements = [
+                    { id: "surveys", text: ["Part 1: Surveys &", "Baseline Measures"], x: startX + colWidth/2, y: currentY, width: colWidth, height: boxBaseHeight, style:"fill:#e9f5ff; stroke:#a3cffd;" },
+                    { id: "baseline_est", text: ["Initial Energy Estimation", "(Attari Task - Per Appliance)"], x: startX + colWidth/2, y: currentY += boxBaseHeight + spacingY, width: colWidth, height: boxBaseHeight, style:"fill:#e9f5ff; stroke:#a3cffd;" },
+                    { id: "ai_interaction_main", text: ["Part 2: Experimental Task", "(Iterated Per Appliance)"], x: startX + colWidth/2, y: currentY += boxBaseHeight + spacingY + 10, width: colWidth, height: boxBaseHeight + 20, style:"fill:#e6f6f0; stroke:#a0d8b9;"},
+                    { id: "ai_advice", text: ["1. AI Estimate & Explanation", "(Manipulated: Calibrated vs. Confident)"], x: subColX + subColWidth/2, y: currentY - 10, width: subColWidth, height: boxBaseHeight + 10, style:"fill:#fff8e1; stroke:#ffe082;"},
+                    { id: "user_confidence_rating", text: ["2. User Confidence in AI", "(0-100% Scale)"], x: subColX + subColWidth/2, y: currentY + (boxBaseHeight + 10) + spacingY - 35, width: subColWidth, height: boxBaseHeight, style:"fill:#fff8e1; stroke:#ffe082;"},
+                    { id: "forced_choice", text: ["3. Forced Choice (Reliance)", "(Own Initial vs. AI Estimate)"], x: subColX + subColWidth/2, y: currentY + (boxBaseHeight + 10) + spacingY + boxBaseHeight - 35 + spacingY -35, width: subColWidth, height: boxBaseHeight + 10, style:"fill:#fff8e1; stroke:#ffe082;"},
+                    { id: "post_task_measures", text: ["Post-Task Questionnaires", "(Overall Trust, Demographics etc.)"], x: startX + colWidth/2, y: currentY + boxBaseHeight + spacingY + 70, width: colWidth, height: boxBaseHeight + 10, style:"fill:#e9f5ff; stroke:#a3cffd;" },
+                    { id: "data_analysis", text: ["Data Analysis", "(Mixed Models, Calibration, Moderation)"], x: startX + colWidth/2, y: currentY + (boxBaseHeight + 10) * 2 + spacingY * 2 + 60 , width: colWidth, height: boxBaseHeight, style:"fill:#f0e6fa; stroke:#d3c0e2;" }
+                ];
+                let svgContent = `<defs><marker id="flowArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4a5568"/></marker><filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="1" dy="1" result="offsetblur"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style> .flowBox { stroke-width:1.5; rx:8; ry:8; filter:url(#dropShadow); } .flowText { font-family:'Roboto', Helvetica, Arial, sans-serif; font-size:13px; fill:#2d3748; text-anchor:middle; dominant-baseline:middle; } .flowTitle { font-weight:600; font-size:14px; } .flowArrow { stroke:#4a5568; stroke-width:1.8; marker-end:url(#flowArrow); } .loopText {font-family:'Roboto', Helvetica, Arial, sans-serif; font-size:11px; fill:#718096; text-anchor:middle;} </style>`;
+                elements.forEach(el => { /* ... SVG element creation as before ... */
+                    svgContent += `<rect id="${el.id}" x="${el.x - el.width/2}" y="${el.y}" width="${el.width}" height="${el.height}" class="flowBox" style="${el.style}"/>`;
+                    if (Array.isArray(el.text)) { const lineHeight = 18; const startTextY = el.y + el.height/2 - (el.text.length - 1) * lineHeight / 2; el.text.forEach((line, index) => { svgContent += `<text x="${el.x}" y="${startTextY + index * lineHeight}" class="flowText ${index === 0 ? 'flowTitle' : ''}">${line}</text>`; }); } else { svgContent += `<text x="${el.x}" y="${el.y + el.height/2}" class="flowText flowTitle">${el.text}</text>`; }
+                });
+                const mainColCenterX = startX + colWidth/2; const subColCenterX = subColX + subColWidth/2;
+                svgContent += `<line x1="${mainColCenterX}" y1="${elements[0].y + elements[0].height + arrowOffset}" x2="${mainColCenterX}" y2="${elements[1].y - arrowOffset}" class="flowArrow"/>`; svgContent += `<line x1="${mainColCenterX}" y1="${elements[1].y + elements[1].height + arrowOffset}" x2="${mainColCenterX}" y2="${elements[2].y - arrowOffset}" class="flowArrow"/>`; svgContent += `<line x1="${mainColCenterX}" y1="${elements[2].y + elements[2].height + arrowOffset}" x2="${mainColCenterX}" y2="${elements[6].y - arrowOffset}" class="flowArrow"/>`; svgContent += `<line x1="${mainColCenterX}" y1="${elements[6].y + elements[6].height + arrowOffset}" x2="${mainColCenterX}" y2="${elements[7].y - arrowOffset}" class="flowArrow"/>`;
+                svgContent += `<line x1="${elements[2].x + elements[2].width/2 + arrowOffset}" y1="${elements[3].y + elements[3].height/2}" x2="${elements[3].x - elements[3].width/2 - arrowOffset}" y2="${elements[3].y + elements[3].height/2}" class="flowArrow"/>`;
+                svgContent += `<line x1="${subColCenterX}" y1="${elements[3].y + elements[3].height + arrowOffset}" x2="${subColCenterX}" y2="${elements[4].y - arrowOffset}" class="flowArrow"/>`; svgContent += `<line x1="${subColCenterX}" y1="${elements[4].y + elements[4].height + arrowOffset}" x2="${subColCenterX}" y2="${elements[5].y - arrowOffset}" class="flowArrow"/>`;
+                const loopStartX = elements[5].x - elements[5].width/2 - arrowOffset; const loopStartY = elements[5].y + elements[5].height/2; const loopEndX = elements[2].x - elements[2].width/2 - 20;  const loopEndY = elements[2].y + elements[2].height/2;
+                svgContent += `<path d="M ${loopStartX} ${loopStartY} C ${loopStartX - 60} ${loopStartY}, ${loopEndX - 60} ${loopEndY}, ${loopEndX} ${loopEndY}" class="flowArrow" fill="none" stroke-dasharray="5,5"/>`; svgContent += `<text x="${loopEndX - 70}" y="${loopEndY + 5}" class="loopText">Loop per</text>`; svgContent += `<text x="${loopEndX - 70}" y="${loopEndY + 18}" class="loopText">Appliance</text>`;
+                svgContainer.innerHTML = svgContent;
+                console.log("MethodsDiagram created successfully.");
+            } catch (err) {
+                console.error("Error in createMethodsDiagram:", err);
+            }
+        }
+
+        const simAppliances = [ /* ... data as before ... */
+            { name: 'Central Air Conditioner', actualEnergy: 3500, icon: '❄️', typicalUserErrorFactor: 0.4 },
+            { name: 'LED Light Bulb (15W)', actualEnergy: 15, icon: '💡', typicalUserErrorFactor: 2.5 },
+            { name: 'Refrigerator (Energy Star)', actualEnergy: 50, icon: '🧊', typicalUserErrorFactor: 1.8 },
+            { name: 'Electric Clothes Dryer', actualEnergy: 3000, icon: '👕', typicalUserErrorFactor: 0.5 },
+            { name: 'Laptop Computer (in use)', actualEnergy: 50, icon: '💻', typicalUserErrorFactor: 1.5 }
+        ];
+        const simConfidenceLanguage = { /* ... data as before ... */
+            high: (val, app) => `The ${app} definitely uses about <strong>${val} units</strong> of energy per hour. This is a well-established figure for typical models.`,
+            medium: (val, app) => `I estimate the ${app} probably uses approximately <strong>${val} units</strong> of energy per hour. This can vary somewhat with specific models and usage.`,
+            low: (val, app) => `My best guess is the ${app} might use roughly <strong>${val} units</strong> of energy per hour, but this is quite variable. You might want to check specific ratings as it could differ significantly.`
+        };
+        let currentSimTrial = {};
+
+        function startNewSimulationTrial() { /* ... function logic as before ... */
+            const uncertaintyStyle = parseInt(document.getElementById('simUncertaintyLevel').value);
+            const userKnowledge = parseInt(document.getElementById('simUserKnowledgeLevel').value);
+            const isAiAdviceCorrect = parseInt(document.getElementById('simAiActualCorrectness').value);
+            currentSimTrial.appliance = simAppliances[Math.floor(Math.random() * simAppliances.length)];
+            let userEstimateErrorFactor;
+            if (userKnowledge === 0) userEstimateErrorFactor = currentSimTrial.appliance.typicalUserErrorFactor * (currentSimTrial.appliance.actualEnergy > 200 ? 1.8 : 0.5);
+            else if (userKnowledge === 1) userEstimateErrorFactor = currentSimTrial.appliance.typicalUserErrorFactor;
+            else userEstimateErrorFactor = currentSimTrial.appliance.typicalUserErrorFactor * (currentSimTrial.appliance.actualEnergy > 200 ? 0.6 : 1.2);
+            currentSimTrial.userEstimate = Math.round(currentSimTrial.appliance.actualEnergy * userEstimateErrorFactor * (0.9 + Math.random()*0.2));
+            currentSimTrial.userEstimate = Math.max(1, currentSimTrial.userEstimate);
+            if (isAiAdviceCorrect) { currentSimTrial.aiEstimateValue = currentSimTrial.appliance.actualEnergy; currentSimTrial.aiInternalConfidence = 'high';  } else { const errorMagnitude = 0.3 + Math.random() * 0.7;  const errorDirection = Math.random() < 0.5 ? -1 : 1; currentSimTrial.aiEstimateValue = Math.round(currentSimTrial.appliance.actualEnergy * (1 + errorDirection * errorMagnitude)); currentSimTrial.aiEstimateValue = Math.max(1, currentSimTrial.aiEstimateValue); currentSimTrial.aiInternalConfidence = Math.random() < 0.6 ? 'low' : 'medium';  }
+            currentSimTrial.aiLinguisticStyle = uncertaintyStyle === 0 ? 'high' : currentSimTrial.aiInternalConfidence;
+            const simulationArea = document.getElementById('simulationArea');
+            simulationArea.innerHTML = ` <h3 style="text-align:center; margin-bottom:20px;">Trial: Estimating for ${currentSimTrial.appliance.name} ${currentSimTrial.appliance.icon}</h3> <p>Your initial (simulated) estimate for the <strong>${currentSimTrial.appliance.name}</strong> is <strong>${currentSimTrial.userEstimate} units/hr</strong>.</p> <div class="advice-box advice-${currentSimTrial.aiLinguisticStyle}"> <p style="font-weight:600; margin-bottom:8px;">AI Energy Advisor says:</p> <p>${simConfidenceLanguage[currentSimTrial.aiLinguisticStyle](currentSimTrial.aiEstimateValue, currentSimTrial.appliance.name.toLowerCase())}</p> </div> <div class="user-controls"> <label for="simConfidenceSlider" style="font-weight:500;">How confident are you that the AI's estimate (<strong>${currentSimTrial.aiEstimateValue} units</strong>) is correct? <span id="simConfidenceValue" class="slider-value">50</span>%</label> <input type="range" id="simConfidenceSlider" min="0" max="100" value="50" style="width: 100%;"> <div class="confidence-labels"><span>Not at all (0%)</span><span>Very (100%)</span></div> <p style="margin-top: 15px; font-weight:500;">Whose estimate do you choose as the final answer?</p> <div class="decision-btns"> <button onclick="recordSimChoice('user')" class="btn user-btn">My Estimate (${currentSimTrial.userEstimate})</button> <button onclick="recordSimChoice('ai')" class="btn ai-btn">AI's Estimate (${currentSimTrial.aiEstimateValue})</button> </div> </div>`;
+            document.getElementById('simConfidenceSlider').addEventListener('input', function() { document.getElementById('simConfidenceValue').textContent = this.value; });
+            document.getElementById('simulationResults').style.display = 'none';
+        }
+        function recordSimChoice(choice) { /* ... function logic as before ... */
+            const userConfidenceInAI = parseInt(document.getElementById('simConfidenceSlider').value); const resultsDisplay = document.getElementById('simulationResults');
+            const actual = currentSimTrial.appliance.actualEnergy; const userAbsError = Math.abs(currentSimTrial.userEstimate - actual); const aiAbsError = Math.abs(currentSimTrial.aiEstimateValue - actual);
+            let chosenEstimate, chosenAbsError; if (choice === 'user') { chosenEstimate = currentSimTrial.userEstimate; chosenAbsError = userAbsError; } else { chosenEstimate = currentSimTrial.aiEstimateValue; chosenAbsError = aiAbsError; }
+            const reliedOnAI = choice === 'ai'; const aiWasActuallyMoreAccurate = aiAbsError < userAbsError; const userChoseMoreAccurate = (choice === 'ai' && aiWasActuallyMoreAccurate) || (choice === 'user' && !aiWasActuallyMoreAccurate);
+            let resultHTML = `<h3 style="text-align:center; margin-bottom:20px;">Trial Result for ${currentSimTrial.appliance.name}</h3> <p><strong>Actual Energy Consumption:</strong> ${actual} units/hr</p> <ul style="list-style-type: disclosure-closed; padding-left: 20px;"> <li>Your Initial Estimate: ${currentSimTrial.userEstimate} (Error: ${userAbsError})</li> <li>AI's Estimate: ${currentSimTrial.aiEstimateValue} (Error: ${aiAbsError})</li> <li>AI Linguistic Style: ${currentSimTrial.aiLinguisticStyle.charAt(0).toUpperCase() + currentSimTrial.aiLinguisticStyle.slice(1)}</li> <li>Your Confidence in AI: ${userConfidenceInAI}%</li> <li>You Chose: <strong>${choice === 'user' ? 'Your Estimate' : "AI's Estimate"} (${chosenEstimate})</strong></li> <li>Your Chosen Estimate Error: ${chosenAbsError}</li> </ul> <p style="margin-top:15px;"><strong>Outcome:</strong> You ${userChoseMoreAccurate ? '<strong class="correct">correctly</strong> chose the more accurate estimate.' : '<strong class="incorrect">incorrectly</strong> chose the less accurate estimate.'}</p> <p><strong>Reliance:</strong> You ${reliedOnAI ? '<strong>relied</strong> on the AI.' : 'did <strong>not rely</strong> on the AI.'}</p> <p><strong>AI Accuracy Insight:</strong> The AI's advice was ${aiWasActuallyMoreAccurate ? '<strong class="correct">more accurate</strong>' : '<strong class="incorrect">less accurate</strong>'} than your initial estimate.</p>`;
+            const outcomeForBrier = aiWasActuallyMoreAccurate ? 1 : 0;  const brierComponent = ((userConfidenceInAI / 100) - outcomeForBrier) ** 2; resultHTML += `<p style="margin-top:10px;"><strong>Calibration Insight:</strong> Your confidence in AI (${userConfidenceInAI}%) vs. AI being more accurate (${aiWasActuallyMoreAccurate ? 'Yes':'No'}). Brier component for this trial: ${brierComponent.toFixed(3)} (lower is better).</p>`;
+            resultsDisplay.innerHTML = resultHTML; resultsDisplay.style.display = 'block';
+        }
+
+        // Event listeners for sliders and buttons
+        document.getElementById('underestimationFactor').addEventListener('input', function() { document.getElementById('underestimationValue').textContent = parseFloat(this.value).toFixed(1); });
+        document.getElementById('overestimationFactor').addEventListener('input', function() { document.getElementById('overestimationValue').textContent = parseFloat(this.value).toFixed(1); });
+        document.getElementById('calibrationGapSize').addEventListener('input', function() { document.getElementById('calibrationGapValue').textContent = this.value; });
+        document.getElementById('hedgingEffect').addEventListener('input', function() { document.getElementById('hedgingEffectValue').textContent = this.value; });
+        document.getElementById('simUserKnowledgeLevel').addEventListener('input', function() { const levels = ['Low', 'Medium', 'High']; document.getElementById('simUserKnowledgeValue').textContent = levels[parseInt(this.value)]; });
+        document.getElementById('simAiActualCorrectness').addEventListener('change', function() { document.getElementById('simAiCorrectnessValue').textContent = this.options[this.selectedIndex].text; });
+
+        document.getElementById('updateEnergyChart').addEventListener('click', initEnergyPerceptionChart);
+        document.getElementById('updateCalibrationChart').addEventListener('click', initCalibrationGapChart);
+        document.getElementById('startSimulation').addEventListener('click', startNewSimulationTrial);
+
+        window.onload = function() {
+            console.log("Window loaded. Initializing dashboard components.");
+            // Initialize all UI controls that display values
+            try {
+                document.getElementById('underestimationValue').textContent = parseFloat(document.getElementById('underestimationFactor').value).toFixed(1);
+                document.getElementById('overestimationValue').textContent = parseFloat(document.getElementById('overestimationFactor').value).toFixed(1);
+                document.getElementById('calibrationGapValue').textContent = document.getElementById('calibrationGapSize').value;
+                document.getElementById('hedgingEffectValue').textContent = document.getElementById('hedgingEffect').value;
+
+                const simUserKnowledgeInput = document.getElementById('simUserKnowledgeLevel');
+                const simUserKnowledgeLevels = ['Low', 'Medium', 'High'];
+                document.getElementById('simUserKnowledgeValue').textContent = simUserKnowledgeLevels[parseInt(simUserKnowledgeInput.value)];
+
+                const simAiCorrectnessSelect = document.getElementById('simAiActualCorrectness');
+                document.getElementById('simAiCorrectnessValue').textContent = simAiCorrectnessSelect.options[simAiCorrectnessSelect.selectedIndex].text;
+            } catch(err) {
+                console.error("Error initializing slider/select display values:", err);
+            }
+
+            // Initialize all diagrams
+            createLLMInternalDiagram();
+            createMethodsDiagram();
+
+            // The charts in the initial tab will be initialized by the simulated click in the load listener
+            // Charts in other tabs will be initialized when those tabs are clicked.
+
+            console.log("Dashboard initialization complete.");
+        };
+    </script>
+</body>
+</html>

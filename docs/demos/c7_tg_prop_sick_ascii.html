@@ -1,0 +1,2073 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calibrating Trust in an LLM Energy Advisor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', 'Roboto', -apple-system, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin-top: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin-bottom: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            background-color: transparent;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            flex-grow: 1;
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background-color: #f5f5f5;
+            color: #2c3e50;
+        }
+        
+        .tab.active {
+            color: #2c3e50;
+            border-bottom: 3px solid #4ca1af;
+            background-color: #f5f5f5;
+        }
+        
+        .tab-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #2c3e50;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 300px;
+        }
+        
+        .viz-container {
+            width: 100%;
+            height: 400px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #666;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn {
+            background-color: #4ca1af;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2c3e50;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        
+        .key-concept {
+            background-color: #f1f8ff;
+            border-left: 4px solid #4ca1af;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .key-concept h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        
+        .ascii-diagram {
+            font-family: monospace;
+            white-space: pre;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            line-height: 1.2;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            background-color: #fff4de;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+            color: #e67e22;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .ascii-diagram {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Calibrating Trust in an LLM Energy Advisor</h1>
+            <p>The Impact of Linguistic Uncertainty on User Trust and Decision Making</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('overview')">Overview</button>
+            <button class="tab" onclick="openTab('attari')">Energy Perception</button>
+            <button class="tab" onclick="openTab('steyvers')">AI Confidence</button>
+            <button class="tab" onclick="openTab('energy-advisor')">LLM Energy Advisor</button>
+            <button class="tab" onclick="openTab('task-design')">Experimental Design</button>
+            <button class="tab" onclick="openTab('individual-differences')">Individual Differences</button>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <h2>Understanding Human-AI Trust in Energy Decision Making</h2>
+            
+            <div class="key-concept">
+                <h4>Research Question</h4>
+                <p>"Given that people often misunderstand energy consumption (Attari), how will they react when an LLM energy advisor gives them advice, especially when we deliberately make that AI express different levels of linguistic certainty (inspired by Steyvers)?"</p>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>The Problem: Energy Misconceptions</h3>
+                        </div>
+                        <p>Attari et al. (2010) demonstrated that people systematically:</p>
+                        <ul>
+                            <li><span class="highlight">Underestimate</span> the energy used by high-consumption appliances (like air conditioners)</li>
+                            <li><span class="highlight">Overestimate</span> the energy used by low-consumption ones (like light bulbs)</li>
+                            <li>Focus on less effective <span class="highlight">"curtailment"</span> actions rather than more impactful <span class="highlight">"efficiency"</span> improvements</li>
+                        </ul>
+                        
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Energy Perception (Actual vs. Perceived)
+                                                 ┌────────────────┐
+3500 ┤                                          │  Perfect        │
+     │                                          │  Accuracy       │
+3000 ┤                                          └────────────────┘
+     │                      Perfect Accuracy Line      /
+2500 ┤                                           /
+     │                                        /
+2000 ┤                                     /
+     │                                  /
+1500 ┤                               /
+     │                            /           ┌────────────────┐
+1000 ┤                         /              │  Human         │
+     │                      /                 │  Perception    │
+ 500 ┤ - - - - - - - - - /- - - - - - - - -  └────────────────┘
+     │                /       Human Perception (Compressed)
+   0 ┼──────────────┬─────────┬─────────┬─────────┬──────────┐
+     0            500       1000      1500      2000       3500
+                           Actual Energy (Units)
+                           
+Factor of ~2.8 underestimation for high-energy appliances!
+</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>The Challenge: AI Trust Calibration</h3>
+                        </div>
+                        <p>Steyvers et al. (2025) showed that:</p>
+                        <ul>
+                            <li>A <span class="highlight">"calibration gap"</span> exists between an LLM's internal confidence and human perception</li>
+                            <li>Users typically <span class="highlight">overestimate</span> LLM accuracy, especially with longer or confident-sounding explanations</li>
+                            <li>Using <span class="highlight">appropriate hedging language</span> when confidence is low helps narrow this gap</li>
+                        </ul>
+                        
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Calibration Gap (Model vs. Human Confidence)
+                                                 ┌────────────────┐
+100% ┤                                          │  Perfect        │
+     │                                          │  Calibration    │
+ 80% ┤                      Perfect Calibration └────────────────┘
+     │                                  /
+     │                               /     ┌────────────────┐
+ 60% ┤                            /        │  Model         │
+     │          Human Perception /         │  Confidence    │
+     │                        /            └────────────────┘
+ 40% ┤                     /
+     │                  /                   ┌────────────────┐
+     │       Model    /                     │  Human         │
+ 20% ┤     Confidence                       │  Perception    │
+     │                                      └────────────────┘
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                     Confidence in Answer confidence exceeds model confidence, creating a calibration gap!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>The Simulation: LLM Energy Advisor with Uncertainty Expression</h3>
+                </div>
+                <p>This simulation explores how varying the linguistic expression of uncertainty in an LLM's energy advice affects:</p>
+                <ul>
+                    <li>Users' trust in and reliance on the AI advisor</li>
+                    <li>The likelihood of users choosing the AI's estimate over their own prior estimate</li>
+                    <li>How individual differences (energy knowledge, AI literacy, numeracy) moderate these effects</li>
+                </ul>
+                
+                <div class="viz-container">
+                    <div class="ascii-diagram">
+Experiment Flow: Trust Calibration in an LLM Energy Advisor
+
+┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐
+│ Phase 1:          │  │ Phase 2:          │  │ Phase 3:          │
+│ Energy Estimation │  │ AI Advice         │  │ Decision Making   │
+│                   │  │                   │  │                   │
+│ • Estimate energy │  │ • View AI's       │  │ • Choose between  │
+│   for appliances  │──▶   energy estimate │──▶   own estimate    │
+│   (Attari task)   │  │   with explanation│  │   and AI's        │
+│                   │  │ • Rate confidence │  │                   │
+│                   │  │   in AI's estimate│  │                   │
+└───────────────────┘  └───────────────────┘  └───────────────────┘
+                              ▲     │
+                              │     │
+                              │     ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Manipulation: Three levels of linguistic uncertainty        │
+│                                                             │
+│ 1. Confident: "A laptop definitely uses 50 energy units..." │
+│ 2. Medium: "A laptop typically uses around 50 units..."     │
+│ 3. Uncertain: "I believe a laptop might use about 50..."    │
+└─────────────────────────────────────────────────────────────┘
+</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Key Measures</h4>
+                        <ul>
+                            <li><strong>Reliance:</strong> Choice between own energy estimate and AI's estimate</li>
+                            <li><strong>Confidence:</strong> User's confidence rating in AI's estimate (0-100%)</li>
+                            <li><strong>Calibration:</strong> Alignment between confidence and actual accuracy</li>
+                            <li><strong>Discrimination:</strong> Ability to distinguish correct vs. incorrect AI advice</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col">
+                        <h4>Key Hypotheses</h4>
+                        <ul>
+                            <li>Uncertainty expressions will decrease reliance on AI estimates (but more so for incorrect estimates)</li>
+                            <li>Uncertainty expressions will improve appropriate reliance (choosing the more accurate estimate)</li>
+                            <li>Individual differences in energy knowledge and AI literacy will moderate these effects</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="openTab('energy-advisor')">Explore Simulation</button>
+            </div>
+        </div>
+        
+        <!-- Energy Perception (Attari) Tab -->
+        <div id="attari" class="tab-content">
+            <h2>Energy Perception Biases (Attari et al., 2010)</h2>
+            
+            <div class="key-concept">
+                <h4>Key Finding</h4>
+                <p>People systematically compress the true distribution of energy magnitudes—overestimating low-consumption actions and underestimating high-leverage actions by roughly a factor of three (mean ratio ≈ 2.8).</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>The Compression Effect</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Attari et al. (2010) asked 505 participants to estimate energy use for various household devices relative to a 100-watt light bulb (defined as 100 units). The results revealed a systematic "compression" pattern:</p>
+                        
+                        <ul>
+                            <li>The slope of perceived vs. actual energy was just 0.28 (vs. 1.0 for perfect accuracy)</li>
+                            <li>Small energy users (e.g., laptop at ~35W) were overestimated</li>
+                            <li>Large energy users (e.g., central AC at ~3500W) were severely underestimated</li>
+                        </ul>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Compression Factor:</span>
+                                <span id="compression-value">2.8</span>
+                            </div>
+                            <input type="range" min="1" max="5" step="0.1" value="2.8" class="slider" id="compression-slider" oninput="updateCompressionViz()">
+                            <p><small>Adjust to see how different compression factors affect energy perception</small></p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container" id="compression-viz">
+                            <div class="ascii-diagram" id="compression-diagram">
+Energy Perception Based on Compression Factor: 2.8
+                                                 
+3500 ┤                     Perfect Accuracy
+     │                            /
+3000 ┤                         /
+     │                      /
+2500 ┤                   /
+     │                /
+2000 ┤             /
+     │          /
+1500 ┤       /
+     │    /                      Perceived Energy
+1000 ┤ /                              /
+     │                            /
+ 500 ┤                       /
+     │                  /
+   0 ┼──────────────────────────────────────────┐
+     0   500   1000   1500   2000   2500   3000   3500
+                    Actual Energy (Units)
+
+People consistently underestimate high-energy appliances
+and overestimate low-energy ones.
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Curtailment vs. Efficiency Actions</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Attari et al. also found that people focused more on <strong>curtailment actions</strong> (using less) rather than <strong>efficiency actions</strong> (using better technology), despite efficiency actions often saving more energy:</p>
+                        
+                        <ul>
+                            <li>19.6% mentioned "turning off lights" as most effective (curtailment)</li>
+                            <li>Only 3.6% mentioned "using efficient light bulbs" (efficiency)</li>
+                            <li>12.9% mentioned "driving less/using public transit" (curtailment)</li>
+                            <li>Only 2.8% mentioned "driving efficient cars/hybrids" (efficiency)</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Key Implication</h4>
+                            <p>Even when individuals are motivated to "do their part," their baseline knowledge is too noisy and too flat to prioritize effective behaviors.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Energy-Saving Actions: Perceived vs. Actual Impact
+                                            
+Perceived as High Impact:                         Actual Impact:
+┌────────────────────────┐                      ┌────────────────────────┐
+│ Turn off lights        │████████████████████  │ Turn off lights        │█████
+│ (19.6% mentioned)      │                      │ (100 units)            │
+└────────────────────────┘                      └────────────────────────┘
+┌────────────────────────┐                      ┌────────────────────────┐
+│ Drive less             │████████████▌         │ Drive less             │█████████████████████
+│ (12.9% mentioned)      │                      │ (1800 units)           │
+└────────────────────────┘                      └────────────────────────┘
+┌────────────────────────┐                      ┌────────────────────────┐
+│ Efficient light bulbs  │███▌                  │ Efficient light bulbs  │████
+│ (3.6% mentioned)       │                      │ (75 units)             │
+└────────────────────────┘                      └────────────────────────┘
+┌────────────────────────┐                      ┌────────────────────────┐
+│ Efficient cars/hybrids │██▋                   │ Efficient cars/hybrids │███████████████
+│ (2.8% mentioned)       │                      │ (1500 units)           │
+└────────────────────────┘                      └────────────────────────┘
+┌────────────────────────┐                      ┌────────────────────────┐
+│ Insulate home          │█▋                    │ Insulate home          │████████████
+│ (2.1% mentioned)       │                      │ (1200 units)           │
+└────────────────────────┘                      └────────────────────────┘
+
+People focus on visible curtailment actions over more impactful efficiency improvements!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Individual Differences in Energy Perception</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Attari et al. found that energy perception accuracy was influenced by several individual factors:</p>
+                        
+                        <ul>
+                            <li><strong>Numeracy:</strong> Higher numeracy skills led to more accurate estimates</li>
+                            <li><strong>Energy Knowledge:</strong> Those with prior energy knowledge made more accurate estimates</li>
+                            <li><strong>Environmental Attitudes:</strong> Pro-environmental attitudes correlated with more accurate perceptions</li>
+                        </ul>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Numeracy Level:</span>
+                                <span id="numeracy-level">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="numeracy-slider" oninput="updateIndividualDiffViz()">
+                            
+                            <div class="slider-label">
+                                <span>Energy Knowledge:</span>
+                                <span id="energy-knowledge">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="energy-knowledge-slider" oninput="updateIndividualDiffViz()">
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container" id="individual-diff-viz">
+                            <div class="ascii-diagram" id="individual-diff-diagram">
+Energy Perception Accuracy by Individual Differences
+                                             
+High │                   ★
+     │               ★       ★
+     │           ★               
+     │       ★                   ★
+     │   ★                           ★
+Med  │                                   ★ 
+     │★                                     ★
+     │                                         ★
+     │                                           
+     │                                            ★
+Low  │                                              ★
+     └───────────────────────────────────────────────
+        Low           Medium           High
+                Energy Knowledge Level
+
+★ = Perception Accuracy (lower compression)
+                                
+Numeracy Level: Medium
+                                
+Higher numeracy and energy knowledge lead to 
+more accurate energy perceptions (less compression).
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-concept">
+                <h4>Mathematical Model of Compression</h4>
+                <div class="ascii-diagram">
+log₁₀Perception_ij = β₀j + β₁j·log₁₀Actual_i + β₂j·(log₁₀Actual_i)² + r_ij
+
+Where:
+- β₀j is the intercept for participant j
+- β₁j is the slope (found to be 0.28, ideally 1.0)
+- β₂j is the quadratic term (found to be -0.19)
+- Compression factor = 1/β₁j ≈ 3.57 (typically reported as ~2.8)
+</div>
+            </div>
+        </div>
+        
+        <!-- AI Confidence (Steyvers) Tab -->
+        <div id="steyvers" class="tab-content">
+            <h2>AI Confidence Calibration (Steyvers et al., 2025)</h2>
+            
+            <div class="key-concept">
+                <h4>Key Finding</h4>
+                <p>Default LLM explanations create a calibration gap: users' judged probability that the model is correct ("human confidence") is substantially higher than the model's own token-level probability ("model confidence")—especially when explanations are long or categorical.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>The Calibration Gap</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Steyvers et al. found a mismatch between:</p>
+                        <ul>
+                            <li><strong>Model Confidence</strong>: The LLM's internal confidence in its answer (measured via token probabilities)</li>
+                            <li><strong>Human Confidence</strong>: How confident users feel about the LLM's answer after reading its explanation</li>
+                        </ul>
+                        
+                        <p>This <strong>calibration gap</strong> represents the difference between perceived reliability and actual reliability. Their findings showed:</p>
+                        <ul>
+                            <li>Users consistently overestimate LLM accuracy with default explanations</li>
+                            <li>The LLM's own internal confidence is better calibrated than human perceptions</li>
+                            <li>This creates a gap where users trust AI more than warranted</li>
+                        </ul>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Explanation Style:</span>
+                                <span id="explanation-style">Moderately Confident</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="explanation-style-slider" oninput="updateCalibrationGapViz()">
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container" id="calibration-gap-viz">
+                            <div class="ascii-diagram" id="calibration-gap-diagram">
+Calibration Diagram: Moderately Confident Explanations
+                                                 
+100% ┤                                       /
+     │                                    /
+     │                   Perfect      /
+ 80% ┤                  Calibration/      
+     │                         /        ○  Human Confidence
+     │                      /         /         
+ 60% ┤                   /         /        
+     │                /        /          
+     │             /       /  □  Model Confidence
+ 40% ┤          /      /              
+     │       /     /                
+     │    /    /                      
+ 20% ┤ /   /    Expected Calibration Error (ECE):
+     │/                        - Model: 0.05
+     │                         - Human: 0.17
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                  Confidence in Answer
+
+Default explanations lead to overconfidence in LLM answers!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>The Discrimination Gap</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Steyvers et al. also found that humans struggle to distinguish between correct and incorrect AI answers compared to the AI's own ability:</p>
+                        
+                        <ul>
+                            <li><strong>Discrimination ability</strong> measures how well confidence ratings distinguish between correct and incorrect answers</li>
+                            <li>Measured using AUC (Area Under Curve), where 0.5 is random guessing and 1.0 is perfect discrimination</li>
+                            <li>LLM models had AUC of 0.75-0.78 (good discrimination)</li>
+                            <li>Humans reviewing default explanations had much lower AUC of ~0.59 (poor discrimination)</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>AUC (Area Under Curve)</h4>
+                            <p>This metric shows whether confidence is higher for correct answers than incorrect ones. When viewing default LLM explanations, humans were barely better than random guessing at distinguishing correct from incorrect AI advice!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Discrimination Ability (AUC)
+                                             
+1.0 ┤          Perfect Discrimination
+    │
+    │
+0.8 ┤          ┌────────┐
+    │          │ 0.76   │  Model Discrimination
+    │          │        │
+    │          └────────┘
+0.6 ┤          ┌────────┐
+    │          │ 0.59   │  Human Discrimination
+    │          │        │  (Default Explanations)
+    │          └────────┘
+    │          - - - - - - - - - - - - - - - - - -
+0.5 ┤          Random Guessing
+    │
+    │
+0.4 ┤
+
+AUC of 0.59 means humans were only slightly better
+than chance at detecting incorrect AI answers!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Factors Affecting Human Confidence</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4>Effect of Explanation Style</h4>
+                        <p>Steyvers et al. found that how the LLM expresses confidence significantly impacts user perception:</p>
+                        
+                        <div class="key-concept">
+                            <h4>Linguistic Expression Styles</h4>
+                            <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────┐
+│ High Confidence:                                    │
+│ "The capital of Australia is definitely Canberra.   │
+│  This is a well-established fact."                  │
+├─────────────────────────────────────────────────────┤
+│ Medium Confidence:                                  │
+│ "The capital of Australia is Canberra, which was    │
+│  designated as the capital in the early 20th        │
+│  century."                                          │
+├─────────────────────────────────────────────────────┤
+│ Low Confidence:                                     │
+│ "I believe the capital of Australia is Canberra,    │
+│  though I'm not entirely certain. You may want to   │
+│  verify this information."                          │
+└─────────────────────────────────────────────────────┘</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <h4>Effect of Explanation Length</h4>
+                        <p>Longer explanations led to higher human confidence <em>without</em> improving discrimination:</p>
+                        
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Effect of Explanation Length on Human Confidence
+                                             
+100% ┤                       
+     │                     ┌────────┐
+ 80% ┤                     │ 78%    │
+     │          ┌────────┐ │        │
+     │          │ 65%    │ │        │
+ 60% ┤ ┌────────┐│        │ │        │
+     │ │ 55%    ││        │ │        │
+     │ │        ││        │ │        │
+ 40% ┤ │        ││        │ │        │
+     │ │        ││        │ │        │
+     │ │        ││        │ │        │
+ 20% ┤ │        ││        │ │        │
+     │ │        ││        │ │        │
+     │ │        ││        │ │        │
+  0% ┼─┴────────┴┴────────┴─┴────────┴─
+      Uncertainty   Medium      Long
+         Only     Explanation Explanation
+
+Longer explanations increased confidence without
+improving actual discrimination ability!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Narrowing the Gaps: Appropriate Uncertainty Communication</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Steyvers et al. demonstrated that tailoring the explanation's tone to reflect the model's internal confidence can narrow both the calibration gap and the discrimination gap:</p>
+                        
+                        <ul>
+                            <li>Using hedging language when model confidence is low</li>
+                            <li>Using more definitive language when model confidence is high</li>
+                            <li>This improved human calibration and discrimination</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Key Implication</h4>
+                            <p>Appropriate linguistic uncertainty cues can help users weight AI advice in proportion to its likely accuracy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Calibration with Adaptive Uncertainty
+                                                 
+100% ┤                                       /
+     │                                    /
+     │                              Δ  /
+ 80% ┤                             /
+     │                          /
+     │                       / 
+ 60% ┤                    /        
+     │                 /     
+     │              /     
+ 40% ┤           /      ○ Matched Uncertainty
+     │        /           (Human)
+     │     /         □ Matched Uncertainty
+ 20% ┤  /               (Model)
+     │/               Δ Default Explanations
+     │                   (Human)
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                  Confidence in Answer
+
+When uncertainty expressions match model confidence,
+the calibration gap narrows significantly!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-concept">
+                <h4>Technical Approach to Measuring Confidence</h4>
+                <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│ LLM Confidence Measurement                                  │
+├─────────────────────────────────────────────────────────────┤
+│ Multiple-choice questions:                                  │
+│ - Read out token probabilities for different answer options │
+│ - Normalize across options to get model confidence          │
+│                                                             │
+│ Short-answer questions:                                     │
+│ - Use "pTrue" method asking model if its answer is correct  │
+│ - Normalized probability of "true" = model confidence       │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ Key Metrics                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ Expected Calibration Error (ECE):                           │
+│ ECE = Σ(|Bm|/N · |conf(Bm) - acc(Bm)|)                     │
+│ Measures overall calibration error across confidence bins   │
+│                                                             │
+│ Area Under Curve (AUC):                                     │
+│ Measures discrimination between correct/incorrect answers   │
+│ AUC = 0.5 (random) to 1.0 (perfect discrimination)         │
+└─────────────────────────────────────────────────────────────┘</div>
+            </div>
+        </div>
+        
+        <!-- LLM Energy Advisor Tab -->
+        <div id="energy-advisor" class="tab-content">
+            <h2>LLM Energy Advisor Simulation</h2>
+            
+            <div class="key-concept">
+                <h4>Simulation Purpose</h4>
+                <p>This simulation explores how linguistic uncertainty in LLM energy advice affects user trust, decision making, and the calibration of confidence judgments.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Simulation Controls</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4>User Characteristics</h4>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Energy Domain Knowledge:</span>
+                                <span id="user-energy-knowledge">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="user-energy-knowledge-slider" oninput="updateSimulation()">
+                            
+                            <div class="slider-label">
+                                <span>AI Literacy:</span>
+                                <span id="user-ai-literacy">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="user-ai-literacy-slider" oninput="updateSimulation()">
+                            
+                            <div class="slider-label">
+                                <span>Numeracy Level:</span>
+                                <span id="user-numeracy">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="user-numeracy-slider" oninput="updateSimulation()">
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <h4>AI Advisor Settings</h4>
+                        
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Linguistic Uncertainty:</span>
+                                <span id="ai-uncertainty">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="ai-uncertainty-slider" oninput="updateSimulation()">
+                            
+                            <div class="slider-label">
+                                <span>Explanation Length:</span>
+                                <span id="ai-explanation-length">Medium</span>
+                            </div>
+                            <input type="range" min="1" max="3" step="1" value="2" class="slider" id="ai-explanation-length-slider" oninput="updateSimulation()">
+                            
+                            <div class="slider-label">
+                                <span>AI Correctness Rate:</span>
+                                <span id="ai-accuracy">70%</span>
+                            </div>
+                            <input type="range" min="50" max="90" step="5" value="70" class="slider" id="ai-accuracy-slider" oninput="updateSimulation()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Simulation Results</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="viz-container" id="trust-calibration-viz">
+                            <div class="ascii-diagram" id="simulation-viz">
+Trust Calibration by Linguistic Uncertainty
+                                                 
+100% ┤                                       /
+     │                                    /
+     │                                 /
+ 80% ┤             Low Uncertainty  □/
+     │                            /□  □
+     │                         /  □
+ 60% ┤        Medium Uncertainty/x     □
+     │                       /x    
+     │                    / x        
+ 40% ┤                 /   x      
+     │              /     x    
+     │     High Uncertainty    
+ 20% ┤         o  /        
+     │        o /         □ Low Uncertainty
+     │      o /           x Medium Uncertainty
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                  Confidence in Answer
+
+Higher uncertainty expressions improve calibration!
+</div>
+                        </div>
+                        
+                        <div class="viz-container" id="reliance-decision-viz">
+                            <div class="ascii-diagram" id="reliance-viz">
+Reliance Decisions by Uncertainty &amp; AI Correctness
+                                             
+100% ┤          
+     │          ┌────────┐
+     │          │        │          ┌────────┐
+ 80% ┤          │        │          │        │         Accept Correct AI
+     │          │        │  ┌────────┐       │
+     │          │        │  │        │       │
+ 60% ┤          │        │  │        │       │
+     │          │        │  │        │ ┌────────┐
+     │          │        │  │        │ │        │
+ 40% ┤ ┌────────┐        │  │        │ │        │     Accept Incorrect AI
+     │ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+ 20% ┤ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+  0% ┼─┴────────┴────────┴──┴────────┴─┴────────┴─
+         High       Medium              Low
+       Uncertainty  Uncertainty       Uncertainty
+
+Higher uncertainty decreases incorrect AI acceptance
+while maintaining correct AI acceptance!
+</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <h4>Key Metrics</h4>
+                        <table id="metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                    <th>Interpretation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Calibration Gap</td>
+                                    <td id="calibration-gap-value">0.15</td>
+                                    <td>Difference between user confidence and actual accuracy</td>
+                                </tr>
+                                <tr>
+                                    <td>AUC (Discrimination)</td>
+                                    <td id="auc-value">0.65</td>
+                                    <td>Ability to distinguish correct from incorrect AI advice</td>
+                                </tr>
+                                <tr>
+                                    <td>Appropriate Reliance</td>
+                                    <td id="appropriate-reliance-value">68%</td>
+                                    <td>% of choices where user selected the more accurate estimate</td>
+                                </tr>
+                                <tr>
+                                    <td>AI Acceptance Rate</td>
+                                    <td id="ai-acceptance-rate">62%</td>
+                                    <td>% of cases where user chose AI estimate over own estimate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="viz-container" id="individual-differences-impact-viz">
+                            <div class="ascii-diagram" id="individual-diff-impact">
+Impact of Individual Differences on Trust Calibration
+  
+              Calibration Error by Energy Knowledge Level
+                                             
+0.25 │ •
+     │    
+0.20 │     •        High AI Uncertainty
+     │          •          
+0.15 │               •          
+     │                    •  Medium AI Uncertainty
+0.10 │                         •
+     │                              •  
+0.05 │                                   • Low AI Uncertainty
+     │                                       
+0.00 └───────────────────────────────────────────────
+        Low           Medium           High
+                Energy Knowledge Level
+
+Higher energy knowledge allows better use of
+uncertainty cues for trust calibration!
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Interactive Energy Advice Task</h3>
+                </div>
+                <p>Experience the task from a participant's perspective. You'll first estimate energy use for an appliance, then see the AI's estimate with explanation, and finally choose between your estimate and the AI's.</p>
+                
+                <div id="task-simulation">
+                    <!-- Phase 1: User provides energy estimate -->
+                    <div id="phase1" class="task-phase">
+                        <h4>Phase 1: Energy Estimation</h4>
+                        <p>How much energy does the following appliance use compared to a standard 100-watt incandescent light bulb (defined as 100 energy units)?</p>
+                        
+                        <div class="card" style="background-color: #f9f9f9;">
+                            <h4 id="current-appliance">Central Air Conditioner (1 hour)</h4>
+                            <p>Your estimate: <input type="number" id="user-energy-estimate" min="1"> energy units</p>
+                            <button class="btn" onclick="submitUserEstimate()">Submit Estimate</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Phase 2: User sees AI estimate and explanation -->
+                    <div id="phase2" class="task-phase" style="display: none;">
+                        <h4>Phase 2: AI Energy Advisor</h4>
+                        <p>The AI Energy Advisor has provided the following estimate and explanation:</p>
+                        
+                        <div class="card" style="background-color: #f9f9f9;">
+                            <h4 id="ai-appliance">Central Air Conditioner (1 hour)</h4>
+                            <p><strong>AI Estimate:</strong> <span id="ai-energy-estimate">3000</span> energy units</p>
+                            <p><strong>AI Explanation:</strong></p>
+                            <div id="ai-explanation" style="padding: 15px; background-color: #fff; border-radius: 6px; border-left: 4px solid #4ca1af;">
+                                <!-- AI explanation will be displayed here -->
+                            </div>
+                            
+                            <h4 style="margin-top: 20px;">Your Confidence Rating</h4>
+                            <p>How confident are you that the AI's estimate is correct?</p>
+                            
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>Your Confidence:</span>
+                                    <span id="task-user-confidence-value">50%</span>
+                                </div>
+                                <input type="range" min="0" max="100" step="1" value="50" class="slider" id="task-user-confidence-slider" oninput="updateTaskUserConfidence()">
+                            </div>
+                            
+                            <button class="btn" style="margin-top: 15px;" onclick="submitConfidence()">Submit Confidence</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Phase 3: User chooses between own estimate and AI estimate -->
+                    <div id="phase3" class="task-phase" style="display: none;">
+                        <h4>Phase 3: Decision</h4>
+                        <p>Now you need to decide which estimate you believe is more accurate.</p>
+                        
+                        <div class="card" style="background-color: #f9f9f9;">
+                            <h4 id="decision-appliance">Central Air Conditioner (1 hour)</h4>
+                            <div class="row">
+                                <div class="col" style="text-align: center;">
+                                    <h4>Your Estimate</h4>
+                                    <p id="user-estimate-display">2500 energy units</p>
+                                    <button class="btn" onclick="chooseUserEstimate()">Choose Your Estimate</button>
+                                </div>
+                                
+                                <div class="col" style="text-align: center;">
+                                    <h4>AI Estimate</h4>
+                                    <p id="ai-estimate-display">3000 energy units</p>
+                                    <button class="btn" onclick="chooseAIEstimate()">Choose AI Estimate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Results -->
+                    <div id="task-results" style="display: none;">
+                        <h4>Task Results</h4>
+                        <div class="card" style="background-color: #f9f9f9;">
+                            <p>The actual energy use for <span id="result-appliance">Central Air Conditioner (1 hour)</span> is <span id="actual-energy-value">3500</span> energy units.</p>
+                            
+                            <p>Your estimate was <span id="result-user-estimate">2500</span> energy units (<span id="user-accuracy-assessment">28.6% error</span>).</p>
+                            
+                            <p>The AI's estimate was <span id="result-ai-estimate">3000</span> energy units (<span id="ai-accuracy-assessment">14.3% error</span>).</p>
+                            
+                            <p>You chose the <span id="chosen-estimate">AI's</span> estimate, which was <span id="decision-assessment">better</span>.</p>
+                            
+                            <button class="btn" style="margin-top: 15px;" onclick="startNewTask()">Try Another Appliance</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Task Design Tab -->
+        <div id="task-design" class="tab-content">
+            <h2>Experimental Design: Calibrating Trust in an LLM Energy Advisor</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Experimental Design Overview</h3>
+                </div>
+                <p>The study uses a 4 (items, within) × 3 (tone: confident / hedged-medium / hedged-low, nested) design with the following key components:</p>
+                
+                <div class="viz-container">
+                    <div class="ascii-diagram">
+Design: 4 (items, within) × 3 (tone: confident / hedged-medium / hedged-low, nested)
+
+┌────────────────────────────────────────────────────────────────────────┐
+│                      Independent Variables                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ • Linguistic Uncertainty (Tone): Experimental Manipulation              │
+│   - Confident: Definitive language with no hedging                     │
+│   - Hedged-Medium: Moderate uncertainty expressions                    │
+│   - Hedged-Low: Strong uncertainty expressions                         │
+│                                                                        │
+│ • AI Advice Accuracy: Not experimentally manipulated                   │
+│   - Correct advice (AI estimate closer to true value than user's)      │
+│   - Incorrect advice (user's estimate closer to true value than AI's)  │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│                     Procedure &amp; Measures                                │
+├────────────────────────────────────────────────────────────────────────┤
+│ Phase 1: Energy Estimation                                             │
+│ • Participants estimate energy use for appliances (Attari-style task)  │
+│ • Measures baseline energy mental model and perception bias            │
+│                                                                        │
+│ Phase 2: AI Advice &amp; Confidence Rating                                 │
+│ • View AI's energy estimate with explanation (manipulation applied)    │
+│ • Rate confidence in AI's estimate (0-100% slider)                     │
+│ • Measures trust in AI advice                                          │
+│                                                                        │
+│ Phase 3: Comparative Decision                                          │
+│ • Choose between own estimate and AI's estimate                        │
+│ • Measures reliance behavior                                           │
+└────────────────────────────────────────────────────────────────────────┘
+</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Dependent Variables</h4>
+                        <ul>
+                            <li><strong>Reliance Decision:</strong> User's choice between their own estimate and the AI's estimate</li>
+                            <li><strong>Confidence Rating:</strong> User's confidence in the AI's estimate (0-100%)</li>
+                            <li><strong>Calibration Metrics:</strong> Measures of the alignment between confidence and accuracy</li>
+                            <li><strong>Discrimination Metrics:</strong> Ability to distinguish correct vs. incorrect AI advice</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col">
+                        <h4>Individual Difference Measures</h4>
+                        <ul>
+                            <li><strong>Energy Domain Knowledge:</strong> Accuracy of baseline energy estimates + Energy Literacy Test</li>
+                            <li><strong>AI Literacy:</strong> AICOS-SV Scale (measuring objective knowledge about AI)</li>
+                            <li><strong>Numeracy:</strong> Berlin Numeracy Test (measuring numerical reasoning)</li>
+                            <li><strong>Trust Propensity:</strong> Propensity to Trust Automation Scale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Linguistic Uncertainty Manipulation</h3>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>How Uncertainty is Expressed</h4>
+                        <p>The AI's explanations vary in their expression of uncertainty through linguistic features such as:</p>
+                        <ul>
+                            <li>Hedging phrases ("I think," "probably," "might be")</li>
+                            <li>Certainty markers ("definitely," "certainly")</li>
+                            <li>Acknowledgment of limitations or potential errors</li>
+                            <li>Suggestions to verify information</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Technical Implementation</h4>
+                            <p>The LLM (GPT-4.1-nano) first generates an internal confidence score for each energy estimate using the Steyvers approach. This score then determines the hedging language in the explanation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card" style="background-color: #f9f9f9;">
+                            <h4>Example Explanations</h4>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <p><strong>Confident:</strong></p>
+                                <div style="padding: 10px; background-color: #fff; border-radius: 4px; border-left: 4px solid #2c3e50;">
+                                    "A central air conditioner definitely uses about 3500 energy units per hour. This is 35 times more energy than a standard light bulb. Air conditioners are among the highest energy-consuming appliances in homes due to the substantial power needed for the compressor and fan systems."
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <p><strong>Hedged-Medium:</strong></p>
+                                <div style="padding: 10px; background-color: #fff; border-radius: 4px; border-left: 4px solid #27ae60;">
+                                    "A central air conditioner typically uses around 3500 energy units per hour. This is approximately 35 times more energy than a standard light bulb. Air conditioners tend to be among the higher energy-consuming appliances in homes, though exact usage can vary by model and efficiency rating."
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p><strong>Hedged-Low:</strong></p>
+                                <div style="padding: 10px; background-color: #fff; border-radius: 4px; border-left: 4px solid #e74c3c;">
+                                    "I believe a central air conditioner might use about 3500 energy units per hour, though I'm not entirely certain. This would be roughly 35 times more energy than a standard light bulb, but the exact amount can vary significantly depending on the unit's size, efficiency, and usage conditions. You might want to verify this information."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Measuring Trust Calibration</h3>
+                </div>
+                
+                <div class="key-concept">
+                    <h4>Operational Definition</h4>
+                    <p>Trust calibration is defined as "the alignment between participants' confidence in the advice (or their own final decisions) and the objective accuracy of those decisions."</p>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <h4>Key Metrics</h4>
+                        <ul>
+                            <li><strong>Expected Calibration Error (ECE):</strong> Measures overall calibration by comparing confidence to accuracy across bins</li>
+                            <li><strong>Area Under Curve (AUC):</strong> Measures discrimination ability between correct and incorrect advice</li>
+                            <li><strong>Appropriate Reliance Rate:</strong> % of decisions where participant chose the actually more accurate estimate</li>
+                            <li><strong>AI Acceptance Rate:</strong> % of decisions where participant chose the AI's estimate over their own</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Confidence Calibration Measurement:
+
+Expected Calibration Error (ECE)
+┌───────────────────────────────────────┐
+│                                       │
+│  ECE = Σ |Bin_m|/N · |conf(Bin_m) - acc(Bin_m)|  │
+│        m=1                            │
+│                                       │
+└───────────────────────────────────────┘
+Where:
+- Bin_m = mth confidence bin (e.g., 0-10%, 10-20%, etc.)
+- conf(Bin_m) = Average confidence in bin m
+- acc(Bin_m) = Actual accuracy in bin m
+- N = Total number of judgments
+
+Discrimination Ability:
+AUC (Area Under ROC Curve)
+- Measures ability to distinguish correct from incorrect
+- AUC = 0.5 is random guessing
+- AUC = 1.0 is perfect discrimination
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Methods Diagram</h3>
+                </div>
+                <div class="viz-container">
+                    <div class="ascii-diagram">
+Methods Flow Diagram:
+
+┌─────────────────┐          ┌─────────────────┐          ┌─────────────────┐
+│ Recruitment &amp;   │          │ Experimental    │          │ Analysis        │
+│ Baseline        │────────▶│ Task            │────────▶│ Metrics         │
+│ Measures        │          │                 │          │                 │
+└─────────────────┘          └─────────────────┘          └─────────────────┘
+        │                            │                            │
+        ▼                            ▼                            ▼
+┌─────────────────┐          ┌─────────────────┐          ┌─────────────────┐
+│ • Demographics  │          │ • Phase 1:      │          │ • Calibration   │
+│ • Energy        │          │   Initial energy │          │   (ECE metric)  │
+│   literacy      │          │   estimates     │          │ • Discrimination│
+│ • AI literacy   │          │ • Phase 2:      │          │   (AUC metric)  │
+│ • Numeracy      │          │   View AI advice│          │ • Appropriate   │
+│ • Trust         │          │   Rate confidence│          │   reliance rate │
+│   propensity    │          │ • Phase 3:      │          │ • Moderation by │
+│                 │          │   Choose between│          │   individual    │
+│                 │          │   estimates     │          │   differences   │
+└─────────────────┘          └─────────────────┘          └─────────────────┘
+</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Individual Differences Tab -->
+        <div id="individual-differences" class="tab-content">
+            <h2>Individual Differences: Moderators of the Linguistic Uncertainty Effect</h2>
+            
+            <div class="key-concept">
+                <h4>Research Questions</h4>
+                <p>How do individual differences in energy knowledge, AI literacy, and numeracy moderate the effect of linguistic uncertainty on trust calibration and appropriate reliance?</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Energy Knowledge</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>How well do people understand energy usage? Attari et al. (2010) demonstrated widespread energy misconceptions. In our simulation, energy knowledge refers to:</p>
+                        
+                        <ul>
+                            <li>Accuracy of initial energy estimates (Phase 1)</li>
+                            <li>Knowledge of energy units and conversions</li>
+                            <li>Understanding of relative energy usage across appliances</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Hypothesis</h4>
+                            <p>Individuals with greater energy domain knowledge (demonstrated by more accurate appliance use estimates in Phase 1) will exhibit more appropriate reliance in the Phase 2 forced-choice task (i.e., they will be more likely to correctly identify the more accurate estimate between their own and the AI's).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Energy Knowledge &amp; Appropriate Reliance
+                                             
+100% ┤                                   ■
+     │                               ■
+     │                           ■       
+ 80% ┤                       ■               
+     │                   ■                   
+     │               ■                       ▲ High Uncertainty
+ 60% ┤           ■   ○ Medium Uncertainty    ■ Low Uncertainty   
+     │       ■                              ○ No Uncertainty
+     │   ■                                   
+ 40% ┤■
+     │                   
+     │                       
+ 20% ┤                   
+     │                   
+     │                   
+  0% ┼───────────────────────────────────────────────
+        Low           Medium           High
+                Energy Knowledge Level
+
+People with high energy knowledge adjust their
+reliance more appropriately in response to
+uncertainty cues.
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>AI Literacy</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>How well do people understand AI capabilities and limitations? AI literacy includes:</p>
+                        
+                        <ul>
+                            <li>Knowledge of what LLMs are and how they work</li>
+                            <li>Understanding of AI strengths and weaknesses</li>
+                            <li>Awareness of when AI is likely to be accurate vs. inaccurate</li>
+                            <li>Ability to interpret AI confidence signals</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Hypothesis</h4>
+                            <p>Individuals with higher AI literacy will better interpret the LLM's uncertainty cues, leading to more appropriate reliance adjustments and better calibration.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+AI Literacy &amp; Confidence Calibration
+                                             
+0.25 ┤■
+     │   
+     │ ■    
+0.20 ┤  ■     
+     │   ■     
+     │    ■    ○ 
+0.15 ┤     ■    ○
+     │      ■    ○
+     │       ■    ○   ▲
+0.10 ┤        ■    ○   ▲
+     │         ■    ○   ▲
+     │          ■    ○   ▲
+0.05 ┤           ■    ○   ▲
+     │            ■    ○   ▲
+     │             ■    ○   ▲
+0.00 ┼───────────────────────────────────────────────
+        Low           Medium           High
+                  AI Literacy Level
+
+■ No Uncertainty  ○ Medium Uncertainty  ▲ High Uncertainty
+
+Higher AI literacy enables people to better
+calibrate their trust based on uncertainty cues.
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Numeracy</h3>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>How well do people understand and work with numerical information? Numeracy includes:</p>
+                        
+                        <ul>
+                            <li>Ability to understand proportions and ratios</li>
+                            <li>Capacity to interpret numerical uncertainty</li>
+                            <li>Skill in comparing numerical values</li>
+                            <li>Comfort with statistical concepts</li>
+                        </ul>
+                        
+                        <div class="key-concept">
+                            <h4>Hypothesis</h4>
+                            <p>Individuals with higher numeracy will show better calibration of their confidence in the AI's estimates and make more appropriate reliance decisions, particularly when linguistic uncertainty is present.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="viz-container">
+                            <div class="ascii-diagram">
+Numeracy &amp; Discrimination Ability (AUC)
+                                             
+1.0 ┤                               ▲
+    │                           ▲
+    │                       ▲       
+0.8 ┤                   ▲           ▲ High Uncertainty
+    │               ▲               
+    │           ▲                   ○ Medium Uncertainty 
+0.6 ┤       ▲○                      
+    │   ○○○○                        ■ No Uncertainty
+    │■■■                            
+0.5 ┤                               
+    │                               
+    │                               
+0.4 ┤                               
+    │                                   
+    │                                   
+0.3 ┼───────────────────────────────────────────────
+       Low           Medium           High
+                Numeracy Level
+
+AUC = ability to discriminate between correct/incorrect AI
+Higher numeracy enhances the benefit of uncertainty cues
+for distinguishing reliable from unreliable AI advice.
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Combined Effects Model</h3>
+                </div>
+                <div class="viz-container">
+                    <div class="ascii-diagram">
+Three-Way Interaction Model
+
+                 User         +        AI           =     Decision
+              Factors                Factors              Outcomes
+                 
+┌─────────────────┐        ┌─────────────────┐       ┌─────────────────┐
+│                 │        │                 │       │                 │
+│ Energy Knowledge│        │ Expressed       │       │ Confidence      │
+│                 │        │ Uncertainty     ├──────▶│ Calibration     │
+├─────────────────┤        │                 │       │                 │
+│                 │        ├─────────────────┤       ├─────────────────┤
+│ AI Literacy     ├──────▶│ Explanation     │       │                 │
+│                 │        │ Length          ├──────▶│ Discrimination  │
+├─────────────────┤        │                 │       │ Ability         │
+│                 │        ├─────────────────┤       │                 │
+│ Numeracy        │        │ AI Correctness  │       ├─────────────────┤
+│                 │        │                 │       │                 │
+└─────────────────┘        └─────────────────┘       │ Reliance        │
+                                                     │ Behavior        │
+                                                     │                 │
+                                                     └─────────────────┘
+Key Interactions:
+
+1. Energy Knowledge × Uncertainty
+   Higher knowledge → stronger positive effect of uncertainty
+
+2. AI Literacy × Uncertainty
+   Higher literacy → stronger positive effect of uncertainty
+
+3. Numeracy × Uncertainty
+   Higher numeracy → stronger positive effect of uncertainty
+</div>
+                </div>
+                
+                <div class="key-concept">
+                    <h4>Key Insight: Adaptive Response to Uncertainty</h4>
+                    <p>The most effective uncertainty expression might differ based on individual differences:</p>
+                    <ul>
+                        <li>Low knowledge/literacy/numeracy users: May need explicit, directive uncertainty signals</li>
+                        <li>High knowledge/literacy/numeracy users: Can effectively use subtle uncertainty cues</li>
+                    </ul>
+                    <p>This suggests the potential benefit of personalized uncertainty expressions in AI energy advisors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching function
+        function openTab(tabName) {
+            // Hide all tabs
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tab buttons
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show the selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Energy perception visualization update
+        function updateCompressionViz() {
+            const compressionFactor = document.getElementById('compression-slider').value;
+            document.getElementById('compression-value').textContent = compressionFactor;
+            
+            // Update diagram text for demonstration
+            document.getElementById('compression-diagram').textContent = 
+`Energy Perception Based on Compression Factor: ${compressionFactor}
+                                                 
+3500 ┤                     Perfect Accuracy
+     │                            /
+3000 ┤                         /
+     │                      /
+2500 ┤                   /
+     │                /
+2000 ┤             /
+     │          /
+1500 ┤       /
+     │    /                      Perceived Energy
+1000 ┤ /                              /
+     │                            /
+ 500 ┤                       /
+     │                  /
+   0 ┼──────────────────────────────────────────┐
+     0   500   1000   1500   2000   2500   3000   3500
+                    Actual Energy (Units)
+
+People consistently underestimate high-energy appliances
+and overestimate low-energy ones.`;
+        }
+        
+        // Individual differences visualization update
+        function updateIndividualDiffViz() {
+            const numeracyLevel = document.getElementById('numeracy-slider').value;
+            const numeracyLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('numeracy-level').textContent = numeracyLabels[numeracyLevel - 1];
+            
+            const energyKnowledge = document.getElementById('energy-knowledge-slider').value;
+            const knowledgeLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('energy-knowledge').textContent = knowledgeLabels[energyKnowledge - 1];
+            
+            // Update diagram text for demonstration
+            document.getElementById('individual-diff-diagram').textContent = 
+`Energy Perception Accuracy by Individual Differences
+                                             
+High │                   ★
+     │               ★       ★
+     │           ★               
+     │       ★                   ★
+     │   ★                           ★
+Med  │                                   ★ 
+     │★                                     ★
+     │                                         ★
+     │                                           
+     │                                            ★
+Low  │                                              ★
+     └───────────────────────────────────────────────
+        Low           Medium           High
+                Energy Knowledge Level
+
+★ = Perception Accuracy (lower compression)
+                                
+Numeracy Level: ${numeracyLabels[numeracyLevel - 1]}
+                                
+Higher numeracy and energy knowledge lead to 
+more accurate energy perceptions (less compression).`;
+        }
+        
+        // AI confidence calibration visualization update
+        function updateCalibrationGapViz() {
+            const explanationStyle = document.getElementById('explanation-style-slider').value;
+            const styles = ['Uncertain', 'Moderately Confident', 'Very Confident'];
+            document.getElementById('explanation-style').textContent = styles[explanationStyle - 1];
+            
+            // Update diagram text for demonstration
+            document.getElementById('calibration-gap-diagram').textContent = 
+`Calibration Diagram: ${styles[explanationStyle - 1]} Explanations
+                                                 
+100% ┤                                       /
+     │                                    /
+     │                   Perfect      /
+ 80% ┤                  Calibration/      
+     │                         /        ○  Human Confidence
+     │                      /         /         
+ 60% ┤                   /         /        
+     │                /        /          
+     │             /       /  □  Model Confidence
+ 40% ┤          /      /              
+     │       /     /                
+     │    /    /                      
+ 20% ┤ /   /    Expected Calibration Error (ECE):
+     │/                        - Model: 0.05
+     │                         - Human: ${explanationStyle === '1' ? '0.08' : explanationStyle === '2' ? '0.17' : '0.25'}
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                  Confidence in Answer
+
+${explanationStyle === '1' ? 'Uncertain language helps align human confidence with AI accuracy!' : explanationStyle === '2' ? 'Default explanations lead to overconfidence in LLM answers!' : 'Highly confident language creates significant overconfidence in AI advice!'}`;
+        }
+        
+        // Update simulation visualization
+        function updateSimulation() {
+            // Get user characteristics values
+            const energyKnowledge = document.getElementById('user-energy-knowledge-slider').value;
+            const knowledgeLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('user-energy-knowledge').textContent = knowledgeLabels[energyKnowledge - 1];
+            
+            const aiLiteracy = document.getElementById('user-ai-literacy-slider').value;
+            const literacyLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('user-ai-literacy').textContent = literacyLabels[aiLiteracy - 1];
+            
+            const numeracy = document.getElementById('user-numeracy-slider').value;
+            const numeracyLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('user-numeracy').textContent = numeracyLabels[numeracy - 1];
+            
+            // Get AI advisor settings
+            const uncertainty = document.getElementById('ai-uncertainty-slider').value;
+            const uncertaintyLabels = ['Low', 'Medium', 'High'];
+            document.getElementById('ai-uncertainty').textContent = uncertaintyLabels[uncertainty - 1];
+            
+            const explanationLength = document.getElementById('ai-explanation-length-slider').value;
+            const lengthLabels = ['Short', 'Medium', 'Long'];
+            document.getElementById('ai-explanation-length').textContent = lengthLabels[explanationLength - 1];
+            
+            const aiAccuracy = document.getElementById('ai-accuracy-slider').value;
+            document.getElementById('ai-accuracy').textContent = aiAccuracy + '%';
+            
+            // Calculate metrics based on settings
+            // These would be based on the findings of the studies, but are simplified here
+            
+            // Calibration gap is smaller with higher uncertainty and numeracy
+            let calibrationGap = 0.25;
+            calibrationGap -= (uncertainty - 1) * 0.05; // Uncertainty reduces gap
+            calibrationGap -= (numeracy - 1) * 0.04; // Numeracy reduces gap
+            calibrationGap -= (aiLiteracy - 1) * 0.03; // AI literacy reduces gap
+            calibrationGap = Math.max(0.03, Math.min(0.30, calibrationGap)); // Keep in reasonable range
+            
+            // AUC improves with higher uncertainty and AI literacy
+            let auc = 0.55;
+            auc += (uncertainty - 1) * 0.04; // Uncertainty improves discrimination
+            auc += (aiLiteracy - 1) * 0.05; // AI literacy improves discrimination
+            auc = Math.max(0.5, Math.min(0.8, auc)); // Keep in reasonable range
+            
+            // Appropriate reliance improves with higher uncertainty, energy knowledge, and numeracy
+            let appropriateReliance = 60;
+            appropriateReliance += (uncertainty - 1) * 5; // Uncertainty improves appropriate reliance
+            appropriateReliance += (energyKnowledge - 1) * 7; // Energy knowledge improves appropriate reliance
+            appropriateReliance += (numeracy - 1) * 3; // Numeracy improves appropriate reliance
+            appropriateReliance = Math.max(50, Math.min(95, appropriateReliance)); // Keep in reasonable range
+            
+            // AI acceptance rate decreases with uncertainty but increases with AI accuracy
+            let aiAcceptanceRate = 60;
+            aiAcceptanceRate -= (uncertainty - 1) * 8; // Uncertainty decreases AI acceptance
+            aiAcceptanceRate += (aiAccuracy - 70) * 0.3; // Higher AI accuracy increases acceptance
+            aiAcceptanceRate = Math.max(30, Math.min(90, aiAcceptanceRate)); // Keep in reasonable range
+            
+            // Update the display
+            document.getElementById('calibration-gap-value').textContent = calibrationGap.toFixed(2);
+            document.getElementById('auc-value').textContent = auc.toFixed(2);
+            document.getElementById('appropriate-reliance-value').textContent = appropriateReliance.toFixed(0) + '%';
+            document.getElementById('ai-acceptance-rate').textContent = aiAcceptanceRate.toFixed(0) + '%';
+            
+            // Update visualizations
+            updateSimulationVisualizations(uncertainty, energyKnowledge, aiLiteracy, numeracy, aiAccuracy);
+        }
+        
+        // Update simulation visualizations
+        function updateSimulationVisualizations(uncertainty, energyKnowledge, aiLiteracy, numeracy, aiAccuracy) {
+            // Update trust calibration visualization
+            const uncertaintyLabel = uncertainty === '1' ? 'Low' : uncertainty === '2' ? 'Medium' : 'High';
+            
+            // Simple updates to the ASCII diagrams for demonstration
+            document.getElementById('simulation-viz').textContent = 
+`Trust Calibration by Linguistic Uncertainty
+                                                 
+100% ┤                                       /
+     │                                    /
+     │                                 /
+ 80% ┤             Low Uncertainty  □/
+     │                            /□  □
+     │                         /  □
+ 60% ┤        Medium Uncertainty/x     □
+     │                       /x    
+     │                    / x        
+ 40% ┤                 /   x      
+     │              /     x    
+     │     High Uncertainty    
+ 20% ┤         o  /        
+     │        o /         □ Low Uncertainty
+     │      o /           x Medium Uncertainty
+  0% ┼──────┬─────────┬─────────┬─────────┬─────────┐
+     0%    20%       40%       60%       80%      100%
+                  Confidence in Answer
+
+Higher uncertainty expressions improve calibration!`;
+
+            document.getElementById('reliance-viz').textContent = 
+`Reliance Decisions by Uncertainty & AI Correctness
+                                             
+100% ┤          
+     │          ┌────────┐
+     │          │        │          ┌────────┐
+ 80% ┤          │        │          │        │         Accept Correct AI
+     │          │        │  ┌────────┐       │
+     │          │        │  │        │       │
+ 60% ┤          │        │  │        │       │
+     │          │        │  │        │ ┌────────┐
+     │          │        │  │        │ │        │
+ 40% ┤ ┌────────┐        │  │        │ │        │     Accept Incorrect AI
+     │ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+ 20% ┤ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+     │ │        │        │  │        │ │        │
+  0% ┼─┴────────┴────────┴──┴────────┴─┴────────┴─
+         High       Medium              Low
+       Uncertainty  Uncertainty       Uncertainty
+
+Higher uncertainty decreases incorrect AI acceptance
+while maintaining correct AI acceptance!`;
+
+            document.getElementById('individual-diff-impact').textContent = 
+`Impact of Individual Differences on Trust Calibration
+  
+              Calibration Error by Energy Knowledge Level
+                                             
+0.25 │ •
+     │    
+0.20 │     •        High AI Uncertainty
+     │          •          
+0.15 │               •          
+     │                    •  Medium AI Uncertainty
+0.10 │                         •
+     │                              •  
+0.05 │                                   • Low AI Uncertainty
+     │                                       
+0.00 └───────────────────────────────────────────────
+        Low           Medium           High
+                Energy Knowledge Level
+
+Higher energy knowledge allows better use of
+uncertainty cues for trust calibration!`;
+        }
+        
+        // Variables for the interactive energy advice task
+        let currentTaskPhase = 1;
+        let currentAppliance = null;
+        let userEstimate = null;
+        let aiEstimate = null;
+        let aiExplanation = null;
+        let userConfidence = null;
+        let actualValue = null;
+        
+        // Example appliance data
+        const appliances = [
+            {
+                name: "Central Air Conditioner (1 hour)",
+                actual: 3500,
+                aiEstimate: 3000,
+                explanations: {
+                    confident: "A central air conditioner definitely uses about 3000 energy units per hour. This is 30 times more energy than a standard light bulb. Air conditioners are among the highest energy-consuming appliances in homes due to the substantial power needed for the compressor and fan systems.",
+                    medium: "A central air conditioner typically uses around 3000 energy units per hour. This is approximately 30 times more energy than a standard light bulb. Air conditioners tend to be among the higher energy-consuming appliances in homes, though exact usage can vary by model and efficiency rating.",
+                    uncertain: "I believe a central air conditioner might use about 3000 energy units per hour, though I'm not entirely certain. This would be roughly 30 times more energy than a standard light bulb, but the exact amount can vary significantly depending on the unit's size, efficiency, and usage conditions. You might want to verify this information."
+                }
+            },
+            {
+                name: "Clothes Dryer (1 hour)",
+                actual: 3000,
+                aiEstimate: 2800,
+                explanations: {
+                    confident: "A clothes dryer definitely uses about 2800 energy units per hour. This is 28 times more energy than a standard light bulb. Clothes dryers are major energy consumers in homes because they require significant heat to dry clothes quickly.",
+                    medium: "A clothes dryer typically uses around 2800 energy units per hour. This is approximately 28 times more energy than a standard light bulb. Clothes dryers are generally high-energy appliances, though consumption varies by model and settings.",
+                    uncertain: "I believe a clothes dryer might use about 2800 energy units per hour, but I'm not entirely certain. This would be roughly 28 times more energy than a standard light bulb, but the actual consumption can vary considerably based on the dryer type, load size, and drying settings. You might want to check this information."
+                }
+            },
+            {
+                name: "Laptop Computer (1 hour)",
+                actual: 35,
+                aiEstimate: 50,
+                explanations: {
+                    confident: "A laptop computer definitely uses about 50 energy units per hour. This is half the energy of a standard light bulb. Laptops are designed to be energy-efficient compared to desktop computers due to their mobile nature.",
+                    medium: "A laptop computer typically uses around 50 energy units per hour. This is about half the energy of a standard light bulb. Laptops generally consume less energy than desktop computers, though usage varies by model and activity.",
+                    uncertain: "I believe a laptop computer might use about 50 energy units per hour, but I'm not entirely confident. This would be roughly half the energy of a standard light bulb, but the actual consumption can vary based on the laptop model, screen brightness, and what tasks you're performing. You might want to verify this information."
+                }
+            }
+        ];
+        
+        // Function to update task user confidence display
+        function updateTaskUserConfidence() {
+            const confidence = document.getElementById('task-user-confidence-slider').value;
+            document.getElementById('task-user-confidence-value').textContent = confidence + '%';
+        }
+        
+        // Function to submit user estimate in the task
+        function submitUserEstimate() {
+            // Get the user's estimate
+            userEstimate = parseInt(document.getElementById('user-energy-estimate').value) || 0;
+            
+            // If they didn't enter a value, alert and return
+            if (userEstimate <= 0) {
+                alert('Please enter a valid estimate greater than 0');
+                return;
+            }
+            
+            // If no appliance is currently selected, choose one
+            if (!currentAppliance) {
+                // Choose a random appliance
+                const applianceIndex = Math.floor(Math.random() * appliances.length);
+                currentAppliance = appliances[applianceIndex];
+                actualValue = currentAppliance.actual;
+                aiEstimate = currentAppliance.aiEstimate;
+            }
+            
+            // Move to phase 2
+            document.getElementById('phase1').style.display = 'none';
+            document.getElementById('phase2').style.display = 'block';
+            
+            // Update phase 2 display
+            document.getElementById('ai-appliance').textContent = currentAppliance.name;
+            document.getElementById('ai-energy-estimate').textContent = aiEstimate;
+            
+            // Choose explanation style based on AI uncertainty slider
+            const uncertaintyLevel = document.getElementById('ai-uncertainty-slider').value;
+            let explanationStyle;
+            if (uncertaintyLevel == 1) {
+                explanationStyle = 'confident';
+            } else if (uncertaintyLevel == 2) {
+                explanationStyle = 'medium';
+            } else {
+                explanationStyle = 'uncertain';
+            }
+            
+            // Set the explanation
+            aiExplanation = currentAppliance.explanations[explanationStyle];
+            document.getElementById('ai-explanation').textContent = aiExplanation;
+            
+            // Update the current phase
+            currentTaskPhase = 2;
+        }
+        
+        // Function to submit confidence in the task
+        function submitConfidence() {
+            // Get the user's confidence
+            userConfidence = parseInt(document.getElementById('task-user-confidence-slider').value) || 50;
+            
+            // Move to phase 3
+            document.getElementById('phase2').style.display = 'none';
+            document.getElementById('phase3').style.display = 'block';
+            
+            // Update phase 3 display
+            document.getElementById('decision-appliance').textContent = currentAppliance.name;
+            document.getElementById('user-estimate-display').textContent = userEstimate + ' energy units';
+            document.getElementById('ai-estimate-display').textContent = aiEstimate + ' energy units';
+            
+            // Update the current phase
+            currentTaskPhase = 3;
+        }
+        
+        // Function to choose user estimate in the task
+        function chooseUserEstimate() {
+            // Show results
+            document.getElementById('phase3').style.display = 'none';
+            document.getElementById('task-results').style.display = 'block';
+            
+            // Update results display
+            document.getElementById('result-appliance').textContent = currentAppliance.name;
+            document.getElementById('actual-energy-value').textContent = actualValue;
+            document.getElementById('result-user-estimate').textContent = userEstimate;
+            document.getElementById('result-ai-estimate').textContent = aiEstimate;
+            
+            // Calculate error percentages
+            const userErrorPercent = Math.abs((userEstimate - actualValue) / actualValue * 100).toFixed(1);
+            const aiErrorPercent = Math.abs((aiEstimate - actualValue) / actualValue * 100).toFixed(1);
+            
+            document.getElementById('user-accuracy-assessment').textContent = userErrorPercent + '% error';
+            document.getElementById('ai-accuracy-assessment').textContent = aiErrorPercent + '% error';
+            
+            document.getElementById('chosen-estimate').textContent = 'your own';
+            
+            // Determine if this was the better choice
+            if (Math.abs(userEstimate - actualValue) <= Math.abs(aiEstimate - actualValue)) {
+                document.getElementById('decision-assessment').textContent = 'better';
+            } else {
+                document.getElementById('decision-assessment').textContent = 'worse';
+            }
+        }
+        
+        // Function to choose AI estimate in the task
+        function chooseAIEstimate() {
+            // Show results
+            document.getElementById('phase3').style.display = 'none';
+            document.getElementById('task-results').style.display = 'block';
+            
+            // Update results display
+            document.getElementById('result-appliance').textContent = currentAppliance.name;
+            document.getElementById('actual-energy-value').textContent = actualValue;
+            document.getElementById('result-user-estimate').textContent = userEstimate;
+            document.getElementById('result-ai-estimate').textContent = aiEstimate;
+            
+            // Calculate error percentages
+            const userErrorPercent = Math.abs((userEstimate - actualValue) / actualValue * 100).toFixed(1);
+            const aiErrorPercent = Math.abs((aiEstimate - actualValue) / actualValue * 100).toFixed(1);
+            
+            document.getElementById('user-accuracy-assessment').textContent = userErrorPercent + '% error';
+            document.getElementById('ai-accuracy-assessment').textContent = aiErrorPercent + '% error';
+            
+            document.getElementById('chosen-estimate').textContent = 'the AI\'s';
+            
+            // Determine if this was the better choice
+            if (Math.abs(aiEstimate - actualValue) <= Math.abs(userEstimate - actualValue)) {
+                document.getElementById('decision-assessment').textContent = 'better';
+            } else {
+                document.getElementById('decision-assessment').textContent = 'worse';
+            }
+        }
+        
+        // Function to start a new task
+        function startNewTask() {
+            // Reset task display
+            document.getElementById('task-results').style.display = 'none';
+            document.getElementById('phase1').style.display = 'block';
+            
+            // Clear user estimate input
+            document.getElementById('user-energy-estimate').value = '';
+            
+            // Reset confidence slider
+            document.getElementById('task-user-confidence-slider').value = 50;
+            document.getElementById('task-user-confidence-value').textContent = '50%';
+            
+            // Choose a new random appliance
+            const applianceIndex = Math.floor(Math.random() * appliances.length);
+            currentAppliance = appliances[applianceIndex];
+            actualValue = currentAppliance.actual;
+            aiEstimate = currentAppliance.aiEstimate;
+            
+            // Update the appliance name in phase 1
+            document.getElementById('current-appliance').textContent = currentAppliance.name;
+            
+            // Reset the current phase
+            currentTaskPhase = 1;
+        }
+        
+        // Initialize the simulation when the page loads
+        window.onload = function() {
+            // Initialize the energy perception visualizations
+            updateCompressionViz();
+            updateIndividualDiffViz();
+            
+            // Initialize the AI confidence visualizations
+            updateCalibrationGapViz();
+            
+            // Initialize the simulation visualizations
+            updateSimulation();
+            
+            // Start the interactive task
+            startNewTask();
+        };
+    </script>
+
+
+</body></html>
