@@ -1,0 +1,720 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Perception &amp; AI Confidence Simulation</title>
+    <!-- Use a specific Vue version with a reliable CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#38bdf8',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        dark: {
+                            900: '#121827',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #121827;
+            color: #e2e8f0;
+        }
+        
+        /* Custom slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #475569;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            border: 4px solid rgba(93, 92, 222, 0.1);
+            border-left-color: #5D5CDE;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        /* Static chart styling */
+        .static-chart {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .blue-accent-left {
+            border-left: 4px solid #38bdf8;
+            padding-left: 16px;
+        }
+        
+        /* Math equation styles */
+        .math-eq {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+        
+        /* Pulse animation for selections */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(93, 92, 222, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(93, 92, 222, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(93, 92, 222, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-200 min-h-screen">
+    <!-- Vue initialization check -->
+    <div id="vue-check" class="fixed top-0 right-0 p-2 bg-red-500 text-white text-xs z-50">
+        Vue not loaded or initialized
+    </div>
+    
+    <div id="app" class="container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 text-primary">
+            Energy Perception &amp; AI Confidence Simulation
+        </h1>
+        
+        <!-- Main Navigation Tabs -->
+        <div class="flex overflow-x-auto mb-6 bg-dark-800 rounded-lg shadow-md">
+            <button v-for="(tab, index) in mainTabs" :key="index" @click="activeMainTab = index" class="px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap" :class="activeMainTab === index ? 'text-primary border-b-2 border-primary' : 'text-gray-400 hover:text-gray-200'">
+                {{ tab.name }}
+            </button>
+        </div>
+        
+        <!-- Attari Energy Perception Tab -->
+        <div v-if="activeMainTab === 0" class="space-y-6">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">Energy Perception Compression (Attari et al., 2010)</h2>
+                
+                <p class="mb-6">
+                    This simulation demonstrates how people systematically compress the true distribution of energy magnitudes, 
+                    overestimating small energy uses and underestimating large ones.
+                </p>
+                
+                <!-- Compression Factor Slider -->
+                <div class="bg-dark-700 p-5 rounded-xl shadow-md mb-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Adjust Compression Factor:
+                    </h3>
+                    <div class="flex items-center mt-4">
+                        <span class="text-xl font-semibold mr-4 min-w-[120px] text-primary">Factor: {{ compressionFactor.toFixed(1) }}</span>
+                        <input type="range" v-model.number="compressionFactor" min="1" max="5" step="0.1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <p class="mt-4 text-gray-400 italic">
+                        <span v-if="compressionFactor === 1">No compression - perceived energy equals actual energy</span>
+                        <span v-else-if="compressionFactor < 2">Mild compression - slightly overestimating small uses, slightly underestimating large uses</span>
+                        <span v-else-if="compressionFactor < 3">Moderate compression - similar to average person in Attari study</span>
+                        <span v-else="">Strong compression - severely overestimating small uses, severely underestimating large uses</span>
+                    </p>
+                </div>
+                
+                <!-- Energy Usage Static Visualization -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Energy Usage: Actual vs. Perceived
+                    </h3>
+                    <div class="bg-dark-800 p-4 rounded-xl shadow-md">
+                        <div class="static-chart h-[300px]">
+                            <svg width="100%" height="100%" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+                                <!-- Grid lines and static visualization elements -->
+                                <g>
+                                    <line x1="50" y1="350" x2="750" y2="350" stroke="#475569" stroke-width="2"></line>
+                                    <line x1="50" y1="350" x2="50" y2="50" stroke="#475569" stroke-width="2"></line>
+                                    
+                                    <!-- X-axis ticks and labels (static) -->
+                                    <line x1="50" y1="350" x2="50" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="50" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">0W</text>
+                                    <line x1="190" y1="350" x2="190" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="190" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">1000W</text>
+                                    <line x1="330" y1="350" x2="330" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="330" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">2000W</text>
+                                    <line x1="470" y1="350" x2="470" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="470" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">3000W</text>
+                                    <line x1="610" y1="350" x2="610" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="610" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">4000W</text>
+                                    <line x1="750" y1="350" x2="750" y2="355" stroke="#475569" stroke-width="2"></line>
+                                    <text x="750" y="375" text-anchor="middle" fill="#94a3b8" font-size="12">5000W</text>
+                                    
+                                    <!-- Y-axis ticks and labels (static) -->
+                                    <line x1="45" y1="350" x2="50" y2="350" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="355" text-anchor="end" fill="#94a3b8" font-size="12">0W</text>
+                                    <line x1="45" y1="290" x2="50" y2="290" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="295" text-anchor="end" fill="#94a3b8" font-size="12">1000W</text>
+                                    <line x1="45" y1="230" x2="50" y2="230" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="235" text-anchor="end" fill="#94a3b8" font-size="12">2000W</text>
+                                    <line x1="45" y1="170" x2="50" y2="170" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="175" text-anchor="end" fill="#94a3b8" font-size="12">3000W</text>
+                                    <line x1="45" y1="110" x2="50" y2="110" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="115" text-anchor="end" fill="#94a3b8" font-size="12">4000W</text>
+                                    <line x1="45" y1="50" x2="50" y2="50" stroke="#475569" stroke-width="2"></line>
+                                    <text x="35" y="55" text-anchor="end" fill="#94a3b8" font-size="12">5000W</text>
+                                    
+                                    <!-- Perfect perception line (diagonal) -->
+                                    <line x1="50" y1="350" x2="750" y2="50" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"></line>
+                                    
+                                    <!-- Perceived energy curve -->
+                                    <path d="M50,350 Q350,200 750,100" stroke="#5D5CDE" stroke-width="3" fill="none"></path>
+                                    
+                                    <!-- Appliance points (static examples) -->
+                                    <circle cx="120" cy="270" r="6" fill="#38bdf8"></circle>
+                                    <circle cx="250" cy="230" r="6" fill="#38bdf8"></circle>
+                                    <circle cx="400" cy="190" r="6" fill="#38bdf8"></circle>
+                                    <circle cx="550" cy="150" r="6" fill="#38bdf8"></circle>
+                                    <circle cx="680" cy="120" r="6" fill="#38bdf8"></circle>
+                                    
+                                    <!-- Axis labels -->
+                                    <text x="400" y="395" text-anchor="middle" fill="#e2e8f0" font-size="14">Actual Energy Use (Watts)</text>
+                                    <text x="15" y="200" text-anchor="middle" fill="#e2e8f0" font-size="14" transform="rotate(-90, 15, 200)">Perceived Energy Use (Watts)</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Appliance Selection -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                        View Specific Appliances/Activities
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div v-for="(appliance, index) in appliances" :key="index" class="bg-dark-700 p-4 rounded-lg shadow-md cursor-pointer transition-all duration-300" :class="{'ring-2 ring-primary': selectedApplianceIndex === index}" @click="selectAppliance(index)">
+                            <div class="font-medium text-lg">{{ appliance.name }}</div>
+                            <div class="mt-2 space-y-1">
+                                <div class="text-gray-300">Actual: <span class="font-semibold">{{ appliance.actualEnergy }}W</span></div>
+                                <div class="text-gray-300">Perceived: <span class="font-semibold">{{ calculatePerceivedEnergy(appliance.actualEnergy, compressionFactor) }}W</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Combined Model Tab -->
+        <div v-if="activeMainTab === 1" class="space-y-6">
+            <div class="bg-dark-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">
+                    Combined Simulation: Energy Advice from AI
+                </h2>
+                
+                <p class="mb-6">
+                    This simulation explores how people respond to energy-saving advice from AI systems that express different levels of confidence.
+                </p>
+                
+                <!-- Parameter Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Energy perception parameters -->
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Human Energy Perception
+                        </h3>
+                        <div class="mb-4">
+                            <span class="block mb-2 font-medium">User's Compression Factor:</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[100px] text-primary">{{ combinedCompressionFactor.toFixed(1) }}</span>
+                                <input type="range" v-model.number="combinedCompressionFactor" min="1" max="5" step="0.1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI parameters -->
+                    <div class="bg-dark-700 p-5 rounded-xl shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            AI Explanation Style
+                        </h3>
+                        <!-- Confidence tone slider -->
+                        <div class="mb-4">
+                            <span class="block mb-2 font-medium">AI Confidence Tone:</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">{{ confidenceTones[combinedConfidenceToneIndex] }}</span>
+                                <input type="range" v-model.number="combinedConfidenceToneIndex" min="0" max="2" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Energy Saving Scenario -->
+                <div class="bg-dark-800 border border-dark-600 rounded-xl p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-6 text-primary border-b pb-2 border-dark-600">Energy Saving Scenario</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-lg font-medium mb-3">Select an energy-saving action to evaluate:</label>
+                        <select v-model="selectedAction" class="w-full p-3 border border-dark-600 rounded-lg bg-dark-900 text-base focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option v-for="action in energySavingActions" :key="action.id" :value="action">
+                                {{ action.name }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!-- User's initial estimate -->
+                    <div class="mb-6 p-5 bg-dark-700 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Your Initial Estimate
+                        </h4>
+                        <p>Without AI advice, how much energy do you think this action would save?</p>
+                        <div class="mt-4">
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">Your estimate: {{ userEstimate }}W</span>
+                                <input type="range" v-model.number="userEstimate" min="10" max="300" step="5" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <p class="mt-3 text-sm text-gray-400 italic">
+                                Note: This estimate reflects the compressed perception based on your selected compression factor.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Advice -->
+                    <div class="mb-6 p-5 bg-blue-900/30 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center text-blue-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            AI Energy Advisor Response
+                        </h4>
+                        <div class="p-4 bg-dark-900 rounded-lg border border-dark-600 shadow-inner">
+                            <p v-if="selectedAction" v-html="getAIEnergyAdvice()" class="leading-relaxed text-blue-200"></p>
+                            <p v-else="" class="italic text-gray-500">Please select an energy-saving action to see AI advice.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust in AI Advice -->
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-3 text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            How much do you trust this AI advice?
+                        </h4>
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-4 min-w-[180px] text-primary">Trust level: {{ (trustLevel * 100).toFixed(0) }}%</span>
+                            <input type="range" v-model.number="trustLevel" min="0" max="1" step="0.01" class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    
+                    <!-- Final Estimate After AI Advice -->
+                    <div class="p-5 bg-green-900/30 rounded-xl shadow-md">
+                        <h4 class="font-medium mb-3 text-lg flex items-center text-green-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Your Final Estimate (After AI Advice)
+                        </h4>
+                        <p class="mb-4">
+                            Based on both your initial perception and the AI advice, your final estimate would be:
+                        </p>
+                        <div class="text-2xl font-bold text-center py-3 text-green-400">
+                            {{ selectedAction ? getFinalEstimate() : 0 }}W
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div class="bg-dark-900 p-3 rounded-lg shadow-sm">
+                                <p class="font-medium text-center">
+                                    <strong>Actual energy savings:</strong><br>
+                                    <span class="text-xl">{{ selectedAction ? selectedAction.actualSavings : 0 }}W</span>
+                                </p>
+                            </div>
+                            <div class="bg-dark-900 p-3 rounded-lg shadow-sm">
+                                <p class="font-medium text-center">
+                                    <strong>Estimation error:</strong><br>
+                                    <span class="text-xl" :class="{
+                                        'text-red-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) > 20,
+                                        'text-yellow-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) > 10 &amp;&amp; Math.abs(getEstimationError()) <= 20,
+                                        'text-green-500': selectedAction &amp;&amp; Math.abs(getEstimationError()) <= 10
+                                    }">{{ selectedAction ? getEstimationError() : 0 }}%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Visualization -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Impact of AI Advice on Energy Perception
+                    </h3>
+                    <div class="bg-dark-800 p-4 rounded-xl shadow-md">
+                        <div class="static-chart h-[300px] flex items-center justify-center">
+                            <div v-if="!selectedAction" class="text-center text-gray-400">
+                                Select an energy-saving action to see visualization
+                            </div>
+                            <svg v-else="" width="100%" height="100%" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+                                <!-- Static bar chart for energy estimates -->
+                                <g>
+                                    <!-- Axes -->
+                                    <line x1="50" y1="350" x2="750" y2="350" stroke="#475569" stroke-width="2"></line>
+                                    <line x1="50" y1="350" x2="50" y2="50" stroke="#475569" stroke-width="2"></line>
+                                    
+                                    <!-- X-axis labels -->
+                                    <text x="150" y="380" text-anchor="middle" fill="#94a3b8" font-size="12">Initial User Estimate</text>
+                                    <text x="325" y="380" text-anchor="middle" fill="#94a3b8" font-size="12">AI Estimate</text>
+                                    <text x="500" y="380" text-anchor="middle" fill="#94a3b8" font-size="12">Final User Estimate</text>
+                                    <text x="675" y="380" text-anchor="middle" fill="#94a3b8" font-size="12">Actual Value</text>
+                                    
+                                    <!-- Bars with dynamic height based on scaled values -->
+                                    <rect x="100" y="350" width="100" :height="getUserEstimateBarHeight()" fill="#fb923c"></rect>
+                                    <rect x="275" y="350" width="100" :height="getAIEstimateBarHeight()" fill="#38bdf8"></rect>
+                                    <rect x="450" y="350" width="100" :height="getFinalEstimateBarHeight()" fill="#a855f7"></rect>
+                                    <rect x="625" y="350" width="100" :height="getActualValueBarHeight()" fill="#10b981"></rect>
+                                    
+                                    <!-- Bar values -->
+                                    <text x="150" :y="340 - getUserEstimateBarHeight()" text-anchor="middle" fill="#e2e8f0" font-size="14">
+                                        {{ userEstimate }}W
+                                    </text>
+                                    <text x="325" :y="340 - getAIEstimateBarHeight()" text-anchor="middle" fill="#e2e8f0" font-size="14">
+                                        {{ getAIEstimate() }}W
+                                    </text>
+                                    <text x="500" :y="340 - getFinalEstimateBarHeight()" text-anchor="middle" fill="#e2e8f0" font-size="14">
+                                        {{ getFinalEstimate() }}W
+                                    </text>
+                                    <text x="675" :y="340 - getActualValueBarHeight()" text-anchor="middle" fill="#e2e8f0" font-size="14">
+                                        {{ selectedAction.actualSavings }}W
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add error fallback content for Vue failure -->
+    <div id="fallback" class="hidden container mx-auto px-4 py-8 max-w-6xl">
+        <div class="bg-red-900/30 p-5 rounded-xl shadow-lg text-center">
+            <h2 class="text-2xl font-bold text-red-300 mb-3">Application Error</h2>
+            <p class="mb-4">The energy simulation couldn't be loaded correctly. This might be due to a JavaScript issue.</p>
+            <p class="text-sm text-gray-400">Technical detail: Vue.js failed to initialize.</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple check to see if Vue is properly loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Wait a moment to check Vue
+                setTimeout(function() {
+                    if (typeof Vue === 'undefined') {
+                        document.getElementById('fallback').classList.remove('hidden');
+                        console.error('Vue.js is not loaded properly');
+                    } else {
+                        document.getElementById('vue-check').style.display = 'none';
+                    }
+                }, 500);
+            } catch (e) {
+                console.error('Error in Vue check:', e);
+                document.getElementById('fallback').classList.remove('hidden');
+            }
+        });
+        
+        // Safe Vue initialization with error handling
+        try {
+            // Wait for Vue to be fully loaded
+            window.onload = function() {
+                if (typeof Vue === 'undefined') {
+                    console.error('Vue is not defined, fallback to static content');
+                    document.getElementById('fallback').classList.remove('hidden');
+                    return;
+                }
+                
+                // Initialize Vue app
+                new Vue({
+                    el: '#app',
+                    data: {
+                        // Navigation
+                        activeMainTab: 0,
+                        mainTabs: [
+                            { name: "Energy Perception" },
+                            { name: "Combined Model" }
+                        ],
+                        
+                        // Attari simulation data
+                        compressionFactor: 2.8,
+                        selectedApplianceIndex: null,
+                        appliances: [
+                            { 
+                                name: "Central AC (1 hour)", 
+                                actualEnergy: 3500, 
+                                category: "High Consumption", 
+                                savingPotential: "High - Upgrading to efficient models can save significantly",
+                                misconception: "Many people underestimate by 3-4x how much energy this uses"
+                            },
+                            { 
+                                name: "Clothes Dryer (1 load)", 
+                                actualEnergy: 3000, 
+                                category: "High Consumption", 
+                                savingPotential: "High - Air drying or efficient models can save significantly",
+                                misconception: "Often underestimated by consumers" 
+                            },
+                            { 
+                                name: "Water Heater (1 hour)", 
+                                actualEnergy: 4000, 
+                                category: "High Consumption", 
+                                savingPotential: "High - Lower temperature settings and insulation help",
+                                misconception: "Hidden energy use that people rarely think about"
+                            },
+                            { 
+                                name: "Incandescent Bulb (1 hour)", 
+                                actualEnergy: 100, 
+                                category: "Low Consumption", 
+                                savingPotential: "Medium - Replacing with LED saves 75-80%",
+                                misconception: "Used as reference point but still overestimated"
+                            },
+                            { 
+                                name: "LED Light (1 hour)", 
+                                actualEnergy: 15, 
+                                category: "Very Low Consumption", 
+                                savingPotential: "Low - Already efficient",
+                                misconception: "Efficiency often overestimated relative to other actions"
+                            },
+                            { 
+                                name: "Laptop Computer (1 hour)", 
+                                actualEnergy: 50, 
+                                category: "Low Consumption", 
+                                savingPotential: "Low - Sleep mode helps but overall impact is small",
+                                misconception: "People often overestimate energy use"
+                            }
+                        ],
+                        
+                        // Combined simulation data
+                        confidenceTones: ["Low Confidence", "Medium Confidence", "High Confidence"],
+                        explanationLengths: ["Short", "Medium", "Long"],
+                        combinedCompressionFactor: 2.8,
+                        combinedConfidenceToneIndex: 1,
+                        combinedExplanationLengthIndex: 1, 
+                        trustLevel: 0.5,
+                        userEstimate: 60,
+                        selectedAction: null,
+                        energySavingActions: [
+                            {
+                                id: 1,
+                                name: "Turn off lights when leaving a room",
+                                actualSavings: 60,
+                                type: "Curtailment",
+                                isAICorrect: true,
+                                description: "Turning off lights when not in use is a simple way to save energy.",
+                                aiExplanationBase: "Turning off lights when leaving a room can save around 60W per hour if you have standard bulbs."
+                            },
+                            {
+                                id: 2,
+                                name: "Replace incandescent bulbs with LEDs",
+                                actualSavings: 85,
+                                type: "Efficiency",
+                                isAICorrect: true,
+                                description: "Replacing traditional bulbs with energy-efficient ones reduces energy consumption.",
+                                aiExplanationBase: "Replacing an incandescent bulb with an LED can save about 85W per hour of use."
+                            },
+                            {
+                                id: 3,
+                                name: "Unplug electronics when not in use",
+                                actualSavings: 50,
+                                type: "Curtailment",
+                                isAICorrect: false,
+                                description: "Unplugging devices eliminates standby power consumption.",
+                                aiExplanationBase: "Unplugging electronics can save around 200W per day. This is incorrect - actual savings are closer to 50W."
+                            },
+                            {
+                                id: 4,
+                                name: "Upgrade to an ENERGY STAR refrigerator",
+                                actualSavings: 500,
+                                type: "Efficiency",
+                                isAICorrect: true,
+                                description: "ENERGY STAR appliances are more efficient than standard models.",
+                                aiExplanationBase: "Upgrading to an ENERGY STAR refrigerator can save approximately 500W per day compared to an older model."
+                            }
+                        ]
+                    },
+                    mounted: function() {
+                        // Initialize the first action as selectedAction
+                        if (this.energySavingActions.length > 0) {
+                            this.selectedAction = this.energySavingActions[0];
+                            this.userEstimate = this.calculatePerceivedEnergy(this.selectedAction.actualSavings, this.combinedCompressionFactor);
+                        }
+                        
+                        // Mark that Vue has successfully mounted
+                        document.getElementById('vue-check').style.display = 'none';
+                    },
+                    methods: {
+                        // Appliance selection
+                        selectAppliance: function(index) {
+                            this.selectedApplianceIndex = index;
+                        },
+                        
+                        // Energy perception calculations
+                        calculatePerceivedEnergy: function(actualEnergy, compressionFactor) {
+                            // Simple power function model: perceived = actual^(1/compressionFactor)
+                            return Math.round(Math.pow(actualEnergy, 1/compressionFactor));
+                        },
+                        
+                        // AI advice methods
+                        getAIEnergyAdvice: function() {
+                            if (!this.selectedAction) return "";
+                            
+                            // Get confidence prefix based on tone
+                            let prefix;
+                            if (this.combinedConfidenceToneIndex === 0) {
+                                prefix = "<span class='text-yellow-400 font-medium'>I'm not completely sure, but I believe that </span>";
+                            } else if (this.combinedConfidenceToneIndex === 1) {
+                                prefix = "<span class='text-blue-400 font-medium'>I'm fairly confident that </span>";
+                            } else {
+                                prefix = "<span class='text-green-400 font-medium'>I'm certain that </span>";
+                            }
+                            
+                            // Base explanation from action data
+                            const baseExplanation = this.selectedAction.aiExplanationBase;
+                            
+                            // Additional details based on action type
+                            let additionalDetails = "";
+                            if (this.selectedAction.type === "Curtailment") {
+                                additionalDetails = " This is a 'curtailment' action, which involves changing behavior rather than equipment.";
+                            } else {
+                                additionalDetails = " This is an 'efficiency' improvement, which involves upgrading to more efficient equipment.";
+                            }
+                            
+                            return prefix + baseExplanation + additionalDetails;
+                        },
+                        
+                        getAIEstimate: function() {
+                            if (!this.selectedAction) return 0;
+                            
+                            if (this.selectedAction.isAICorrect) {
+                                return this.selectedAction.actualSavings;
+                            } else {
+                                const match = this.selectedAction.aiExplanationBase.match(/(\d+)W/);
+                                return match ? parseInt(match[1]) : this.selectedAction.actualSavings * 0.5;
+                            }
+                        },
+                        
+                        getFinalEstimate: function() {
+                            if (!this.selectedAction) return 0;
+                            
+                            // Weighted average of user estimate and AI estimate
+                            const aiEstimate = this.getAIEstimate();
+                            return Math.round(this.userEstimate * (1 - this.trustLevel) + aiEstimate * this.trustLevel);
+                        },
+                        
+                        getEstimationError: function() {
+                            if (!this.selectedAction) return 0;
+                            
+                            // Calculate percentage error from actual value
+                            const finalEstimate = this.getFinalEstimate();
+                            const actualValue = this.selectedAction.actualSavings;
+                            return ((finalEstimate - actualValue) / actualValue * 100).toFixed(1);
+                        },
+                        
+                        // Bar chart height calculations
+                        getUserEstimateBarHeight: function() {
+                            if (!this.selectedAction) return 0;
+                            const maxValue = Math.max(
+                                this.userEstimate, 
+                                this.getAIEstimate(), 
+                                this.getFinalEstimate(), 
+                                this.selectedAction.actualSavings
+                            );
+                            return (this.userEstimate / maxValue) * 250;
+                        },
+                        
+                        getAIEstimateBarHeight: function() {
+                            if (!this.selectedAction) return 0;
+                            const maxValue = Math.max(
+                                this.userEstimate, 
+                                this.getAIEstimate(), 
+                                this.getFinalEstimate(), 
+                                this.selectedAction.actualSavings
+                            );
+                            return (this.getAIEstimate() / maxValue) * 250;
+                        },
+                        
+                        getFinalEstimateBarHeight: function() {
+                            if (!this.selectedAction) return 0;
+                            const maxValue = Math.max(
+                                this.userEstimate, 
+                                this.getAIEstimate(), 
+                                this.getFinalEstimate(), 
+                                this.selectedAction.actualSavings
+                            );
+                            return (this.getFinalEstimate() / maxValue) * 250;
+                        },
+                        
+                        getActualValueBarHeight: function() {
+                            if (!this.selectedAction) return 0;
+                            const maxValue = Math.max(
+                                this.userEstimate, 
+                                this.getAIEstimate(), 
+                                this.getFinalEstimate(), 
+                                this.selectedAction.actualSavings
+                            );
+                            return (this.selectedAction.actualSavings / maxValue) * 250;
+                        }
+                    }
+                });
+            };
+        } catch (e) {
+            console.error('Error initializing Vue:', e);
+            document.getElementById('fallback').classList.remove('hidden');
+        }
+    </script>
+
+
+</body></html>

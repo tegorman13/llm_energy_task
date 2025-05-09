@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Trust & Calibration Research Resource</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Tailwind gray-100 */
+            color: #1f2937; /* Tailwind gray-800 */
+        }
+        .main-container {
+            max-width: 1400px; /* Increased max-width for more content */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1.5rem; /* Tailwind p-6 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* Tailwind rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-lg */
+            padding: 1.5rem; /* Tailwind p-6 */
+            margin-bottom: 1.5rem; /* Added margin for spacing between cards within tabs */
+        }
+        .card-title {
+            font-size: 1.25rem; /* Tailwind text-xl */
+            font-weight: 600; /* Tailwind font-semibold */
+            color: #1f2937; /* Tailwind gray-800 */
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            padding-bottom: 0.75rem;
+        }
+        
+        /* Tab Styles */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid #d1d5db; /* Tailwind gray-300 */
+            margin-bottom: 1.5rem; /* Tailwind mb-6 */
+        }
+        .nav-tab {
+            padding: 0.75rem 1.5rem; /* Tailwind py-3 px-6 */
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px; 
+            color: #4b5563; /* Tailwind gray-600 */
+            font-weight: 500;
+            font-size: 1rem; /* Tailwind text-base */
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-tab:hover {
+            color: #3b82f6; /* Tailwind blue-500 */
+        }
+        .nav-tab.active {
+            color: #3b82f6; /* Tailwind blue-500 */
+            border-bottom-color: #3b82f6; /* Tailwind blue-500 */
+            font-weight: 600;
+        }
+        .tab-pane { /* Renamed from tab-content to avoid conflict with old class */
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Styles for the 9-step process diagram (within its tab) */
+        .process-diagram-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .process-step {
+            background-color: #e0f2fe; /* Tailwind sky-100 */
+            border: 1px solid #7dd3fc; /* Tailwind sky-300 */
+            color: #0c4a6e; /* Tailwind sky-800 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            width: 90%; 
+            max-width: 550px; 
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .process-step-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .process-step-title svg { 
+            width: 1.25rem; 
+            height: 1.25rem; 
+            margin-right: 0.375rem; 
+            vertical-align: middle;
+        }
+        .process-step-details {
+            font-size: 0.8rem;
+            color: #0369a1; /* Tailwind sky-700 */
+            line-height: 1.4;
+        }
+        .process-arrow {
+            margin: 0.25rem 0;
+            color: #374151; /* Tailwind gray-700 */
+            font-size: 1.5rem; 
+        }
+        .process-arrow-label {
+            font-size: 0.75rem;
+            color: #4b5563; /* Tailwind gray-600 */
+            margin-bottom: 0.25rem;
+            font-style: italic;
+        }
+
+        /* General Controls & Metrics (reusable) */
+        .controls label, .live-demo-controls label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            color: #374151; 
+        }
+        .controls input[type="range"], .controls select, .controls button,
+        .live-demo-controls input[type="number"], .live-demo-controls input[type="range"], .live-demo-controls button {
+            width: 100%;
+            padding: 0.75rem; /* Increased padding */
+            border-radius: 0.375rem; 
+            border: 1px solid #d1d5db; 
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .controls button, .live-demo-controls button {
+            background-color: #3b82f6; 
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .controls button:hover, .live-demo-controls button:hover {
+            background-color: #2563eb; 
+        }
+        .metric-display {
+            font-size: 1rem;
+            color: #1f2937; 
+            margin-bottom: 0.5rem; /* Added margin */
+        }
+        .metric-display strong {
+            font-weight: 600;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            background: #111827; 
+            color: white;
+            border-radius: 0.25rem; 
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10; /* Ensure tooltip is on top */
+        }
+        .plot-container {
+            min-height: 300px;
+            width: 100%;
+        }
+        
+        /* Styles for Study Proposal Tab */
+        .proposal-section h3 {
+            font-size: 1.15rem; /* Slightly smaller than card-title */
+            font-weight: 600;
+            color: #111827; /* Tailwind gray-900 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .proposal-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151; /* Tailwind gray-700 */
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .proposal-section p, .proposal-section ul, .proposal-section ol {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #374151; /* Tailwind gray-700 */
+            margin-bottom: 0.75rem;
+        }
+        .proposal-section ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+        }
+        .proposal-section ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+        }
+        .proposal-section strong {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .proposal-section em {
+            font-style: italic;
+        }
+
+        /* Live Demo Specific Styles */
+        .live-demo-appliance-display {
+            background-color: #e0f2fe; /* sky-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #bae6fd; /* sky-200 */
+        }
+        .live-demo-appliance-display h4 { margin-top: 0; }
+
+        .live-demo-ai-advice {
+            background-color: #fef3c7; /* amber-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #fde68a; /* amber-200 */
+        }
+        .live-demo-ai-advice p { margin-bottom: 0.5rem; }
+        .live-demo-ai-estimate { font-size: 1.1rem; font-weight: bold; color: #78350f; /* amber-800 */ }
+        .live-demo-ai-explanation { font-style: italic; color: #92400e; /* amber-700 */}
+
+        .live-demo-choice-buttons button {
+            background-color: #10b981; /* emerald-500 */
+            margin-right: 0.5rem;
+        }
+        .live-demo-choice-buttons button:hover {
+            background-color: #059669; /* emerald-600 */
+        }
+        .live-demo-feedback {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+        }
+        .live-demo-feedback.correct { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7;} /* emerald */
+        .live-demo-feedback.incorrect { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;} /* red */
+
+        /* Grid layout for Calibration Concepts & Simulator Tab */
+        .simulator-grid-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+        @media (min-width: 1024px) { /* lg */
+            .simulator-grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .simulator-col-span-1 { grid-column: span 1 / span 1; }
+            .simulator-col-span-2 { grid-column: span 2 / span 2; }
+        }
+
+
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="main-container">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800">LLM Trust & Calibration: An Open Science Resource</h1>
+            <p class="text-lg text-gray-600 mt-2">Exploring human-AI interaction in the context of energy advice.</p>
+        </header>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTabPane('studyProposalTab', this)">Study Proposal Overview</div>
+            <div class="nav-tab" onclick="showTabPane('calibrationSimulatorTab', this)">Calibration Concepts & Simulator</div>
+            <div class="nav-tab" onclick="showTabPane('liveDemoTab', this)">Live Study Demo</div>
+        </div>
+
+        <div class="tab-content-area mt-2">
+            <div id="studyProposalTab" class="tab-pane active">
+                <div class="card proposal-section">
+                    <h2 class="card-title">Calibrating Trust in an LLM Energy Advisor: The Impact of Linguistic Uncertainty</h2>
+                    
+                    <h3>1. Comparison and Contrast with Attari et al. (2010) and Steyvers et al. (2025)</h3>
+                    <h4>Attari et al. (2010) - The "What People (Don't) Know" Foundation:</h4>
+                    <ul>
+                        <li><strong>Focus:</strong> Quantifying public misperceptions of energy consumption and savings. Showed systematic underestimation of high-energy items and overestimation of low-energy items, and a preference for less effective curtailment over efficiency.</li>
+                        <li><strong>Method:</strong> Participants estimated energy use of various appliances/activities relative to a 100W incandescent bulb.</li>
+                        <li><strong>Contribution to Your Proposal:</strong>
+                            <ul>
+                                <li>Provides the <strong>domain and the problem</strong>: People are generally poor at estimating energy use, creating a need for accurate advice and a challenging environment for an AI advisor.</li>
+                                <li>Inspires your <strong>Phase 1 (Baseline Energy Knowledge Assessment)</strong>: You'll measure participants' initial energy estimates, similar to Attari, to understand their starting point and potentially use this as a covariate or moderator.</li>
+                                <li>Highlights the <strong>stakes</strong>: Miscalibrated trust in an energy LLM could exacerbate existing misconceptions or lead to poor energy-saving decisions.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Steyvers et al. (2025) - The "How People Interact with (Un)Certain AI" Framework:</h4>
+                    <ul>
+                        <li><strong>Focus:</strong> Investigating the "calibration gap" (human confidence vs. LLM's actual/internal confidence) and "discrimination gap" (human ability to distinguish correct/incorrect LLM answers). Showed that LLM's default explanations often lead to overestimation of accuracy by users.</li>
+                        <li><strong>Method:</strong> Manipulated LLM explanation style (linguistic uncertainty, length) based on the LLM's internal confidence metrics and measured its impact on human confidence, calibration (ECE), and discrimination (AUC).</li>
+                        <li><strong>Contribution to Your Proposal:</strong>
+                            <ul>
+                                <li>Provides the <strong>core intervention and theoretical lens</strong>: Manipulating the LLM's linguistic expression of uncertainty.</li>
+                                <li>Inspires your <strong>Phase 2 (AI Interaction Task)</strong>: You'll present AI advice with varying linguistic uncertainty.</li>
+                                <li>Suggests key <strong>dependent variables and analytical approaches</strong>: Human confidence ratings, calibration metrics (like Brier score or ECE if you capture correctness judgments), and potentially discrimination if applicable to your reliance measure.</li>
+                                <li>Highlights the <strong>mechanism for improving trust</strong>: Aligning expressed uncertainty with actual AI reliability can help users better calibrate.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Your Proposal - The Synthesis:</h4>
+                    <ul>
+                        <li><strong>Unique Contribution:</strong> Your study uniquely combines these by:
+                            <ol>
+                                <li><strong>Applying Steyvers' principles to a specific, consequential domain (energy) where Attari demonstrated pre-existing user knowledge gaps.</strong> This is crucial because user's prior (mis)conceptions in the energy domain will likely interact significantly with how they perceive and use the AI's advice.</li>
+                                <li><strong>Introducing a direct comparative judgment/forced-choice reliance task.</strong> Instead of just rating AI confidence (as in Steyvers' primary DVs), you're asking participants to choose between their <em>own</em> (Attari-like) estimate and the AI's estimate. This is a strong behavioral measure of reliance and directly pits the user's potentially flawed knowledge against the AI's (variably certain) advice.</li>
+                                <li><strong>Focusing on "calibrating trust" specifically through linguistic uncertainty.</strong> While Steyvers looked at calibration of accuracy judgments, your emphasis is on how this translates to appropriate reliance and trust.</li>
+                            </ol>
+                        </li>
+                        <li><strong>Contrast Summary:</strong>
+                            <ul>
+                                <li><strong>Attari:</strong> Descriptive, focused on human knowledge deficit.</li>
+                                <li><strong>Steyvers:</strong> Prescriptive (how to improve interaction), focused on general knowledge LLMs and human perception of AI accuracy.</li>
+                                <li><strong>Your Proposal:</strong> Prescriptive, focused on a specific domain (energy) with known user deficits, using linguistic uncertainty to calibrate trust and influence reliance decisions involving direct comparison with user's own beliefs.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>2. Rewritten Research Questions (RQs) and Hypotheses (Hs)</h3>
+                    <p><strong>Overall Research Aim:</strong> To investigate whether an LLM Energy Advisor's linguistic expression of uncertainty, informed by its internal confidence, can improve users' calibration of trust and lead to more appropriate reliance on its advice, particularly given users' pre-existing (and often inaccurate) knowledge about energy consumption.</p>
+                    <h4>Research Questions (RQs):</h4>
+                    <ul>
+                        <li><strong>RQ1 (Reliance & Accuracy):</strong> How does the LLM's linguistic expression of uncertainty (confident vs. hedged) influence participants' reliance on its energy estimates when forced to choose between the AI's estimate and their own prior estimate? Specifically, does hedged language from the AI decrease reliance on incorrect AI estimates more than on correct AI estimates?</li>
+                        <li><strong>RQ2 (Subjective Confidence & Trust):</strong> How does the LLM's linguistic expression of uncertainty affect participants' subjective confidence in the AI's specific estimate for each item, and their overall post-task trust in the LLM advisor?</li>
+                        <li><strong>RQ3 (Calibration of Confidence):</strong> Does linguistically expressing the LLM's uncertainty lead to better calibration between participants' confidence in the AI's estimates and the actual accuracy of those estimates (i.e., do users become more confident in correct AI advice and less confident in incorrect AI advice)?</li>
+                        <li><strong>RQ4 (Role of Prior Knowledge & Individual Differences):</strong> How do participants' baseline energy knowledge accuracy (from Phase 1) and individual differences (e.g., AI literacy, numeracy) moderate the effects of the LLM's expressed uncertainty on their reliance, confidence, and calibration?</li>
+                    </ul>
+                    <h4>Hypotheses (Hs):</h4>
+                    <ul>
+                        <li><strong>H1 (Appropriate Reliance):</strong>
+                            <ul>
+                                <li><strong>H1a:</strong> Participants will be less likely to choose the AI's estimate when it is expressed with hedged (uncertain) language compared to confident language, in the forced-choice task.</li>
+                                <li><strong>H1b (Interaction):</strong> The reduction in reliance due to hedged language (H1a) will be significantly greater when the AI's advice is incorrect than when it is correct, leading to more <em>appropriate reliance</em> (i.e., participants will be better at rejecting incorrect AI advice when it sounds uncertain).</li>
+                            </ul>
+                        </li>
+                        <li><strong>H2 (Subjective Confidence & Trust):</strong>
+                            <ul>
+                                <li><strong>H2a:</strong> Participants will report lower confidence in the AI's estimate for a specific item when its explanation is hedged compared to when it is confident.</li>
+                                <li><strong>H2b:</strong> Participants will report lower overall post-task trust in the LLM advisor after interacting with an advisor that predominantly uses hedged language compared to one that uses confident language (or this could be nuanced: trust might be better calibrated, not just lower).</li>
+                            </ul>
+                        </li>
+                        <li><strong>H3 (Improved Calibration):</strong> Participants exposed to AI estimates with linguistic uncertainty cues (hedged language corresponding to AI's lower internal confidence, confident language for higher) will exhibit better calibration (e.g., lower Brier scores or ECE) than participants exposed only to confidently expressed AI estimates, or a mix not aligned with internal confidence. They will be better at aligning their confidence level with the AI's actual accuracy.</li>
+                        <li><strong>H4 (Moderation by Prior Knowledge & Individual Differences):</strong>
+                            <ul>
+                                <li><strong>H4a (Prior Knowledge):</strong> Participants with more accurate baseline energy knowledge (Phase 1) will demonstrate more appropriate reliance (better discrimination in the forced-choice task) and better calibration overall. The benefits of AI uncertainty cues (H1b, H3) might be more pronounced for those with initially poorer or overly confident inaccurate knowledge.</li>
+                                <li><strong>H4b (AI Literacy/Numeracy):</strong> Participants with higher AI literacy and numeracy will be more sensitive to the AI's linguistic uncertainty cues, leading to more pronounced effects on appropriate reliance (H1b) and better calibration (H3).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>3. Draft Outline for Study Design and Procedure</h3>
+                    <h4>A. Study Design:</h4>
+                    <p><strong>Overall Design:</strong> Mixed-factorial design.</p>
+                    <ul>
+                        <li><strong>Phase 1 (Baseline Assessment):</strong> Correlational.</li>
+                        <li><strong>Phase 2 (AI Interaction Task):</strong>
+                            A 2 (AI Uncertainty Communication Style: Calibrated vs. Always Confident - Between-Subjects) x N (Items: e.g., 8 appliances - Within-Subjects) x 2 (AI Advice Correctness for each item presentation: Correct vs. Incorrect - Within-Subjects, manipulated & counterbalanced) mixed factorial design.
+                            <ul>
+                                <li>For the "Calibrated" style: Correct advice gets confident language. Incorrect advice gets hedged language.</li>
+                                <li>For the "Always Confident" style: Both correct and incorrect advice get confident language.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>B. Participants:</h4>
+                    <ul>
+                        <li>Recruited from an online platform (e.g., Prolific, MTurk) or university pool.</li>
+                        <li>Target sample size to be determined by power analysis (e.g., N=150-200 for adequate power for between-subjects comparisons and interactions).</li>
+                        <li>Exclusion criteria: Failed attention checks, non-native English speakers (if linguistic nuance is critical).</li>
+                    </ul>
+                    <h4>C. Materials & Measures:</h4>
+                    <ol>
+                        <li><strong>Appliance Set:</strong> List of 8-10 common household appliances/activities with established average energy consumption values (e.g., from Attari et al., NREL, EnergyStar). These will be used in both Phase 1 and Phase 2.</li>
+                        <li><strong>Phase 1 - Baseline Energy Knowledge:</strong>
+                            <ul>
+                                <li><strong>Appliance Energy Estimation Task:</strong> "Relative to a 100-watt incandescent light bulb which uses 100 units of energy per hour, how many units of energy do you think the following device typically uses in one hour?" (for all appliances).</li>
+                                <li><strong>Accuracy Score:</strong> Calculated for each participant based on their Phase 1 estimates compared to ground truth (e.g., log-ratio accuracy, absolute error).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 2 - AI Energy Advisor Interaction:</strong>
+                            <ul>
+                                <li><strong>AI-Generated Advice:</strong> For each appliance, pre-scripted AI estimates and explanations.
+                                    <ul>
+                                        <li><strong>Estimates:</strong> One "correct" (true value) and one "incorrect" (e.g., systematically overestimated for low-use items, underestimated for high-use items, mimicking Attari's findings but from the AI).</li>
+                                        <li><strong>Explanations (Linguistic Manipulation):</strong>
+                                            <ul>
+                                                <li><em>Confident Tone:</em> Clear, direct language, assertive statements (e.g., "A stereo typically uses 20 units per hour. This is because most standard stereo systems consume between 10 to 50 watts during operation.")</li>
+                                                <li><em>Hedged Tone:</em> Softer language, qualifiers, uncertainty markers (e.g., "My estimate is around 20 units for the 'Stereo.' It seems that the estimated energy use for a 'Stereo' could be in the ballpark of 20 units per hour, though this can vary. This might be typical for many standard stereo systems that often consume somewhere between 10 to 50 watts, but it's just an estimate.")</li>
+                                                <li><em>Implementation:</em> The actual linguistic expression for "hedged" will be consistent for all incorrect items in the "Calibrated" condition, or varied if simulating different levels of low internal confidence. For the "Always Confident" condition, both correct and incorrect AI advice get the confident tone.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><strong>Dependent Variables (Trial-Level):</strong>
+                                    <ul>
+                                        <li><strong>AI Confidence Rating:</strong> "How confident are you that the AI's estimate shown above is correct for this item?" (0-100% slider).</li>
+                                        <li><strong>Reliance (Forced Choice):</strong> "Considering your own initial estimate and the AI's estimate, which do you believe is more accurate?" (Buttons: "My Initial Estimate," "The AI's Estimate").</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>Individual Difference Measures (Administered before Phase 1 or between Phase 1 and 2):</strong>
+                            <ul>
+                                <li><strong>AI Literacy Scale:</strong> e.g., AICOS-SV (Markus et al., 2025) or similar.</li>
+                                <li><strong>Numeracy Scale:</strong> e.g., Berlin Numeracy Test (Cokely et al., 2012).</li>
+                                <li><strong>Propensity to Trust Automation:</strong> e.g., Jian–Bisantz–Drury Trust in Automation Scale.</li>
+                                <li>Demographics: Age, education, prior experience with LLMs.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Post-Task Measures:</strong>
+                            <ul>
+                                <li><strong>Overall Trust in the AI Advisor:</strong> Using the same trust scale as above, but rephrased for overall judgment.</li>
+                                <li><strong>Manipulation Check:</strong> "How certain or uncertain did the AI generally seem in its advice?" (Likert scale).</li>
+                                <li>Open-ended feedback.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h4>D. Procedure:</h4>
+                    <ol>
+                        <li><strong>Consent & Demographics:</strong> Participants provide informed consent and complete demographic questions.</li>
+                        <li><strong>Individual Difference Measures:</strong> Administer AI literacy, numeracy, and propensity to trust automation scales.</li>
+                        <li><strong>Phase 1: Baseline Energy Estimation:</strong>
+                            <ul>
+                                <li>Instructions for the estimation task (relative to 100W bulb).</li>
+                                <li>Participants provide estimates for all appliances in the set. Their estimates are recorded.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Instructions for Phase 2:</strong>
+                            <ul>
+                                <li>Introduction to the "AI Energy Advisor." Participants are told they will see the AI's estimates for some of the same appliances and will be asked to evaluate them.</li>
+                                <li>Explanation of the confidence rating and the forced-choice task.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 2: AI Interaction Task (Trial-by-Trial, for each of the N items):</strong>
+                            <ul>
+                                <li>An appliance name is presented.</li>
+                                <li>The AI's estimate and its (manipulated) explanation are displayed. (Correctness of AI estimate and linguistic style determined by experimental condition and counterbalancing).</li>
+                                <li>Participant rates their confidence in the AI's estimate (slider).</li>
+                                <li>Participant's own estimate for that item (from Phase 1) is displayed next to the AI's estimate.</li>
+                                <li>Participant makes the forced choice: "My Initial Estimate" or "The AI's Estimate."</li>
+                                <li>(Short inter-trial interval). Repeat for all N items. Order of items and assignment of correct/incorrect AI advice should be counterbalanced/randomized across participants.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Post-Task Measures:</strong> Administer overall trust scale, manipulation check, and open-ended feedback.</li>
+                        <li><strong>Debriefing:</strong> Explain the full purpose of the study, including the manipulation of AI advice correctness and linguistic uncertainty. Provide resources for accurate energy information.</li>
+                    </ol>
+                    <h4>E. Data Analysis Plan:</h4>
+                     <ul>
+                        <li><strong>H1 (Reliance):</strong> Logistic mixed-effects models to predict the forced choice (User vs. AI) with AI Uncertainty Style, AI Correctness, and their interaction as fixed effects, and participant/item as random effects.</li>
+                        <li><strong>H2 (Subjective Confidence/Trust):</strong> Linear mixed-effects models for trial-level AI confidence ratings. ANOVA/t-test for overall post-task trust.</li>
+                        <li><strong>H3 (Calibration):</strong> Calculate Brier scores (or ECE if judgments of AI correctness are collected) based on participants' confidence ratings and the AI's actual correctness per trial. Compare these scores between AI Uncertainty Style conditions using mixed-effects models or ANOVA.</li>
+                        <li><strong>H4 (Moderation):</strong> Include baseline energy knowledge accuracy, AI literacy, and numeracy scores as covariates or moderators in the mixed-effects models for H1, H2, and H3.</li>
+                    </ul>
+                    <p class="mt-6 text-xs text-gray-500">References:<br>
+                    Steyvers, M., Tejeda, H., Kumar, A., Belem, C., Karny, S., Hu, X., Mayer, L., & Smyth, P. (2025). What large language models know and what people think they know. <em>Nature Machine Intelligence</em>, 1–11. <br>
+                    Attari, S. Z., DeKay, M. L., Davidson, C. I., & Bruine De Bruin, W. (2010). Public perceptions of energy consumption and savings. <em>Proceedings of the National Academy of Sciences, 107(37)</em>, 16054–16059. https://doi.org/10.1073/pnas.1001509107</p>
+                </div>
+            </div>
+
+            <div id="calibrationSimulatorTab" class="tab-pane">
+                <div class="simulator-grid-container">
+                    <div class="simulator-col-span-1 space-y-6">
+                        <div class="card">
+                            <h2 class="card-title">LLM Confidence & Calibration: Process Flow</h2>
+                            <div class="nav-tabs" id="simulatorInternalTabs">
+                                <div class="nav-tab active" onclick="showSimulatorSubTab('tab-process-diagram-content', this, 'simulatorInternalTabs')">Process Diagram</div>
+                                <div class="nav-tab" onclick="showSimulatorSubTab('tab-definitions-content', this, 'simulatorInternalTabs')">Key Definitions</div>
+                            </div>
+            
+                            <div id="tab-process-diagram-content" class="tab-pane active">
+                                <p class="text-sm text-gray-600 mb-4">This diagram illustrates the typical flow from an LLM's internal state through to human interaction and research evaluation, highlighting where key calibration concepts emerge.</p>
+                                <div class="process-diagram-container">
+                                    <div class="process-step">
+                                        <div class="process-step-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m12.75-9.75L18 6m0 0L15.75 3M18 6v1.5m-6 13.5V21m6-3.75L18 21m0 0L15.75 18M18 21v-1.5m-15-12.75L6 3m0 0L8.25 6M6 3v1.5M3 12c0 4.556 3.694 8.25 8.25 8.25 1.347 0 2.619-.322 3.75-.885m-3.75-.885L18 18.75m0-11.25L12 3.75m0 11.25L6 18.75" />
+                                            </svg>
+                                            1. LLM Internal State (Neural Network Core)
+                                        </div>
+                                        <div class="process-step-details">• Knowledge in weights & activations<br>• Potential for token generation based on context</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Generates raw outputs: tokens & their likelihoods)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">2. LLM Raw Outputs (From Prediction Layer)</div>
+                                        <div class="process-step-details">• <strong>Generated Text/Answer</strong> (chosen token sequence)<br>• <strong>Token-Level Log-Probs</strong> (scores for output tokens, forming basis for P̂)</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Log-probs converted to numeric P̂)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">3. Model Confidence (P̂)</div>
+                                        <div class="process-step-details">• Numeric probability of chosen answer's correctness (derived from log-probs)<br>• Not yet visible to end user</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Drives wording of the explanation / hedging)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">4. LLM User-Facing Output</div>
+                                        <div class="process-step-details">• Answer text<br>• Explanation / rationale<br>• Linguistic hedge derived from P̂<br>• (Optional) explicit numeric probability</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Displayed to user)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">5. Human Cognition</div>
+                                        <div class="process-step-details">• Interprets answer & rationale<br>• Forms subjective confidence Ĉ (0–100)<br>• Decides to rely / ignore</div>
+                                    </div>
+                                    <div class="process-arrow-label">(UI records Ĉ and choice)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">6. Human Response Data</div>
+                                        <div class="process-step-details">• Confidence rating Ĉ<br>• Reliance decision</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Supplies data along with Ground Truth & P̂)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">7. Ground-Truth Dataset (y)</div>
+                                        <div class="process-step-details">• Correct/actual outcomes or values</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Ground-Truth, P̂, and Ĉ feed into metrics)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">8. Research Metrics</div>
+                                        <div class="process-step-details">• Calibration Gap: |Ĉ – P̂|<br>• Expected Calibration Error (ECE)<br>• Brier Score<br>• AUC (Discrimination)<br>• Model Accuracy</div>
+                                    </div>
+                                    <div class="process-arrow-label">(Informs)</div>
+                                    <div class="process-arrow">↓</div>
+                                    <div class="process-step">
+                                        <div class="process-step-title">9. Decision Quality & Outcomes</div>
+                                        <div class="process-step-details">• Advice adoption/rejection<br>• Task performance<br>• Guidelines for uncertainty communication</div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div id="tab-definitions-content" class="tab-pane">
+                                <dl class="space-y-3 text-sm">
+                                    <div><dt class="font-semibold text-gray-700">Model Confidence (P̂):</dt><dd class="text-gray-600">The probability (0 to 1) that an LLM assigns to its own answer being correct. This is often derived from the log-probabilities of the output tokens.</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Human Confidence (Ĉ):</dt><dd class="text-gray-600">A person's subjective belief (e.g., on a 0-100 scale) that the LLM's answer is correct, after reviewing the LLM's output.</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Ground Truth (y):</dt><dd class="text-gray-600">The actual, objective correctness of an answer (typically 1 if correct, 0 if incorrect).</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Calibration:</dt><dd class="text-gray-600">The alignment between stated confidence and actual accuracy. A perfectly calibrated model that says it's X% confident will be correct X% of the time for those predictions.</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Expected Calibration Error (ECE):</dt><dd class="text-gray-600">A metric quantifying miscalibration. It's the weighted average of the difference between average confidence and actual accuracy within predefined confidence bins. Lower ECE is better.</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Brier Score:</dt><dd class="text-gray-600">A proper scoring rule measuring the accuracy of probabilistic predictions. It's the mean squared difference between predicted probability and actual outcome. Lower Brier Score is better (0 is perfect).</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Discrimination (AUC):</dt><dd class="text-gray-600">The ability of a model's confidence scores to distinguish between correct and incorrect items. Area Under the ROC Curve (AUC) is a common measure. Higher AUC (closer to 1) is better.</dd></div>
+                                    <div><dt class="font-semibold text-gray-700">Calibration Gap:</dt><dd class="text-gray-600">The discrepancy between human confidence (Ĉ) and model confidence (P̂), or more broadly, the difference in calibration quality between human judgment of the LLM and the LLM's own self-assessment.</dd></div>
+                                     <div><dt class="font-semibold text-gray-700">Logprobs:</dt><dd class="text-gray-600">Logarithmic probabilities. LLMs often output scores for potential next tokens as logprobs. These can be converted to probabilities (e.g., using the softmax function). The confidence P̂ is derived from these.</dd></div>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="simulator-col-span-2 space-y-6">
+                        <div class="card">
+                            <h2 class="card-title">Simulation Controls</h2>
+                            <div class="controls grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="numTrials">Number of Trials:</label>
+                                    <input type="range" id="numTrials" min="20" max="1000" value="100" step="10">
+                                    <span id="numTrialsValue" class="text-sm text-gray-600">100</span>
+                                </div>
+                                <div>
+                                    <label for="llmProfile">LLM Calibration Profile:</label>
+                                    <select id="llmProfile">
+                                        <option value="perfect">Perfectly Calibrated</option>
+                                        <option value="overconfident">Overconfident</option>
+                                        <option value="underconfident">Underconfident</option>
+                                        <option value="poor_discrimination">Poor Discrimination</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <button id="runSimulation">Run Simulation</button>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="card">
+                            <h2 class="card-title">Simulation Results</h2>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-700 mb-2">Calibration Curve (Reliability Diagram)</h3>
+                                    <div id="calibrationPlot" class="plot-container"></div>
+                                </div>
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-700 mb-2">Confidence Histograms</h3>
+                                    <div id="confidenceHistograms" class="plot-container"></div>
+                                     <p class="text-xs text-gray-500 mt-1">Blue: Correct, Red: Incorrect. Good discrimination means less overlap.</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 space-y-2">
+                                <div class="metric-display"><strong>Expected Calibration Error (ECE):</strong> <span id="eceValue">-</span></div>
+                                <div class="metric-display"><strong>Brier Score:</strong> <span id="brierScoreValue">-</span></div>
+                                <div class="metric-display"><strong>Model Accuracy:</strong> <span id="accuracyValue">-</span></div>
+                                <div class="metric-display"><strong>Discrimination (AUC approximation):</strong> <span id="aucValue">-</span> (Higher is better)</div>
+                            </div>
+                        </div>
+                         <div class="card">
+                            <h2 class="card-title">Understanding the Simulation</h2>
+                            <p class="text-sm text-gray-600">
+                                This simulation generates a set of hypothetical LLM predictions. Each prediction has a 'model confidence' (P̂) and an 'actual outcome' (ground truth: correct or incorrect).
+                                You can adjust the number of trials and the LLM's inherent calibration profile. The plots and metrics will update to show how these profiles affect ECE, Brier Score, and the visual patterns of calibration and discrimination.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="liveDemoTab" class="tab-pane">
+                <div class="card">
+                    <h2 class="card-title">Live Energy Advisor Demo Task</h2>
+                    <p class="text-gray-600 mb-6">This is a simplified demonstration of the AI-assisted decision-making task proposed in the study. You will estimate energy use, see an AI's advice, and make a choice.</p>
+
+                    <div id="liveDemoContainer" class="live-demo-controls">
+                        <div id="demoPhase1" class="mb-6">
+                            <h3 class="text-lg font-semibold mb-2 text-sky-700">Phase 1: Your Energy Estimate</h3>
+                            <div class="live-demo-appliance-display">
+                                <h4 class="text-md font-medium text-gray-700">Appliance: <span id="demoApplianceName" class="font-bold"></span></h4>
+                                <p class="text-sm text-gray-500">A 100-Watt incandescent light bulb uses 100 units of energy in one hour. How many units of energy do you think the device above typically uses in one hour?</p>
+                            </div>
+                            <label for="userEstimate">Your Estimate (Units/Hour):</label>
+                            <input type="number" id="userEstimate" placeholder="Enter your estimate">
+                            <button id="submitUserEstimate">Submit Estimate</button>
+                        </div>
+
+                        <div id="demoPhase2" style="display:none;">
+                            <h3 class="text-lg font-semibold mb-2 text-sky-700">Phase 2: AI Advisor Interaction</h3>
+                            <div class="live-demo-ai-advice">
+                                <p class="text-sm font-medium text-gray-700">Energy-AI-Advisor says for <span id="demoApplianceNameAI" class="font-bold"></span>:</p>
+                                <p>My estimate is: <span id="aiEstimateValue" class="live-demo-ai-estimate"></span> units</p>
+                                <p id="aiExplanation" class="live-demo-ai-explanation"></p>
+                            </div>
+
+                            <label for="userConfidenceInAI">How confident are you that the AI's estimate is correct? (0-100%)</label>
+                            <input type="range" id="userConfidenceInAI" min="0" max="100" value="50">
+                            <p class="text-sm text-gray-600 text-center mb-4">Your Confidence: <span id="userConfidenceInAIValue">50</span>%</p>
+
+                            <h4 class="text-md font-semibold mb-2 text-gray-700">Comparison of Estimates:</h4>
+                            <p class="mb-1 text-sm">Your earlier estimate for <span id="demoApplianceNameCompare" class="font-bold"></span>: <span id="userPriorEstimateDisplay" class="font-bold"></span> units</p>
+                            <p class="mb-3 text-sm">AI's estimate for <span id="demoApplianceNameCompare2" class="font-bold"></span>: <span id="aiEstimateDisplay" class="font-bold"></span> units</p>
+                            
+                            <label>Which estimate do you believe is more accurate?</label>
+                            <div class="live-demo-choice-buttons mb-4">
+                                <button id="chooseUserEstimate">My Initial Estimate</button>
+                                <button id="chooseAIEstimate">The AI's Estimate</button>
+                            </div>
+                            <div id="demoFeedback" class="live-demo-feedback" style="display:none;"></div>
+                            <button id="nextDemoItem" style="display:none; background-color: #6b7280;">Next Item</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        // --- Tab Switching Logic ---
+        function showTabPane(tabPaneId, element) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabPaneId).classList.add('active');
+            element.classList.add('active');
+        }
+        // For nested tabs within the simulator
+        function showSimulatorSubTab(tabId, element, parentTabsId) {
+            const parentTabsContainer = document.getElementById(parentTabsId);
+            parentTabsContainer.querySelectorAll('.tab-pane').forEach(tc => tc.classList.remove('active'));
+            parentTabsContainer.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- Original Simulation Logic (for Tab 2) ---
+        const numTrialsSlider = document.getElementById('numTrials');
+        const numTrialsValueDisplay = document.getElementById('numTrialsValue');
+        const llmProfileSelect = document.getElementById('llmProfile');
+        const runSimulationButton = document.getElementById('runSimulation');
+        const eceValueDisplay = document.getElementById('eceValue');
+        const brierScoreValueDisplay = document.getElementById('brierScoreValue');
+        const accuracyValueDisplay = document.getElementById('accuracyValue');
+        const aucValueDisplay = document.getElementById('aucValue');
+        const calibrationPlotDiv = document.getElementById('calibrationPlot');
+        const confidenceHistogramsDiv = document.getElementById('confidenceHistograms');
+        const tooltip = d3.select("#tooltip");
+
+        if (numTrialsSlider) { // Check if these elements exist (they are in Tab 2)
+            numTrialsSlider.oninput = () => {
+                numTrialsValueDisplay.textContent = numTrialsSlider.value;
+            };
+            runSimulationButton.addEventListener('click', runOriginalSimulation);
+        }
+
+        function runOriginalSimulation() {
+            const numTrials = parseInt(numTrialsSlider.value);
+            const llmProfile = llmProfileSelect.value;
+            const data = generateOriginalData(numTrials, llmProfile);
+            updateOriginalVisualizations(data);
+            calculateAndDisplayOriginalMetrics(data);
+        }
+
+        function generateOriginalData(numTrials, profile) {
+            const data = [];
+            for (let i = 0; i < numTrials; i++) {
+                let pTrue = Math.random(); 
+                let modelConfidence;
+                switch (profile) {
+                    case 'perfect': modelConfidence = pTrue; break;
+                    case 'overconfident': modelConfidence = Math.sqrt(pTrue); break;
+                    case 'underconfident': modelConfidence = pTrue * pTrue; break;
+                    case 'poor_discrimination':
+                        const noise = (Math.random() - 0.5) * 0.6;
+                        modelConfidence = pTrue + noise;
+                        break;
+                    default: modelConfidence = pTrue;
+                }
+                modelConfidence = Math.max(0.01, Math.min(0.99, modelConfidence));
+                const groundTruth = Math.random() < pTrue ? 1 : 0;
+                data.push({ modelConfidence, groundTruth });
+            }
+            return data;
+        }
+
+        function calculateAndDisplayOriginalMetrics(data) {
+            const totalPredictions = data.length;
+            const overallCorrectness = data.reduce((sum, d) => sum + d.groundTruth, 0) / totalPredictions;
+            accuracyValueDisplay.textContent = `${(overallCorrectness * 100).toFixed(1)}% (Dataset Base Rate Correct)`;
+            const brierScore = data.reduce((sum, d) => sum + Math.pow(d.modelConfidence - d.groundTruth, 2), 0) / totalPredictions;
+            brierScoreValueDisplay.textContent = brierScore.toFixed(4);
+
+            const numBins = 10;
+            const bins = Array(numBins).fill(null).map(() => ({ sumConfidence: 0, count: 0, sumCorrect: 0 }));
+            data.forEach(d => {
+                let binIndex = Math.floor(d.modelConfidence * numBins);
+                if (binIndex >= numBins) binIndex = numBins - 1; 
+                if (binIndex < 0) binIndex = 0; 
+                bins[binIndex].sumConfidence += d.modelConfidence;
+                bins[binIndex].count++;
+                bins[binIndex].sumCorrect += d.groundTruth;
+            });
+            let ece = 0;
+            bins.forEach(bin => {
+                if (bin.count > 0) {
+                    const avgConfidenceInBin = bin.sumConfidence / bin.count;
+                    const fractionCorrectInBin = bin.sumCorrect / bin.count;
+                    ece += (bin.count / totalPredictions) * Math.abs(avgConfidenceInBin - fractionCorrectInBin);
+                }
+            });
+            eceValueDisplay.textContent = ece.toFixed(4);
+            
+            const n_pos = data.filter(d => d.groundTruth === 1).length;
+            const n_neg = data.filter(d => d.groundTruth === 0).length;
+            if (n_pos === 0 || n_neg === 0) {
+                aucValueDisplay.textContent = "N/A";
+            } else {
+                let concordantPairs = 0;
+                let tiedPairs = 0;
+                for (let i = 0; i < data.length; i++) {
+                    for (let j = 0; j < data.length; j++) {
+                        if (data[i].groundTruth === 1 && data[j].groundTruth === 0) {
+                            if (data[i].modelConfidence > data[j].modelConfidence) concordantPairs++;
+                            else if (data[i].modelConfidence === data[j].modelConfidence) tiedPairs++;
+                        }
+                    }
+                }
+                const auc = (concordantPairs + 0.5 * tiedPairs) / (n_pos * n_neg);
+                aucValueDisplay.textContent = auc.toFixed(4);
+            }
+        }
+
+        function updateOriginalVisualizations(data) {
+            drawCalibrationPlot(data);
+            drawConfidenceHistograms(data);
+        }
+
+        function drawCalibrationPlot(data) {
+            if (!calibrationPlotDiv) return;
+            d3.select(calibrationPlotDiv).selectAll("*").remove(); 
+            const margin = {top: 20, right: 30, bottom: 50, left: 50};
+            const containerWidth = calibrationPlotDiv.clientWidth;
+            if (!containerWidth) return; // Exit if not visible
+            const width = containerWidth - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+            const svg = d3.select(calibrationPlotDiv).append("svg")
+                .attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom)
+                .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+            
+            const numBins = 10;
+            const bins = Array(numBins).fill(null).map(() => ({ sumConfidence: 0, count: 0, sumCorrect: 0, confidencesInBin: [] }));
+            data.forEach(d => {
+                let binIndex = Math.floor(d.modelConfidence * numBins);
+                if (binIndex >= numBins) binIndex = numBins - 1;
+                if (binIndex < 0) binIndex = 0; 
+                bins[binIndex].sumConfidence += d.modelConfidence;
+                bins[binIndex].count++;
+                bins[binIndex].sumCorrect += d.groundTruth;
+                bins[binIndex].confidencesInBin.push(d.modelConfidence);
+            });
+            const plotData = bins.map((bin) => {
+                if (bin.count === 0) return null;
+                const actualAvgConfidence = bin.confidencesInBin.reduce((a,b)=>a+b,0) / bin.count;
+                return {
+                    fractionCorrect: bin.sumCorrect / bin.count,
+                    actualAvgConfidence: actualAvgConfidence, 
+                    count: bin.count
+                };
+            }).filter(d => d !== null && !isNaN(d.actualAvgConfidence) && !isNaN(d.fractionCorrect));
+
+            const x = d3.scaleLinear().domain([0, 1]).range([0, width]);
+            const y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+            svg.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x).ticks(5).tickFormat(d3.format(".1f")));
+            svg.append("g").call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".1f")));
+            svg.append("text").attr("text-anchor", "middle").attr("x", width/2).attr("y", height + margin.bottom - 10).style("font-size", "0.8rem").text("Mean Predicted Confidence (in bin)");
+            svg.append("text").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("y", -margin.left+15).attr("x", -height/2).style("font-size", "0.8rem").text("Fraction of Positives (in bin)");
+            svg.append("line").attr("x1", x(0)).attr("y1", y(0)).attr("x2", x(1)).attr("y2", y(1)).attr("stroke", "grey").attr("stroke-dasharray", "4");
+            svg.selectAll("circle").data(plotData).enter().append("circle")
+                .attr("cx", d => x(d.actualAvgConfidence)) .attr("cy", d => y(d.fractionCorrect))
+                .attr("r", d => Math.max(3, Math.min(10, Math.sqrt(d.count / data.length * 500))))
+                .attr("fill", "#3b82f6").attr("opacity", 0.7)
+                .on("mouseover", (event, d_mouseover) => {
+                    tooltip.transition().duration(200).style("opacity", .9);
+                    tooltip.html(`Avg Conf: ${d_mouseover.actualAvgConfidence.toFixed(2)}<br/>Frac. Correct: ${d_mouseover.fractionCorrect.toFixed(2)}<br/>Count: ${d_mouseover.count}`)
+                        .style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 15) + "px");
+                }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
+            svg.append("path").datum(plotData.sort((a,b) => a.actualAvgConfidence - b.actualAvgConfidence)) 
+                .attr("fill", "none").attr("stroke", "#3b82f6").attr("stroke-width", 1.5)
+                .attr("d", d3.line().x(d => x(d.actualAvgConfidence)).y(d => y(d.fractionCorrect)));
+        }
+
+        function drawConfidenceHistograms(data) {
+            if (!confidenceHistogramsDiv) return;
+            d3.select(confidenceHistogramsDiv).selectAll("*").remove();
+            const margin = {top: 20, right: 30, bottom: 50, left: 50};
+            const containerWidth = confidenceHistogramsDiv.clientWidth;
+            if (!containerWidth) return; // Exit if not visible
+            const width = containerWidth - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
+            const svg = d3.select(confidenceHistogramsDiv).append("svg")
+                .attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom)
+                .append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+            
+            const x = d3.scaleLinear().domain([0, 1]).range([0, width]);
+            svg.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x).ticks(10).tickFormat(d3.format(".1f")));
+            svg.append("text").attr("text-anchor", "middle").attr("x", width/2).attr("y", height + margin.bottom -10).style("font-size", "0.8rem").text("Model Confidence (P̂)");
+            svg.append("text").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("y", -margin.left+15).attr("x", -height/2).style("font-size", "0.8rem").text("Frequency");
+
+            const histogram = d3.histogram().value(d => d.modelConfidence).domain(x.domain()).thresholds(x.ticks(20)); 
+            const correctData = data.filter(d => d.groundTruth === 1);
+            const incorrectData = data.filter(d => d.groundTruth === 0);
+            const binsCorrect = histogram(correctData);
+            const binsIncorrect = histogram(incorrectData);
+            const yMax = Math.max(1, d3.max(binsCorrect, d => d.length), d3.max(binsIncorrect, d => d.length));
+            const y = d3.scaleLinear().range([height, 0]).domain([0, yMax]);
+            svg.append("g").call(d3.axisLeft(y).ticks(Math.min(5, yMax)));
+            svg.selectAll("rect.correct").data(binsCorrect).enter().append("rect").attr("class", "correct")
+                .attr("x", 1).attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`)
+                .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1)).attr("height", d => Math.max(0, height - y(d.length)))
+                .style("fill", "#3b82f6").style("opacity", 0.6);
+            svg.selectAll("rect.incorrect").data(binsIncorrect).enter().append("rect").attr("class", "incorrect")
+                .attr("x", 1).attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`)
+                .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1)).attr("height", d => Math.max(0, height - y(d.length)))
+                .style("fill", "#ef4444").style("opacity", 0.6);
+        }
+
+        // --- Live Study Demo Logic (for Tab 3) ---
+        const demoAppliances = [
+            { 
+                name: "Laptop Computer", 
+                trueUnits: 50, 
+                aiCorrectEstimate: 50, 
+                aiIncorrectEstimate: 150, // Overestimate
+                confidentExplanationCorrect: "A laptop computer typically uses 50 units of energy per hour. This is standard for most modern laptops under normal workloads.",
+                hedgedExplanationCorrect: "It seems a laptop computer might use around 50 units per hour. This can vary, but it's a plausible figure for typical usage.",
+                confidentExplanationIncorrect: "A laptop computer typically uses 150 units of energy per hour, similar to a small heater. This is due to its powerful processor and screen.",
+                hedgedExplanationIncorrect: "My estimate for a laptop computer is around 150 units per hour. This could be the case for high-performance models under heavy load, though it's a bit high for average use."
+            },
+            { 
+                name: "Electric Clothes Dryer", 
+                trueUnits: 3000, 
+                aiCorrectEstimate: 3000, 
+                aiIncorrectEstimate: 1000, // Underestimate
+                confidentExplanationCorrect: "An electric clothes dryer is a high-consumption appliance, typically using 3000 units of energy per hour.",
+                hedgedExplanationCorrect: "An electric clothes dryer could use in the ballpark of 3000 units per hour. These appliances are known to be quite power-intensive.",
+                confidentExplanationIncorrect: "An electric clothes dryer typically uses 1000 units of energy per hour, making it moderately efficient for its task.",
+                hedgedExplanationIncorrect: "I'd estimate an electric clothes dryer at around 1000 units per hour. While they use a lot of power, this figure might be representative of shorter cycles or more efficient models."
+            },
+            { 
+                name: "Compact Fluorescent Bulb (CFL)", 
+                trueUnits: 25, 
+                aiCorrectEstimate: 25, 
+                aiIncorrectEstimate: 75, // Overestimate
+                confidentExplanationCorrect: "A CFL bulb, equivalent to a 100W incandescent, typically uses 25 units of energy per hour. This demonstrates its high efficiency.",
+                hedgedExplanationCorrect: "A CFL bulb might use around 25 units per hour. They are designed to be much more efficient than older incandescent bulbs.",
+                confidentExplanationIncorrect: "A CFL bulb, even an efficient one, typically uses 75 units of energy per hour, only slightly less than an incandescent.",
+                hedgedExplanationIncorrect: "My estimate for a CFL bulb is around 75 units per hour. While more efficient, they still consume a noticeable amount of energy."
+            },
+            {
+                name: "Desktop Computer",
+                trueUnits: 120,
+                aiCorrectEstimate: 120,
+                aiIncorrectEstimate: 40, // Underestimate
+                confidentExplanationCorrect: "A desktop computer typically uses 120 units of energy per hour, reflecting the power needs of its components like the CPU, GPU, and monitor.",
+                hedgedExplanationCorrect: "It's plausible that a desktop computer uses around 120 units per hour. This can depend heavily on its specifications and current tasks.",
+                confidentExplanationIncorrect: "A desktop computer is quite efficient, typically using only 40 units of energy per hour, less than many laptops.",
+                hedgedExplanationIncorrect: "My estimate for a desktop computer is around 40 units per hour. Some very low-power or idle systems might approach this, but it's generally on the low side."
+            }
+        ];
+        let currentDemoItemIndex = 0;
+        let userPhase1Estimate = null;
+        let currentAIEstimate = null;
+        let currentAICorrectness = null; // true or false
+
+        const demoApplianceNameEl = document.getElementById('demoApplianceName');
+        const userEstimateInput = document.getElementById('userEstimate');
+        const submitUserEstimateBtn = document.getElementById('submitUserEstimate');
+        const demoPhase1Div = document.getElementById('demoPhase1');
+        const demoPhase2Div = document.getElementById('demoPhase2');
+        
+        const demoApplianceNameAIEl = document.getElementById('demoApplianceNameAI');
+        const aiEstimateValueEl = document.getElementById('aiEstimateValue');
+        const aiExplanationEl = document.getElementById('aiExplanation');
+        const userConfidenceInAISlider = document.getElementById('userConfidenceInAI');
+        const userConfidenceInAIValueEl = document.getElementById('userConfidenceInAIValue');
+        
+        const demoApplianceNameCompareEl = document.getElementById('demoApplianceNameCompare');
+        const userPriorEstimateDisplayEl = document.getElementById('userPriorEstimateDisplay');
+        const demoApplianceNameCompare2El = document.getElementById('demoApplianceNameCompare2');
+        const aiEstimateDisplayEl = document.getElementById('aiEstimateDisplay');
+
+        const chooseUserEstimateBtn = document.getElementById('chooseUserEstimate');
+        const chooseAIEstimateBtn = document.getElementById('chooseAIEstimate');
+        const demoFeedbackEl = document.getElementById('demoFeedback');
+        const nextDemoItemBtn = document.getElementById('nextDemoItem');
+
+        function loadDemoItem(index) {
+            if (index >= demoAppliances.length) {
+                demoPhase1Div.innerHTML = '<h3 class="text-lg font-semibold text-green-600">Demo Completed!</h3><p>You have gone through all the items. You can refresh the page to try again or explore other tabs.</p>';
+                demoPhase2Div.style.display = 'none';
+                return;
+            }
+            const item = demoAppliances[index];
+            demoApplianceNameEl.textContent = item.name;
+            demoApplianceNameAIEl.textContent = item.name;
+            demoApplianceNameCompareEl.textContent = item.name;
+            demoApplianceNameCompare2El.textContent = item.name;
+
+            userEstimateInput.value = '';
+            demoPhase1Div.style.display = 'block';
+            demoPhase2Div.style.display = 'none';
+            demoFeedbackEl.style.display = 'none';
+            nextDemoItemBtn.style.display = 'none';
+            chooseUserEstimateBtn.disabled = false;
+            chooseAIEstimateBtn.disabled = false;
+            userConfidenceInAISlider.value = 50;
+            userConfidenceInAIValueEl.textContent = "50";
+        }
+
+        if (submitUserEstimateBtn) {
+            submitUserEstimateBtn.addEventListener('click', () => {
+                userPhase1Estimate = parseFloat(userEstimateInput.value);
+                if (isNaN(userPhase1Estimate)) {
+                    alert("Please enter a valid number for your estimate.");
+                    return;
+                }
+                demoPhase1Div.style.display = 'none';
+                setupAIInteraction();
+                demoPhase2Div.style.display = 'block';
+            });
+
+            userConfidenceInAISlider.oninput = () => {
+                userConfidenceInAIValueEl.textContent = userConfidenceInAISlider.value;
+            };
+
+            chooseUserEstimateBtn.addEventListener('click', () => handleDemoChoice('user'));
+            chooseAIEstimateBtn.addEventListener('click', () => handleDemoChoice('ai'));
+            nextDemoItemBtn.addEventListener('click', () => {
+                currentDemoItemIndex++;
+                loadDemoItem(currentDemoItemIndex);
+            });
+        }
+
+        function setupAIInteraction() {
+            const item = demoAppliances[currentDemoItemIndex];
+            
+            // Randomly decide if AI is correct and what tone to use (for demo purposes)
+            const isAICorrect = Math.random() < 0.6; // AI is correct 60% of the time
+            const useConfidentTone = Math.random() < 0.5; // AI uses confident tone 50% of the time
+
+            currentAICorrectness = isAICorrect;
+
+            if (isAICorrect) {
+                currentAIEstimate = item.aiCorrectEstimate;
+                aiExplanationEl.textContent = useConfidentTone ? item.confidentExplanationCorrect : item.hedgedExplanationCorrect;
+            } else {
+                currentAIEstimate = item.aiIncorrectEstimate;
+                aiExplanationEl.textContent = useConfidentTone ? item.confidentExplanationIncorrect : item.hedgedExplanationIncorrect;
+            }
+            aiEstimateValueEl.textContent = currentAIEstimate;
+            userPriorEstimateDisplayEl.textContent = userPhase1Estimate;
+            aiEstimateDisplayEl.textContent = currentAIEstimate;
+        }
+
+        function handleDemoChoice(choice) {
+            chooseUserEstimateBtn.disabled = true;
+            chooseAIEstimateBtn.disabled = true;
+            const item = demoAppliances[currentDemoItemIndex];
+            let feedbackText = "";
+
+            if (choice === 'user') {
+                feedbackText = `You chose your estimate of ${userPhase1Estimate}. `;
+            } else {
+                feedbackText = `You chose the AI's estimate of ${currentAIEstimate}. `;
+            }
+
+            if (currentAICorrectness) {
+                feedbackText += `The AI was CORRECT. The true value is ${item.trueUnits} units.`;
+                demoFeedbackEl.className = 'live-demo-feedback correct';
+            } else {
+                feedbackText += `The AI was INCORRECT. The true value is ${item.trueUnits} units.`;
+                demoFeedbackEl.className = 'live-demo-feedback incorrect';
+            }
+            // Compare user's choice to true value
+            let chosenEstimate = (choice === 'user') ? userPhase1Estimate : currentAIEstimate;
+            let userChoiceError = Math.abs(chosenEstimate - item.trueUnits);
+            let otherChoiceError = (choice === 'user') ? Math.abs(currentAIEstimate - item.trueUnits) : Math.abs(userPhase1Estimate - item.trueUnits);
+
+            if (userChoiceError < otherChoiceError) {
+                feedbackText += " Your chosen estimate was closer to the true value.";
+            } else if (userChoiceError > otherChoiceError) {
+                feedbackText += " The other estimate was closer to the true value.";
+            } else {
+                feedbackText += " Both estimates were equally close/far from the true value."
+            }
+
+
+            demoFeedbackEl.textContent = feedbackText;
+            demoFeedbackEl.style.display = 'block';
+            nextDemoItemBtn.style.display = 'block';
+        }
+
+
+        // --- Initial Page Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Activate the first main tab
+            const firstMainTab = document.querySelector('.main-container .nav-tabs .nav-tab');
+            if (firstMainTab) {
+                showTabPane(firstMainTab.getAttribute('onclick').match(/'([^']+)'/)[1], firstMainTab);
+            }
+
+            // Activate the first sub-tab in the simulator section
+            const simulatorTabsContainer = document.getElementById('simulatorInternalTabs');
+            if (simulatorTabsContainer) {
+                 const firstSimulatorSubTab = simulatorTabsContainer.querySelector('.nav-tab');
+                 if(firstSimulatorSubTab) {
+                    showSimulatorSubTab(firstSimulatorSubTab.getAttribute('onclick').match(/'([^']+)'/)[1], firstSimulatorSubTab, 'simulatorInternalTabs');
+                 }
+            }
+            
+            // Initial run for the original D3 simulation if its tab is active or elements are present
+            if (runSimulationButton) { // Check if the button exists, implies the tab might be visible or prepped
+                 runOriginalSimulation();
+            }
+
+            // Load the first item for the live demo
+            if (submitUserEstimateBtn) { // Check if demo elements exist
+                loadDemoItem(currentDemoItemIndex);
+            }
+        });
+
+    </script>
+</body>
+</html>
