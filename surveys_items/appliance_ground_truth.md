@@ -574,3 +574,4 @@ This table consolidates ground truth estimates for various appliances as reporte
 *   **kg CO2e/kg:** Kilograms of CO2 equivalent emissions per kilogram of food product.
 
 This table shows considerable variation in "ground truth" estimates across studies for similar appliances. This reflects the difficulty in establishing a single true value due to model variations, usage patterns, and different data aggregation methods by researchers.
+
