@@ -138,6 +138,38 @@ Steyvers et al. (2025)
 
 </div>
 
+## Steyvers Task
+
+![](image/steyvers25_task.png)
+
+## Confidence Calibration
+
+![](image/meta_sens1.png)
+
+<div class="footer">
+
+Steyvers & Peters (2025)
+
+</div>
+
+## Communicating Uncertainty
+
+<div class="column" width="50%">
+
+<img src="image/belem_llm1.png" style="width:88.0%" />
+<img src="image/belem_cap1.png" style="width:88.0%" />
+
+</div>
+
+<div class="column" width="50%">
+
+- LLM’s also shown to map uncertainty terms to numeric probabilities in
+  similar fashion to humans (Belem et al., 2024)
+
+<img src="image/belem_human.png" style="width:90.0%" />
+
+</div>
+
 ## Energy AI Tasks
 
 <div class="column" width="60%">
@@ -207,6 +239,15 @@ Attari, S. Z., DeKay, M. L., Davidson, C. I., & Bruine De Bruin, W.
 
 </div>
 
+<div id="ref-belemPerceptionsLinguisticUncertainty2024"
+class="csl-entry">
+
+Belem, C. G., Kelly, M., Steyvers, M., Singh, S., & Smyth, P. (2024).
+*Perceptions of Linguistic Uncertainty by Language Models and Humans*
+(arXiv:2407.15814). arXiv. <https://arxiv.org/abs/2407.15814>
+
+</div>
+
 <div id="ref-frederickCharacterizingPerceptionsEnergy2011"
 class="csl-entry">
 
@@ -231,7 +272,16 @@ joules: Exploring how experts make decisions about household energy use.
 Schille-Hudson, E. B., Margehtis, T., Miniard, D., Landy, D., & Attari,
 S. Z. (2019). Big, hot, or bright? Integrating cues to perceive home
 energy use. *Proceedings of the Annual Meeting of the Cognitive Science
-Society*, *41*. <https://escholarship.org/uc/item/83z4w09n>
+Society*, *41*.
+
+</div>
+
+<div id="ref-steyversMetacognitionUncertaintyCommunication2025"
+class="csl-entry">
+
+Steyvers, M., & Peters, M. A. K. (2025). *Metacognition and Uncertainty
+Communication in Humans and Large Language Models* (arXiv:2504.14045).
+arXiv. <https://doi.org/10.48550/arXiv.2504.14045>
 
 </div>
 
@@ -252,7 +302,7 @@ people think they know. *Nature Machine Intelligence*, 1–11.
 
 <div class="column" width="40%">
 
-<img src="image/_prop_explain/attari_fig1.png" style="width:85.0%"
+<img src="image/attari_fig1.png" style="width:85.0%"
 alt="Attari 2010 pattern" />
 
 </div>
