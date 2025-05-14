@@ -16,8 +16,6 @@ project:
     - "!surveys_items/AI_Surveys/Ravselj25_AI_Survey.md"
     - "!surveys_items/AI_Surveys/Soto-Sanfiel_AI_Survey.md"
 
-
-    
   resources:
     - "demos/*"
     - "demos/dash/*"
