@@ -1,4 +1,6 @@
 
+
+![[Pasted image 20250514020424.png]]
 # Gorman - AI Energy Study Proposal
 
 

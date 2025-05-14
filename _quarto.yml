@@ -25,6 +25,8 @@ project:
     - "task/prop_task.html"
     - "task/*"
 
+bibliography: assets/ai_confidence.bib
+csl: assets/apa.csl
 
 website:
   title: "Energy AI Study"
@@ -41,6 +43,9 @@ website:
         href: inspector.qmd
       - text: "Dash"
         href: survey_dash.qmd
+      - text: "Slides"
+        href: proposals/eslides.qmd
+
     right: 
       - icon: github
         aria-label: github

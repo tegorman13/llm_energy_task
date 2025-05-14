@@ -156,3 +156,44 @@ energy_data <- tibble::tribble(
   "Using clothes washer (478Wh for 1 cycle) instead of ironing (599Wh for 30min)",     "Saving_Action",    121,
   "Listening to stereo (264Wh for 8hr) instead of vacuuming (405Wh for 30min)",        "Saving_Action",    141
 )
+
+
+
+
+
+
+
+
+
+
+
+# Define the Attari energy estimation task
+devices <- c(
+  "A compact fluorescent light bulb that is as bright as a 100-Watt incandescent light bulb",
+  "A desktop computer", 
+  "A laptop computer",
+  "A stereo",
+  "An electric clothes dryer",
+  "A portable heater",
+  "A room air-conditioner",
+  "A central air conditioner",
+  "A dish washer"
+)
+
+# Actual energy values (in Wh) based on literature
+actual_values <- c(25, 120, 40, 60, 3400, 1500, 1000, 3500, 1800)
+
+
+
+attari_energy_task <- tibble::tribble(
+  ~device, ~actual_value,
+  "A compact fluorescent light bulb that is as bright as a 100-Watt incandescent light bulb", 25,
+  "A desktop computer", 120,
+  "A laptop computer", 40,
+  "A stereo", 60,
+  "An electric clothes dryer", 3400,
+  "A portable heater", 1500,
+  "A room air-conditioner", 1000,
+  "A central air conditioner", 3500,
+  "A dish washer", 1800
+)
