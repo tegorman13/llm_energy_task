@@ -44,7 +44,7 @@ website:
       - text: "Dash"
         href: survey_dash.qmd
       - text: "Slides"
-        href: proposals/eslides.qmd
+        href: proposals/prop_slides.qmd
 
     right: 
       - icon: github

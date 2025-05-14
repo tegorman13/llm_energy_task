@@ -1,170 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/task2.html</loc>
-    <lastmod>2025-04-04T04:58:30.559Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/task1.html</loc>
-    <lastmod>2025-04-04T04:56:41.211Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/energy_ai_ideas.html</loc>
-    <lastmod>2025-04-04T04:04:03.018Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/survey_dash.html</loc>
-    <lastmod>2025-05-01T06:51:40.812Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/survey_codebook_outline.html</loc>
-    <lastmod>2025-01-21T13:19:28.591Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/attari_2010_items.html</loc>
-    <lastmod>2025-04-27T16:03:12.143Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Attari_2010_supplemental.html</loc>
-    <lastmod>2025-01-20T04:51:16.892Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Chiu_DeWaters2018_Survey.html</loc>
-    <lastmod>2025-05-01T05:36:04.760Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/nsf_instrument_codebook.html</loc>
-    <lastmod>2025-01-18T03:11:19.519Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/marghetis2019_materials.html</loc>
-    <lastmod>2025-04-30T22:40:02.386Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Katenbacher_Attari_2021_sup.html</loc>
-    <lastmod>2025-05-01T04:39:11.767Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/DeWaters_Powers2011_Supp.html</loc>
-    <lastmod>2025-05-01T04:50:56.221Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Attari_2025_TechSurvey.html</loc>
-    <lastmod>2025-04-30T23:12:30.657Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Attari2010_Survey.html</loc>
-    <lastmod>2025-05-01T04:31:02.504Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/Canfield2017_Supp.html</loc>
-    <lastmod>2025-04-30T23:18:46.927Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/DeWaters2013_Energy.html</loc>
-    <lastmod>2025-05-01T06:32:18.015Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/Energy_Surveys/He_Blasch24_energy_survey.html</loc>
-    <lastmod>2025-05-01T04:31:45.012Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Zhu2024_AI_Survey.html</loc>
-    <lastmod>2025-05-01T03:32:24.668Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Tully25_AI_Survey.html</loc>
-    <lastmod>2025-05-01T04:33:32.535Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Stein24_AI_Survey.html</loc>
-    <lastmod>2025-05-01T04:36:46.448Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Sindermann21_AI.html</loc>
-    <lastmod>2025-05-01T04:41:55.445Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Scharowski_AI_Survey.html</loc>
-    <lastmod>2025-05-01T06:36:18.870Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Rheu25_AI_Survey.html</loc>
-    <lastmod>2025-04-30T20:45:21.002Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Lee24_AI_Surveys.html</loc>
-    <lastmod>2025-05-01T03:31:01.675Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Grassini23_AI_Scale.html</loc>
-    <lastmod>2025-05-01T01:00:38.183Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Gerlich25_Survey.html</loc>
-    <lastmod>2025-05-01T05:11:10.722Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Chen25_Survey.html</loc>
-    <lastmod>2025-04-30T23:54:38.756Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Carolus23_MAILS.html</loc>
-    <lastmod>2025-05-01T04:36:47.111Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Fang25_AI_Survey.html</loc>
-    <lastmod>2025-05-01T06:33:35.366Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Gnabs_AI_Survey.html</loc>
-    <lastmod>2025-05-01T04:36:47.825Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Koch24_MAILS_Short.html</loc>
-    <lastmod>2025-04-30T20:33:47.382Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Ovsyannikova_Survey.html</loc>
-    <lastmod>2025-05-01T04:32:47.295Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Scantamburlo_AI_Survey.html</loc>
-    <lastmod>2025-05-01T04:37:56.505Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Shang25_AI_Trust_Scale.html</loc>
-    <lastmod>2025-04-30T21:51:03.106Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Song24_AI_Survey.html</loc>
-    <lastmod>2025-04-30T22:31:44.041Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/TPA.html</loc>
-    <lastmod>2025-04-30T20:41:19.745Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/surveys_items/AI_Surveys/Weber23_AI_Survey.html</loc>
-    <lastmod>2025-05-01T03:31:01.213Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/demos2/pd_1.html</loc>
-    <lastmod>2025-05-01T07:08:39.183Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/demos2/pd.html</loc>
-    <lastmod>2025-05-01T07:08:39.188Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/dash.html</loc>
-    <lastmod>2025-05-01T07:30:43.729Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/task.html</loc>
-    <lastmod>2025-05-07T14:11:14.053Z</lastmod>
-  </url>
-  <url>
     <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/ng24_AI_lit_Survey.html</loc>
     <lastmod>2025-05-02T02:43:45.172Z</lastmod>
   </url>
@@ -173,8 +9,12 @@
     <lastmod>2025-05-02T15:10:59.274Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Wojton_Trust_Survey.html</loc>
-    <lastmod>2025-05-02T14:59:18.819Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Zhang_Dafoe_AI_Survey.html</loc>
+    <lastmod>2025-05-02T03:10:13.306Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Wischnewski_Trust.html</loc>
+    <lastmod>2025-05-03T20:41:13.188Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Tully25_AI_Survey.html</loc>
@@ -185,24 +25,128 @@
     <lastmod>2025-05-04T00:11:15.246Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Wischnewski_Trust.html</loc>
-    <lastmod>2025-05-03T20:41:13.188Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Song24_AI_Survey.html</loc>
+    <lastmod>2025-04-30T22:31:44.041Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Zhang_Dafoe_AI_Survey.html</loc>
-    <lastmod>2025-05-02T03:10:13.306Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Sindermann21_AI.html</loc>
+    <lastmod>2025-05-01T04:41:55.445Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/kim24_AI_Survey.html</loc>
-    <lastmod>2025-05-02T02:53:07.438Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Scholz25_AI_Survey.html</loc>
+    <lastmod>2025-05-02T04:06:08.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Scharowski_AI_Survey.html</loc>
+    <lastmod>2025-05-01T06:36:18.870Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Salah_AI_Survey.html</loc>
+    <lastmod>2025-05-02T23:54:59.862Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Puppart_Aru25_AI_Survey.html</loc>
+    <lastmod>2025-05-02T03:12:25.542Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Ovsyannikova_Survey.html</loc>
+    <lastmod>2025-05-01T04:32:47.295Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Morales-Garcia24_AI_Survey.html</loc>
+    <lastmod>2025-05-02T03:26:30.300Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Li_AIMS_AI_Survey.html</loc>
+    <lastmod>2025-05-02T19:42:46.565Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Laupichler_AI_Survey.html</loc>
+    <lastmod>2025-05-02T03:00:33.850Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Korber19_Trust_Survey.html</loc>
+    <lastmod>2025-05-02T04:04:58.162Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Hou25_gen_AI.html</loc>
+    <lastmod>2025-05-04T18:00:33.115Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Grassini_PailQ6.html</loc>
+    <lastmod>2025-05-02T21:06:15.421Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Grassini23_AI_Scale.html</loc>
+    <lastmod>2025-05-01T01:00:38.183Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Gerlich25_Survey.html</loc>
+    <lastmod>2025-05-01T05:11:10.722Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Duro_AI_Survey.html</loc>
+    <lastmod>2025-05-02T02:53:05.051Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Carolus23_MAILS.html</loc>
+    <lastmod>2025-05-01T04:36:47.111Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/AI_Survey_Sums.html</loc>
+    <lastmod>2025-05-02T04:58:33.812Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/nblm_prp.html</loc>
+    <lastmod>2025-05-07T03:52:41.133Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/energy_survey_sumF.html</loc>
+    <lastmod>2025-05-02T05:08:38.823Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Schley_DeKay_2015_supp.html</loc>
+    <lastmod>2025-05-12T20:37:46.221Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Katenbacher_Attari_2021_sup.html</loc>
+    <lastmod>2025-05-01T04:39:11.767Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Energy_Survey_Sums.html</loc>
+    <lastmod>2025-05-02T05:13:07.520Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/DeWaters2013_Energy.html</loc>
+    <lastmod>2025-05-01T06:32:18.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Chiu_DeWaters2018_Survey.html</loc>
+    <lastmod>2025-05-01T05:36:04.760Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Camilleri_Larrick_2019_supp.html</loc>
+    <lastmod>2025-05-12T20:34:39.060Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari_2016_supp.html</loc>
+    <lastmod>2025-05-12T20:35:41.778Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari_2010_supplemental.html</loc>
+    <lastmod>2025-01-20T04:51:16.892Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/task.html</loc>
+    <lastmod>2025-05-07T14:11:14.053Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/survey_dash.html</loc>
     <lastmod>2025-05-01T06:51:40.812Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari2010_Survey.html</loc>
-    <lastmod>2025-05-01T04:31:02.504Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/proposals/eslides.html</loc>
+    <lastmod>2025-05-14T08:01:57.458Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/index.html</loc>
@@ -213,20 +157,8 @@
     <lastmod>2025-05-07T12:17:27.330Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Koch24_MAILS_Short.html</loc>
-    <lastmod>2025-04-30T20:33:47.382Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Rheu25_AI_Survey.html</loc>
-    <lastmod>2025-04-30T20:45:21.002Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Katenbacher_Attari_2021_sup.html</loc>
-    <lastmod>2025-05-01T04:39:11.767Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Weber23_AI_Survey.html</loc>
-    <lastmod>2025-05-01T03:31:01.213Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/energy_ai_ideas.html</loc>
+    <lastmod>2025-05-01T22:37:27.872Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/inspector.html</loc>
@@ -234,38 +166,150 @@
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/proposals/slides_revealjs.html</loc>
-    <lastmod>2025-05-14T08:23:59.887Z</lastmod>
+    <lastmod>2025-05-14T08:31:35.832Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/proposals/slides.html</loc>
-    <lastmod>2025-05-14T07:18:40.284Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/proposals/prop_slides.html</loc>
+    <lastmod>2025-05-14T08:31:35.832Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Schley_DeKay_2015_supp.html</loc>
-    <lastmod>2025-05-12T20:37:46.221Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/survey_codebook_outline.html</loc>
+    <lastmod>2025-01-21T13:19:28.591Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Camilleri_Larrick_2019_supp.html</loc>
-    <lastmod>2025-05-12T20:34:39.060Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari2010_Survey.html</loc>
+    <lastmod>2025-05-01T04:31:02.504Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari_2014_water_supp.html</loc>
     <lastmod>2025-05-12T20:36:50.221Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari_2016_supp.html</loc>
-    <lastmod>2025-05-12T20:35:41.778Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Attari_2025_TechSurvey.html</loc>
+    <lastmod>2025-05-02T04:26:38.923Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Canfield2017_Supp.html</loc>
+    <lastmod>2025-04-30T23:18:46.927Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Cotton21_Energy.html</loc>
+    <lastmod>2025-05-02T04:15:25.261Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/DeWaters_Powers2011_Supp.html</loc>
+    <lastmod>2025-05-01T04:50:56.221Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/He_Blasch24_energy_survey.html</loc>
+    <lastmod>2025-05-01T04:31:45.012Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/Lundberg_Attari19_survey.html</loc>
     <lastmod>2025-05-12T20:49:24.017Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/proposals/eslides.html</loc>
-    <lastmod>2025-05-14T08:01:57.458Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/attari_2010_items.html</loc>
+    <lastmod>2025-04-27T16:03:12.143Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/llm_energy_task/proposals/prop_slides.html</loc>
-    <lastmod>2025-05-14T08:23:59.887Z</lastmod>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/marghetis2019_materials.html</loc>
+    <lastmod>2025-04-30T22:40:02.386Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/Energy_Surveys/nsf_instrument_codebook.html</loc>
+    <lastmod>2025-01-18T03:11:19.519Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Adams_2003_Trust.html</loc>
+    <lastmod>2025-05-07T12:19:17.308Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Chen25_Survey.html</loc>
+    <lastmod>2025-04-30T23:54:38.756Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Fang25_AI_Survey.html</loc>
+    <lastmod>2025-05-01T06:33:35.366Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Gnabs_AI_Survey.html</loc>
+    <lastmod>2025-05-01T04:36:47.825Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Grassini_AIAS-4.html</loc>
+    <lastmod>2025-05-02T03:06:06.076Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Hoffman19_AI_Trust.html</loc>
+    <lastmod>2025-05-03T22:26:53.297Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Koch24_MAILS_Short.html</loc>
+    <lastmod>2025-04-30T20:33:47.382Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Kuper_TrustAI.html</loc>
+    <lastmod>2025-05-03T20:41:03.654Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Lee24_AI_Surveys.html</loc>
+    <lastmod>2025-05-01T03:31:01.675Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Markus_AI_Literacy.html</loc>
+    <lastmod>2025-05-02T22:26:58.165Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Morrill23_AI_Survey.html</loc>
+    <lastmod>2025-05-02T02:57:24.312Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Perrig23_TrustAI.html</loc>
+    <lastmod>2025-05-03T22:25:55.541Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Rheu25_AI_Survey.html</loc>
+    <lastmod>2025-04-30T20:45:21.002Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Scantamburlo_AI_Survey.html</loc>
+    <lastmod>2025-05-04T17:23:41.791Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Schepman_AI_Gen.html</loc>
+    <lastmod>2025-05-03T22:46:59.055Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Shang25_AI_Trust_Scale.html</loc>
+    <lastmod>2025-04-30T21:51:03.106Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Smith25_AI_Aversion.html</loc>
+    <lastmod>2025-05-04T00:06:14.869Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Stein24_AI_Survey.html</loc>
+    <lastmod>2025-05-01T04:36:46.448Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/TPA.html</loc>
+    <lastmod>2025-04-30T20:41:19.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Weber23_AI_Survey.html</loc>
+    <lastmod>2025-05-01T03:31:01.213Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Wojton_Trust_Survey.html</loc>
+    <lastmod>2025-05-02T14:59:18.819Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/Zhu2024_AI_Survey.html</loc>
+    <lastmod>2025-05-01T03:32:24.668Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/llm_energy_task/surveys_items/AI_Surveys/kim24_AI_Survey.html</loc>
+    <lastmod>2025-05-02T02:53:07.438Z</lastmod>
   </url>
 </urlset>
