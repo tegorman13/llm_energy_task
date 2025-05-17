@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguistic Uncertainty Perceptions Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#4A4A4A',
+                        accent: '#8C8CFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for slider track */
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+        }
+        
+        .custom-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            cursor: pointer;
+        }
+        
+        .custom-slider::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+        }
+        
+        .custom-slider::-moz-range-track {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+        }
+        
+        .dark .custom-slider::-webkit-slider-runnable-track {
+            background: #555;
+        }
+        
+        .dark .custom-slider::-moz-range-track {
+            background: #555;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #5D5CDE;
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Custom styles for active tabs */
+        .tab-active {
+            border-bottom: 2px solid #5D5CDE;
+            color: #5D5CDE;
+        }
+        
+        .dark .tab-active {
+            border-bottom: 2px solid #8C8CFF;
+            color: #8C8CFF;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header Section -->
+        <header class="mb-10">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary dark:text-accent">Perceptions of Linguistic Uncertainty</h1>
+                <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+            <p class="mt-4 text-lg">
+                Explore how humans and large language models (LLMs) interpret expressions of uncertainty like "probably" or "highly unlikely". 
+                Based on research by Belem et al. (2024).
+            </p>
+        </header>
+
+        <!-- Main Navigation Tabs -->
+        <div class="border-b border-gray-300 dark:border-gray-700 mb-8">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="mr-2">
+                    <a href="#" id="tab-baseline" class="inline-block p-4 tab-active" data-target="section-baseline">Human Baseline</a>
+                </li>
+                <li class="mr-2">
+                    <a href="#" id="tab-comparison" class="inline-block p-4" data-target="section-comparison">LLM vs Human</a>
+                </li>
+                <li class="mr-2">
+                    <a href="#" id="tab-theory" class="inline-block p-4" data-target="section-theory">LLM Theory of Mind</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Section 1: Human Baseline -->
+        <section id="section-baseline" class="mb-10">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4">Human Baseline for Linguistic Uncertainty</h2>
+                <p class="mb-4">
+                    In the original study, participants were shown statements where a speaker expressed uncertainty, such as:
+                    <span class="italic block my-2 p-2 bg-gray-200 dark:bg-gray-700 rounded">"[Speaker] believes it is [uncertainty phrase] that [statement]."</span>
+                    Participants then estimated the probability (0-100%) that the speaker believed the statement to be true.
+                </p>
+
+                <div class="mt-6">
+                    <label class="block mb-2 font-semibold" for="uncertaintyExpression">Select an uncertainty expression:</label>
+                    <select id="uncertaintyExpression" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-base">
+                        <option value="almost_certain">Almost Certain</option>
+                        <option value="highly_likely">Highly Likely</option>
+                        <option value="very_likely">Very Likely</option>
+                        <option value="likely">Likely</option>
+                        <option value="probable">Probable</option>
+                        <option value="somewhat_likely">Somewhat Likely</option>
+                        <option value="possible">Possible</option>
+                        <option value="uncertain">Uncertain</option>
+                        <option value="somewhat_unlikely">Somewhat Unlikely</option>
+                        <option value="unlikely">Unlikely</option>
+                        <option value="not_likely">Not Likely</option>
+                        <option value="doubtful">Doubtful</option>
+                        <option value="very_unlikely">Very Unlikely</option>
+                        <option value="highly_unlikely">Highly Unlikely</option>
+                    </select>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold mb-3">Human Response Distribution</h3>
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <canvas id="humanDistributionChart" height="250"></canvas>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-3">Heatmap: All Uncertainty Expressions</h3>
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow overflow-x-auto">
+                        <canvas id="humanHeatmapChart" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: LLM vs Human Comparison -->
+        <section id="section-comparison" class="mb-10 hidden">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4">LLM vs. Human Interpretation</h2>
+                <p class="mb-4">
+                    Compare how different LLMs interpret uncertainty expressions against the human baseline.
+                    This section shows whether LLMs can map linguistic uncertainty to numerical values similarly to human consensus.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label class="block mb-2 font-semibold" for="llmModel">Select an LLM:</label>
+                        <select id="llmModel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-base">
+                            <option value="gpt4">GPT-4</option>
+                            <option value="gpt4o">GPT-4o</option>
+                            <option value="chatgpt">ChatGPT</option>
+                            <option value="gemini">Gemini</option>
+                            <option value="llama3_70b">Llama3 (70B)</option>
+                            <option value="mixtral_8x22b">Mixtral 8x22B</option>
+                            <option value="olmo_7b">OLMo (7B)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold" for="comparisonExpression">Select an uncertainty expression:</label>
+                        <select id="comparisonExpression" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-base">
+                            <option value="almost_certain">Almost Certain</option>
+                            <option value="highly_likely">Highly Likely</option>
+                            <option value="very_likely">Very Likely</option>
+                            <option value="likely">Likely</option>
+                            <option value="probable">Probable</option>
+                            <option value="somewhat_likely">Somewhat Likely</option>
+                            <option value="possible">Possible</option>
+                            <option value="uncertain">Uncertain</option>
+                            <option value="somewhat_unlikely">Somewhat Unlikely</option>
+                            <option value="unlikely">Unlikely</option>
+                            <option value="not_likely">Not Likely</option>
+                            <option value="doubtful">Doubtful</option>
+                            <option value="very_unlikely">Very Unlikely</option>
+                            <option value="highly_unlikely">Highly Unlikely</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold mb-3">Side-by-Side Comparison</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                            <h4 class="text-center font-medium mb-2">Human Responses</h4>
+                            <canvas id="humanComparisonChart" height="250"></canvas>
+                        </div>
+                        <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                            <h4 class="text-center font-medium mb-2" id="llmChartTitle">LLM Responses</h4>
+                            <canvas id="llmComparisonChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3">Performance Metrics</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="border-r border-gray-200 dark:border-gray-700 pr-4">
+                                <h4 class="text-lg mb-2">Proportional Agreement (PA)</h4>
+                                <p class="tooltip">What is PA?
+                                    <span class="tooltiptext">Proportional Agreement measures how well the LLM's responses match the most common human responses. Higher scores indicate better alignment.</span>
+                                </p>
+                                <div class="text-4xl font-bold text-primary dark:text-accent mt-2" id="paScore">--</div>
+                            </div>
+                            <div class="pl-4">
+                                <h4 class="text-lg mb-2">Mean Absolute Error (MAE)</h4>
+                                <p class="tooltip">What is MAE?
+                                    <span class="tooltiptext">Mean Absolute Error measures the average difference between LLM and human responses. Lower scores indicate better alignment.</span>
+                                </p>
+                                <div class="text-4xl font-bold text-primary dark:text-accent mt-2" id="maeScore">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3">Key Insight</h3>
+                        <p class="italic" id="comparisonInsight">
+                            Select an LLM and uncertainty expression to see insights about their performance compared to humans.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: LLM Theory of Mind -->
+        <section id="section-theory" class="mb-10 hidden">
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4">Testing LLM Theory of Mind</h2>
+                <p class="mb-4">
+                    This section explores how LLMs' prior knowledge affects their interpretation of uncertainty expressions - 
+                    a critical test of 
+                    <span class="tooltip">Theory of Mind
+                        <span class="tooltiptext">Theory of Mind refers to the ability to understand and attribute mental states to others, independently of one's own mental state.</span>
+                    </span>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label class="block mb-2 font-semibold" for="theoryLlmModel">Select an LLM:</label>
+                        <select id="theoryLlmModel" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-base">
+                            <option value="gpt4">GPT-4</option>
+                            <option value="gpt4o">GPT-4o</option>
+                            <option value="chatgpt">ChatGPT</option>
+                            <option value="gemini">Gemini</option>
+                            <option value="llama3_70b">Llama3 (70B)</option>
+                            <option value="mixtral_8x22b">Mixtral 8x22B</option>
+                            <option value="olmo_7b">OLMo (7B)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-semibold" for="theoryExpression">Select an uncertainty expression:</label>
+                        <select id="theoryExpression" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-base">
+                            <option value="almost_certain">Almost Certain</option>
+                            <option value="highly_likely">Highly Likely</option>
+                            <option value="very_likely">Very Likely</option>
+                            <option value="likely">Likely</option>
+                            <option value="probable">Probable</option>
+                            <option value="somewhat_likely">Somewhat Likely</option>
+                            <option value="possible">Possible</option>
+                            <option value="uncertain">Uncertain</option>
+                            <option value="somewhat_unlikely">Somewhat Unlikely</option>
+                            <option value="unlikely">Unlikely</option>
+                            <option value="not_likely">Not Likely</option>
+                            <option value="doubtful">Doubtful</option>
+                            <option value="very_unlikely">Very Unlikely</option>
+                            <option value="highly_unlikely">Highly Unlikely</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block mb-2 font-semibold">Statement Context:</label>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div id="nonVerifiableBtn" class="cursor-pointer p-3 bg-primary bg-opacity-20 rounded-lg text-center font-medium transition-all hover:bg-opacity-30 border-2 border-primary">
+                            Non-Verifiable
+                        </div>
+                        <div id="verifiableTrueBtn" class="cursor-pointer p-3 bg-gray-200 dark:bg-gray-700 rounded-lg text-center font-medium transition-all hover:bg-gray-300 dark:hover:bg-gray-600">
+                            Verifiable & True
+                        </div>
+                        <div id="verifiableFalseBtn" class="cursor-pointer p-3 bg-gray-200 dark:bg-gray-700 rounded-lg text-center font-medium transition-all hover:bg-gray-300 dark:hover:bg-gray-600">
+                            Verifiable & False
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow mt-2">
+                        <h4 class="text-lg font-medium mb-3">Example Statement:</h4>
+                        <div id="exampleStatement" class="p-3 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 italic">
+                            "Maria believes it is <span id="expressionExample">likely</span> that her flight will land around 6pm."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-3">Prior Knowledge Influence</h3>
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <canvas id="theoryOfMindChart" height="300"></canvas>
+                    </div>
+                </div>
+
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3">Theory of Mind Gap</h3>
+                        <div class="flex items-center mt-4">
+                            <div class="w-full">
+                                <label class="block mb-1">
+                                    <span class="font-medium">Gap between True vs. False interpretations:</span>
+                                    <span id="theoryGapValue" class="float-right font-bold text-primary dark:text-accent">0</span>
+                                </label>
+                                <input type="range" min="0" max="50" value="0" class="w-full h-2 custom-slider" id="theoryGapSlider" disabled>
+                                <div class="flex justify-between text-xs mt-1">
+                                    <span>0% (No Bias)</span>
+                                    <span>25%</span>
+                                    <span>50% (Strong Bias)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-sm">
+                            This gap represents how much an LLM's interpretation of the same uncertainty phrase changes
+                            based on whether it believes the statement is true or false. Larger gaps indicate weaker Theory of Mind.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3">Key Finding</h3>
+                        <p class="italic" id="theoryInsight">
+                            The research found that LLMs significantly alter their numerical interpretation of uncertainty phrases 
+                            based on whether they perceive the statement to be true or false - a bias that humans exhibit to a much lesser degree.
+                        </p>
+                        <p class="mt-4 text-sm">
+                            This suggests limitations in LLMs' Theory of Mind: they struggle to separate their own knowledge
+                            from their assessment of another agent's expressed uncertainty.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-10 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p>Based on research by Belem et al. (2024): "Perceptions of Linguistic Uncertainty by Language Models and Humans"</p>
+            <p class="mt-2">Interactive dashboard created for educational purposes</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample data based on the paper by Belem et al. (2024)
+        const humanData = {
+            // Distribution of human responses for each uncertainty expression (0-100 in steps of 5)
+            // Values represent frequency/density at each probability point
+            almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.05, 0.60, 0.10],
+            highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.03, 0.04, 0.08, 0.35, 0.25, 0.08, 0.04, 0.02, 0.01, 0.01],
+            very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.03, 0.05, 0.07, 0.29, 0.23, 0.12, 0.06, 0.03, 0.02, 0.01, 0.01],
+            likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.03, 0.05, 0.06, 0.20, 0.17, 0.15, 0.12, 0.07, 0.04, 0.02, 0.01, 0.01, 0.01],
+            probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.03, 0.04, 0.07, 0.16, 0.14, 0.12, 0.10, 0.08, 0.07, 0.05, 0.03, 0.02, 0.01, 0.01],
+            somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.02, 0.03, 0.04, 0.05, 0.20, 0.17, 0.12, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01],
+            possible: [0.01, 0.01, 0.02, 0.02, 0.03, 0.03, 0.05, 0.06, 0.18, 0.15, 0.15, 0.09, 0.07, 0.05, 0.03, 0.02, 0.01, 0.01, 0.01, 0.01],
+            uncertain: [0.01, 0.01, 0.01, 0.02, 0.02, 0.03, 0.05, 0.35, 0.12, 0.08, 0.07, 0.05, 0.04, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01, 0.01],
+            somewhat_unlikely: [0.01, 0.01, 0.02, 0.03, 0.05, 0.22, 0.19, 0.12, 0.10, 0.07, 0.05, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            unlikely: [0.01, 0.02, 0.03, 0.05, 0.19, 0.17, 0.15, 0.11, 0.08, 0.06, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            not_likely: [0.02, 0.03, 0.05, 0.18, 0.16, 0.14, 0.11, 0.09, 0.06, 0.05, 0.03, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            doubtful: [0.02, 0.03, 0.05, 0.20, 0.18, 0.15, 0.12, 0.08, 0.05, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            very_unlikely: [0.04, 0.39, 0.25, 0.13, 0.07, 0.04, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            highly_unlikely: [0.10, 0.35, 0.20, 0.15, 0.08, 0.05, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+        };
+
+        // LLM data - based on Figures 5, 6, 7, 13 in the paper
+        // For simplicity, I'll create representative distributions that match the general patterns
+        const llmData = {
+            gpt4: {
+                // Non-verifiable statements
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.75, 0.05],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.60, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.15, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.65, 0.15, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.75, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.75, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.70, 0.15, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.80, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.75, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.01, 0.01, 0.01, 0.70, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.01, 0.01, 0.70, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.01, 0.05, 0.70, 0.15, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.01, 0.80, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.75, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                // Mean responses for different statement types (for Section 3)
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 95,
+                        highly_likely: 85,
+                        very_likely: 75,
+                        likely: 65,
+                        probable: 60,
+                        somewhat_likely: 55,
+                        possible: 50,
+                        uncertain: 50,
+                        somewhat_unlikely: 30,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 15,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableTrue: {
+                        almost_certain: 95,
+                        highly_likely: 85,
+                        very_likely: 80,
+                        likely: 70,
+                        probable: 70,
+                        somewhat_likely: 60,
+                        possible: 65,
+                        uncertain: 50,
+                        somewhat_unlikely: 25,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableFalse: {
+                        almost_certain: 85,
+                        highly_likely: 75,
+                        very_likely: 65,
+                        likely: 55,
+                        probable: 45,
+                        somewhat_likely: 40,
+                        possible: 25,
+                        uncertain: 45,
+                        somewhat_unlikely: 35,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 20,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    }
+                },
+                // Performance metrics
+                metrics: {
+                    pa: 24.4,
+                    mae: 4.64
+                }
+            },
+            gpt4o: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.10, 0.15, 0.50, 0.01],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.55, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.10, 0.50, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.08, 0.55, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.10, 0.55, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.10, 0.55, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.10, 0.15, 0.45, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.08, 0.60, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.01, 0.05, 0.08, 0.55, 0.15, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.01, 0.05, 0.10, 0.55, 0.15, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.05, 0.10, 0.55, 0.15, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.08, 0.15, 0.55, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.05, 0.60, 0.15, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.60, 0.25, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 90,
+                        highly_likely: 80,
+                        very_likely: 70,
+                        likely: 60,
+                        probable: 55,
+                        somewhat_likely: 50,
+                        possible: 45,
+                        uncertain: 50,
+                        somewhat_unlikely: 30,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    },
+                    verifiableTrue: {
+                        almost_certain: 90,
+                        highly_likely: 80,
+                        very_likely: 75,
+                        likely: 65,
+                        probable: 65,
+                        somewhat_likely: 55,
+                        possible: 60,
+                        uncertain: 50,
+                        somewhat_unlikely: 25,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    },
+                    verifiableFalse: {
+                        almost_certain: 80,
+                        highly_likely: 65,
+                        very_likely: 55,
+                        likely: 50,
+                        probable: 40,
+                        somewhat_likely: 35,
+                        possible: 20,
+                        uncertain: 45,
+                        somewhat_unlikely: 35,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 20,
+                        very_unlikely: 15,
+                        highly_unlikely: 10
+                    }
+                },
+                metrics: {
+                    pa: 18.9,
+                    mae: 5.58
+                }
+            },
+            chatgpt: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.15, 0.15, 0.10, 0.10, 0.25, 0.01],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.10, 0.15, 0.35, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.05, 0.10, 0.15, 0.35, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.08, 0.10, 0.40, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.08, 0.10, 0.45, 0.08, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.05, 0.05, 0.08, 0.10, 0.45, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.05, 0.05, 0.05, 0.10, 0.15, 0.40, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.05, 0.05, 0.05, 0.10, 0.50, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.05, 0.08, 0.12, 0.45, 0.10, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.05, 0.08, 0.15, 0.45, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.08, 0.15, 0.40, 0.15, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.10, 0.20, 0.40, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.10, 0.45, 0.20, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.45, 0.30, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 85,
+                        highly_likely: 75,
+                        very_likely: 65,
+                        likely: 60,
+                        probable: 55,
+                        somewhat_likely: 50,
+                        possible: 45,
+                        uncertain: 45,
+                        somewhat_unlikely: 30,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    },
+                    verifiableTrue: {
+                        almost_certain: 85,
+                        highly_likely: 80,
+                        very_likely: 75,
+                        likely: 70,
+                        probable: 65,
+                        somewhat_likely: 60,
+                        possible: 60,
+                        uncertain: 45,
+                        somewhat_unlikely: 20,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableFalse: {
+                        almost_certain: 65,
+                        highly_likely: 50,
+                        very_likely: 40,
+                        likely: 30,
+                        probable: 25,
+                        somewhat_likely: 20,
+                        possible: 10,
+                        uncertain: 40,
+                        somewhat_unlikely: 35,
+                        unlikely: 30,
+                        not_likely: 25,
+                        doubtful: 25,
+                        very_unlikely: 15,
+                        highly_unlikely: 10
+                    }
+                },
+                metrics: {
+                    pa: 19.7,
+                    mae: 6.80
+                }
+            },
+            gemini: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.70, 0.01],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.05, 0.65, 0.10, 0.05, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.70, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.05, 0.10, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.10, 0.70, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 95,
+                        highly_likely: 85,
+                        very_likely: 75,
+                        likely: 65,
+                        probable: 60,
+                        somewhat_likely: 55,
+                        possible: 50,
+                        uncertain: 50,
+                        somewhat_unlikely: 30,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    },
+                    verifiableTrue: {
+                        almost_certain: 95,
+                        highly_likely: 85,
+                        very_likely: 80,
+                        likely: 70,
+                        probable: 65,
+                        somewhat_likely: 60,
+                        possible: 55,
+                        uncertain: 50,
+                        somewhat_unlikely: 25,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 15,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableFalse: {
+                        almost_certain: 85,
+                        highly_likely: 70,
+                        very_likely: 60,
+                        likely: 50,
+                        probable: 40,
+                        somewhat_likely: 35,
+                        possible: 30,
+                        uncertain: 45,
+                        somewhat_unlikely: 35,
+                        unlikely: 30,
+                        not_likely: 25,
+                        doubtful: 20,
+                        very_unlikely: 15,
+                        highly_unlikely: 10
+                    }
+                },
+                metrics: {
+                    pa: 25.4,
+                    mae: 4.09
+                }
+            },
+            llama3_70b: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.05, 0.75, 0.01],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.70, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.75, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.01, 0.01, 0.05, 0.08, 0.65, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.01, 0.05, 0.08, 0.65, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.05, 0.08, 0.65, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.08, 0.75, 0.08, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.75, 0.15, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 95,
+                        highly_likely: 85,
+                        very_likely: 80,
+                        likely: 65,
+                        probable: 60,
+                        somewhat_likely: 55,
+                        possible: 50,
+                        uncertain: 50,
+                        somewhat_unlikely: 30,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 15,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableTrue: {
+                        almost_certain: 95,
+                        highly_likely: 90,
+                        very_likely: 85,
+                        likely: 75,
+                        probable: 70,
+                        somewhat_likely: 65,
+                        possible: 60,
+                        uncertain: 50,
+                        somewhat_unlikely: 25,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableFalse: {
+                        almost_certain: 75,
+                        highly_likely: 65,
+                        very_likely: 55,
+                        likely: 45,
+                        probable: 40,
+                        somewhat_likely: 35,
+                        possible: 25,
+                        uncertain: 45,
+                        somewhat_unlikely: 35,
+                        unlikely: 30,
+                        not_likely: 25,
+                        doubtful: 20,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    }
+                },
+                metrics: {
+                    pa: 23.6,
+                    mae: 5.56
+                }
+            },
+            mixtral_8x22b: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.08, 0.10, 0.15, 0.50, 0.01],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.50, 0.15, 0.08, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.55, 0.15, 0.10, 0.03, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.10, 0.65, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.01, 0.01, 0.01, 0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.01, 0.01, 0.01, 0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.01, 0.01, 0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.01, 0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.05, 0.65, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.65, 0.20, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 90,
+                        highly_likely: 80,
+                        very_likely: 70,
+                        likely: 60,
+                        probable: 55,
+                        somewhat_likely: 50,
+                        possible: 45,
+                        uncertain: 45,
+                        somewhat_unlikely: 30,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableTrue: {
+                        almost_certain: 90,
+                        highly_likely: 85,
+                        very_likely: 80,
+                        likely: 70,
+                        probable: 65,
+                        somewhat_likely: 60,
+                        possible: 50,
+                        uncertain: 45,
+                        somewhat_unlikely: 25,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 0
+                    },
+                    verifiableFalse: {
+                        almost_certain: 85,
+                        highly_likely: 70,
+                        very_likely: 60,
+                        likely: 50,
+                        probable: 45,
+                        somewhat_likely: 40,
+                        possible: 40,
+                        uncertain: 45,
+                        somewhat_unlikely: 30,
+                        unlikely: 25,
+                        not_likely: 20,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    }
+                },
+                metrics: {
+                    pa: 21.8,
+                    mae: 7.20
+                }
+            },
+            olmo_7b: {
+                nonVerifiable: {
+                    almost_certain: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.15, 0.25, 0.20, 0.15, 0.08],
+                    highly_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.15, 0.08, 0.05, 0.05, 0.15, 0.20, 0.15, 0.01, 0.01, 0.01, 0.01],
+                    very_likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.20, 0.15, 0.08, 0.05, 0.10, 0.15, 0.08, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    likely: [0.01, 0.01, 0.01, 0.01, 0.01, 0.15, 0.20, 0.15, 0.05, 0.05, 0.10, 0.15, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    probable: [0.01, 0.01, 0.01, 0.01, 0.08, 0.15, 0.15, 0.08, 0.20, 0.10, 0.05, 0.05, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_likely: [0.01, 0.01, 0.01, 0.05, 0.15, 0.20, 0.15, 0.08, 0.05, 0.10, 0.08, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    possible: [0.01, 0.01, 0.05, 0.10, 0.15, 0.20, 0.15, 0.05, 0.08, 0.05, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    uncertain: [0.01, 0.01, 0.05, 0.15, 0.20, 0.15, 0.20, 0.10, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    somewhat_unlikely: [0.01, 0.05, 0.10, 0.15, 0.20, 0.15, 0.08, 0.10, 0.05, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    unlikely: [0.05, 0.10, 0.15, 0.20, 0.15, 0.08, 0.10, 0.05, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    not_likely: [0.08, 0.15, 0.20, 0.15, 0.10, 0.10, 0.08, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    doubtful: [0.10, 0.20, 0.15, 0.15, 0.10, 0.05, 0.10, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    very_unlikely: [0.15, 0.20, 0.15, 0.10, 0.15, 0.08, 0.05, 0.05, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+                    highly_unlikely: [0.20, 0.15, 0.10, 0.15, 0.10, 0.08, 0.08, 0.05, 0.03, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+                },
+                meanResponses: {
+                    nonVerifiable: {
+                        almost_certain: 80,
+                        highly_likely: 70,
+                        very_likely: 55,
+                        likely: 45,
+                        probable: 40,
+                        somewhat_likely: 35,
+                        possible: 30,
+                        uncertain: 30,
+                        somewhat_unlikely: 25,
+                        unlikely: 20,
+                        not_likely: 15,
+                        doubtful: 15,
+                        very_unlikely: 10,
+                        highly_unlikely: 10
+                    },
+                    verifiableTrue: {
+                        almost_certain: 85,
+                        highly_likely: 75,
+                        very_likely: 65,
+                        likely: 55,
+                        probable: 50,
+                        somewhat_likely: 45,
+                        possible: 40,
+                        uncertain: 35,
+                        somewhat_unlikely: 25,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 10,
+                        highly_unlikely: 5
+                    },
+                    verifiableFalse: {
+                        almost_certain: 75,
+                        highly_likely: 65,
+                        very_likely: 55,
+                        likely: 45,
+                        probable: 40,
+                        somewhat_likely: 35,
+                        possible: 30,
+                        uncertain: 30,
+                        somewhat_unlikely: 20,
+                        unlikely: 15,
+                        not_likely: 10,
+                        doubtful: 10,
+                        very_unlikely: 5,
+                        highly_unlikely: 5
+                    }
+                },
+                metrics: {
+                    pa: 12.1,
+                    mae: 18.44
+                }
+            }
+        };
+
+        // Example statements for each context
+        const exampleStatements = {
+            nonVerifiable: {
+                almost_certain: "Maria believes it is almost certain that her flight will land around 6pm.",
+                highly_likely: "Maria believes it is highly likely that her flight will land around 6pm.",
+                very_likely: "Maria believes it is very likely that her flight will land around 6pm.",
+                likely: "Maria believes it is likely that her flight will land around 6pm.",
+                probable: "Maria believes it is probable that her flight will land around 6pm.",
+                somewhat_likely: "Maria believes it is somewhat likely that her flight will land around 6pm.",
+                possible: "Maria believes it is possible that her flight will land around 6pm.",
+                uncertain: "Maria believes it is uncertain that her flight will land around 6pm.",
+                somewhat_unlikely: "Maria believes it is somewhat unlikely that her flight will land around 6pm.",
+                unlikely: "Maria believes it is unlikely that her flight will land around 6pm.",
+                not_likely: "Maria believes it is not likely that her flight will land around 6pm.",
+                doubtful: "Maria believes it is doubtful that her flight will land around 6pm.",
+                very_unlikely: "Maria believes it is very unlikely that her flight will land around 6pm.",
+                highly_unlikely: "Maria believes it is highly unlikely that her flight will land around 6pm."
+            },
+            verifiableTrue: {
+                almost_certain: "David believes it is almost certain that water's chemical formula is H2O.",
+                highly_likely: "David believes it is highly likely that water's chemical formula is H2O.",
+                very_likely: "David believes it is very likely that water's chemical formula is H2O.",
+                likely: "David believes it is likely that water's chemical formula is H2O.",
+                probable: "David believes it is probable that water's chemical formula is H2O.",
+                somewhat_likely: "David believes it is somewhat likely that water's chemical formula is H2O.",
+                possible: "David believes it is possible that water's chemical formula is H2O.",
+                uncertain: "David believes it is uncertain that water's chemical formula is H2O.",
+                somewhat_unlikely: "David believes it is somewhat unlikely that water's chemical formula is H2O.",
+                unlikely: "David believes it is unlikely that water's chemical formula is H2O.",
+                not_likely: "David believes it is not likely that water's chemical formula is H2O.",
+                doubtful: "David believes it is doubtful that water's chemical formula is H2O.",
+                very_unlikely: "David believes it is very unlikely that water's chemical formula is H2O.",
+                highly_unlikely: "David believes it is highly unlikely that water's chemical formula is H2O."
+            },
+            verifiableFalse: {
+                almost_certain: "David believes it is almost certain that carbon monoxide's chemical formula is H2O.",
+                highly_likely: "David believes it is highly likely that carbon monoxide's chemical formula is H2O.",
+                very_likely: "David believes it is very likely that carbon monoxide's chemical formula is H2O.",
+                likely: "David believes it is likely that carbon monoxide's chemical formula is H2O.",
+                probable: "David believes it is probable that carbon monoxide's chemical formula is H2O.",
+                somewhat_likely: "David believes it is somewhat likely that carbon monoxide's chemical formula is H2O.",
+                possible: "David believes it is possible that carbon monoxide's chemical formula is H2O.",
+                uncertain: "David believes it is uncertain that carbon monoxide's chemical formula is H2O.",
+                somewhat_unlikely: "David believes it is somewhat unlikely that carbon monoxide's chemical formula is H2O.",
+                unlikely: "David believes it is unlikely that carbon monoxide's chemical formula is H2O.",
+                not_likely: "David believes it is not likely that carbon monoxide's chemical formula is H2O.",
+                doubtful: "David believes it is doubtful that carbon monoxide's chemical formula is H2O.",
+                very_unlikely: "David believes it is very unlikely that carbon monoxide's chemical formula is H2O.",
+                highly_unlikely: "David believes it is highly unlikely that carbon monoxide's chemical formula is H2O."
+            }
+        };
+
+        // Helper functions
+        function getPrettyName(key) {
+            return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
+        // Chart instances
+        let humanDistributionChart, humanHeatmapChart;
+        let humanComparisonChart, llmComparisonChart;
+        let theoryOfMindChart;
+
+        // DOM references
+        const tabLinks = document.querySelectorAll('[data-target]');
+        const sections = document.querySelectorAll('section');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        // Labels for chart axes
+        const probabilityLabels = Array.from({length: 21}, (_, i) => i * 5);
+        const expressionLabels = [
+            'almost certain', 'highly likely', 'very likely', 'likely',
+            'probable', 'somewhat likely', 'possible', 'uncertain',
+            'somewhat unlikely', 'unlikely', 'not likely', 'doubtful',
+            'very unlikely', 'highly unlikely'
+        ];
+
+        // Theme handling
+        function initTheme() {
+            // Check for user's preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Listen for changes in system preference
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                updateChartsTheme();
+            });
+            
+            // Toggle button
+            darkModeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                updateChartsTheme();
+            });
+        }
+
+        function updateChartsTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#1f2937';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            
+            Chart.defaults.color = textColor;
+            Chart.defaults.borderColor = gridColor;
+            
+            // Update existing charts
+            if (humanDistributionChart) humanDistributionChart.update();
+            if (humanHeatmapChart) humanHeatmapChart.update();
+            if (humanComparisonChart) humanComparisonChart.update();
+            if (llmComparisonChart) llmComparisonChart.update();
+            if (theoryOfMindChart) theoryOfMindChart.update();
+        }
+
+        // Tab handling
+        function initTabs() {
+            tabLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Update tabs
+                    tabLinks.forEach(l => l.classList.remove('tab-active'));
+                    link.classList.add('tab-active');
+                    
+                    // Update sections
+                    const targetId = link.getAttribute('data-target');
+                    sections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Initialize Section 1: Human Baseline
+        function initHumanBaseline() {
+            const uncertaintyExpressionSelect = document.getElementById('uncertaintyExpression');
+            
+            // Initialize the human distribution chart
+            const humanDistributionCtx = document.getElementById('humanDistributionChart').getContext('2d');
+            humanDistributionChart = new Chart(humanDistributionCtx, {
+                type: 'bar',
+                data: {
+                    labels: probabilityLabels,
+                    datasets: [{
+                        label: 'Human Responses',
+                        data: humanData.almost_certain.map(v => v * 100),
+                        backgroundColor: 'rgba(93, 92, 222, 0.6)',
+                        borderColor: 'rgba(93, 92, 222, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Numerical Probability (%)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Frequency (%)'
+                            },
+                            min: 0,
+                            max: 80
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribution for "Almost Certain"'
+                        }
+                    }
+                }
+            });
+            
+            // Initialize the heatmap chart
+            const humanHeatmapCtx = document.getElementById('humanHeatmapChart').getContext('2d');
+            
+            // Create data for heatmap
+            const heatmapData = [];
+            expressionLabels.forEach((expression, i) => {
+                const expressionKey = expression.replace(/ /g, '_');
+                const dataArray = [];
+                
+                for (let j = 0; j < probabilityLabels.length; j++) {
+                    const humanValue = humanData[expressionKey] ? humanData[expressionKey][j] : 0;
+                    dataArray.push({
+                        x: probabilityLabels[j],
+                        y: expression,
+                        v: humanValue
+                    });
+                }
+                
+                heatmapData.push(...dataArray);
+            });
+            
+            humanHeatmapChart = new Chart(humanHeatmapCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Human Responses',
+                        data: heatmapData,
+                        backgroundColor: (context) => {
+                            const value = context.dataset.data[context.dataIndex].v;
+                            const alpha = Math.min(value * 5, 1); // Scale up for visibility
+                            return `rgba(93, 92, 222, ${alpha})`;
+                        },
+                        pointRadius: 10,
+                        pointStyle: 'rect',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Numerical Probability (%)'
+                            },
+                            ticks: {
+                                stepSize: 10
+                            }
+                        },
+                        y: {
+                            type: 'category',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Uncertainty Expression'
+                            },
+                            reverse: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const dataPoint = context.dataset.data[context.dataIndex];
+                                    const percentage = (dataPoint.v * 100).toFixed(1);
+                                    return `${dataPoint.y} at ${dataPoint.x}%: ${percentage}% of responses`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Handle uncertainty expression selection
+            uncertaintyExpressionSelect.addEventListener('change', () => {
+                const selectedExpression = uncertaintyExpressionSelect.value;
+                const prettyName = getPrettyName(selectedExpression);
+                
+                // Update distribution chart
+                humanDistributionChart.data.datasets[0].data = humanData[selectedExpression].map(v => v * 100);
+                humanDistributionChart.options.plugins.title.text = `Distribution for "${prettyName}"`;
+                humanDistributionChart.update();
+            });
+        }
+
+        // Initialize Section 2: LLM vs Human Comparison
+        function initLlmComparison() {
+            const llmModelSelect = document.getElementById('llmModel');
+            const comparisonExpressionSelect = document.getElementById('comparisonExpression');
+            const paScoreElement = document.getElementById('paScore');
+            const maeScoreElement = document.getElementById('maeScore');
+            const comparisonInsightElement = document.getElementById('comparisonInsight');
+            const llmChartTitleElement = document.getElementById('llmChartTitle');
+            
+            // Initialize comparison charts
+            const humanComparisonCtx = document.getElementById('humanComparisonChart').getContext('2d');
+            humanComparisonChart = new Chart(humanComparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: probabilityLabels,
+                    datasets: [{
+                        label: 'Human Responses',
+                        data: humanData.almost_certain.map(v => v * 100),
+                        backgroundColor: 'rgba(93, 92, 222, 0.6)',
+                        borderColor: 'rgba(93, 92, 222, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 80,
+                            title: {
+                                display: true,
+                                text: 'Frequency (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Numerical Probability (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            const llmComparisonCtx = document.getElementById('llmComparisonChart').getContext('2d');
+            llmComparisonChart = new Chart(llmComparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: probabilityLabels,
+                    datasets: [{
+                        label: 'LLM Responses',
+                        data: llmData.gpt4.nonVerifiable.almost_certain.map(v => v * 100),
+                        backgroundColor: 'rgba(140, 140, 255, 0.6)',
+                        borderColor: 'rgba(140, 140, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 80,
+                            title: {
+                                display: true,
+                                text: 'Frequency (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Numerical Probability (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Update comparison charts and metrics
+            function updateComparison() {
+                const selectedModel = llmModelSelect.value;
+                const selectedExpression = comparisonExpressionSelect.value;
+                const prettyModelName = getPrettyName(selectedModel);
+                const prettyExpressionName = getPrettyName(selectedExpression);
+                
+                // Update human chart
+                humanComparisonChart.data.datasets[0].data = humanData[selectedExpression].map(v => v * 100);
+                humanComparisonChart.update();
+                
+                // Update LLM chart
+                llmComparisonChart.data.datasets[0].data = llmData[selectedModel].nonVerifiable[selectedExpression].map(v => v * 100);
+                llmChartTitleElement.textContent = `${prettyModelName} Responses`;
+                llmComparisonChart.update();
+                
+                // Update metrics
+                paScoreElement.textContent = llmData[selectedModel].metrics.pa.toFixed(1);
+                maeScoreElement.textContent = llmData[selectedModel].metrics.mae.toFixed(1);
+                
+                // Update insights based on model
+                if (selectedModel === 'gpt4' || selectedModel === 'gemini' || selectedModel === 'llama3_70b') {
+                    comparisonInsightElement.textContent = `${prettyModelName} exhibits strong alignment with human interpretations of uncertainty expressions, achieving a high Proportional Agreement score. For "${prettyExpressionName}", its response distribution closely matches human consensus.`;
+                } else if (selectedModel === 'olmo_7b') {
+                    comparisonInsightElement.textContent = `${prettyModelName} shows weaker alignment with human interpretations, with more diffuse distributions and higher error rates. Its understanding of "${prettyExpressionName}" differs significantly from human consensus.`;
+                } else {
+                    comparisonInsightElement.textContent = `${prettyModelName} shows moderate alignment with human interpretations of uncertainty expressions. For "${prettyExpressionName}", its responses are less varied than the human distribution but capture the general trend.`;
+                }
+            }
+            
+            // Handle selection changes
+            llmModelSelect.addEventListener('change', updateComparison);
+            comparisonExpressionSelect.addEventListener('change', updateComparison);
+            
+            // Initial update
+            updateComparison();
+        }
+
+        // Initialize Section 3: LLM Theory of Mind
+        function initTheoryOfMind() {
+            const theoryLlmModelSelect = document.getElementById('theoryLlmModel');
+            const theoryExpressionSelect = document.getElementById('theoryExpression');
+            const nonVerifiableBtn = document.getElementById('nonVerifiableBtn');
+            const verifiableTrueBtn = document.getElementById('verifiableTrueBtn');
+            const verifiableFalseBtn = document.getElementById('verifiableFalseBtn');
+            const exampleStatementElement = document.getElementById('exampleStatement');
+            const expressionExampleElement = document.getElementById('expressionExample');
+            const theoryGapSliderElement = document.getElementById('theoryGapSlider');
+            const theoryGapValueElement = document.getElementById('theoryGapValue');
+            const theoryInsightElement = document.getElementById('theoryInsight');
+            
+            let currentContext = 'nonVerifiable';
+            
+            // Initialize Theory of Mind chart
+            const theoryOfMindCtx = document.getElementById('theoryOfMindChart').getContext('2d');
+            theoryOfMindChart = new Chart(theoryOfMindCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Non-Verifiable', 'Verifiable & True', 'Verifiable & False'],
+                    datasets: [{
+                        label: 'Mean Response',
+                        data: [
+                            llmData.gpt4.meanResponses.nonVerifiable.almost_certain,
+                            llmData.gpt4.meanResponses.verifiableTrue.almost_certain,
+                            llmData.gpt4.meanResponses.verifiableFalse.almost_certain
+                        ],
+                        backgroundColor: [
+                            'rgba(93, 92, 222, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 99, 132, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(93, 92, 222, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Mean Numerical Response (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Interpretation of "Almost Certain" by GPT-4'
+                        }
+                    }
+                }
+            });
+            
+            // Context button styling
+            function updateContextButtonStyles() {
+                [nonVerifiableBtn, verifiableTrueBtn, verifiableFalseBtn].forEach(btn => {
+                    btn.classList.remove('bg-primary', 'bg-opacity-20', 'border-2', 'border-primary');
+                    btn.classList.add('bg-gray-200', 'dark:bg-gray-700');
+                });
+                
+                if (currentContext === 'nonVerifiable') {
+                    nonVerifiableBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700');
+                    nonVerifiableBtn.classList.add('bg-primary', 'bg-opacity-20', 'border-2', 'border-primary');
+                } else if (currentContext === 'verifiableTrue') {
+                    verifiableTrueBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700');
+                    verifiableTrueBtn.classList.add('bg-primary', 'bg-opacity-20', 'border-2', 'border-primary');
+                } else if (currentContext === 'verifiableFalse') {
+                    verifiableFalseBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700');
+                    verifiableFalseBtn.classList.add('bg-primary', 'bg-opacity-20', 'border-2', 'border-primary');
+                }
+            }
+            
+            // Update theory of mind chart and example
+            function updateTheoryOfMind() {
+                const selectedModel = theoryLlmModelSelect.value;
+                const selectedExpression = theoryExpressionSelect.value;
+                const prettyModelName = getPrettyName(selectedModel);
+                const prettyExpressionName = getPrettyName(selectedExpression);
+                
+                // Update chart data
+                theoryOfMindChart.data.datasets[0].data = [
+                    llmData[selectedModel].meanResponses.nonVerifiable[selectedExpression],
+                    llmData[selectedModel].meanResponses.verifiableTrue[selectedExpression],
+                    llmData[selectedModel].meanResponses.verifiableFalse[selectedExpression]
+                ];
+                
+                // Update chart title
+                theoryOfMindChart.options.plugins.title.text = `Interpretation of "${prettyExpressionName}" by ${prettyModelName}`;
+                theoryOfMindChart.update();
+                
+                // Update example statement
+                expressionExampleElement.textContent = selectedExpression.replace(/_/g, ' ');
+                exampleStatementElement.innerHTML = exampleStatements[currentContext][selectedExpression];
+                
+                // Calculate and update the gap
+                const trueFalseGap = Math.abs(
+                    llmData[selectedModel].meanResponses.verifiableTrue[selectedExpression] - 
+                    llmData[selectedModel].meanResponses.verifiableFalse[selectedExpression]
+                );
+                
+                theoryGapSliderElement.value = trueFalseGap;
+                theoryGapValueElement.textContent = `${trueFalseGap.toFixed(1)} percentage points`;
+                
+                // Update insights based on gap size
+                if (trueFalseGap > 25) {
+                    theoryInsightElement.textContent = `${prettyModelName} demonstrates a strong bias in its interpretation of "${prettyExpressionName}" based on its belief about statement truth. This ${trueFalseGap.toFixed(1)} percentage point gap suggests limited Theory of Mind capability in this context.`;
+                } else if (trueFalseGap > 10) {
+                    theoryInsightElement.textContent = `${prettyModelName} shows a moderate bias of ${trueFalseGap.toFixed(1)} percentage points when interpreting "${prettyExpressionName}" between true and false statements. This suggests its Theory of Mind capability is present but imperfect.`;
+                } else {
+                    theoryInsightElement.textContent = `${prettyModelName} maintains relatively consistent interpretations of "${prettyExpressionName}" regardless of statement truth, with only a ${trueFalseGap.toFixed(1)} percentage point gap. This suggests better Theory of Mind capabilities than most LLMs.`;
+                }
+            }
+            
+            // Handle selection changes
+            theoryLlmModelSelect.addEventListener('change', updateTheoryOfMind);
+            theoryExpressionSelect.addEventListener('change', updateTheoryOfMind);
+            
+            // Handle context buttons
+            nonVerifiableBtn.addEventListener('click', () => {
+                currentContext = 'nonVerifiable';
+                updateContextButtonStyles();
+                updateTheoryOfMind();
+            });
+            
+            verifiableTrueBtn.addEventListener('click', () => {
+                currentContext = 'verifiableTrue';
+                updateContextButtonStyles();
+                updateTheoryOfMind();
+            });
+            
+            verifiableFalseBtn.addEventListener('click', () => {
+                currentContext = 'verifiableFalse';
+                updateContextButtonStyles();
+                updateTheoryOfMind();
+            });
+            
+            // Initial update
+            updateContextButtonStyles();
+            updateTheoryOfMind();
+        }
+
+        // Initialize everything on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initTabs();
+            initHumanBaseline();
+            initLlmComparison();
+            initTheoryOfMind();
+            updateChartsTheme();
+        });
+    </script>
+</body>
+</html>

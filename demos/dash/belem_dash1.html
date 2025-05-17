@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM & Human Uncertainty Perception Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #e5e7eb; /* Default tab color */
+            color: #4b5563; /* Default tab text color */
+            border: 1px solid #d1d5db;
+            border-bottom: none;
+        }
+        .tab-button.active {
+            background-color: #60a5fa; /* Active tab blue */
+            color: white;
+            border-color: #60a5fa;
+        }
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem;
+            background-color: white;
+            min-height: 450px; /* Increased min-height for more content */
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .slider-container {
+            width: 100%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #d1d5db;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        h1, h2, h3 {
+            color: #1f2937; /* Darker text for headings */
+        }
+        p, li, label, select, button {
+            color: #374151; /* Slightly lighter text for body */
+            line-height: 1.6;
+        }
+        select, button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 500;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        .info-box {
+            background-color: #eff6ff; /* Light blue background for info */
+            border-left: 4px solid #60a5fa; /* Blue left border */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .info-box p {
+            color: #1e40af; /* Darker blue text */
+        }
+        .citation {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Perceptions of Linguistic Uncertainty</h1>
+            <p class="text-lg text-gray-600">An Interactive Exploration of Human & LLM Responses</p>
+        </header>
+
+        <div class="tabs mb-6">
+            <button class="tab-button active" onclick="openTab(event, 'overview')">Overview</button>
+            <button class="tab-button" onclick="openTab(event, 'humanExperiment')">Human Experiment</button>
+            <button class="tab-button" onclick="openTab(event, 'llmModeling')">LLM Uncertainty</button>
+            <button class="tab-button" onclick="openTab(event, 'findings')">Key Findings</button>
+        </div>
+
+        <div id="overview" class="tab-content active card">
+            <h2 class="text-2xl font-semibold mb-4">Research Overview</h2>
+            <p class="mb-3">This research, detailed in Belem et al. (2024), investigates how both humans and ten popular Large Language Models (LLMs) interpret and quantify linguistic expressions of uncertainty. These are phrases like "probably," "it is certain," or "highly unlikely," which are pervasive in human communication. A central inquiry of the paper is whether LLMs can demonstrate a form of "theory of mind." Specifically, the study assesses if LLMs can determine the uncertainty expressed by an agent (e.g., a person in a vignette) independently of the LLM's own knowledge or "belief" about the truthfulness of the statement in question.</p>
+            <p class="mb-3">The methodology involved presenting human participants (recruited via Prolific) and various LLMs with statements. These statements were attributed to a hypothetical speaker who used a specific uncertainty phrase. Participants and LLMs were then tasked with estimating the speaker's level of certainty as a numerical probability (on a scale of 0-100, in increments of 5). The study utilized both non-verifiable statements (where truth is subjective or unknown) and verifiable statements (factually true or false common-knowledge statements).</p>
+            <p class="mb-3">Key findings suggest that while many LLMs (8 out of 10 tested) can map uncertainty expressions to probabilistic responses in a manner that aligns with human population-level averages, their responses are often systematically influenced by the factual truth or falsity of the verifiable statements. This indicates a greater susceptibility to bias from their prior knowledge compared to humans when performing such tasks. This phenomenon is illustrated by the motivating example in the paper (Figure 1), where ChatGPT's headline generation for a passage about climate change versus one about vaccine-autism links (both qualified with "probable") showed markedly different levels of expressed confidence, aligning with its internal "beliefs" on these topics.</p>
+            <p>The study employs metrics such as Proportional Agreement (PA) – measuring how often an agent's response matches the modal human response – and Mean Absolute Error (MAE) – measuring the average difference between an agent's mean response and the human mean response for an uncertainty expression. These metrics help quantify the alignment and divergence between human and LLM perceptions. The implications of these findings are significant for human-AI communication, AI-AI interaction, and understanding the nature of reasoning and potential biases in LLMs.</p>
+        </div>
+
+        <div id="humanExperiment" class="tab-content card">
+            <h2 class="text-2xl font-semibold mb-4">The Human Experiment: A Simulation</h2>
+            <p class="mb-3">In the study by Belem et al. (2024), human participants (94 for non-verifiable statements, 89 for verifiable statements, after filtering) were recruited via Prolific. They were presented with scenarios where a person (e.g., "Sonia," "Alex") expressed a statement accompanied by one of 14 specific linguistic uncertainty expressions (e.g., "almost certain," "unlikely," "possible"). Participants were then asked to quantify this expressed uncertainty on a numerical scale from 0 to 100 (in bins of 5), reflecting their estimate of the speaker's belief in the statement.</p>
+            <p class="mb-4">The experiment aimed to isolate the interpretation of the linguistic phrase by asking participants about the *speaker's* perspective, distinct from their own potential beliefs about the statement. This setup is designed to probe "theory of mind" capabilities. Try a simplified version yourself:</p>
+
+            <div class="mb-4">
+                <label for="statementTypeHuman" class="block mb-2 font-medium">1. Select Statement Type (as used in the study):</label>
+                <select id="statementTypeHuman" class="w-full md:w-1/2">
+                    <option value="nonverifiable">Non-Verifiable (e.g., "her boss has two pets")</option>
+                    <option value="verifiable_true">Verifiable & True (e.g., "Paris is the capital of France")</option>
+                    <option value="verifiable_false">Verifiable & False (e.g., "the Moon is made of green cheese")</option>
+                </select>
+            </div>
+             <div class="mb-4">
+                <label for="uncertaintyExpressionHuman" class="block mb-2 font-medium">2. Select Uncertainty Expression (from the study's list):</label>
+                <select id="uncertaintyExpressionHuman" class="w-full md:w-1/2">
+                    </select>
+            </div>
+
+            <button onclick="generateHumanScenario()" class="mb-4">Generate Scenario</button>
+
+            <div id="humanScenarioDisplay" class="info-box mb-4" style="display: none;">
+                <p id="scenarioText" class="mb-2"></p>
+                <p id="questionText" class="font-semibold"></p>
+            </div>
+
+            <div class="slider-container mb-2">
+                <label for="humanProbabilitySlider" class="block mb-1 font-medium">Your estimate of <span id="speakerNameHumanDisplay">the speaker</span>'s certainty (0-100%):</label>
+                <input type="range" min="0" max="100" value="50" step="5" class="slider" id="humanProbabilitySlider" oninput="updateSliderValue('humanProbabilitySlider', 'humanSliderValue')">
+                <p class="text-center font-semibold text-lg mt-1"><span id="humanSliderValue">50</span>%</p>
+            </div>
+             <div id="humanMockResponse" class="mt-4 p-3 bg-green-100 border border-green-300 rounded-md" style="display:none;">
+                <p class="text-green-700">For context: In the Belem et al. (2024) study, for non-verifiable statements, humans on average rated the expression "<span id="humanMockExpression"></span>" around <span id="humanMockProb"></span>%. Individual responses varied, forming a distribution.</p>
+            </div>
+        </div>
+
+        <div id="llmModeling" class="tab-content card">
+            <h2 class="text-2xl font-semibold mb-4">LLM Uncertainty & "Theory of Mind" Assessment</h2>
+            <p class="mb-3">The LLMs in the study (including models like GPT-4, GPT-4o, Llama3, Gemini) were presented with prompts analogous to those given to human participants. These prompts contained scenarios where an agent expressed a statement using one of the 14 uncertainty phrases. The LLMs were then asked to output a numerical probability (0-100) reflecting the *agent's* perceived certainty.</p>
+            <p class="mb-3">The core objective was to evaluate if LLMs could perform this task by focusing on the linguistic cue of uncertainty, akin to human "theory of mind," rather than letting their own internal knowledge about the statement's factual correctness dominate their response. For example, if an agent states, "It is <span class='font-medium text-blue-600'>highly unlikely</span> that the sun revolves around the Earth," an ideal "theory of mind" response from the LLM would be a low probability based on "highly unlikely," despite the LLM "knowing" the underlying statement ("the sun revolves around the Earth") is false.</p>
+            <p class="mb-4">A key finding, as quantified by metrics like Proportional Agreement (PA) and Mean Absolute Error (MAE), is that LLMs' responses are often "pulled" by their internal knowledge, especially with verifiable statements. If a statement is factually true, the LLM's estimate of the agent's certainty tends to be higher than if the statement is factually false, even when the agent uses the exact same linguistic uncertainty phrase. This suggests a challenge for LLMs in cleanly separating the agent's expressed perspective from their own extensive knowledge base, indicating a potential limitation in their "theory of mind" capabilities in this specific context.</p>
+            <p class="mb-4">The paper notes (Table 2) that for verifiable statements, the average PA score for humans dropped by 0.9 points compared to non-verifiable statements, while for LLMs, the average drop was a more substantial 4.3 points, highlighting this increased sensitivity to prior knowledge.</p>
+
+            <div class="mb-4">
+                <label for="statementTypeLLM" class="block mb-2 font-medium">1. Select Statement Type for LLM Simulation:</label>
+                <select id="statementTypeLLM" class="w-full md:w-1/2">
+                    <option value="nonverifiable">Non-Verifiable</option>
+                    <option value="verifiable_true">Verifiable & True</option>
+                    <option value="verifiable_false">Verifiable & False</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="uncertaintyExpressionLLM" class="block mb-2 font-medium">2. Select Uncertainty Expression (from the study's list):</label>
+                <select id="uncertaintyExpressionLLM" class="w-full md:w-1/2">
+                    </select>
+            </div>
+
+            <button onclick="simulateLLMResponse()" class="mb-4">Simulate LLM Response</button>
+
+            <div id="llmScenarioDisplay" class="info-box mb-4" style="display: none;">
+                <p id="llmScenarioText" class="mb-2"></p>
+            </div>
+            <div id="llmResponseDisplay" class="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700" style="display: none;">
+                <p class="font-semibold">Simulated LLM Assessment of Agent's Certainty:</p>
+                <p id="llmCertaintyValue" class="text-xl"></p>
+                <p id="llmExplanation" class="text-sm mt-2"></p>
+            </div>
+        </div>
+        
+        <div id="findings" class="tab-content card">
+            <h2 class="text-2xl font-semibold mb-4">Key Findings & Implications (from Belem et al., 2024)</h2>
+            <ul class="list-disc pl-5 space-y-3">
+                <li><span class="font-semibold">Human-like Mapping for Non-Verifiable Statements:</span> For non-verifiable statements, many advanced LLMs (e.g., GPT-4, Llama3-70B, Gemini) demonstrated a strong ability to map linguistic uncertainty expressions to numerical probabilities in a way that aligns well with average human judgments (high Proportional Agreement scores, often exceeding individual human consistency with the population mode). For instance, expressions like "almost certain" consistently received high probability ratings, while "highly unlikely" received low ratings, following human-like trends (see Table 1 in the paper).</li>
+                <li><span class="font-semibold">Increased Sensitivity to Factual Truth (Bias in Verifiable Contexts):</span> A critical divergence appeared with verifiable statements. LLMs were found to be substantially more influenced by the actual truth or falsity of a statement compared to humans when assessing an *agent's* expressed uncertainty.
+                    <ul class="list-circle pl-5 mt-1 space-y-2">
+                        <li>LLMs tended to assign higher probability estimates to an agent's belief if the underlying statement was factually true (according to the LLM's knowledge) and lower estimates if it was false, irrespective of the agent using the same uncertainty phrase. For example, the mean numerical response by LLMs for true statements was, on average, 7.0 percentage points higher than for false statements (Figure 6 in the paper). This gap was much smaller for humans.</li>
+                        <li>This bias varied by expression; for instance, the difference was particularly stark for "possible" (Figure 7a in the paper).</li>
+                    </ul>
+                </li>
+                <li><span class="font-semibold">"Theory of Mind" Considerations:</span> This pronounced sensitivity to factual truth suggests that while LLMs can process prompts related to an agent's mental state (like uncertainty), their capacity to model this state *independently* of their own embedded knowledge appears more limited than in humans. They exhibit difficulty in fully disentangling "what the agent believes" from "what the LLM knows to be true." The paper suggests this points to areas for improvement in LLM theory of mind capabilities.</li>
+                <li><span class="font-semibold">Lower Variance in LLM Responses:</span> Compared to the distribution of human responses (which show considerable individual variability), LLM responses for a given uncertainty expression tended to be more concentrated, exhibiting lower entropy or variance (Figure 5 in the paper illustrates this for GPT-4o vs. humans).</li>
+                <li><span class="font-semibold">Implications for Human-AI and AI-AI Communication:</span> These findings carry significant weight for interactions involving AI. If an LLM's interpretation of a user's uncertain statement is unduly colored by its own "beliefs" or knowledge, it could lead to misinterpretations or misaligned actions. This is also pertinent for multi-agent AI systems where a shared, nuanced understanding of uncertainty is vital.</li>
+                <li><span class="font-semibold">Robustness Across Decoding Strategies:</span> The paper found that the observed knowledge bias persisted even when changing the decoding strategy from greedy decoding (temperature=0) to probabilistic decoding (temperature=1) for models where this was testable (e.g., OpenAI models, Section 5.4).</li>
+                <li><span class="font-semibold">Future Research Directions:</span> The work calls for further investigation into the origins of these LLM behaviors and the development of models that can more robustly and independently represent and reason about the mental states of others. Understanding the limitations, such as the US-centric view of the human baseline and the specific set of uncertainty expressions, also presents avenues for future work.</li>
+            </ul>
+        </div>
+
+        <footer class="citation">
+            <p>This dashboard is based on the findings and concepts presented in:</p>
+            <p>Belem, C. G., Kelly, M., Steyvers, M., Singh, S., & Smyth, P. (2024). <em>Perceptions of Linguistic Uncertainty by Language Models and Humans</em> (No. arXiv:2407.15814). arXiv. <a href="http://arxiv.org/abs/2407.15814" target="_blank" class="text-blue-600 hover:underline">http://arxiv.org/abs/2407.15814</a></p>
+            <p class="mt-2 text-sm">Dashboard simulations are illustrative and simplified for conceptual understanding.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(event, tabName) {
+            let i, tabcontent, tabbuttons;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.className += " active";
+        }
+
+        // Data for simulations, aligned with paper's expressions
+        const uncertaintyExpressions = [
+            // Based on Appendix B.1 of Belem et al. (2024) and typical human responses from Figure 4/Table 1
+            { phrase: "highly unlikely", typicalHumanProb: 5, llmBaseProb: 5, biasFactor: 0.85 }, 
+            { phrase: "very unlikely", typicalHumanProb: 10, llmBaseProb: 10, biasFactor: 0.85 },
+            { phrase: "doubtful", typicalHumanProb: 15, llmBaseProb: 15, biasFactor: 0.9 },
+            { phrase: "not likely", typicalHumanProb: 20, llmBaseProb: 20, biasFactor: 0.9 },
+            { phrase: "unlikely", typicalHumanProb: 25, llmBaseProb: 25, biasFactor: 0.9 },
+            { phrase: "somewhat unlikely", typicalHumanProb: 35, llmBaseProb: 35, biasFactor: 0.95 },
+            { phrase: "uncertain", typicalHumanProb: 45, llmBaseProb: 45, biasFactor: 1.0 }, 
+            { phrase: "possible", typicalHumanProb: 50, llmBaseProb: 50, biasFactor: 1.0 }, 
+            { phrase: "somewhat likely", typicalHumanProb: 60, llmBaseProb: 60, biasFactor: 1.05 },
+            { phrase: "probable", typicalHumanProb: 70, llmBaseProb: 70, biasFactor: 1.1 },
+            { phrase: "likely", typicalHumanProb: 75, llmBaseProb: 75, biasFactor: 1.1 },
+            { phrase: "very likely", typicalHumanProb: 80, llmBaseProb: 80, biasFactor: 1.15 },
+            { phrase: "highly probable", typicalHumanProb: 85, llmBaseProb: 85, biasFactor: 1.15 }, // Added for completeness, though "highly probable" is distinct from "highly likely" in paper's list. Assuming similar magnitude.
+            { phrase: "almost certain", typicalHumanProb: 95, llmBaseProb: 95, biasFactor: 1.15 } 
+        ];
+        // The paper uses 14 expressions. The list above is illustrative.
+        // The paper's list: "almost certain", "highly likely", "very likely", "likely", "probable", "somewhat likely", "somewhat unlikely", "uncertain", "possible", "unlikely", "not likely", "doubtful", "very unlikely", "highly unlikely"
+
+        const studyUncertaintyExpressions = [ // Exact list from paper Appendix B.1
+            { phrase: "almost certain", typicalHumanProb: 95, llmBaseProb: 95, biasFactor: 1.15 },
+            { phrase: "highly likely", typicalHumanProb: 85, llmBaseProb: 85, biasFactor: 1.15 }, // Adjusted based on typical ordering
+            { phrase: "very likely", typicalHumanProb: 80, llmBaseProb: 80, biasFactor: 1.15 },
+            { phrase: "likely", typicalHumanProb: 75, llmBaseProb: 75, biasFactor: 1.1 },
+            { phrase: "probable", typicalHumanProb: 70, llmBaseProb: 70, biasFactor: 1.1 },
+            { phrase: "somewhat likely", typicalHumanProb: 60, llmBaseProb: 60, biasFactor: 1.05 },
+            { phrase: "possible", typicalHumanProb: 50, llmBaseProb: 50, biasFactor: 1.0 },
+            { phrase: "uncertain", typicalHumanProb: 45, llmBaseProb: 45, biasFactor: 1.0 },
+            { phrase: "somewhat unlikely", typicalHumanProb: 35, llmBaseProb: 35, biasFactor: 0.95 },
+            { phrase: "unlikely", typicalHumanProb: 25, llmBaseProb: 25, biasFactor: 0.9 },
+            { phrase: "not likely", typicalHumanProb: 20, llmBaseProb: 20, biasFactor: 0.9 },
+            { phrase: "doubtful", typicalHumanProb: 15, llmBaseProb: 15, biasFactor: 0.9 },
+            { phrase: "very unlikely", typicalHumanProb: 10, llmBaseProb: 10, biasFactor: 0.85 },
+            { phrase: "highly unlikely", typicalHumanProb: 5, llmBaseProb: 5, biasFactor: 0.85 }
+        ].sort((a,b) => b.typicalHumanProb - a.typicalHumanProb); // Sort for dropdown consistency
+
+
+        const names = ["Alex", "Jordan", "Casey", "Morgan", "Riley", "Skyler", "Sonia", "Maria", "Catherine", "David"];
+        const statements = {
+            nonverifiable: [
+                "their local sports team will win the next game",
+                "it will rain tomorrow in their city",
+                "the new restaurant downtown will be successful",
+                "their boss has two pets",
+                "their flight will land around 6pm"
+            ],
+            verifiable_true: [
+                "the Earth revolves around the Sun",
+                "water is composed of hydrogen and oxygen (H2O)",
+                "Paris is the capital of France",
+                "the Colosseum was originally built as an Amphitheatre",
+                "New York is known as the Big Apple"
+            ],
+            verifiable_false: [
+                "the Moon is made of green cheese",
+                "cats can fly without any assistance",
+                "Antarctica is a tropical desert",
+                "the primary language spoken in Brazil is Spanish",
+                "plants grow best in complete darkness"
+            ]
+        };
+
+        // Populate uncertainty expression dropdowns
+        const uncertaintyHumanDropdown = document.getElementById('uncertaintyExpressionHuman');
+        const uncertaintyLLMDropdown = document.getElementById('uncertaintyExpressionLLM');
+        
+        studyUncertaintyExpressions.forEach(expr => {
+            let optionHuman = document.createElement('option');
+            optionHuman.value = expr.phrase;
+            optionHuman.textContent = expr.phrase.charAt(0).toUpperCase() + expr.phrase.slice(1);
+            uncertaintyHumanDropdown.appendChild(optionHuman);
+
+            let optionLLM = document.createElement('option');
+            optionLLM.value = expr.phrase;
+            optionLLM.textContent = expr.phrase.charAt(0).toUpperCase() + expr.phrase.slice(1);
+            uncertaintyLLMDropdown.appendChild(optionLLM);
+        });
+
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function updateSliderValue(sliderId, displayId) {
+            const slider = document.getElementById(sliderId);
+            const display = document.getElementById(displayId);
+            display.textContent = slider.value;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSliderValue('humanProbabilitySlider', 'humanSliderValue');
+            // Set default selected uncertainty expression for human tab to "probable" or similar mid-range
+            const defaultHumanExpr = "probable";
+            if (Array.from(uncertaintyHumanDropdown.options).some(opt => opt.value === defaultHumanExpr)) {
+                 uncertaintyHumanDropdown.value = defaultHumanExpr;
+            }
+             // Set default selected uncertainty expression for LLM tab
+            const defaultLLMExpr = "probable";
+            if (Array.from(uncertaintyLLMDropdown.options).some(opt => opt.value === defaultLLMExpr)) {
+                 uncertaintyLLMDropdown.value = defaultLLMExpr;
+            }
+        });
+
+
+        function generateHumanScenario() {
+            const statementType = document.getElementById('statementTypeHuman').value;
+            const selectedStatements = statements[statementType];
+            const statement = getRandomElement(selectedStatements);
+            const speakerName = getRandomElement(names);
+            
+            const selectedUncertaintyPhrase = document.getElementById('uncertaintyExpressionHuman').value;
+            const uncertaintyObj = studyUncertaintyExpressions.find(e => e.phrase === selectedUncertaintyPhrase);
+            if (!uncertaintyObj) { // Fallback if somehow not found
+                 console.error("Selected uncertainty expression not found in dataset:", selectedUncertaintyPhrase);
+                 return;
+            }
+            const uncertaintyPhrase = uncertaintyObj.phrase;
+
+
+            document.getElementById('scenarioText').textContent = `${speakerName} says, "It is ${uncertaintyPhrase} that ${statement}."`;
+            document.getElementById('questionText').textContent = `How certain is ${speakerName} that the statement "${statement}" is true? (0 = 0% chance, 100 = 100% chance)`;
+            document.getElementById('speakerNameHumanDisplay').textContent = speakerName;
+            document.getElementById('humanScenarioDisplay').style.display = 'block';
+            
+            const humanMockResponseDiv = document.getElementById('humanMockResponse');
+            document.getElementById('humanMockExpression').textContent = uncertaintyPhrase;
+            document.getElementById('humanMockProb').textContent = uncertaintyObj.typicalHumanProb;
+            humanMockResponseDiv.style.display = 'block';
+        }
+
+        function simulateLLMResponse() {
+            const statementType = document.getElementById('statementTypeLLM').value;
+            const selectedStatements = statements[statementType];
+            const statementText = getRandomElement(selectedStatements);
+            const uncertaintyPhrase = document.getElementById('uncertaintyExpressionLLM').value;
+            const speakerName = getRandomElement(names);
+
+            const uncertaintyObj = studyUncertaintyExpressions.find(e => e.phrase === uncertaintyPhrase);
+            if (!uncertaintyObj) {
+                console.error("Selected uncertainty expression not found for LLM:", uncertaintyPhrase);
+                return;
+            }
+
+            let llmProb = uncertaintyObj.llmBaseProb;
+            let explanation = `Based on the paper, the LLM interprets "${uncertaintyPhrase}" as typically corresponding to around ${uncertaintyObj.llmBaseProb}%. `;
+
+            // Simulate bias based on statement truth (simplified, reflecting trends in Belem et al., 2024)
+            // The actual bias is complex and model-dependent. This is a general illustration.
+            let biasEffectDescription = "";
+            if (statementType === 'verifiable_true') {
+                const biasedProb = Math.min(100, Math.round(llmProb * uncertaintyObj.biasFactor)); 
+                biasEffectDescription = `Since the statement "${statementText}" is factually true, the LLM's estimate of ${speakerName}'s certainty might be increased (e.g., to around ${biasedProb}%) due to its own knowledge, a stronger effect than typically seen in humans.`;
+                llmProb = biasedProb;
+            } else if (statementType === 'verifiable_false') {
+                const biasedProb = Math.max(0, Math.round(llmProb / uncertaintyObj.biasFactor)); 
+                biasEffectDescription = `Since the statement "${statementText}" is factually false, the LLM's estimate of ${speakerName}'s certainty might be decreased (e.g., to around ${biasedProb}%) due to its own knowledge, a stronger effect than typically seen in humans.`;
+                llmProb = biasedProb;
+            } else { // nonverifiable
+                biasEffectDescription = `${speakerName}'s statement is non-verifiable, so the LLM primarily relies on the linguistic expression. The estimate remains around ${llmProb}%. In this scenario, LLMs often align well with human population averages.`;
+            }
+            explanation += biasEffectDescription;
+            
+            llmProb = Math.max(0, Math.min(100, llmProb)); // Clamp between 0 and 100
+
+            document.getElementById('llmScenarioText').textContent = `${speakerName} states, "It is ${uncertaintyPhrase} that ${statementText}." The LLM is tasked: "According to ${speakerName}, what is the probability that '${statementText}' is true?"`;
+            document.getElementById('llmScenarioDisplay').style.display = 'block';
+
+            document.getElementById('llmCertaintyValue').textContent = `${llmProb}%`;
+            document.getElementById('llmExplanation').textContent = explanation;
+            document.getElementById('llmResponseDisplay').style.display = 'block';
+        }
+
+        // Initialize the first tab
+        document.addEventListener("DOMContentLoaded", () => {
+            // Ensure the first tab is active on load
+             const firstTabButton = document.querySelector('.tab-button');
+             if(firstTabButton) {
+                openTab({currentTarget: firstTabButton}, 'overview');
+             }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguistic Uncertainty Dashboard - Belem et al. 2024</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <header class="mb-12">
+            <h1 class="text-4xl font-bold text-purple-700 dark:text-purple-400 mb-2">Perceptions of Linguistic Uncertainty</h1>
+            <h2 class="text-2xl text-gray-600 dark:text-gray-400">by Language Models and Humans (Belem et al., 2024)</h2>
+            <p class="mt-4 text-lg max-w-4xl">This dashboard visualizes how humans and language models map uncertainty expressions (e.g., "likely", "unlikely") to numerical probabilities, highlighting differences in theory of mind.</p>
+        </header>
+
+        <!-- Interactive Example Section -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Try the Experiment</h2>
+            <p class="mb-4">Experience the task that human participants completed in the study:</p>
+            
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
+                <p id="interactive-statement" class="text-lg mb-2">Amanda believes it is <span class="text-purple-600 dark:text-purple-400 font-semibold">likely</span> that the company will have another round of lay-offs by mid July.</p>
+                <p class="mb-2 font-medium">What is the probability being expressed from Amanda's perspective that the statement is correct?</p>
+                <div class="flex flex-wrap mb-2">
+                    <input type="range" min="0" max="100" step="5" value="50" class="w-full mb-2" id="probability-slider">
+                    <div class="w-full flex justify-between text-sm">
+                        <span>0</span>
+                        <span>25</span>
+                        <span>50</span>
+                        <span>75</span>
+                        <span>100</span>
+                    </div>
+                </div>
+                <p class="text-center text-xl font-bold" id="probability-display">50%</p>
+                <button id="submit-probability" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                    Submit
+                </button>
+                <div id="feedback-area" class="mt-4 hidden bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+                    <p>You selected <span id="user-response" class="font-bold"></span>. Human participants gave a range of responses with an average of <span id="human-avg" class="font-bold"></span> for this expression.</p>
+                    <div class="mt-2">
+                        <canvas id="response-comparison" width="400" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Controls Section -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Explore the Data</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- Uncertainty Expression Selector -->
+                <div>
+                    <label for="uncertainty-expression" class="block text-sm font-medium mb-2">Uncertainty Expression</label>
+                    <select id="uncertainty-expression" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                        <option value="almost-certain">almost certain</option>
+                        <option value="highly-likely">highly likely</option>
+                        <option value="very-likely">very likely</option>
+                        <option value="likely" selected>likely</option>
+                        <option value="probable">probable</option>
+                        <option value="somewhat-likely">somewhat likely</option>
+                        <option value="possible">possible</option>
+                        <option value="uncertain">uncertain</option>
+                        <option value="somewhat-unlikely">somewhat unlikely</option>
+                        <option value="unlikely">unlikely</option>
+                        <option value="not-likely">not likely</option>
+                        <option value="doubtful">doubtful</option>
+                        <option value="very-unlikely">very unlikely</option>
+                        <option value="highly-unlikely">highly unlikely</option>
+                    </select>
+                </div>
+                
+                <!-- Agent Selector -->
+                <div>
+                    <label for="agent-selector" class="block text-sm font-medium mb-2">Agent</label>
+                    <select id="agent-selector" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-base">
+                        <option value="humans">Humans</option>
+                        <option value="gpt4o">GPT-4o</option>
+                        <option value="gpt4">GPT-4</option>
+                        <option value="chatgpt">ChatGPT</option>
+                        <option value="gemini">Gemini</option>
+                        <option value="llama3-70b">Llama3 (70B)</option>
+                        <option value="mixtral-8x22b">Mixtral 8x22B</option>
+                        <option value="olmo-7b">OLMo (7B)</option>
+                    </select>
+                </div>
+                
+                <!-- Statement Type Selector -->
+                <div>
+                    <label for="statement-type" class="block text-sm font-medium mb-2">Statement Type</label>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="statement-type" value="non-verifiable" class="form-radio" checked>
+                            <span class="ml-2">Non-Verifiable</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="statement-type" value="verifiable" class="form-radio">
+                            <span class="ml-2">Verifiable</span>
+                        </label>
+                    </div>
+                    <div id="verifiable-options" class="hidden mt-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="statement-truth" value="true" class="form-radio" checked>
+                            <span class="ml-2">True</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="statement-truth" value="false" class="form-radio">
+                            <span class="ml-2">False</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualization Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- Distribution Visualization -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Response Distribution</h2>
+                <p class="mb-4">Histogram of numerical responses for the selected uncertainty expression:</p>
+                <div class="h-64">
+                    <canvas id="distribution-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- True vs False Comparison (for verifiable statements) -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">True vs. False Statements</h2>
+                <p class="mb-4">Mean responses for verifiable statements by truthfulness:</p>
+                <div class="h-64">
+                    <canvas id="true-false-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Heatmap and Metrics Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- Heatmap Visualization -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Uncertainty Expression Mapping</h2>
+                <p class="mb-4">Most common responses across all uncertainty expressions:</p>
+                <div class="h-96">
+                    <canvas id="heatmap-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Performance Metrics Table -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Performance Metrics</h2>
+                <p class="mb-4">Proportional Agreement (PA) and Mean Absolute Error (MAE) metrics:</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 text-left">Agent</th>
+                                <th class="px-4 py-2 text-right">PA (↑)</th>
+                                <th class="px-4 py-2 text-right">MAE (↓)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metrics-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
+                            <!-- Table rows will be inserted by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Theory of Mind Section -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-400">Theory of Mind and Prior Knowledge Bias</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">Key Findings</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Most LLMs can map uncertainty expressions to numerical responses in a human-like way.</li>
+                        <li>However, LLMs show a strong bias based on their prior knowledge about the statement.</li>
+                        <li>This bias is much stronger in LLMs than in humans, suggesting a failure of theory of mind.</li>
+                        <li>Theory of mind: Understanding another's beliefs independent of your own beliefs.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">Prior Knowledge Bias</h3>
+                    <p class="mb-2">When assessing a speaker's uncertainty (e.g., "<span class="italic">Amanda believes it is possible that...</span>"):</p>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <p class="mb-2"><span class="font-medium">Humans:</span> Interpret "possible" similarly regardless of whether they personally believe the statement is true or false.</p>
+                        <p><span class="font-medium">LLMs:</span> Interpret "possible" as indicating higher probability when they believe the statement is true, and lower probability when they believe it's false.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 dark:text-gray-400 mt-16 mb-8">
+            <p>Based on research by Belem, Kelly, Steyvers, Singh, & Smyth (2024)</p>
+            <p class="text-sm mt-2">Interactive dashboard created for educational purposes</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for functionality -->
+    <script>
+    // Dark mode detection
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        if (event.matches) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    });
+    
+    // Data for the dashboard
+    const data = {
+        // Human baseline distributions for each uncertainty expression
+        humanDistributions: {
+            "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 5, 10, 15, 25, 45, 60, 85],
+            "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 5, 10, 20, 35, 45, 30, 25, 15, 10],
+            "very-likely": [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 5, 10, 15, 25, 35, 40, 25, 15, 10, 5, 2],
+            "likely": [0, 0, 0, 0, 0, 1, 2, 3, 5, 10, 15, 25, 40, 35, 25, 15, 10, 5, 2, 1, 0],
+            "probable": [0, 0, 0, 0, 1, 2, 3, 5, 10, 15, 25, 40, 35, 25, 15, 10, 5, 2, 1, 0, 0],
+            "somewhat-likely": [0, 0, 0, 1, 2, 3, 5, 10, 20, 35, 45, 30, 20, 15, 5, 3, 2, 1, 0, 0, 0],
+            "possible": [0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 50, 30, 15, 10, 5, 3, 2, 1, 0, 0, 0],
+            "uncertain": [0, 2, 5, 10, 15, 20, 25, 30, 35, 45, 70, 35, 30, 25, 20, 15, 10, 5, 2, 0, 0],
+            "somewhat-unlikely": [0, 5, 10, 15, 25, 35, 45, 30, 20, 15, 10, 5, 3, 2, 1, 0, 0, 0, 0, 0, 0],
+            "unlikely": [5, 10, 20, 35, 45, 30, 20, 15, 5, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "not-likely": [10, 20, 35, 45, 30, 20, 15, 5, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "doubtful": [15, 30, 45, 35, 25, 15, 10, 5, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "very-unlikely": [30, 45, 35, 20, 15, 10, 5, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "highly-unlikely": [45, 50, 35, 25, 15, 5, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        
+        // LLM distributions for each uncertainty expression and statement type
+        llmDistributions: {
+            "gpt4o": {
+                "non-verifiable": {
+                    "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 30, 60],
+                    "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 40, 30, 10, 0, 0],
+                    "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0],
+                    "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0],
+                    "probable": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0],
+                    "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "possible": [0, 0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "uncertain": [0, 0, 0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "somewhat-unlikely": [0, 0, 0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "unlikely": [0, 5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "not-likely": [5, 15, 30, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "doubtful": [5, 20, 40, 30, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "very-unlikely": [15, 40, 30, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "highly-unlikely": [40, 50, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                "verifiable": {
+                    "true": {
+                        "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 70],
+                        "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 30, 40, 25, 0, 0],
+                        "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0],
+                        "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0],
+                        "probable": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0],
+                        "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0],
+                        "possible": [0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0, 0],
+                        "uncertain": [0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 55, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-unlikely": [0, 0, 0, 0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "unlikely": [0, 0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "not-likely": [0, 5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "doubtful": [5, 20, 45, 25, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "very-unlikely": [10, 30, 40, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "highly-unlikely": [30, 45, 20, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    "false": {
+                        "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20, 35, 30, 10],
+                        "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0],
+                        "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0],
+                        "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0],
+                        "probable": [0, 0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "possible": [0, 0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "uncertain": [0, 0, 0, 0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-unlikely": [0, 0, 5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "unlikely": [5, 15, 30, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "not-likely": [15, 30, 35, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "doubtful": [15, 35, 35, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "very-unlikely": [30, 40, 25, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "highly-unlikely": [50, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    }
+                }
+            },
+            "gpt4": {
+                "non-verifiable": {
+                    "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100],
+                    "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0],
+                    "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0],
+                    "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0],
+                    "probable": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0],
+                    "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0],
+                    "possible": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "uncertain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 80, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "somewhat-unlikely": [0, 0, 0, 0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "unlikely": [0, 0, 0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "not-likely": [0, 0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "doubtful": [0, 10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "very-unlikely": [10, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "highly-unlikely": [30, 60, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                "verifiable": {
+                    "true": {
+                        "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 95],
+                        "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0],
+                        "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0],
+                        "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0],
+                        "probable": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0],
+                        "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0],
+                        "possible": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "uncertain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 82, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-unlikely": [0, 0, 0, 0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "unlikely": [0, 0, 0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "not-likely": [0, 0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "doubtful": [0, 13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "very-unlikely": [13, 65, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "highly-unlikely": [37, 59, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    "false": {
+                        "almost-certain": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42],
+                        "highly-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0],
+                        "very-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0],
+                        "likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0],
+                        "probable": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-likely": [0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "possible": [0, 0, 0, 0, 0, 0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "uncertain": [0, 0, 0, 0, 0, 0, 0, 9, 20, 42, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "somewhat-unlikely": [0, 0, 0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "unlikely": [0, 9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "not-likely": [9, 20, 29, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "doubtful": [20, 29, 42, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "very-unlikely": [29, 42, 20, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        "highly-unlikely": [42, 29, 20, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    }
+                }
+            },
+            // Other models simplified for brevity
+        },
+        
+        // Mean responses for verifiable statements (true vs false)
+        meanResponses: {
+            "humans": {
+                "almost-certain": {"true": 92, "false": 89},
+                "highly-likely": {"true": 83, "false": 81},
+                "very-likely": {"true": 79, "false": 76},
+                "likely": {"true": 72, "false": 70},
+                "probable": {"true": 69, "false": 66},
+                "somewhat-likely": {"true": 61, "false": 58},
+                "possible": {"true": 53, "false": 51},
+                "uncertain": {"true": 50, "false": 50},
+                "somewhat-unlikely": {"true": 40, "false": 39},
+                "unlikely": {"true": 27, "false": 26},
+                "not-likely": {"true": 24, "false": 22},
+                "doubtful": {"true": 21, "false": 19},
+                "very-unlikely": {"true": 15, "false": 14},
+                "highly-unlikely": {"true": 10, "false": 9}
+            },
+            "gpt4o": {
+                "almost-certain": {"true": 95, "false": 80},
+                "highly-likely": {"true": 85, "false": 70},
+                "very-likely": {"true": 80, "false": 65},
+                "likely": {"true": 75, "false": 60},
+                "probable": {"true": 70, "false": 55},
+                "somewhat-likely": {"true": 65, "false": 50},
+                "possible": {"true": 60, "false": 40},
+                "uncertain": {"true": 50, "false": 45},
+                "somewhat-unlikely": {"true": 35, "false": 25},
+                "unlikely": {"true": 25, "false": 15},
+                "not-likely": {"true": 20, "false": 10},
+                "doubtful": {"true": 15, "false": 5},
+                "very-unlikely": {"true": 10, "false": 5},
+                "highly-unlikely": {"true": 5, "false": 0}
+            },
+            "gpt4": {
+                "almost-certain": {"true": 95, "false": 82},
+                "highly-likely": {"true": 87, "false": 72},
+                "very-likely": {"true": 82, "false": 67},
+                "likely": {"true": 77, "false": 62},
+                "probable": {"true": 72, "false": 57},
+                "somewhat-likely": {"true": 67, "false": 52},
+                "possible": {"true": 62, "false": 42},
+                "uncertain": {"true": 50, "false": 48},
+                "somewhat-unlikely": {"true": 33, "false": 23},
+                "unlikely": {"true": 23, "false": 13},
+                "not-likely": {"true": 18, "false": 8},
+                "doubtful": {"true": 13, "false": 3},
+                "very-unlikely": {"true": 8, "false": 3},
+                "highly-unlikely": {"true": 3, "false": 0}
+            },
+            "chatgpt": {
+                "almost-certain": {"true": 95, "false": 75},
+                "highly-likely": {"true": 88, "false": 65},
+                "very-likely": {"true": 85, "false": 60},
+                "likely": {"true": 80, "false": 55},
+                "probable": {"true": 75, "false": 50},
+                "somewhat-likely": {"true": 70, "false": 45},
+                "possible": {"true": 65, "false": 35},
+                "uncertain": {"true": 55, "false": 40},
+                "somewhat-unlikely": {"true": 30, "false": 20},
+                "unlikely": {"true": 20, "false": 10},
+                "not-likely": {"true": 15, "false": 5},
+                "doubtful": {"true": 10, "false": 0},
+                "very-unlikely": {"true": 5, "false": 0},
+                "highly-unlikely": {"true": 0, "false": 0}
+            },
+            "gemini": {
+                "almost-certain": {"true": 94, "false": 86},
+                "highly-likely": {"true": 86, "false": 78},
+                "very-likely": {"true": 81, "false": 73},
+                "likely": {"true": 74, "false": 66},
+                "probable": {"true": 71, "false": 63},
+                "somewhat-likely": {"true": 63, "false": 55},
+                "possible": {"true": 55, "false": 47},
+                "uncertain": {"true": 50, "false": 50},
+                "somewhat-unlikely": {"true": 38, "false": 30},
+                "unlikely": {"true": 29, "false": 21},
+                "not-likely": {"true": 26, "false": 18},
+                "doubtful": {"true": 23, "false": 15},
+                "very-unlikely": {"true": 17, "false": 9},
+                "highly-unlikely": {"true": 12, "false": 4}
+            },
+            "llama3-70b": {
+                "almost-certain": {"true": 93, "false": 75},
+                "highly-likely": {"true": 85, "false": 67},
+                "very-likely": {"true": 80, "false": 62},
+                "likely": {"true": 73, "false": 55},
+                "probable": {"true": 70, "false": 52},
+                "somewhat-likely": {"true": 62, "false": 44},
+                "possible": {"true": 58, "false": 32},
+                "uncertain": {"true": 50, "false": 40},
+                "somewhat-unlikely": {"true": 38, "false": 20},
+                "unlikely": {"true": 29, "false": 11},
+                "not-likely": {"true": 26, "false": 8},
+                "doubtful": {"true": 23, "false": 5},
+                "very-unlikely": {"true": 17, "false": 5},
+                "highly-unlikely": {"true": 12, "false": 0}
+            },
+            "mixtral-8x22b": {
+                "almost-certain": {"true": 92, "false": 82},
+                "highly-likely": {"true": 84, "false": 74},
+                "very-likely": {"true": 79, "false": 69},
+                "likely": {"true": 72, "false": 62},
+                "probable": {"true": 69, "false": 59},
+                "somewhat-likely": {"true": 61, "false": 51},
+                "possible": {"true": 57, "false": 43},
+                "uncertain": {"true": 50, "false": 45},
+                "somewhat-unlikely": {"true": 39, "false": 29},
+                "unlikely": {"true": 28, "false": 18},
+                "not-likely": {"true": 25, "false": 15},
+                "doubtful": {"true": 22, "false": 12},
+                "very-unlikely": {"true": 16, "false": 6},
+                "highly-unlikely": {"true": 11, "false": 1}
+            },
+            "olmo-7b": {
+                "almost-certain": {"true": 80, "false": 70},
+                "highly-likely": {"true": 75, "false": 65},
+                "very-likely": {"true": 72, "false": 62},
+                "likely": {"true": 68, "false": 58},
+                "probable": {"true": 65, "false": 55},
+                "somewhat-likely": {"true": 60, "false": 50},
+                "possible": {"true": 55, "false": 45},
+                "uncertain": {"true": 50, "false": 45},
+                "somewhat-unlikely": {"true": 40, "false": 35},
+                "unlikely": {"true": 35, "false": 30},
+                "not-likely": {"true": 32, "false": 27},
+                "doubtful": {"true": 28, "false": 23},
+                "very-unlikely": {"true": 25, "false": 20},
+                "highly-unlikely": {"true": 20, "false": 15}
+            }
+        },
+        
+        // Performance metrics
+        metrics: {
+            "non-verifiable": {
+                "humans": {"PA": 17.6, "MAE": 8.91},
+                "gpt4o": {"PA": 18.9, "MAE": 5.58},
+                "gpt4": {"PA": 24.4, "MAE": 4.64},
+                "chatgpt": {"PA": 19.7, "MAE": 6.80},
+                "gemini": {"PA": 25.4, "MAE": 4.09},
+                "llama3-70b": {"PA": 23.6, "MAE": 5.56},
+                "mixtral-8x22b": {"PA": 21.8, "MAE": 7.20},
+                "olmo-7b": {"PA": 11.1, "MAE": 21.41}
+            },
+            "verifiable": {
+                "humans": {"PA": 16.7, "MAE": 9.35},
+                "gpt4o": {"PA": 15.2, "MAE": 7.05},
+                "gpt4": {"PA": 22.1, "MAE": 3.84},
+                "chatgpt": {"PA": 15.3, "MAE": 8.57},
+                "gemini": {"PA": 21.3, "MAE": 7.23},
+                "llama3-70b": {"PA": 18.9, "MAE": 13.73},
+                "mixtral-8x22b": {"PA": 18.6, "MAE": 9.78},
+                "olmo-7b": {"PA": 7.6, "MAE": 33.66}
+            }
+        },
+        
+        // Human data for the interactive example
+        exampleData: {
+            "likely": 70,
+            "somewhat-likely": 60,
+            "possible": 50,
+            "uncertain": 50,
+            "unlikely": 30,
+            "very-unlikely": 15
+        }
+    };
+    
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the interactive example
+        initializeInteractiveExample();
+        
+        // Initialize the charts and tables
+        updateDistributionChart();
+        updateTrueFalseChart();
+        updateHeatmapChart();
+        updateMetricsTable();
+        
+        // Setup event listeners for controls
+        document.getElementById('uncertainty-expression').addEventListener('change', updateVisualizations);
+        document.getElementById('agent-selector').addEventListener('change', updateVisualizations);
+        
+        const statementTypeRadios = document.querySelectorAll('input[name="statement-type"]');
+        statementTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const verifiableOptions = document.getElementById('verifiable-options');
+                if (this.value === 'verifiable') {
+                    verifiableOptions.classList.remove('hidden');
+                } else {
+                    verifiableOptions.classList.add('hidden');
+                }
+                updateVisualizations();
+            });
+        });
+        
+        document.querySelectorAll('input[name="statement-truth"]').forEach(radio => {
+            radio.addEventListener('change', updateVisualizations);
+        });
+    });
+    
+    // Initialize the interactive example
+    function initializeInteractiveExample() {
+        const slider = document.getElementById('probability-slider');
+        const display = document.getElementById('probability-display');
+        const submitBtn = document.getElementById('submit-probability');
+        
+        slider.addEventListener('input', function() {
+            display.textContent = this.value + '%';
+        });
+        
+        submitBtn.addEventListener('click', function() {
+            const selectedValue = parseInt(slider.value);
+            const feedbackArea = document.getElementById('feedback-area');
+            const userResponse = document.getElementById('user-response');
+            const humanAvg = document.getElementById('human-avg');
+            
+            // Get the current uncertainty expression from the statement
+            const statement = document.getElementById('interactive-statement').textContent;
+            const match = statement.match(/it is (\w+)(\s\w+)? that/);
+            let uncertaintyExpression = 'likely'; // Default
+            if (match) {
+                uncertaintyExpression = match[1] + (match[2] || '');
+                uncertaintyExpression = uncertaintyExpression.trim();
+            }
+            
+            // Map to our data keys
+            const dataKey = uncertaintyExpression.replace(/\s/g, '-');
+            
+            // Get the human average for this expression
+            const humanAvgValue = data.exampleData[dataKey] || 50;
+            
+            userResponse.textContent = selectedValue + '%';
+            humanAvg.textContent = humanAvgValue + '%';
+            feedbackArea.classList.remove('hidden');
+            
+            // Create a comparison chart
+            const ctx = document.getElementById('response-comparison').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (window.responseChart instanceof Chart) {
+                window.responseChart.destroy();
+            }
+            
+            window.responseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Your Response', 'Human Average'],
+                    datasets: [{
+                        label: 'Probability',
+                        data: [selectedValue, humanAvgValue],
+                        backgroundColor: [
+                            'rgba(93, 92, 222, 0.6)',
+                            'rgba(54, 162, 235, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(93, 92, 222, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Change the example periodically
+        const uncertaintyExpressions = ['likely', 'somewhat-likely', 'possible', 'uncertain', 'unlikely', 'very-unlikely'];
+        const statements = [
+            'the company will have another round of lay-offs by mid July',
+            'they will buy a new watch this Thanksgiving weekend',
+            'they will visit New York over winter break',
+            'their boss owns a blue car',
+            'their friend has a leather jacket',
+            'their cousin prefers spinach over broccoli'
+        ];
+        
+        let currentExprIndex = 0;
+        let currentStatementIndex = 0;
+        
+        function changeExample() {
+            const statement = document.getElementById('interactive-statement');
+            const expression = uncertaintyExpressions[currentExprIndex];
+            const statementText = statements[currentStatementIndex];
+            
+            statement.innerHTML = `Amanda believes it is <span class="text-purple-600 dark:text-purple-400 font-semibold">${expression.replace(/-/g, ' ')}</span> that ${statementText}.`;
+            
+            // Reset the feedback area
+            document.getElementById('feedback-area').classList.add('hidden');
+            
+            // Update indices for next time
+            currentExprIndex = (currentExprIndex + 1) % uncertaintyExpressions.length;
+            if (currentExprIndex === 0) {
+                currentStatementIndex = (currentStatementIndex + 1) % statements.length;
+            }
+        }
+        
+        // Change example every 20 seconds
+        setInterval(changeExample, 20000);
+    }
+    
+    // Update all visualizations based on current selections
+    function updateVisualizations() {
+        updateDistributionChart();
+        updateTrueFalseChart();
+        updateHeatmapChart();
+        updateMetricsTable();
+    }
+    
+    // Update the distribution chart
+    function updateDistributionChart() {
+        const uncertaintyExpression = document.getElementById('uncertainty-expression').value;
+        const agent = document.getElementById('agent-selector').value;
+        const statementType = document.querySelector('input[name="statement-type"]:checked').value;
+        const statementTruth = document.querySelector('input[name="statement-truth"]:checked')?.value || 'true';
+        
+        let distribution;
+        if (agent === 'humans') {
+            distribution = data.humanDistributions[uncertaintyExpression];
+        } else {
+            if (statementType === 'non-verifiable') {
+                distribution = data.llmDistributions[agent]?.['non-verifiable']?.[uncertaintyExpression] || [];
+            } else {
+                distribution = data.llmDistributions[agent]?.['verifiable']?.[statementTruth]?.[uncertaintyExpression] || [];
+            }
+        }
+        
+        // If no specific distribution is available, show an empty chart
+        if (!distribution || distribution.length === 0) {
+            distribution = Array(21).fill(0);
+        }
+        
+        const ctx = document.getElementById('distribution-chart').getContext('2d');
+        
+        // Check if a chart instance already exists
+        if (window.distributionChart instanceof Chart) {
+            window.distributionChart.destroy();
+        }
+        
+        // Create labels for the x-axis (0, 5, 10, ..., 100)
+        const labels = Array.from({length: 21}, (_, i) => i * 5);
+        
+        // Create the chart
+        window.distributionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `Responses for "${uncertaintyExpression.replace(/-/g, ' ')}"`,
+                    data: distribution,
+                    backgroundColor: 'rgba(93, 92, 222, 0.6)',
+                    borderColor: 'rgba(93, 92, 222, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Frequency'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Numerical Probability'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update the true vs false comparison chart
+    function updateTrueFalseChart() {
+        const agent = document.getElementById('agent-selector').value;
+        
+        // Get all agents to display
+        const agentsToDisplay = ['humans', agent];
+        const uniqueAgents = [...new Set(agentsToDisplay)];
+        
+        const uncertaintyExpression = document.getElementById('uncertainty-expression').value;
+        const expressionName = uncertaintyExpression.replace(/-/g, ' ');
+        
+        const labels = uniqueAgents.map(a => a === 'humans' ? 'Humans' : a);
+        const trueData = [];
+        const falseData = [];
+        
+        for (const a of uniqueAgents) {
+            trueData.push(data.meanResponses[a]?.[uncertaintyExpression]?.true || 0);
+            falseData.push(data.meanResponses[a]?.[uncertaintyExpression]?.false || 0);
+        }
+        
+        const ctx = document.getElementById('true-false-chart').getContext('2d');
+        
+        // Check if a chart instance already exists
+        if (window.trueFalseChart instanceof Chart) {
+            window.trueFalseChart.destroy();
+        }
+        
+        // Create the chart
+        window.trueFalseChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'True Statements',
+                        data: trueData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'False Statements',
+                        data: falseData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Mean Numerical Response'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `"${expressionName}" - True vs. False Statement Responses`
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update the heatmap chart - simplified version using a bar chart of modal values
+    function updateHeatmapChart() {
+        const agent = document.getElementById('agent-selector').value;
+        const statementType = document.querySelector('input[name="statement-type"]:checked').value;
+        const statementTruth = document.querySelector('input[name="statement-truth"]:checked')?.value || 'true';
+        
+        // List of uncertainty expressions in the correct order (from most to least certain)
+        const expressions = [
+            'almost-certain', 'highly-likely', 'very-likely', 'likely', 'probable', 
+            'somewhat-likely', 'possible', 'uncertain', 'somewhat-unlikely', 
+            'unlikely', 'not-likely', 'doubtful', 'very-unlikely', 'highly-unlikely'
+        ];
+        
+        const expressionLabels = expressions.map(e => e.replace(/-/g, ' '));
+        
+        // Calculate the mode (bin with highest frequency) for each expression
+        const modes = [];
+        
+        if (agent === 'humans') {
+            // For humans, always use the non-verifiable baseline
+            for (const expr of expressions) {
+                const dist = data.humanDistributions[expr];
+                if (!dist || dist.length === 0) {
+                    modes.push(0);
+                    continue;
+                }
+                const maxIndex = dist.indexOf(Math.max(...dist));
+                modes.push(maxIndex * 5); // Convert bin index to probability value
+            }
+        } else {
+            if (statementType === 'non-verifiable') {
+                for (const expr of expressions) {
+                    const dist = data.llmDistributions[agent]?.['non-verifiable']?.[expr];
+                    if (!dist || dist.length === 0) {
+                        modes.push(0);
+                        continue;
+                    }
+                    const maxIndex = dist.indexOf(Math.max(...dist));
+                    modes.push(maxIndex * 5);
+                }
+            } else {
+                for (const expr of expressions) {
+                    const dist = data.llmDistributions[agent]?.['verifiable']?.[statementTruth]?.[expr];
+                    if (!dist || dist.length === 0) {
+                        modes.push(0);
+                        continue;
+                    }
+                    const maxIndex = dist.indexOf(Math.max(...dist));
+                    modes.push(maxIndex * 5);
+                }
+            }
+        }
+        
+        const ctx = document.getElementById('heatmap-chart').getContext('2d');
+        
+        // Check if a chart instance already exists
+        if (window.heatmapChart instanceof Chart) {
+            window.heatmapChart.destroy();
+        }
+        
+        // Create the chart
+        window.heatmapChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: expressionLabels,
+                datasets: [{
+                    label: 'Most Common Response',
+                    data: modes,
+                    backgroundColor: 'rgba(93, 92, 222, 0.6)',
+                    borderColor: 'rgba(93, 92, 222, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `${agent === 'humans' ? 'Human' : agent} Modal Responses - ${statementType === 'non-verifiable' ? 'Non-Verifiable' : `Verifiable (${statementTruth})`}`
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Numerical Probability'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Uncertainty Expression'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update the metrics table
+    function updateMetricsTable() {
+        const statementType = document.querySelector('input[name="statement-type"]:checked').value;
+        const tableBody = document.getElementById('metrics-table-body');
+        
+        // Clear the table
+        tableBody.innerHTML = '';
+        
+        // Get metrics based on the statement type
+        const metricsData = data.metrics[statementType];
+        
+        // Generate rows for the metrics table
+        const agents = ['humans', 'gpt4o', 'gpt4', 'chatgpt', 'gemini', 'llama3-70b', 'mixtral-8x22b', 'olmo-7b'];
+        
+        agents.forEach(agent => {
+            const row = document.createElement('tr');
+            
+            // Agent name cell
+            const nameCell = document.createElement('td');
+            nameCell.className = 'px-4 py-2';
+            nameCell.textContent = agent === 'humans' ? 'Humans' : agent;
+            row.appendChild(nameCell);
+            
+            // PA cell
+            const paCell = document.createElement('td');
+            paCell.className = 'px-4 py-2 text-right';
+            paCell.textContent = metricsData[agent]?.PA?.toFixed(1) || '-';
+            row.appendChild(paCell);
+            
+            // MAE cell
+            const maeCell = document.createElement('td');
+            maeCell.className = 'px-4 py-2 text-right';
+            maeCell.textContent = metricsData[agent]?.MAE?.toFixed(2) || '-';
+            row.appendChild(maeCell);
+            
+            tableBody.appendChild(row);
+        });
+    }
+    </script>
+</body>
+</html>

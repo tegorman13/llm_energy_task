@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguistic Uncertainty Dashboard (Belem et al. 2024)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+            cursor: help;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10; /* Ensure tooltip is above other elements */
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .heatmap-section {
+            margin-bottom: 2rem;
+        }
+        .heatmap-grid {
+            display: grid;
+            /* grid-template-columns: minmax(150px, max-content) repeat(21, 1fr); */ /* Y-labels + 21 data bins */
+            gap: 1px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            background-color: #ccc; /* For grid lines */
+            max-width: 100%;
+            overflow-x: auto; /* Allow horizontal scrolling for narrow screens */
+        }
+        .heatmap-cell, .heatmap-header-cell, .heatmap-row-label {
+            background-color: white; /* Default background for cells */
+            padding: 6px 4px; /* Adjusted padding */
+            text-align: center;
+            font-size: 0.7rem; /* Uniform small font size */
+            min-height: 22px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .heatmap-header-cell {
+            font-weight: bold;
+            background-color: #e9ecef;
+            font-size: 0.65rem; /* Slightly smaller for header numbers */
+        }
+        .heatmap-row-label {
+            font-weight: bold;
+            background-color: #e9ecef;
+            text-align: right;
+            justify-content: flex-end;
+            padding-right: 8px; /* More padding for right-aligned text */
+            white-space: nowrap;
+        }
+        .heatmap-top-left-corner { /* For the empty cell above row labels */
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            padding: 5px;
+            background-color: #f9fafb;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+        .heatmap-legend-label {
+            font-size: 0.75rem;
+            margin-right: 8px;
+            color: #4b5563;
+        }
+        .heatmap-legend-gradient {
+            flex-grow: 1;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid #d1d5db;
+        }
+        .heatmap-legend-ticks {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            padding: 0 2px; /* Align with gradient edges */
+            margin-top: 1px;
+            color: #6b7280;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh; 
+            width: 90vw;  
+            max-width: 800px;
+        }
+        select, button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            background-color: white;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+        button {
+            background-color: #4f46e5; 
+            color: white;
+        }
+        button:hover {
+            background-color: #4338ca;
+        }
+        h2, h3 { /* Added h3 styling */
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem; /* Added margin-bottom for spacing */
+        }
+        .control-panel {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1rem;
+        }
+        .content-text p { /* Styling for paragraph text in new section */
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Interactive Dashboard: Perceptions of Linguistic Uncertainty</h1>
+        <p class="text-lg text-gray-600">Based on Belem, Kelly, Steyvers, Singh, & Smyth (2024)</p>
+    </header>
+
+    <section id="introduction" class="mb-8 p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-700">Introduction & Key Concepts</h2>
+        <p class="text-gray-600 mb-3 content-text">
+            This dashboard explores how humans and Large Language Models (LLMs) interpret linguistic expressions of uncertainty (e.g., "likely," "uncertain").
+            The Belem et al. (2024) paper investigates whether LLMs can understand a speaker's uncertainty independently of their own beliefs about a statement, a capability related to "Theory of Mind."
+        </p>
+        <p class="text-gray-600 mb-1">Hover over the underlined terms for explanations:</p>
+        <ul class="list-disc list-inside text-gray-600 space-y-1">
+            <li>
+                <span class="tooltip font-semibold">Empirical Distribution
+                    <span class="tooltiptext">The observed frequency of different numerical probability ratings (0-100) that people or LLMs assign to a specific uncertainty phrase. It shows the range and commonality of interpretations.</span>
+                </span>
+            </li>
+            <li>
+                <span class="tooltip font-semibold">Theory of Mind
+                    <span class="tooltiptext">The cognitive ability to attribute mental states—beliefs, desires, intentions, knowledge, uncertainty—to oneself and to others, and to understand that others have mental states that are different from one's own. In this context, it's about the LLM understanding the *speaker's* uncertainty, not its own.</span>
+                </span>
+            </li>
+            <li>
+                <span class="tooltip font-semibold">Prior Knowledge Bias
+                    <span class="tooltiptext">The phenomenon where an agent's (human or LLM) pre-existing beliefs or knowledge about a statement systematically influence how they interpret new information related to that statement, even if the new information comes from another agent expressing their own uncertainty. LLMs show a stronger bias than humans.</span>
+                </span>
+            </li>
+             <li>
+                <span class="tooltip font-semibold">Metacognition
+                    <span class="tooltiptext">"Thinking about thinking." It involves monitoring and evaluating one's own cognitive processes, including confidence in one's knowledge or decisions. This is distinct from Theory of Mind, which is about understanding *others'* mental states.</span>
+                </span>
+            </li>
+        </ul>
+    </section>
+
+    <section id="paradigm1" class="mb-8 p-6 bg-white rounded-lg shadow-md heatmap-section">
+        <h2 class="text-2xl font-semibold text-gray-700">Paradigm 1: Human Interpretation (Non-Verifiable Statements)</h2>
+        <p class="text-gray-600 mb-4 content-text">
+            This section replicates the baseline human study. Participants rated the probability expressed by a speaker using an uncertainty phrase in a non-verifiable statement (where they had little prior knowledge). This establishes the human benchmark.
+        </p>
+        <div class="control-panel">
+            <label for="p1_uncertainty_expr" class="mr-2 font-medium text-gray-700">Select Uncertainty Expression:</label>
+            <select id="p1_uncertainty_expr" class="mb-4"></select>
+        </div>
+        <div class="chart-container mb-6">
+            <canvas id="humanNVHistogramChart"></canvas>
+        </div>
+        <p class="text-gray-600 mb-2 text-sm">The histogram above (similar to Fig. 3 in the paper) shows the distribution of numerical probabilities (0-100) assigned by human participants to the selected uncertainty expression for non-verifiable statements.</p>
+        
+        <button id="toggleHumanNVHeatmap" class="mb-4">Show/Hide Human Baseline Heatmap (Fig. 4)</button>
+        <div id="humanNVHeatmapContainer" class="hidden">
+            <h3 class="text-xl font-semibold text-gray-700">Human Empirical Distributions (Non-Verifiable Statements)</h3>
+            <p class="text-gray-600 mb-2 text-sm">This heatmap (similar to Fig. 4 in the paper) shows the frequency of human responses for all 14 uncertainty expressions. Darker cells indicate more frequent responses. Blue outlined cells indicate the mode (most frequent response) for that expression.</p>
+            <div id="humanNVHeatmap" class="heatmap-grid"></div>
+            <div id="humanNVHeatmapLegend" class="heatmap-legend"></div>
+        </div>
+    </section>
+
+    <section id="paradigm2" class="mb-8 p-6 bg-white rounded-lg shadow-md heatmap-section">
+        <h2 class="text-2xl font-semibold text-gray-700">Paradigm 2: Comparing Humans & LLMs (Verifiable Statements & Prior Knowledge Bias)</h2>
+        <p class="text-gray-600 mb-4 content-text">
+            This section explores how prior knowledge affects interpretations. Agents (humans or LLMs) rated speaker uncertainty for verifiable statements (known to be true or false).
+            A key finding is that LLMs' interpretations are more strongly biased by their own "knowledge" of the statement's truthfulness than humans' interpretations are, indicating a challenge in Theory of Mind.
+        </p>
+
+        <div class="control-panel">
+            <label for="p2_agent_select" class="mr-2 font-medium text-gray-700">Select Agent:</label>
+            <select id="p2_agent_select" class="mb-2"></select>
+            <label for="p2_uncertainty_expr" class="mr-2 font-medium text-gray-700">Select Uncertainty Expression:</label>
+            <select id="p2_uncertainty_expr" class="mb-4"></select>
+        </div>
+        <div class="chart-container mb-6">
+            <canvas id="verifiableMeanChart"></canvas>
+        </div>
+        <p class="text-gray-600 mb-2 text-sm">The bar chart above (similar to Fig. 6 & 7 in the paper) shows the mean numerical probability assigned by the selected agent to the selected uncertainty expression when the underlying verifiable statement was TRUE versus when it was FALSE. Larger differences between 'True' and 'False' bars indicate stronger prior knowledge bias.</p>
+
+        <button id="toggleLlmNVHeatmapComparison" class="mb-4">Show/Hide LLM vs Human NV Heatmap Comparison (Fig. 4 vs Fig. 5/13)</button>
+        <div id="llmNVHeatmapContainer" class="hidden">
+            <h3 class="text-xl font-semibold text-gray-700">LLM vs. Human Empirical Distributions (Non-Verifiable Statements)</h3>
+            <div class="control-panel">
+                <label for="p2_llm_heatmap_select" class="mr-2 font-medium text-gray-700">Select LLM for Heatmap:</label>
+                <select id="p2_llm_heatmap_select" class="mb-4"></select>
+            </div>
+            <p class="text-gray-600 mb-2 text-sm">Compare the selected LLM's response patterns (right) to the human baseline (left) in non-verifiable contexts. LLMs often show less variance (sharper peaks). Blue outlined cells indicate the mode.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-1">Human Baseline (Fig. 4)</h4>
+                    <div id="comparisonHumanNVHeatmap" class="heatmap-grid"></div>
+                    <div id="comparisonHumanNVHeatmapLegend" class="heatmap-legend"></div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-1">Selected LLM (e.g., Fig. 5)</h4>
+                    <div id="comparisonLlmNVHeatmap" class="heatmap-grid"></div>
+                    <div id="comparisonLlmNVHeatmapLegend" class="heatmap-legend"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tom-contribution" class="mb-8 p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-700">Belem et al. (2024) and Theory of Mind in LLMs</h2>
+        <div class="content-text text-gray-700">
+            <p>A significant contribution of the Belem et al. (2024) paper lies in its direct empirical investigation of a crucial facet of <span class="tooltip font-semibold">Theory of Mind (ToM)<span class="tooltiptext">The cognitive ability to attribute mental states—beliefs, desires, intentions, knowledge, uncertainty—to oneself and to others, and to understand that others have mental states that are different from one's own.</span></span> in Large Language Models. Specifically, the research probes whether LLMs can interpret a speaker's expressed uncertainty independently of the model's own internal assessment of the statement's veracity.</p>
+            
+            <h3 class="text-xl font-semibold text-gray-700 mt-6">Probing ToM through Experimental Design</h3>
+            <p>The experimental paradigm, particularly the task involving verifiable statements (Paradigm 2), is ingeniously structured to test this aspect of ToM. Participants (both human and LLM) were asked to quantify the probability expressed from a hypothetical speaker's perspective (e.g., "Sonia believes it is <em>unlikely</em> it will rain today"). When the statement's truth value is known or can be readily assessed by the agent (the LLM or human participant), a conflict can arise if the speaker's expressed uncertainty diverges from the agent's own belief. For instance, if an LLM 'knows' that Paris is the capital of France (a verifiable true statement), how does it interpret a speaker saying, "John believes it is <em>highly unlikely</em> that Paris is the capital of France"? Accurately reporting John's low belief, despite its own high confidence in the statement's truth, would demonstrate a capacity to decouple its own mental state from that attributed to John—a hallmark of ToM.</p>
+
+            <h3 class="text-xl font-semibold text-gray-700 mt-6">Key Finding: The Conflation of Self and Other</h3>
+            <p>The central finding of Belem et al. (2024) in this domain is that LLMs, to a significantly greater extent than humans, exhibit a <span class="tooltip font-semibold">prior knowledge bias<span class="tooltiptext">The phenomenon where an agent's pre-existing beliefs or knowledge about a statement systematically influence how they interpret new information related to that statement.</span></span>. This manifests as a tendency for LLMs to conflate their internal "knowledge" or "belief" about a statement's truth with the uncertainty expressed by the speaker. As visualized in Paradigm 2 of this dashboard, LLMs systematically shift their interpretation of the speaker's uncertainty towards their own assessment of the statement:</p>
+            <ul class="list-disc list-inside ml-4 mb-3">
+                <li>If an LLM considers a statement to be true, it tends to assign a higher probability to the speaker's belief, even if the speaker used a phrase indicating low certainty (e.g., "unlikely"). The LLM's interpretation is thus pulled upwards by its own "belief."</li>
+                <li>Conversely, if an LLM considers a statement to be false, it tends to assign a lower probability to the speaker's belief, even if the speaker used a phrase indicating high certainty (e.g., "probable"). The LLM's interpretation is pulled downwards.</li>
+            </ul>
+            <p>Humans, while not entirely immune to such biases, demonstrate a substantially greater ability to distinguish the speaker's expressed belief from their own, aligning more closely with the literal meaning of the uncertainty phrase used by the speaker, irrespective of the statement's actual truth value.</p>
+
+            <h3 class="text-xl font-semibold text-gray-700 mt-6">A Challenge for LLM Theory of Mind</h3>
+            <p>Belem et al. frame this systematic conflation as a notable challenge for, or limitation in, the current ToM-like capabilities of LLMs. While these models can, in some contexts (like non-verifiable statements), map uncertainty phrases to numerical probabilities in a manner that aligns with human population averages, their performance degrades when their own "knowledge" conflicts with the speaker's assertion. This suggests a difficulty in robustly representing and reasoning about another agent's mental state as truly distinct and potentially contradictory to their own internal state or world model. It is important to distinguish this from <span class="tooltip font-semibold">metacognition<span class="tooltiptext">"Thinking about thinking." It involves monitoring and evaluating one's own cognitive processes, including confidence in one's knowledge or decisions.</span></span> (an LLM's assessment of its own confidence in its generations), as the task here specifically requires interpreting an *external* agent's uncertainty.</p>
+
+            <h3 class="text-xl font-semibold text-gray-700 mt-6">Implications and Future Directions</h3>
+            <p>The observed limitations have considerable implications for human-AI interaction, particularly in scenarios requiring nuanced understanding of human beliefs, intentions, and subjective confidence. If LLMs project their own "beliefs" onto their interpretation of human utterances, misunderstandings and misalignments in communication may arise. For instance, an LLM might inaccurately gauge a user's level of doubt or certainty if the topic is one where the LLM holds strong "priors." This work, therefore, underscores the ongoing need for research into developing LLMs with more sophisticated and robust ToM-like capabilities, enabling them to navigate the complexities of human mental states more effectively. Further investigations might explore the architectural or training data factors contributing to this bias and methods to mitigate it, thereby enhancing the capacity of LLMs for more genuinely other-oriented understanding.</p>
+        </div>
+    </section>
+
+
+    <footer class="text-center mt-12 py-4 border-t border-gray-300">
+        <p class="text-sm text-gray-500">Dashboard created to demonstrate key findings from Belem et al. (2024). For educational purposes.</p>
+    </footer>
+
+    <script>
+        // --- DATA (Mock data based on Belem et al. 2024 Figures) ---
+        const uncertaintyExpressions = [
+            "almost certain", "highly likely", "very likely", "likely", "probable",
+            "somewhat likely", "possible", "uncertain", "somewhat unlikely",
+            "unlikely", "not likely", "doubtful", "very unlikely", "highly unlikely"
+        ];
+
+        const llmModels = ["Human", "GPT-4o", "GPT-4", "ChatGPT", "Gemini", "Llama-3 (70B)", "OLMo-7B"];
+        const llmModelsForHeatmap = ["GPT-4o", "OLMo-7B", "ChatGPT"]; // Subset for heatmap demo
+
+        const probabilityBins = Array.from({ length: 21 }, (_, i) => i * 5); // 0, 5, ..., 100
+
+        const humanNVData = {
+            "almost certain":    [0,0,0,0,0,0,0,0,0,0,0,0,1,3,5,15,30,61,40,20,10], 
+            "highly likely":     [0,0,0,0,0,0,0,0,0,0,1,4,10,25,51,40,25,10,4,0,0],  
+            "very likely":       [0,0,0,0,0,0,0,0,0,1,5,10,25,41,40,30,15,3,0,0,0],  
+            "likely":            [0,0,0,0,0,0,0,1,5,15,31,40,30,20,10,3,0,0,0,0,0],  
+            "probable":          [0,0,0,0,0,0,1,4,10,21,30,30,20,10,4,0,0,0,0,0,0],  
+            "somewhat likely":   [0,0,0,0,0,1,5,10,20,26,25,20,10,3,0,0,0,0,0,0,0],  
+            "possible":          [0,0,0,0,1,5,10,15,21,20,15,10,3,0,0,0,0,0,0,0,0],  
+            "uncertain":         [0,0,1,3,8,15,20,25,35,20,15,8,3,1,0,0,0,0,0,0,0], 
+            "somewhat unlikely": [0,0,0,1,3,10,20,26,25,20,10,5,1,0,0,0,0,0,0,0,0],  
+            "unlikely":          [0,0,1,3,10,20,31,40,30,15,5,1,0,0,0,0,0,0,0,0,0],  
+            "not likely":        [0,1,4,10,25,41,30,20,10,5,1,0,0,0,0,0,0,0,0,0,0],  
+            "doubtful":          [1,4,10,21,30,30,20,10,4,1,0,0,0,0,0,0,0,0,0,0,0],  
+            "very unlikely":     [5,10,25,41,40,30,15,3,1,0,0,0,0,0,0,0,0,0,0,0,0],  
+            "highly unlikely":   [10,20,30,61,30,15,5,3,1,0,0,0,0,0,0,0,0,0,0,0,0],  
+        };
+        
+        const humanNVModes = { 
+            "almost certain": 90, "highly likely": 80, "very likely": 75, "likely": 60, "probable": 55,
+            "somewhat likely": 50, "possible": 45, "uncertain": 45, 
+            "somewhat unlikely": 40, "unlikely": 35, "not likely": 25, "doubtful": 20, 
+            "very unlikely": 15, "highly unlikely": 10
+        };
+        
+        const llmNVData = {
+            "GPT-4o": { 
+                "almost certain":    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,20,80,60,20,5,0],
+                "highly likely":     [0,0,0,0,0,0,0,0,0,0,0,5,15,60,70,30,10,0,0,0,0],
+                "very likely":       [0,0,0,0,0,0,0,0,0,0,5,20,50,70,40,10,5,0,0,0,0],
+                "likely":            [0,0,0,0,0,0,0,0,10,30,60,50,20,5,0,0,0,0,0,0,0],
+                "probable":          [0,0,0,0,0,0,0,5,20,40,60,40,10,5,0,0,0,0,0,0,0],
+                "somewhat likely":   [0,0,0,0,0,0,5,15,30,50,40,15,5,0,0,0,0,0,0,0,0],
+                "possible":          [0,0,0,0,0,5,15,30,50,40,15,5,0,0,0,0,0,0,0,0,0],
+                "uncertain":         [0,0,0,0,0,5,10,20,30,70,30,20,10,5,0,0,0,0,0,0,0], 
+                "somewhat unlikely": [0,0,0,0,5,15,40,50,30,15,5,0,0,0,0,0,0,0,0,0,0],
+                "unlikely":          [0,0,0,5,20,50,60,30,10,0,0,0,0,0,0,0,0,0,0,0,0],
+                "not likely":        [0,5,20,60,50,30,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "doubtful":          [5,20,40,60,50,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "very unlikely":     [10,30,70,50,20,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "highly unlikely":   [20,60,80,20,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            },
+            "OLMo-7B": { 
+                "almost certain":    [0,0,0,0,0,0,0,0,0,10,20,30,40,30,20,10,0,0,0,0,0], 
+                "highly likely":     [0,0,0,0,0,0,0,5,15,25,35,30,20,10,5,0,0,0,0,0,0],
+                "very likely":       [0,0,0,0,0,5,10,20,30,30,25,15,10,5,0,0,0,0,0,0,0],
+                "likely":            [0,0,0,5,10,20,25,20,15,10,5,0,0,0,0,0,0,0,0,0,0],
+                "probable":          [0,0,5,10,15,20,20,15,10,5,0,0,0,0,0,0,0,0,0,0,0],
+                "somewhat likely":   [0,5,10,15,20,15,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "possible":          [5,10,15,20,15,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "uncertain":         [10,20,30,20,10,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0], 
+                "somewhat unlikely": [15,25,30,20,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "unlikely":          [20,30,25,15,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "not likely":        [25,35,20,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "doubtful":          [30,40,15,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "very unlikely":     [40,30,10,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "highly unlikely":   [50,25,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            },
+             "ChatGPT": { 
+                "almost certain":    [0,0,0,0,0,0,0,0,0,0,0,0,0,5,25,70,50,10,0,0,0],
+                "highly likely":     [0,0,0,0,0,0,0,0,0,0,0,10,30,60,40,20,0,0,0,0,0],
+                "very likely":       [0,0,0,0,0,0,0,0,0,5,20,50,60,30,10,0,0,0,0,0,0],
+                "likely":            [0,0,0,0,0,0,0,10,30,50,40,20,5,0,0,0,0,0,0,0,0],
+                "probable":          [0,0,0,0,0,0,5,20,40,50,30,10,0,0,0,0,0,0,0,0,0],
+                "somewhat likely":   [0,0,0,0,0,10,25,40,30,20,5,0,0,0,0,0,0,0,0,0,0],
+                "possible":          [0,0,0,0,5,20,40,30,20,10,0,0,0,0,0,0,0,0,0,0,0],
+                "uncertain":         [0,0,0,5,15,30,50,30,15,5,0,0,0,0,0,0,0,0,0,0,0], 
+                "somewhat unlikely": [0,0,5,20,40,30,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "unlikely":          [0,5,30,50,40,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "not likely":        [10,40,60,30,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "doubtful":          [20,50,40,20,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "very unlikely":     [30,60,40,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                "highly unlikely":   [50,70,30,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            }
+        };
+        const llmNVModes = {
+            "GPT-4o": { "almost certain": 85, "highly likely": 75, "very likely": 70, "likely": 60, "probable": 55, "somewhat likely": 50, "possible": 45, "uncertain": 50, "somewhat unlikely": 40, "unlikely": 30, "not likely": 20, "doubtful": 20, "very unlikely": 10, "highly unlikely": 5},
+            "OLMo-7B": { "almost certain": 65, "highly likely": 55, "very likely": 50, "likely": 35, "probable": 30, "somewhat likely": 25, "possible": 20, "uncertain": 10, "somewhat unlikely": 5, "unlikely": 5, "not likely": 5, "doubtful": 0, "very unlikely": 0, "highly unlikely": 0},
+            "ChatGPT": { "almost certain": 85, "highly likely": 70, "very likely": 65, "likely": 55, "probable": 50, "somewhat likely": 40, "possible": 35, "uncertain": 30, "somewhat unlikely": 25, "unlikely": 20, "not likely": 10, "doubtful": 5, "very unlikely": 5, "highly unlikely": 0},
+        };
+
+        const verifiableMeanData = {};
+        uncertaintyExpressions.forEach(expr => {
+            const human_base = humanNVModes[expr] || 50; 
+            verifiableMeanData["Human"] = verifiableMeanData["Human"] || {};
+            verifiableMeanData["Human"][expr] = { 
+                trueMean: Math.min(100, human_base + Math.random()*5), 
+                falseMean: Math.max(0, human_base - Math.random()*5)  
+            };
+
+            ["GPT-4o", "GPT-4", "ChatGPT", "Gemini", "Llama-3 (70B)", "OLMo-7B"].forEach(llm => {
+                verifiableMeanData[llm] = verifiableMeanData[llm] || {};
+                let llm_base_nv_mode = 50; 
+                if (llmNVModes[llm] && llmNVModes[llm][expr] !== undefined) {
+                    llm_base_nv_mode = llmNVModes[llm][expr];
+                } else if (humanNVModes[expr] !== undefined) { 
+                    llm_base_nv_mode = humanNVModes[expr];
+                }
+
+                let true_shift = 10 + Math.random() * 15; 
+                let false_shift = 10 + Math.random() * 15; 
+
+                if (llm === "ChatGPT") { 
+                    true_shift = 20 + Math.random() * 20;
+                    false_shift = 20 + Math.random() * 20;
+                }
+                 if (llm === "OLMo-7B") { 
+                    true_shift = 5 + Math.random() * 10;
+                    false_shift = 5 + Math.random()*10;
+                }
+
+                verifiableMeanData[llm][expr] = {
+                    trueMean: Math.min(100, Math.max(0, llm_base_nv_mode + true_shift * ( (human_base > 50 || expr.includes("likely") || expr.includes("certain")) ? 1 : ( (human_base < 50 || expr.includes("unlikely") || expr.includes("doubtful")) ? -0.5 : 0.2 ) ) )),
+                    falseMean: Math.max(0, Math.min(100,llm_base_nv_mode - false_shift * ( (human_base < 50 || expr.includes("unlikely") || expr.includes("doubtful")) ? 1 : ( (human_base > 50 || expr.includes("likely") || expr.includes("certain")) ? -0.5 : 0.2 ) ) ))
+                };
+                if (verifiableMeanData[llm][expr].trueMean < verifiableMeanData[llm][expr].falseMean && llm !== "Human" && llm !== "OLMo-7B") {
+                     let temp = verifiableMeanData[llm][expr].trueMean;
+                     verifiableMeanData[llm][expr].trueMean = verifiableMeanData[llm][expr].falseMean;
+                     verifiableMeanData[llm][expr].falseMean = temp;
+                }
+                verifiableMeanData[llm][expr].trueMean = Math.max(0, Math.min(100, verifiableMeanData[llm][expr].trueMean));
+                verifiableMeanData[llm][expr].falseMean = Math.max(0, Math.min(100, verifiableMeanData[llm][expr].falseMean));
+            });
+        });
+
+        let humanNVHistogramChartInstance = null;
+        let verifiableMeanChartInstance = null;
+
+        const p1UncertaintySelect = document.getElementById('p1_uncertainty_expr');
+        const humanNVHistogramCanvas = document.getElementById('humanNVHistogramChart').getContext('2d');
+        
+        const toggleHumanNVHeatmapButton = document.getElementById('toggleHumanNVHeatmap');
+        const humanNVHeatmapContainer = document.getElementById('humanNVHeatmapContainer');
+        const humanNVHeatmapDiv = document.getElementById('humanNVHeatmap');
+        const humanNVHeatmapLegendDiv = document.getElementById('humanNVHeatmapLegend');
+
+        const p2AgentSelect = document.getElementById('p2_agent_select');
+        const p2UncertaintySelect = document.getElementById('p2_uncertainty_expr');
+        const verifiableMeanCanvas = document.getElementById('verifiableMeanChart').getContext('2d');
+
+        const toggleLlmNVHeatmapComparisonButton = document.getElementById('toggleLlmNVHeatmapComparison');
+        const llmNVHeatmapContainerDiv = document.getElementById('llmNVHeatmapContainer');
+        const p2LlmHeatmapSelect = document.getElementById('p2_llm_heatmap_select');
+        const comparisonHumanNVHeatmapDiv = document.getElementById('comparisonHumanNVHeatmap');
+        const comparisonLlmNVHeatmapDiv = document.getElementById('comparisonLlmNVHeatmap');
+        const comparisonHumanNVHeatmapLegendDiv = document.getElementById('comparisonHumanNVHeatmapLegend');
+        const comparisonLlmNVHeatmapLegendDiv = document.getElementById('comparisonLlmNVHeatmapLegend');
+
+        function populateSelect(selectElement, options) {
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                selectElement.appendChild(opt);
+            });
+        }
+
+        function getMaxFrequency(dataObject) {
+            let maxFreq = 0;
+            Object.values(dataObject).forEach(freqArray => {
+                const currentMax = Math.max(...freqArray);
+                if (currentMax > maxFreq) {
+                    maxFreq = currentMax;
+                }
+            });
+            return Math.ceil(maxFreq / 10) * 10; 
+        }
+        const Y_AXIS_MAX_FREQ_NV = getMaxFrequency(humanNVData);
+
+        function createHeatmapLegend(legendContainerId) {
+            const legendContainer = document.getElementById(legendContainerId);
+            if (!legendContainer) return;
+            legendContainer.innerHTML = `
+                <span class="heatmap-legend-label">Empirical Frequency:</span>
+                <div class="heatmap-legend-gradient" style="background: linear-gradient(to right, hsl(210, 30%, 95%), hsl(210, 44%, 81.5%), hsl(210, 58%, 68%), hsl(210, 72%, 54.5%), hsl(210, 80%, 38%));"></div>
+                <div class="w-full">
+                    <div class="heatmap-legend-ticks">
+                        <span>0.0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1.0</span>
+                    </div>
+                </div>
+            `;
+            const gradientString = `linear-gradient(to right, 
+                hsl(210, ${30 + 0 * 60}%, ${95 - 0 * 65}%), 
+                hsl(210, ${30 + 0.25 * 60}%, ${95 - 0.25 * 65}%),
+                hsl(210, ${30 + 0.5 * 60}%, ${95 - 0.5 * 65}%),
+                hsl(210, ${30 + 0.75 * 60}%, ${95 - 0.75 * 65}%),
+                hsl(210, ${30 + 1 * 60}%, ${95 - 1 * 65}%)
+            )`;
+            legendContainer.querySelector('.heatmap-legend-gradient').style.background = gradientString;
+        }
+        
+        function renderHeatmap(containerDiv, data, modes, expressionsToList = uncertaintyExpressions) {
+            containerDiv.innerHTML = ''; 
+            containerDiv.style.gridTemplateColumns = `minmax(140px, max-content) repeat(${probabilityBins.length}, 1fr)`;
+
+            const topLeftCell = document.createElement('div');
+            topLeftCell.classList.add('heatmap-top-left-corner');
+            containerDiv.appendChild(topLeftCell); 
+
+            probabilityBins.forEach(bin => {
+                const cell = document.createElement('div');
+                cell.classList.add('heatmap-header-cell');
+                cell.textContent = bin;
+                containerDiv.appendChild(cell);
+            });
+            
+            const allFreqs = Object.values(data).flatMap(arr => arr.map(val => val || 0));
+            const maxVal = allFreqs.length > 0 ? Math.max(...allFreqs) : 1; 
+
+            expressionsToList.forEach(expr => {
+                const labelCell = document.createElement('div');
+                labelCell.classList.add('heatmap-row-label');
+                labelCell.textContent = expr;
+                containerDiv.appendChild(labelCell);
+
+                const exprData = data[expr] || Array(probabilityBins.length).fill(0);
+                const modeValue = modes ? modes[expr] : -1;
+
+                exprData.forEach((freq, index) => {
+                    const cell = document.createElement('div');
+                    cell.classList.add('heatmap-cell');
+                    const intensity = maxVal > 0 ? (freq || 0) / maxVal : 0;
+                    
+                    const saturation = 30 + intensity * 60; 
+                    const lightness = 95 - intensity * 65;  
+                    cell.style.backgroundColor = `hsl(210, ${saturation}%, ${lightness}%)`;
+                    cell.style.color = lightness > 55 ? 'black' : 'white'; 
+                    
+                    if (probabilityBins[index] === modeValue) {
+                        cell.style.boxShadow = 'inset 0 0 0 2px #0052cc'; 
+                    }
+                    containerDiv.appendChild(cell);
+                });
+            });
+        }
+
+        function renderHumanNVHistogram() {
+            const selectedExpression = p1UncertaintySelect.value;
+            const data = humanNVData[selectedExpression] || [];
+
+            if (humanNVHistogramChartInstance) {
+                humanNVHistogramChartInstance.destroy();
+            }
+            humanNVHistogramChartInstance = new Chart(humanNVHistogramCanvas, {
+                type: 'bar',
+                data: {
+                    labels: probabilityBins,
+                    datasets: [{
+                        label: `Human Responses for "${selectedExpression}" (Non-Verifiable)`,
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Frequency Count' },
+                            suggestedMax: Y_AXIS_MAX_FREQ_NV
+                        },
+                        x: {
+                            title: { display: true, text: 'Numerical Probability (0-100)' }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Distribution for "${selectedExpression}" (Human, Non-Verifiable Stmts)`
+                        },
+                        legend: {
+                            labels: {
+                                boxWidth: 20 
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderVerifiableMeanChart() {
+            const selectedAgent = p2AgentSelect.value;
+            const selectedExpression = p2UncertaintySelect.value;
+            
+            const agentData = verifiableMeanData[selectedAgent];
+            if (!agentData || !agentData[selectedExpression]) {
+                if (verifiableMeanChartInstance) {
+                    verifiableMeanChartInstance.data.datasets[0].data = [0,0];
+                    verifiableMeanChartInstance.options.plugins.title.text = `Data not available for ${selectedAgent} - ${selectedExpression}`;
+                    verifiableMeanChartInstance.update();
+                }
+                return;
+            }
+            const means = agentData[selectedExpression];
+
+            if (verifiableMeanChartInstance) {
+                verifiableMeanChartInstance.destroy();
+            }
+            verifiableMeanChartInstance = new Chart(verifiableMeanCanvas, {
+                type: 'bar',
+                data: {
+                    labels: ['Statement: TRUE', 'Statement: FALSE'],
+                    datasets: [{
+                        label: `Mean Probability by ${selectedAgent} for "${selectedExpression}"`,
+                        data: [means.trueMean, means.falseMean],
+                        backgroundColor: ['rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Mean Numerical Probability (0-100)' }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Prior Knowledge Bias: ${selectedAgent} on "${selectedExpression}"`
+                        },
+                         legend: {
+                            labels: {
+                                boxWidth: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderLlmHeatmapComparison() {
+            const selectedLlm = p2LlmHeatmapSelect.value;
+            renderHeatmap(comparisonHumanNVHeatmapDiv, humanNVData, humanNVModes); 
+            createHeatmapLegend('comparisonHumanNVHeatmapLegend');
+            
+            const currentLlmData = llmNVData[selectedLlm] || {};
+            const currentLlmModes = llmNVModes[selectedLlm] || {};
+            renderHeatmap(comparisonLlmNVHeatmapDiv, currentLlmData, currentLlmModes);
+            createHeatmapLegend('comparisonLlmNVHeatmapLegend');
+        }
+
+        function init() {
+            populateSelect(p1UncertaintySelect, uncertaintyExpressions);
+            populateSelect(p2AgentSelect, llmModels);
+            populateSelect(p2UncertaintySelect, uncertaintyExpressions);
+            populateSelect(p2LlmHeatmapSelect, llmModelsForHeatmap);
+
+            p1UncertaintySelect.value = "very likely";
+            p2AgentSelect.value = "Human";
+            p2UncertaintySelect.value = "possible";
+            p2LlmHeatmapSelect.value = "GPT-4o";
+
+            p1UncertaintySelect.addEventListener('change', renderHumanNVHistogram);
+            
+            toggleHumanNVHeatmapButton.addEventListener('click', () => {
+                humanNVHeatmapContainer.classList.toggle('hidden');
+                if (!humanNVHeatmapContainer.classList.contains('hidden')) {
+                    renderHeatmap(humanNVHeatmapDiv, humanNVData, humanNVModes);
+                    createHeatmapLegend('humanNVHeatmapLegend');
+                }
+            });
+
+            p2AgentSelect.addEventListener('change', renderVerifiableMeanChart);
+            p2UncertaintySelect.addEventListener('change', renderVerifiableMeanChart);
+            
+            toggleLlmNVHeatmapComparisonButton.addEventListener('click', () => {
+                llmNVHeatmapContainerDiv.classList.toggle('hidden');
+                if (!llmNVHeatmapContainerDiv.classList.contains('hidden')) {
+                    renderLlmHeatmapComparison();
+                }
+            });
+            p2LlmHeatmapSelect.addEventListener('change', renderLlmHeatmapComparison);
+
+            renderHumanNVHistogram();
+            renderVerifiableMeanChart();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>
